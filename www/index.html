@@ -1,0 +1,4290 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: content: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+<title>remaping..</title>
+    <link rel="shortcut icon" href="./images/icons/favicon_remaping.ico">
+<!-- 
+ローカル開発用ライブラリ    /~kiyo/remaping.js/nas
+運用共用ライブラリ   https://nekomataya.info/nas
+-->
+    <script src="cordova.js"></script>
+    <script src="components/loader.js"></script>
+    <link href="./css/remaping.css" type="text/css" rel=stylesheet media="screen,tv">
+    <link href="./css/remaping_prt.css" type="text/css" rel=stylesheet media="print">
+
+    <link rel="stylesheet" href="components/loader.css">
+    <link rel="stylesheet" href="css/style.css">
+
+
+<!--
+<link href="/remaping/template/remaping_.css" type="text/css" rel=stylesheet media="screen,tv">
+<link href="/remaping/template/remaping_prt.css" type="text/css" rel=stylesheet media="print">
+-->
+    <link href="https://nekomataya.info/nas/lib/nas_common_HTML.css"    type="text/css" rel=stylesheet media="screen,tv">
+    <link href="./css/jquery-ui.css" type="text/css" rel="stylesheet">
+<!-- cdn -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.2/markdown-it.min.js" integrity="sha512-ohlWmsCxOu0bph1om5eDL0jm/83eH09fvqLDhiEdiqfDeJbEvz4FSbeY0gLJSVJwQAp0laRhTXbUQG+ZUuifUQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+    </script>
+<!-- cdn -->
+    <script src=./lib/jquery.js></script>
+    <script src=./lib/jquery-ui.js></script>
+
+    <script src=./lib/jquery.longpress.js></script>
+    <script src=./lib/ecl/ecl.js></script>
+    <script src=./lib/csv/csvsimple.js></script>
+    <script src=https://nekomataya.info/nas/ext-lib/psd.js/dist/psd.min.js></script>
+    <script src=https://nekomataya.info/nas/ext-lib/tga-js/dist/umd/tga.js></script>
+    <script src=https://nekomataya.info/nas/ext-lib/tiff.js/tiff.min.js></script>
+
+    <script src=https://nekomataya.info/nas/ext-lib/dom-to-image.min.js ></script>
+
+<!-- fabric.js  -->
+    <script src=https://nekomataya.info/nas/ext-lib/fabric.js/dist/fabric.min.js ></script>
+
+    <script src=https://nekomataya.info/nas/ext-lib/crc32.js></script>
+    <script src=https://nekomataya.info/nas/ext-lib/png-metadata.js></script>
+
+    <!-- <script src=./config.js></script>-->
+    <script src=https://nekomataya.info/nas/lib/config.js></script>
+    <script src=https://nekomataya.info/nas/config_remaping.js></script>
+
+    <script src=https://nekomataya.info/nas/lib/nas_common.js></script>
+    <script src=https://nekomataya.info/nas/lib/nas_common_Image.js></script>
+    <script src=https://nekomataya.info/nas/lib/nas_common_HTML.js></script>
+    <script src=https://nekomataya.info/nas/lib/nas_AnimationValues.js></script>
+    <script src=https://nekomataya.info/nas/lib/cameraworkDescriptionDB.js></script>
+    <script src=https://nekomataya.info/nas/lib/pmio.js></script>
+    <script src=https://nekomataya.info/nas/lib/storyboard.js></script>
+    <script src=https://nekomataya.info/nas/lib/mapio.js></script>
+    <script src=https://nekomataya.info/nas/lib/xpsio.js></script>
+
+    <script src=https://nekomataya.info/nas/lib/etc/_pmdb_/configPMDB.js></script>
+
+
+<!-- 
+        <script src=https://nekomataya.info/nas/newValueConstractors.js></script>
+        <script src=https://nekomataya.info/nas/pmio.js></script>
+
+    <script src=https://nekomataya.info/nas/lib/mapio.js></script>
+    <script src=https://nekomataya.info/nas/lib/xpsio.js></script>
+    <script src=https://nekomataya.info/nas/lib/cameraworkDescriptionDB.js></script>
+
+ -->
+<script src=https://nekomataya.info/nas/scripts/remaping_/airUI.js></script>
+<script src=https://nekomataya.info/nas/scripts/remaping_/nodeUI.js></script>
+
+   <script src=https://nekomataya.info/nas/scripts/remaping_/configPM.js></script>
+<!-- 
+    <script src=./pmdb/configPMDB.js></script>
+
+-->
+
+    <script src=https://nekomataya.info/nas/lib/docio.js></script>
+
+    <script src=https://nekomataya.info/nas/scripts/remaping_/remaping.js></script>
+
+    <script src=https://nekomataya.info/nas/scripts/remaping_/documentFormat.js></script>
+    <script src=https://nekomataya.info/nas/scripts/remaping_/canvasaddon.js></script>
+<!--  下　remaping.js　にマージ予定　-->
+    <script src=https://nekomataya.info/nas/scripts/remaping_/utils.js></script>
+
+
+<!--     汎用ライブラリのためソース分離 一括マージ可能      -->
+    <script src=https://nekomataya.info/nas/lib/postscriptConvert.js></script>
+    <script src=https://nekomataya.info/nas/lib/lib_AEK.js></script>
+    <script src=https://nekomataya.info/nas/lib/lib_TVP.js></script>
+    <script src=https://nekomataya.info/nas/lib/lib_stylosCSV.js></script>
+    <script src=https://nekomataya.info/nas/lib/lib_TSH.js></script>
+    <script src=https://nekomataya.info/nas/lib/lib_ARD.js></script>
+    <script src=https://nekomataya.info/nas/lib/lib_ARDJ.js></script>
+    <script src=https://nekomataya.info/nas/lib/lib_STS.js></script>
+    <script src=https://nekomataya.info/nas/lib/lib_TSX.js></script>
+    <script src=https://nekomataya.info/nas/lib/lib_TDTS.js></script>
+
+<!-- /*  開発用テストコード   2016.07.16  追加*/ これらはすべてremaping.jsへ統合予定-->
+    <script src=https://nekomataya.info/nas/scripts/remaping_/serviceAgent.js></script>
+    <script src=https://nekomataya.info/nas/scripts/remaping_/serverio_test.js></script>
+    <script src=https://nekomataya.info/nas/scripts/remaping_/filePanelTest.js></script>
+
+    <script src=https://nekomataya.info/nas/scripts/remaping_/newTaksController.js></script>
+<!-- /*  AdobeExtension/Scripts 準互換 多言語化リソース  */ -->
+
+    <script src=https://nekomataya.info/nas/lib/nas_locale.js></script>
+    <script src=https://nekomataya.info/nas/lib/messages.js></script>
+    <script src=https://nekomataya.info/nas/scripts/remaping_/messages.js></script>
+<!-- アプリケーション共用メニューライブラリ -->
+    <script src=https://nekomataya.info/nas/lib/nas_menuItem.js></script>
+
+<!-- ライブラリインストール -->
+</head>
+<body
+	onload="startupTooltip();var nRS = setTimeout('nas_Rmp_Startup()',10);nas.LangPack.chgLocale('ja');serviceAgent.init();SoundEdit.panelInit();"
+	onbeforeunload = "return nas_Rmp_reStart();"
+	onContextMenu  = "return false;"
+	onSelectStart  = "return false;"
+	onTouchStart   = "return xUI.Touch(event);"
+>
+<!-- 以下 スクロールモード時のオーバーレイ -->
+<div id=overlayHeadline >
+<div id=UIheader>
+<!-- qdr3 -->
+<div class='fixedHeadline qdr-left' id=UIheaderScrollV >
+<!--
+	onMouseDown = " return xUI.Mouse(event)"
+	onMouseUp   = " return xUI.Mouse(event)"
+	onDblClick  = " return xUI.Mouse(event)"
+	onMouseOver = " xUI.Mouse(event)"
+-->
+  <div id=UIheaderScrollV-table class=sheet></div>
+  <div class='fixedHeadline' id=areaFixImageField style='z-index:9;top:0px;'></div>
+  <!--<br><br><br><br><br><br><br><br><br><br><hr><br><br><br><br><br><br><br><br><br><br><hr><br><br><br><br><br><br><br><br><br><br><hr>qdr3***********-->
+</div>
+<!-- qdr1 -->
+<div class=fixedHeadline id=UIheaderScrollH >
+<!--
+	onMouseDown  = " return xUI.Mouse(event)"
+	onMouseUp    = " return xUI.Mouse(event)"
+	onDblClick   = " return xUI.Mouse(event)"
+	onMouseOver  = " xUI.Mouse(event)"
+--> </div>
+<!-- qdr2 -->
+<div class='fixedHeadline qdr-left' id=UIheaderFix > </div>
+</div></div>
+<!-- 以上 スクロールモード時のオーバーレイ -->
+
+<!--    コンテキストメニューUI        -->
+<div id ="contextMenu" class ="contextMenu optionPanelFloat"></div>
+<!--    コンテキストメニューUI        -->
+
+<!-- 固定コントロール fixedHeaderは、UIのマージン等を取得するためのキャリアエレメント 		onMouseOver=xUI.Mouse(event);
+-->
+	<div	id="fixedHeader"
+			class="fixedHeader"
+	>
+<!-- 固定パネル -->
+		<div	id="fixedPanels">
+<!-- dropdown menu for browser ブラウザ用ドロップダウンメニュー　-->
+<div id=pMenu></div>
+<!-- dropdown menu for browser ブラウザ用ドロップダウンメニュー　-->
+
+<div id=account_box>
+    <div class=server-info
+        id = server-info
+        client_id='b115aead773388942473e77c1e014f4d7d38e4d4829ae4fd1fa0e48e1347b4cd'
+        client_secret='54c0f02c38175436df16a058cc0c0e037038c82d3cc9ce4c212e3e4afe0449dd'
+        current_user=''
+        current_server=''
+        oauth_token=''
+        last_authrized=''
+    >
+
+ <span id="serverurl"></span> :
+ <span id=loginuser ></span> : <button id='loginstatus_button' onclick='xUI.sWitchPanel("Login");return false' title="ユーザ切り替え"> =OFFLINE= </button> 
+    </div>
+    <div style="float:clear;">
+		<form	name=saveXps
+			id=saveXps
+			method=POST
+			encode=UTF-8
+			enctype="application/x-www-form-urlencoded"
+			action="javascript:void(0);"
+		>
+			<input	type=hidden
+				id=COMMAND
+				name=COMMAND
+				value=save
+			>
+			<input	type=hidden
+				id=encode
+				name=encode
+				value=utf8
+			>
+			<input	type=hidden
+				id=XPSFilename
+				name=XPSFilename
+			>
+			<input
+				type=hidden
+				id=XPSBody
+				name=XPSBody
+			>
+        </form>
+    </div>
+</div>
+<!--	ログインパネル	-->
+<div class='loginPanel' id=optionPanelLogin >
+    <span class= 'floating-right'>	<select id=serverSelector
+				class=debug
+		onChange="serviceAgent.switchService(this.value)"
+	>
+<option value='-1'>+no server selected+
+	</select>
+
+	userID (or mail-address) : <input id='current_user_id' type='text' autocomplete='on' list='recentUsers' size=32 value='' onchange ='this.value=(new nas.UserInfo(this.value)).email;'>
+	<datalist id='recentUsers'></datalist>
+	password : <input id='current_user_password' type=password size=32 value='password'>
+	    <button class='sign' id='login_button' onclick='serviceAgent.authorize();'>SIGNIN / signout</button>
+	</span>
+</div>
+<!--	ログインパネル	-->
+
+<!--	ツールバー/toolbarHeader	-->
+<div id=toolbarHeader class=toolbarHeader>
+<button
+	id=ibMtbClose
+		class='iconButton'
+		onclick="xUI.sWitchPanel('ToolBr','hide');"
+		title="ツールバーを隠す"
+	>[×]
+	</button>
+<!--	ツールセレクタ/toolIcons	-->
+	<div id=ibMRibbon class='mousedragscrollable' style="display:inline-block;width:65%;overflow:hidden;white-space: nowrap;" tabindex = 0>
+<!--	ツールバーボタン/toolIcons	-->
+<!-- <span id="siteMenu">
+	<button
+	id=ibMmenuBack
+		class='iconButton iconButton-eject'
+		onclick='return backToDocumentList("cut");'
+		title="カット一覧へ戻る"
+	>	</button>
+ </span>-->
+<span id="severMenu" >
+<button
+	id=ibMbrowse
+		class='iconButton iconButton-openX'
+		onclick='xUI.sWitchPanel("File");return false;'
+		title="documentSelector"
+	>
+	</button><button
+	id=ibMsave
+		class='iconButton  iconButton-storeX'
+		onclick=""
+		title="サーバへ保存"
+	>
+	</button><button
+	id=ibMdiscard
+		class='iconButton  iconButton-close'
+		onclick="serviceAgent.closeEntry();"
+		title="編集を破棄してドキュメントを閉じる"
+	>
+	</button><button
+	id=ibMfloat
+		class='iconButton  iconButton-floating'
+		onclick="serviceAgent.floatEntry();"
+		title="現在のドキュメントを複製してフロート"
+	>
+	</button>
+ </span>
+ <span id="docMenu" >
+<!--
+    ドキュメント操作
+    open(readonly)/
+        読出専用で開く
+    close(discard)/
+        開いているドキュメントを閉じる(破棄する)
+        ドキュメントに変更が行われた場合　すべての変更は破棄され最期に保存された状態のみが残る
+        編集中のデータ以外では画面のクリアが行なわれるのみ
+        UI的にはどこにも所属しない空シートを作り、browsingモードを設定する
+    checkin/
+        現在のドキュメントにチェックイン
+    checkout/
+        現在のドキュメントからチェックアウト
+    activate/
+        現在のドキュメントを有効化
+    deactivate/
+        現在のドキュメントを無効化
+    reseipt/
+        fixedのドキュメントをstartupに
+        同時にラインの分岐を選択できる
+        専用UIが必要
+    abort/
+        中断処理
+
+-->
+	<button
+	id=ibMdocInfo
+		class='iconButton iconButton-info'
+		onclick='myScenePref.open("edit");'
+		title="XpsProperties"
+	>
+	</button>
+ </span>
+ <span id="cgiMenu">
+    <button
+	id=ibMimportDatas
+		class='iconButton  iconButton-imp'
+		onclick="xUI.importDocument('body');"
+		title="file Open"
+	>
+	</button><button
+	id=ibMcallEcho
+		class='iconButton  iconButton-cgiStore'
+		onclick="callEcho();"
+		title="シートをCGI経由でファイルに保存します。"
+	>
+	</button>
+ </span>
+ <span id="airMenu">
+    <button
+	id=ibMopenFS
+		class='iconButton  iconButton-imp'
+		onClick="fileBox.openFileDB()"
+		title="OPEN"
+	>
+	</button><button
+	id=ibMsaveFS
+		class='iconButton  iconButton-exp'
+		onClick="fileBox.saveFile()"
+		title="save"
+	>
+	</button><button
+	id=ibMnoticeAE
+		class='iconButton  iconButton-notice'
+		onClick="noticeToAE();"
+		title="save and noticeAE"
+	>
+	</button>
+ </span>
+
+<span id="psMenu">
+    <button
+	id=ibMopenFSps
+		class='iconButton  iconButton-imp'
+		onClick="if(fileBox.openFileDB){fileBox.openFileDB()}"
+		title="OPEN"
+	>
+	</button><button
+	id=ibMsaveFSps
+		class='iconButton  iconButton-exp'
+		onClick="if(fileBox.saveFile){fileBox.saveFile()}"
+		title="save"
+	>
+	</button><button
+	id=ibMexportFSps
+		class='iconButton  iconButton-storeAs'
+		onClick="if(fileBox.saveAs){fileBox.saveAs()}"
+		title="save as"
+	>
+	</button>
+ </span>
+ <span id=appMenu>
+    <button
+	id=ibMreload
+		class='iconButton  iconButton-reload'
+		onClick="document.location.reload();"
+		title="reload application"
+	>
+	</button>
+ </span>
+ <span id="commonEditMenu">
+<button
+	id=ibMcommandbar
+	class='iconButton  iconButton-meatball'
+	onclick='xUI.sWitchPanel("Utl");'
+	title="ユーティリティ　ツールバー"
+>
+</button><button
+	id=ibMskb
+	class='iconButton  iconButton-bento'
+	onclick='xUI.sWitchPanel("Tbx");'
+	title="ソフトウェアキーボード"
+>
+</button><button
+	id=ibMdialog
+	class='iconButton  iconButton-dialogEdit'
+	onclick='SoundEdit.open();'
+	title="ダイアログ編集"
+>
+</button><button
+	id=ibMmemoArea
+	class='iconButton  iconButton-pen_3'
+	onclick='xUI.sWitchPanel("memoArea");'
+	title="メモ欄"
+>
+</button>
+
+<button
+	id=ibMselectAll
+	class='iconButton iconButton-selectBox'
+	onclick='chkValue("selall");'
+	title="一列選択"
+>
+</button><button
+	id=ibMcopy
+	class='iconButton iconButton-copy'
+	onclick='chkValue("copy");'
+	title="複写"
+>
+</button><button
+	id=ibMcut
+	class='iconButton  iconButton-cut'
+	onclick='chkValue("cut");'
+	title="切り取り"
+>
+</button><button
+	id=ibMpaste
+	class='iconButton  iconButton-paste'
+	onclick='chkValue("paste");'
+	title="貼り付け"
+>
+</button><button
+	id=ibMundo
+	class='iconButton  iconButton-undo'
+	onclick='chkValue("undo");'
+	title="やり直し[ctr]+[Z]"
+>
+</button><button
+	id=ibMredo
+	class='iconButton  iconButton-redo'
+	onclick='chkValue("redo");'
+	title="やり直しのやり直し[ctr]+[Y]"
+>
+</button>
+<button
+	id=ibMzoom
+    class='iconButton iconButton-zoom'
+	onclick="xUI.zoomSwitch();"
+	title='縮小表示'
+> </button>
+
+<button
+	id=ibMmanagementMode
+    class='iconButton iconButton-management'
+	onclick="xUI.setUImode('next');sync('productStatus');"
+	onDblClick='xUI.viewOnly=(xUI.viewOnly)?false:true;sync("productStatus");'
+	title='モード切替'
+> </button><button
+	id=ibMviewOnly
+    class='iconButton iconButton-pen_1 debug'
+	onClick='xUI.viewOnly=(xUI.viewOnly)?false:true;sync("productStatus");'
+	title='書き込み禁止/許可　'
+> </button><button
+	id=ibMprintHTML
+    class='iconButton iconButton-printer'
+	onClick='printHTML("print");'
+	title='印刷'
+> </button><button
+	id=ibMprintPNG
+    class='iconButton iconButton-STORE'
+	onClick='printHTML("png");'
+	title='画像保存(PNG)'
+> </button>
+
+<button
+	id=ibMstw
+    class='iconButton iconButton-goToTime'
+    onClick='xUI.sWitchPanel("Timer");'
+    title='stop watch'
+ ></button>
+
+<button
+	id=ibMdform
+    class='iconButton iconButton-buildXPS'
+    onClick='xUI.sWitchPanel("DocFormat");'
+    title='タイムシートフォーマット編集'
+ ></button><button
+	id=ibMimove
+    class='iconButton iconButton-move'
+    onClick='xUI.sWitchPanel("ImgAdjust");'
+    title='ドキュメント画像調整'
+ ></button><button
+	id=ibMipaint
+    class='iconButton iconButton-editItem'
+    onClick='xUI.sWitchPanel("Paint");'
+    title='画像編集パネル'
+ ></button>
+
+</span>
+<!--	ツールバーボタン/toolIcons	-->
+	</div>
+	<!-- logo -->
+<span id=headerLogo class='floating-right'>
+<b>user-logo</b>
+</span>
+	<!-- logo -->
+    <!--リポジトリ Repository/Team-->
+<span id=headerRepository style="float:right;vertical-align:bottom;height:24px;padding-right:12px;color:snow;">
+<b>Repository</b>
+</span>
+    <!--リポジトリ Repository/Team-->
+</div>
+<!--	/ツールバー/toolbarHeade	-->
+<!--	ユーティリティーコマンドバー	最上段に配置 -->
+<div class=optionPanel id=optionPanelUtl style='vertical-align:middle;'>
+ <input type=checkbox
+	id=tbLock
+	style='display:none;'
+	title="toolbar-lock"
+	checked=false
+><button
+	id=ibMutbClose
+		class='iconButton'
+		onclick="xUI.sWitchPanel('Utl','hide');"
+		title="ユーティリティーバーを隠す"
+	>[×]
+	</button>
+
+	<div id=ibMUtlRibbon class='mousedragscrollable' style="display:inline-block;width:90%;overflow:hidden;white-space: nowrap;" tabindex = 0>
+<button
+    id=ibMcopyToReference
+    class='iconButton  iconButton-toReference'
+	title="参照エリアに転記"
+	onclick='putReference();'
+>
+</button><button
+    id=ibMcopyFromReference
+    class='iconButton  iconButton-fromReference'
+	title="参照エリアを複製"
+	onclick='getReference();'
+>
+</button>
+<button
+    id=ibMpushBackup
+    class='iconButton  iconButton-set'
+	title="バックアップ更新"
+	onclick="xUI.setBackup();"
+>
+</button><button
+    id=ibMrestoreBackup
+    class='iconButton  iconButton-get'
+	title="バックアップを読み出し"
+	onclick="xUI.getBackup();"
+>
+</button><button
+    id=ibMclearTL
+    class='iconButton  iconButton-clearTL'
+	title="選択されたタイムラインのデータを全消去"
+	onclick='clearTL();'
+>
+</button><button
+    id=ibMformatTL
+    class='iconButton  iconButton-reformat'
+	title="タイムラインを１列整形"
+	onclick="reformatTimeline();"
+>
+</button><button
+    id=ibMsimplifyTL
+    class='iconButton  iconButton-simplify'
+	title="タイムラインを１列清掃"
+	onclick="simplifyTimeline();"
+>
+</button><button
+    id=ibMfootStamp
+    class='iconButton  iconButton-footStamp'
+    style="color:snow;font-size:16px;"
+	title="差分機能切り替え"
+	onclick='xUI.footstampReset(!(xUI.footMark));'
+>✓
+</button><button
+    id=ibMpaintFS
+    class='iconButton  iconButton-paintFS'
+	title="差分表示"
+	onclick='xUI.footstampPaint();'
+>
+</button><button
+    id=ibMclearFS
+    class='iconButton  iconButton-clearFS'
+	title="フットスタンプをクリアします"
+	onclick='xUI.footstampClear();'
+>
+</button><button
+    id=ibMeditTN
+    class='iconButton  iconButton-layerName'
+	title="トラックタグ編集"
+	onclick="editTrackTag(xUI.Select[0]);"
+>
+</button><button
+    id=ibMaddSoundTrack
+    class='iconButton  iconButton-addSoundTL'
+	title="音響トラック追加"
+	onclick="addTimeline('dialog');"
+>
+</button><button
+    id=ibMaddStilTL
+    class='iconButton  iconButton-addStillTL'
+	title="静止画タイムライン追加"
+	onclick="addTimeline('still');"
+>
+</button><button
+    id=ibMaddReplacementTL
+    class='iconButton iconButton-addReplacementTL'
+	title="セル追加"
+	onclick="addTimeline('timing');"
+>
+</button><button
+    id=ibMaddCameraTL
+    class='iconButton  iconButton-addCameraTL'
+	title="カメラワーク追加"
+	onclick="addTimeline('camera');"
+>
+</button><!-- <button
+    id=ibMaddGeometryTL
+    class='iconButton  iconButton-addStageworkTL'
+	title="ステージワーク追加"
+	onclick="addTimeline('geometry');"
+>
+</button><button
+    id=ibMaddSfxTL
+    class='iconButton  iconButton-addEffectsTL'
+	title="エフェクト追加"
+	onclick="addTimeline('effect');"
+>
+</button>--> <button
+    id=ibMinsertTL
+    class='iconButton  iconButton-insertTL'
+	title="タイムラインを挿入します"
+	onclick="insertColumns();"
+>
+</button><button
+    id=ibMdeleteTL
+    class='iconButton  iconButton-removeTL'
+	title="タイムラインを削除します"
+	onclick="deleteColumns();"
+>
+</button><button
+    id=ibMinsertBlank
+    class='iconButton  iconButton-blockInsert'
+	title="空白データを挿入して以降後送"
+	onclick="insertBlank();"
+>
+</button><button
+    id=ibMblockRemove
+    class='iconButton  iconButton-blockRemove'
+	title="選択範囲を削除して間を詰める"
+	onclick="deleteBlank();"
+>
+</button>
+<button
+    id=ibMaddCircle
+    class='iconButton  iconButton-addCircle'
+	title="丸囲い"
+	onclick="addCircle('circle');"
+>
+<button
+    id=ibMaddAangles
+    class='iconButton  iconButton-addAngles'
+	title="矢囲い"
+	onclick="addCircle('triangle');"
+>
+</button><button
+    id=ibMaddBlackets
+    class='iconButton  iconButton-addBrackets'
+	title="角括弧"
+	onclick="addCircle('brackets')"
+>
+</button><button
+    id=ibMincrementNum
+    class='iconButton  iconButton-incrCell'
+	title="セルを繰り上げる"
+	onclick="incrementCell(1);"
+>
+</button><button
+    id=ibMdecrementNum
+    class='iconButton  iconButton-decrCell'
+	title="セルを繰り下げる"
+	onclick="incrementCell(-1);"
+>
+</button><button
+    id=ibMvBar
+    class='iconButton  iconButton-vLine'
+	title="選択範囲に縦線"
+	onclick="putSectionLine('|');"
+>
+</button><button
+    id=ibMwBar
+    class='iconButton  iconButton-wLine'
+	title="選択範囲に波線"
+	onclick='setWave(event);'
+>
+</button><button
+    id=ibMinterpSign
+    class='iconButton  iconButton-interpDot'
+	title="補間記号"
+	onclick="interpSign();"
+>
+</button><button
+    id=ibMcamera
+    class='iconButton  iconButton-interpSection'
+	title="選択範囲をカメラワークに"
+	onclick="writeNewSection('slide');"
+>
+</button><button
+    id=ibMtransition
+    class='iconButton  iconButton-transition'
+	title="選択範囲をトランジションに"
+	onclick="writeNewSection('transition');"
+>
+</button><button
+    id=ibMfadein
+    class='iconButton  iconButton-FI'
+	title="選択範囲をフェードインに"
+	onclick="writeNewSection('FI');"
+>
+</button><button
+    id=ibMfadeout
+    class='iconButton  iconButton-FO'
+	title="選択範囲をフェードアウトに"
+	onclick="writeNewSection('FO');"
+>
+</button>
+	</div>
+</div>
+<!--    ユーティリティーコマンドバーここまで          -->
+<!-- 固定ヘッダ 最上段　印刷時非表示　id="fixed"-->
+<!-- pmui production management user interface-->
+<div id=pmui class=pmui>
+<!-- 管理IDコントロール UI-->
+    <div id =pmcui class=pmcui>
+
+    <span id=pmfui>
+<button
+	id=pmfui-new
+    class='pmControl pmControl-new' 
+    title='新規カットを登録'
+	onclick='xUI.storeDocument();'
+>新規登録</button>
+    </span>
+
+<button
+	id=pmcui-checkin
+		class='jobControl jobControl-checkin'
+		onclick="serviceAgent.checkinEntry();"
+		title="チェックイン"
+	>作業開始
+	</button>
+	         <button
+	id=pmcui-update
+		class='jobControl  jobControl-save'
+		onclick='serviceAgent.pushEntry(xUI.XPS,function(){xUI.setStored("current");sync();
+},function(){alert("error :"+this.id)});'
+		title="保存"
+	>作業保存
+	</button><button
+	id=pmcui-checkout
+		class='jobControl  jobControl-checkout'
+		onclick="serviceAgent.checkoutEntry();"
+		title="チェックアウト"
+	>作業終了
+	</button><button
+	id=pmcui-deactivate
+		class='jobControl  jobControl-deactivate'
+		onclick="serviceAgent.deactivateEntry();"
+		title="作業保留"
+	>作業保留
+	</button><button
+	id=pmcui-activate
+		class='jobControl  jobControl-activate'
+		onclick="serviceAgent.activateEntry();"
+		title="作業再開"
+	>作業再開
+	</button>
+<!-- 
+ :  <span id=pmcui_line class=pmcui_> 0:(本線) </span>
+// <span id=pmcui_stage class=pmcui_> 2:原画 </span> 
+// <span id=pmcui_job class=pmcui_> 1:(原画) </span>
+// <span id=pmcui_status class=pmcui_> Active </span>
+// <span id=pmcui_documentWriteable class=pmcui_> [保存不可] </span>
+管理IDコントロール UI-->
+
+<!-- ドキュメントコントロール(制作管理)メニュー
+class=optionPanel id=optionPanelProductManagement
+-->
+    <div id=pmaui>
+<button
+	id=pmaui-new
+    class='pmControl pmControl-new' 
+    title='新規カットを登録'
+	onclick='xUI.sWitchPanel("File");'
+>新規登録</button>
+
+<button
+	id=pmaui-receipt
+    class='pmControl pmControl-receipt'
+    title='作業終了した工程を閉じて次の工程を開始'
+	onclick="serviceAgent.receiptEntry();"
+>作業検収</button><button
+	id=pmaui-checkout
+    class='pmControl pmControl-checkout'
+    disabled = true
+    title='作業中のカットを強制的に終了（回収）'
+>作業終了</button><button
+	id=pmaui-abort
+    class='pmControl pmControl-adort'
+    disabled = true
+    title='カットの全工程を停止（カット削除）'
+>制作中断</button>
+
+<button
+	id=pmaui-branch
+    class='pmControl pmControl-branch'
+    disabled = true
+    title='新規ラインを立ち上げる'
+>ライン分岐</button><button
+	id=pmaui-merge
+    class='pmControl pmControl-merge'
+    disabled = true
+    title='分岐したラインを収束'
+>ラインマージ</button>
+
+    </div>
+<!--
+<span class='pmLabel'>
+    ライン :
+</span>
+<span class='pmId'>
+0:
+</span>
+<select class='pmControl' id=linSelect>
+    <option value='本線'>本線</option>
+</select>
+<span class='pmLabel'>
+　新規ライン :
+</span>
+<span class='pmId'>
+1-2-1:
+</span>
+<input type=text class=pmSelector list=line_list>
+<datalist id=line_list>
+    <option value='trunk'>trunk</option>
+    <option value='本線'>本線</option>
+    <option value='background art'>background art</option>
+    <option value='背景美術'>背景美術</option>
+    <option value='3D-Animation'>3D-Animation</option>
+    <option value='3D-美術'>3D-美術</option>
+</datalist>
+<button class=pmControllButton >分岐</button>
+<br>
+<span class='pmLabel'>
+    工程 :
+</span>
+<span class='pmId'>
+0:
+</span>
+<select class='pmControl' id=stageSelect>
+    <option value='コンテ撮'>コンテ撮</option>
+    <option value='レイアウト'>レイアウト</option>
+</select>
+<span class='pmLabel'>
+　新規工程 :
+</span>
+<span class='pmId'>
+1:
+</span>
+<input type=text class=pmSelector list=stage_list>
+<datalist id=stage_list>
+    <option value='原画'></option>
+    <option value='動画'></option>
+    <option value='トレース'></option>
+    <option value='彩色'></option>
+</datalist>
+<button class=pmControllButton >開始</button>
+<br>
+<span class='pmLabel'>
+    作業 :
+</span>
+<span class='pmId'>
+3:
+</span>
+<select class='pmControl' id=stageSelect>
+    <option value='レイアウト作画'>レイアウト作画</option>
+    <option value='作画打合'></option>
+</select>
+<span class='pmLabel'>
+　新規作業 :
+</span>
+<span class='pmId'>
+4:
+</span>
+<input type=text class=pmSelector list=job_list>
+<datalist id=job_list>
+    <option value='監督チェック'></option>
+    <option value='演出チェック'></option>
+    <option value='作監チェック'></option>
+    <option value='総作監チェック'></option>
+</datalist>
+<button class=pmControllButton >開始</button>
+<br> -->
+<!-- ドキュメントコントロール(floating)メニュー
+class=optionPanel id=optionPanelProductManagement
+-->
+<hr><hr>
+<!--
+
+//  新規カット
+カット番号を入力（確認）してリポジトリに送信（POST）
+
+
+//  作業検収
+カット内容の提示と確認（Fixed）はチェック済
+次ステージの指定（確認）してリポジリに送信（POST）
+
+//  作業終了
+強制的に作業中(Active/Hold)のデータを終了状態(Fixed)に遷移
+二重確認
+（作業中のユーザにメーッセージを発信）省略可
+モード変更送信(PUSH)
+
+//  作業中断
+終了状態(Fixed)のデータを中断(Aborted)に遷移
+二重確認
+モード変更送信
+
+//  ライン分岐
+現在のラインから新規ラインを分岐する
+
+2016拡張では保留　xMap実装後に合わせて実装
+マスターDBが無いので分岐の確認が出来ない
+
+//  ラインマージ
+親側のライン（マスター）側からサブラインドキュメントを指定してマージする
+または支線側からマスターに向かってマージを行う（親は自動認識）
+マージ先はアセットストア
+（通信ロスト等）マージ先が特定できない場合は、処理失敗
+
+2016拡張では保留　xMap実装後に合わせて実装
+マスターDBが無いので分岐の確認が出来ない
+
+//  全処理共通
+新規作成成功/失敗を表示
+リストの更新
+
+
+
+
+    <div id=messages-pmaui>
+    新規カットを作成します。カット番号/継続時間を入力して[OK]ボタンで確定してください。<br>
+        TITLE : <span>%title%</span> OPUS#:<span>%opus%</span> S-C:<input type=text></input> TIME:<input type=text></input>
+        
+    %curentStage% 工程を閉じて次の工程を開きます。新しい工程名を入力してください。<br>
+        現在の工程 : %currentStage% 新規工程 : <input type=text list=taragetStageList></input>  <button>O K</button><hr>
+    カットの更新に失敗しました。時間をおいて再度処理してください。
+    現在作業中のデータを廃棄して作業を終了します。<br>
+    作業担当者 %update_user% に通知を送信します。<input type=checkbox></input>[yes/no]<br>
+    よろしいですか？<br>
+    yes/no/cancel<hr>
+    現在の作業をすべて停止してカット制作を中断します。<br>
+    よろしいですか？<br>
+    
+    
+    </div>
+<hr>
+<hr>-->
+        </div>
+<!-- ドキュメントコントロール(制作管理)メニュー-->
+</div>
+<!-- pmui production management user interface--><!-- ヘッダツール群 入力コントロール -->
+<div class=headerTool id=headerTool >
+	<!-- カウンタ -->
+<input	type=button
+	id=activeLvl
+	name=activeLvl
+	class=aekConvert
+	value=A
+	onclick="chkValue(this.id);"
+	title="AEキー変換"
+>
+<input	type=text
+	id=fct0
+	name=fct0
+	class=fct
+	value='00:00:00+00_'
+	onChange='chkValue(this.id);'
+	title="変更するとジャンプ"
+><input	type=text
+	id=fct1
+	name=fct1
+	class=fct
+	value='p00 / 000+00_'
+	onChange='chkValue(this.id);'
+	title="数字だけはコマ数"
+>
+	<!-- カウンタ -->
+	<!-- スピン -->
+<button
+	name=spin_Vdn
+	id=v_dn
+	class="spinCtl spinCtl-left"
+	onclick="chkValue(this.id);"
+	title="SPIN減"
+	data-i18n='[title]v_dn_description'
+>-</button><input	type=text
+	name=spin_V
+	id=spin_V
+	class=spinCtl
+	value=3
+	onMousedown="nas.sliderVALUE([event,this.id,'24','1','0']);"
+	onChange="chkValue(this.id);"
+	title="スピン値"
+	data-i18n='[title]spin_v_description'
+><button
+	name=spin_Vup
+	id=v_up
+	class="spinCtl spinCtl-right"
+	onclick="chkValue(this.id);"
+	title="SPIN増"
+	data-i18n='[title]v_up_description'
+>+</button>
+<!--
+<a
+	id=spinCkLb
+	href="javascript:void(0);"
+	onClick='return chg("spinCk");'
+	title="選択範囲をスピン指定にする"
+
+> Spin </a><input type=checkbox
+	name=spinCkx
+	id=spinCkx
+	onChange="chkValue(this.id);"
+	title="選択範囲をスピン指定にする"
+>
+--> 
+	<!-- スピン -->
+	<!-- スピン設定 -->
+    <label class="switch__label" title="範囲設定をスピン量と連動">
+        <input type="checkbox" class="switch__input"
+        	id='spinCk'
+			onChange="chkValue(this.id);"
+        >
+        <span class="switch__content"></span>
+        <span id="spinSlider" class="switch__slider">連動</span>
+    </label>
+	<!-- 入力モード -->
+    <label class="switch__label" title="入力フィルタ切替(なし|動画|原画)">
+		<input id ='iptChange' type="range"  min="0" max="2" value="0" onChange="chkValue(this.id);">
+		<span id="iptSlider" class="switch__slider_tryval" ></span>
+    </label>
+<span id=screenZoom>
+    <div style="display:inline-block;position:rerative;vertical-align:middle; margin-left:28px;transform:translate(0,0);">
+ZOOM:
+    <label for='pageZoom' >
+        <input
+			name=ovl_O
+			id=pageZoom
+			class=spinCtl
+			value='100'
+			onMousedown="nas.sliderVALUE([event,this.id,'400','0','0',50,'y','25']);"
+			onchange='var scale = (parseInt(this.value)/100);xUI.adjustScale(scale);if(document.getElementById("pageZoomSlider").style.display !="none")document.getElementById("zoomSlider").click();'
+			title=""
+			data-i18n='[title]ovl_o_description'
+		><button
+			name=zoomSlider
+			id=zoomSlider
+			class="spinCtl spinCtl-right"
+			onclick='if(document.getElementById("pageZoomSlider").style.display!="none"){document.getElementById("pageZoomSlider").style.display ="none";this.innerHTML="▼";}else{document.getElementById("pageZoomSlider").style.display ="inline";this.innerHTML="▲";};'
+		>▼</button>
+        <input
+        	type ='range'
+        	id   ='pageZoomSlider'
+        	name ='pageZoomSlider'
+        	list = 'zoom_values'
+        	min  = 25
+        	max  = 200
+			style='display:none;position:absolute;top:24px;left:0px;'
+            onchange='document.getElementById("pageZoom").value=this.value;document.getElementById("pageZoom").onchange();'
+        >
+        <datalist id='zoom_values'>
+			<option value="25"  ></option>
+			<option value="50"  ></option>
+			<option value="75" ></option>
+			<option value="100" ></option>
+			<option value="150" ></option>
+			<option value="200" ></option>
+		</datalist>
+    </label>
+    </div>
+<!--    </span>-->
+</span>
+	<!-- 画像スイッチ -->
+<span id=docImgAppearance>
+<!--
+    <label class="switch__label" style='margin-left:28px;'>
+        <input type="checkbox" class="switch__input"
+        	id='imgAdjust'
+			onChange="chkValue(this.id);"
+        >
+        <span class="switch__content"></span>
+        <span id="imgSlider" class="switch__slider"></span>
+    </label>
+-->
+<!--
+    <span id=docImgAdjust >
+    <span style="position:rerative;vertical-align:middle;">
+    <label for='ImgBMode' >
+        <select
+            id = 'ImgBMOde'
+            style = 'display:inline-block;'
+            onchange='xUI.XPS.timesheetImages.imageBlendMode = this.value;$(".overlayDocmentImage").css("mix-blend-mode",xUI.XPS.timesheetImages.imageBlendMode);'
+        >
+        <option value='normal'     >通常</option>
+        <option value='darken'     >比較暗</option>
+        <option value='multiply'   >乗算</option>
+        <option value='color-burn' >焼き込みカラー</option>
+        <option value='lighten'    >比較明</option>
+        <option value='screen'     >スクリーン</option>
+        <option value='color-dodge'>覆い焼きカラー</option>
+        <option value='overlay'    >オーバーレイ</option>
+        <option value='difference' >差の絶対値</option>
+        <option value='exclusion'  >除外</option>
+        </select>
+    </label>
+    </span>
+-->
+    <div style="display:inline-block;position:rerative;vertical-align:middle; margin-left:28px;transform:translate(0,0);">
+画像表示:
+    <label for='ImgAppearance' >
+        <input
+			name=ovl_O
+			id=ImgAppearance
+			class=spinCtl
+			value='50%'
+			onMousedown="nas.sliderVALUE([event,this.id,'100','0','0',50,'y','25']);"
+			onchange='xUI.setAppearance(parseInt(this.value)/100,true);if(document.getElementById("ImgAppearanceSlider").style.display !="none")document.getElementById("callSlider").click();'
+			title="不透明度"
+			data-i18n='[title]ovl_o_description'
+		><button
+			name=opacitySlider
+			id=callSlider
+			class="spinCtl spinCtl-right"
+			onclick='if(document.getElementById("ImgAppearanceSlider").style.display!="none"){document.getElementById("ImgAppearanceSlider").style.display ="none";this.innerHTML="▼";}else{document.getElementById("ImgAppearanceSlider").style.display ="inline";this.innerHTML="▲";};'
+		>▼</button>
+        <input
+        	type ='range'
+        	id   ='ImgAppearanceSlider'
+        	name ='ImgAppearanceSlider'
+        	list = 'appearance_values'
+			style='display:none;position:absolute;top:24px;left:0px;'
+            onchange='document.getElementById("ImgAppearance").value=this.value;document.getElementById("ImgAppearance").onchange();'
+        >
+        <datalist id='appearance_values'>
+			<option value="0"  ></option>
+<!--			<option value="1"  ></option>-->
+			<option value="25" ></option>
+			<option value="50" ></option>
+			<option value="75" ></option>
+			<option value="100"></option>
+		</datalist>
+    </label>
+    </div>
+</span>
+<!--
+        <input type="text" class="switch__input"
+        	id = 'iptChange'
+        	value = 0
+			onclick="chkValue(this.id);"
+        >
+        <span class="switch__content"></span>
+        <span id="iptSlider" class="switch__slider">動画</span>
+-->
+</div>
+<div id=inputControl class="inputControl inputControl-show">
+<span
+	id=iNputhEader
+	class=iNputhEader
+><button id=edchg
+disabled
+>EXTEST</button>
+<input	name=iNputbOx
+	id=iNputbOx
+	class=iNputbOx
+	type=text
+	title="シートにデータを入力します。"
+	autocomplete="off"
+> </span>
+<!--
+	onKeyPress="return xUI.keyPress(event);"
+	onKeyUp   ="return xUI.keyUp(event);"
+	onKeyDown ="return xUI.keyDown(event);"
+	onBlur='xUI.put(this.value);'
+	onKeyPress="console.log(xUI.keyPress(event));return true;"
+-->
+
+	<!--		    <span class='ui-icon ui-icon-radio-off'>
+<button
+	name=ok
+	id=ok
+	style="width:36px;position:relative;top:4px;"
+	onclick="chkValue(this.id);"
+	title="確定[Enter]"
+>	<img src=./images/ui/ok.png height=16>
+</button><button
+	name=ng
+	id=ng
+	style="width:20px;position:relative;top:4px;"
+	onclick="chkValue(this.id);"
+	title="取り消し[esc]"
+>
+	<img src=./images/ui/ng.png height=16> 
+-->
+	<!--    <span class='ui-icon ui-icon-close'>
+</button>
+-->
+</div>
+<!-- ヘッダツール群 入力コントロール -->
+
+<!-- ドキュメント ステータス　オーバレイ　-->
+<div id=documentWritable class=documentStatusOverlay>
+<span style='border-style:solid;border-color:red;'> Read Only </span> 
+</div>
+<!-- ドキュメント ステータス　オーバレイ　-->
+
+<!-- ドキュメントシートヘッダUIテーブル　編集機能あり ページモードでは最小の表現に縮小 制限UIの際は非表示または縮小表示 -->
+<div id=sheetHeaderTable>
+<!-- コンパクトビューの時は　インジケータ　カット番号　時間　を残して非表示
+     <td id=edchg>
+	編集中
+     </td>
+-->
+	<div id     = headerInfo
+		class  = "headerInfo"
+	><hr>
+    <span
+        	id=documentIdf
+    	></span>//<span
+        	id=headerInfoWritable
+    	></span>
+	</div>
+	<div
+    	id = headerInfoAlt
+    	class  = "headerInfo headerInfoAlt"
+	><hr>
+	<A
+    	id=XpsIdentifier
+    	onClick='if((event.metaKey)||(event.ctrlKey)){xUI.importDocument()}else{xUI.openDocument()}'
+	>
+<!-- <span id=title>title-string</span>#<span id=opus>opus</span>[<span id=subtitle>subtitle</span>]-->
+	</A>//<span id=pmcui_line class=pmcui_>0:(本線)
+	</span>//<span id=pmcui_stage class=pmcui_>2:原画
+
+<!-- // <select
+    id=pmcui_stage
+    class=historySelect
+    onChange='if(xUI.XPS.currentStatus.content=="Active"){serviceAgent.getEntry(this.value,true)}else{serviceAgent.getEntry(this.value)};' 
+>
+					<option>----</option>
+</select> -->
+	</span>//<select
+    	id=jobSelector
+    	class=historySelect
+    	name=jobSelector 
+    	onChange='if(xUI.XPS.currentStatus.content=="Active"){serviceAgent.getEntry(this.value,true)}else{serviceAgent.getEntry(this.value)};' 
+	>
+					<option>----</option>
+	</select>//<span id=pmcui_documentWritable class=pmcui_>[保存不可]</span>
+
+
+<!--
+
+// <span id=pmcui_job class=pmcui_> 1:(原画) </span>
+// <span id=pmcui_status class=pmcui_> Active </span>
+
+<input id=currentJob type=text name=jobSelector  list=jobSelector  onChange='if(xUI.XPS.currentStatus.content=="Active"){serviceAgent.getEntry(this.value,true)}else{serviceAgent.getEntry(this.value)};' 
+>
+<datalist id=jobSelector>
+					<option>----</option>
+				</datalist>
+-->
+</div><div id=documentHdUI ><table id="xpsInfoTable" class="info" border=0 >
+<tr>
+<!--     <th class='opusLabel headerInfoLabel' id="opusL">
+	No
+     </th><th class='titleLabel headerInfoLabel' id="titleL">
+	TITLE
+     </th><th class='subtitleLabel headerInfoLabel' id="subtitleL">
+	subTITLE
+     </th>--><th class='scenecutLabel  headerInfoLabel'>
+	S-C
+     </th><th colspan=3 class='timeLabel headerInfoLabel'>
+	TIME
+     </th><th class='nameLabel headerInfoLabel' id="nameL">
+	name
+     </th>
+</tr>
+<tr onDblClick ="return rewriteValueByEvt(event)" style='height:24px;font-size:18px;'>
+<!--<td rowspan=2>
+Jobセレクタの動作をもうすこしインテリジェントに変更
+編集時はリファレンスエリアの書き換え
+閲覧時は全体の変更にケース分けして処理
+
+</td><td id=opus lock="yes" >
+	#00
+</td><td id=title lock="yes" >
+	TITLE-TEXT
+</td><td id=subtitle lock="yes" >
+	subTITLE
+</td>--><td id=scene_cut>
+	S-C
+</td><td id=time >
+	(00+00)
+</td><td id=trin >
+	---
+</td><td id=trout >
+	---
+</td><td id=update_user lock="yes">
+	name
+</td></tr>
+
+</table>
+
+<!-- 固定ヘッダ ここまで 以下は表示切り換えのパネル群 --</div>>
+<!-- //拡張署名欄 -->
+<div id=extSig >
+  <div id=extSig_minimise style='display:none;'>
+	<a href="javascript:void(0);"
+		onclick='xUI.eXpandPanel("extSig","expand");'
+		title='show signaturebox area'
+	><span>[□] sig.</a></span>
+  </div>
+<div id=extSig_expand style='display:flex;height:48px;'>
+	<span style='vertilcal-align:bottom;white-space:nowrap;'>
+		<a href="javascript:void(0);"
+			onclick='xUI.eXpandPanel("extSig","minimise");'
+			title='minimize signbox area'
+	>[━] sig.</a>
+<!--
+	<a href="javascript:void(0);"onclick='xUI.sWitchPanel("Sign");return false;'
+		style='vertilcal-align:bottom'> sig.</a>
+-->
+	</span>
+    <div id=signbox style='display:flex;'>
+<!--
+	<span class = signbox id="sig_0">
+		<span class = signlabel>CT</span>
+		<span class = 'signature signature-sc'>
+		演出<br><span class=signdate>12/12</span>
+		</span>
+	</span>
+	<span class = signbox id="sig_1">
+		<span class = signlabel>LO</span>
+		<span class = 'signature signature-up'>
+		たぬき
+		<br><span class=signdate>12/13</span>
+		</span>
+	</span>
+	<span class = signbox>
+		<span class = signlabel>.</span>
+		<span class = 'signature signature-ok'>
+		監督
+		<br><span class=signdate>12/13</span>
+		</span>
+	</span>
+	<span class = signbox>
+		<span class = signlabel>.</span>
+		<span class = 'signature signature-box'>
+		演出
+<img class=sigunature-stamp src=./images/icons/stampPad.png >
+		<span class=signdate><br>12/13</span>
+		</span>
+	</span>
+	<span class = signbox>
+		<span class = signlabel>.</span>
+		<span class = signature>-</span>
+	</span>
+	<span class = signbox>
+		<span class = signlabel>原画</span>
+		<span class = 'signature signature-up'>たぬき
+		<br><span class=signdate>12/14</span>
+		</span>
+	</span>
+	<span class = signbox onclick="alert(123)">
+		<span class = signlabel>.</span>
+		<span class = signature></span>
+	</span><br>
+	<span class = signbox>
+		<span class = signlabel>.</span>
+		<span class = signature></span>
+	</span>
+	<span class = signbox>
+		<span class = signlabel>.</span>
+		<span class = signature></span>
+	</span>
+	<span class = signbox>
+		<span class = signlabel>前検</span>
+		<span class = signature></span>
+	</span	>
+	<span class = signbox>
+		<span class = signlabel>動画</span>
+		<span class = signature></span>
+	</span>
+	<span class = signbox>
+		<span class = signlabel>動検</span>
+		<span class = signature></span>
+	</span>
+-->
+    </div>
+  </div>
+<hr>
+</div>
+<!-- 拡張署名欄// -->
+<!-- メモ編集エリア　画面表示のみ　印刷時はシートヘッダ上に別表示-->
+<div id=memoArea class=memoArea >
+
+  <div id=memoArea_minimise style='display:none;'>
+	<a href="javascript:void(0);"
+		onclick='xUI.eXpandPanel("memoArea","expand");'
+		title='show note text'
+	><span>[□]</span></a>
+	<a href="javascript:void(0);"
+		onclick='xUI.eXpandPanel("memoArea","expand");return false;'
+	>MEMO : </a></span>
+  </div>
+
+  <div id=memoArea_expand>
+    <div id=memo_header>
+    <a href="javascript:void(0);"
+     onclick='xUI.eXpandPanel("memoArea","minimise");'
+      title='hide note text'
+    ><span>[━]</span></a>
+    <a href="javascript:void(0);"
+		onclick='xUI.sWitchPanel("Memo");return false;'
+>MEMO : </a> <span id="transit_data"></span>
+    </div>
+    <div id=memo_image class=overlayNoteImage></div>
+<!-- メモ表示欄     -->
+    <div id=memo class=memoSpace></div>
+  </div>
+<hr>
+</div><!-- メモ表示欄 --></div></div>
+<!-- ドキュメントシートヘッダUIテーブル   >
+<!--	ユーティリティーパネル	-->
+<!--    トラックラベルセレクタ  -->
+<div class=optionPanel id=optionPanelTrackLabel >
+    <button title="Cancel" onclick="$('#optionPanelTrackLabel').hide();"> esc </button>
+    <button title="add new Tarck" onclick="alert(getElementById('currentLabel').value);"> OK </button>
+    <input id="currentLabel" type=text size=6 value="(currentValue)">
+ 	: 
+<!-- モーダルダイアログ用ボタンUI -->
+	<div id=ModalUIStore>
+		<div id=CWLabelTemplate>
+<hr>
+    <button onclick="inputButtonText(this.innerHTML);">PAN</button>
+    <button onclick="inputButtonText(this.innerHTML);">Follow</button>
+    <button onclick="inputButtonText(this.innerHTML);">Slide</button>
+    <button onclick="inputButtonText(this.innerHTML);">TU</button
+><button onclick="inputButtonText(this.innerHTML);">TB</button>
+    <button onclick="inputButtonText(this.innerHTML);">MLTU</button
+><button onclick="inputButtonText(this.innerHTML);">MLTB</button
+><button onclick="inputButtonText(this.innerHTML);">MLSL</button>
+<button onclick="inputButtonText(this.innerHTML);">画面動</button>
+<button onclick="inputButtonText(this.innerHTML);">ハンディブレ</button>
+<button onclick="inputButtonText(this.innerHTML);">ブレ</button>
+<hr>
+		</div>
+		<div id=FXLabelTemplate>
+<hr>
+    <button onclick="inputButtonText(this.innerHTML);">FI</button
+><button onclick="inputButtonText(this.innerHTML);">FO</button>
+    
+    <button onclick="inputButtonText(this.innerHTML);">OL</button
+><button onclick="inputButtonText(this.innerHTML);">WIPE</button>
+    
+    <button onclick="inputButtonText(this.innerHTML);">WXP</button
+><button onclick="inputButtonText(this.innerHTML);">透過光</button>
+
+    <button onclick="inputButtonText(this.innerHTML);">FLT</button
+><button onclick="inputButtonText(this.innerHTML);">FX</button>
+
+ <button onclick="inputButtonText(this.innerHTML);">通常</button
+><button onclick="inputButtonText(this.innerHTML);">SC</button
+><button onclick="inputButtonText(this.innerHTML);">加算</button
+><button onclick="inputButtonText(this.innerHTML);">覆焼</button
+><button onclick="inputButtonText(this.innerHTML);">乗算</button
+><button onclick="inputButtonText(this.innerHTML);">焼込</button
+><button onclick="inputButtonText(this.innerHTML);">差分</button>
+<hr>
+		</div>
+		<div id=CLLabelTemplate>
+<hr>
+ <button class=oneChr onclick='inputButtonText(this.innerHTML);'>A</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">B</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">C</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">D</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">E</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">F</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">G</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">H</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">I</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">J</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">K</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">L</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">M</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">N</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">O</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">Q</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">P</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">R</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">S</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">T</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">U</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">V</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">W</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">X</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">Y</button
+><button class=oneChr onclick="inputButtonText(this.innerHTML);">Z</button
+>
+
+<hr>
+		</div>
+		<div id=DSLabelTemplate>
+<hr>
+    <button onclick="inputButtonText(this.innerHTML);">SE</button>
+    <button onclick="inputButtonText(this.innerHTML);">台詞</button>
+    <button onclick="inputButtonText(this.innerHTML);">M.</button>
+    <button onclick="inputButtonText(this.innerHTML);">N.</button>
+<hr>
+		</div>
+		<div id=BGLabelTemplate>
+<hr>
+    <button onclick="inputButtonText(this.innerHTML);">BG</button>
+    <button onclick="inputButtonText(this.innerHTML);">BOOK1</button>
+    <button onclick="inputButtonText(this.innerHTML);">BOOK2</button>
+<hr>
+		</div>
+<!--    トラックラベルセレクタ  -->
+
+
+<!-- 増減 -->
+		<div id=TCIFTemplate >
+			<hr>
+			<div style="text-align:right;"><button
+onclick='nas.incrFCTonHTMLInput(document.getElementById("nas_modalInput"),"1+0")'
+    >+1s</button><button
+onclick='nas.incrFCTonHTMLInput(document.getElementById("nas_modalInput"),"-(1+0)")'
+ >-1s</button> <button
+onclick='nas.incrFCTonHTMLInput(document.getElementById("nas_modalInput"),"6")'
+ >+6</button><button
+onclick='nas.incrFCTonHTMLInput(document.getElementById("nas_modalInput"),"-(6)")'
+ >-6</button> <button
+onclick='nas.incrFCTonHTMLInput(document.getElementById("nas_modalInput"),"1")'
+ >+1</button><button
+onclick='nas.incrFCTonHTMLInput(document.getElementById("nas_modalInput"),"-(1)")'
+ >-1</button>
+<hr>
+			</div>
+		</div>
+<input id=editTC size=12 value="-(00+00)">
+<button
+onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"1+0")'
+    >+1s</button><button
+onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"-(1+0)")'
+ >-1s</button> <button
+onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"6")'
+ >+6</button><button
+onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"-(6)")'
+ >-6</button> <button
+onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"1")'
+ >+1</button><button
+onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"-(1)")'
+ >-1</button>
+    <button>　OK　</button><button>Reset</button><hr>
+	</div>
+<!-- モーダルダイアログ用ボタンUI -->
+</div>
+
+<!-- プログレスパネル -->
+<div id='optionPanelProg' class=optionPanelModal>
+	<div style='text-align:center;'>
+	<br><br><br><br><br><br>
+		<span>処理中です…</span><br>
+		<img src=./images/ui/wait.gif width=42 height=42><br>
+		<span>processing......</span><br>
+	<br><br><br><br><br>
+	<hr>
+	</div>
+</div>
+<!-- プログレスパネル -->
+
+<!-- AEキー変換 -->
+<div class=optionPanel id=optionPanelAEK >
+	<table>
+		<tr>
+			<td>AE keyペースト用データ<br>
+				<textarea name=AEKrEsult id=AEKrEsult cols=60 rows=6>
+				</textarea>
+			<td>
+			<td>
+				<input type=button class=toolTip value="全選択"
+					onClick='document.getElementById("AEKrEsult").select();if(document.execCommand)document.execCommand("copy");'><br>
+				<input type=button class=toolTip value="消去"
+					onClick='document.getElementById("AEKrEsult").value="";'><br>
+				<input type=button class=toolTip value="更新"
+					onClick='writeAEKey(xUI.Select[0]);'><br>
+				<input type=button class=toolTip value="閉じる"
+					onClick='xUI.sWitchPanel("AEKey","hide");' /><br>
+			</td>
+			<td>
+				<strong>キー変換方式を選択</strong><br>
+				<SELECT	NAME=blmtd
+					id=blmtd
+					title="カラセルの方式"
+					onChange="chgValue(this.id)"
+				>
+	<OPTION VALUE=file > ファイル 
+	<OPTION VALUE=opacity > 不透明度 
+	<OPTION VALUE=wipe > リニアワイプ 
+	<OPTION VALUE=channelShift > チャンネルシフト 
+	<OPTION VALUE=expression1 > 動画番号トラック
+				</SELECT><br>
+				<SELECT	NAME=blpos
+					id=blpos
+					title="カラセルの位置"
+					onChange="chgValue(this.id)"
+				>
+	<OPTION VALUE=build >--------
+	<OPTION VALUE=first >最初の絵を使う
+	<OPTION VALUE=end >最後の絵を使う
+	<OPTION VALUE=none >カラセルなし
+				</SELECT><br>
+				<hr>
+				<strong>AEバージョンを選択</strong><br>
+				<SELECT	NAME=aeVersion
+					id=aeVersion
+					title="AEバージョン"
+					onChange="chgValue(this.id)"
+				>
+	<OPTION VALUE=8.0>AECS3-4
+	<OPTION VALUE=10.0>AECS5-CC2014
+				</SELECT><br>
+<!--
+<strong>キータイプを選択</strong><br>
+<SELECT NAME=keyMethod
+		id=keyMethod
+		title="キータイプ"
+		onChange="chgValue(this.id)"
+>
+			<OPTION VALUE=min>最少フレーム
+		</SELECT>
+-->
+			</td>
+		</tr>
+	</table>
+</div>
+<!-- AEキー変換 -->
+<!--	XPS書き出し	-->
+<!--	XPS書き出し	-->
+<!--	シート取り込み	-->
+<div class=optionPanel id=optionPanelData>
+<strong id=dataPnl>データ入出力</strong> <span id=dataPnlcaption>(このウェルにデータをコピーペーストします)</span>
+<hr>
+<div><form name=cgiSample id=cgiSample><a
+    id=exportXPSwindow
+    href="javascript:void(0);" onclick="return writeXPS(xUI.XPS)"
+    title="保存用に書き出し"
+>別ウィンドウに書き出し</a> <a
+    id=exportHTMLwindow
+    href="javascript:void(0);"
+    onclick="return printHTML(false)"
+    title="HTML書き出し"
+>別ウィンドウにHTMLで書き出し</a> <span id=TSXUi></span>
+/ Sample data :
+<select name=sampleSelect id=sampleSelect　>
+
+ <option value=1>XPS
+ <option value=2>XPS-修飾メモ付き
+ <option value=3>AEキー
+ <option value=4>AERemap
+ <option value=7>cellRemap
+ <option value=5>T-Sheet
+ <option value=6>Stylos-csv
+ <option value=8>TVP-csv1.0
+ <option value=9>TVP-csv1.1
+</select>
+<button
+    id=sampleLoaderSelect
+    onClick='getSample(1*(document.cgiSample.sampleSelect.value));return false;'
+>サンプル読み込み</button>
+<!-- <a href="javascript:void(0);" onClick="getSample(1)" id=sample1 title="xps">XPS-1</a> |
+ <a href="javascript:void(0);" onClick="getSample(2)" id=sample2 title="xps(修飾メモ付き)">XPS-2</a> |
+ <a href="javascript:void(0);" onClick="getSample(3)" id=sample3 title="AE-Key">AE-Key</a> |
+ <a href="javascript:void(0);" onClick="getSample(4)" id=sample4 title="AE-Remap">AERemap</a> |
+ <a href="javascript:void(0);" onClick="getSample(7)" id=sample7 title="cell-Remap">cellRemap</a> |
+ <a href="javascript:void(0);" onClick="getSample(5)" id=sample5 title="T-Sheet">TSheet</a> |
+ <a href="javascript:void(0);" onClick="getSample(6)" id=sample6 title="RETAS-Stylos-csv">Stylos-csv</a>
+-->
+</form>
+</div>
+<hr>
+<div align=right></div>
+<span style="text-align:center">
+<!-- 
+/*
+	このテキストエリアにXPSデータをペーストして
+	[取り込み]ボタンをクリックすると、シートに
+	取り込むことができます。
+
+	このエリア上で直接編集してもかまいません。
+	…[tab]は、入力できないかもしれませんが。
+*/
+<input type=hidden id=loadShortcut    value=false>
+
+-->
+<input type=hidden id=loadTarget    value=true>
+<div style="text-align:center;">
+<span id=localFileLoader>
+<form id="dataLoader" name="dataLoader" method="post" action="javascript:void(0);" enctype="multipart/form-data">
+<input type="file" id=myCurrentFile name=XPSBody size=100 >
+<br>
+テキストエリアにファイルをドロップしてください。
+<br>
+</form>
+</span>
+</div>
+<form name=exportXps action="void(0);">
+<strong> (Import) </strong><input type=button
+    id=dataLoaderImport value="読込＋取込" style="width:10%"
+	onClick="xUI.importDocument('body');"
+	title="ファイルの内容のみを編集エリアに取り込む"
+><input type=button
+    id=dataLoaderRef value="参照取込" style="width:10%"
+	onClick='if(xUI.referenceXPS.parseXps(xUI.convertXps(xUI.data_well.value,"",{},true,0))){xUI.resetSheet();}'
+	title="データを参照エリアへ読み込む"
+><input type=button
+    id=dataLoaderGet value="取込" style="width:10%"
+	onClick="processImport(false)"
+	title="データを編集エリアへ読み込む"
+><input type=button
+    id=dataLoaderSelectAll value="全選択" style="width:10%"
+	onClick="xUI.data_well.select()"
+><input	type=reset
+    id=dataLoaderReset value="リセット" style="width:10%"
+><input type=button
+	id=dataLoaderClear value="消去" style="width:10%"
+	onClick="xUI.data_well.value=''"
+><input type=button
+    id=dataLoaderClose value="閉じる" style="width:10%"
+	onClick='xUI.sWitchPanel("Data","hide")'
+><br /><textarea name=XPSBody id=data_well style="width:80%;height:128px"
+></textarea><br><strong> (Export) </strong>
+<input type=button
+    id=exporterXps value="Xps" style="width:10%"
+	onClick='xUI.data_well.value=xUI.XPS.toString();if(document.getElementById("exportCheck").checked){callEchoExport("xps")};return false;'
+><input type=button
+    id=exporterTdts value="Tdts" style="width:10%"
+	onClick='xUI.data_well.value=XPS2TDTS(xUI.XPS,"tdts");if(document.getElementById("exportCheck").checked){callEchoExport("tdts")};return false;'
+><input type=button
+    id=exporterXdts value="Xdts" style="width:10%"
+	onClick='xUI.data_well.value=XPS2XDTS(xUI.XPS,"xdts");if(document.getElementById("exportCheck").checked){callEchoExport("xdts")};return false;'
+><input type=button
+    id=exporterEPS value="EPS" style="width:10%"
+	onClick='exportEps();return false;'
+><input type=button
+    id=exporterARD value="ARD" style="width:10%"
+	onClick='xUI.data_well.value=XPS2ARD(xUI.XPS);if(document.getElementById("exportCheck").checked){callEchoExport("ard")};return false;'
+><input type=button
+    id=exporterTSheet value="TSheet" style="width:10%"
+	onClick='xUI.data_well.value=XPS2TSH(xUI.XPS);if(document.getElementById("exportCheck").checked){callEchoExport("tsh")};return false;'
+><input type=button
+    id=expoterARDJ value="ARDJ" style="width:10%"
+	onClick='xUI.data_well.value=XPS2ARDJ(xUI.XPS);if(document.getElementById("exportCheck").checked){callEchoExport("ardj")};return false;'
+><input type=button
+    id=exporterStylosCSV value="Stylos-csv" style="width:10%"
+	onClick='xUI.data_well.value=XPS2StylosCSV(xUI.XPS,xUI.referenceXPS);if(document.getElementById("exportCheck").checked){callEchoExport("csv")};return false;'
+> <a href="javascript:void(0);"
+    id='exporterDLcheck'
+    onClick='return chkValue("exportCheck");'>ダウンロード</a>: <input type=checkbox id=exportCheck name=exCk >
+</form>
+</span>
+<div id=receivers style="display:none;">
+<!--cssに設定してこの一角を非表示化すること  visibility:hidden;-->
+<iframe name=window0 class=UIhidden></iframe>
+<iframe name=window1 class=UIhidden></iframe>
+<iframe name=window2 class=UIhidden></iframe>
+</div>
+</div>
+<!--	シート取り込み	-->
+<!--	タイムシート情報(scene)
+ 画面表示的にレイヤ詳細の配置を変更する。
+的には、スクロールを有効にすべきかもしれないので一考の余地あり
+2013.03.30
+	新規タイムシート/タイムシート内容の編集 
+-->
+
+<div class=optionPanelModal id=optionPanelScn>
+
+	<table id=uiTable class='UItable'>
+		<tr>
+		<td style="text-align:left" colspan=2>
+			<span id=scnNewDocument>  
+					<input type=checkbox
+					style="display:inline;"
+					id="scnNewSheet"
+					onChange=myScenePref.chgNewSheet()
+				>
+				<span id=scnNewSheetLbl> 新規作成 </span>
+			</span>
+			<input
+				id=scnPushentry type=button value="登録" class="scnControl" 
+				onclick='myScenePref.putProp();
+					serviceAgent.addEntry(xUI.XPS,function(){
+						var myIdentifier = Xps.getIdentifier(xUI.XPS,false);
+						serviceAgent.currentRepository.getSCi(function(){
+							serviceAgent.currentRepository.getEntry(myIdentifier);
+						},false,myIdentifier);
+					},function(){
+						alert("データ登録失敗");
+					});'
+				title='現在のタイムシートをリポジトリに登録します'
+			>
+			<input id=scnUpdate    type=button value="更  新" class="scnControl" onClick="myScenePref.putProp();">
+			<input id=scnNew       type=button value="作  成" class="scnControl" onClick="myScenePref.putProp();">
+			<input id=scnReset      type=button value="リセット" class="scnControl" onClick="myScenePref.getProp();">
+			<input id=scnClose     type=button value="閉じる" class="scnControl" onClick="myScenePref.close();">
+		</td>
+		</tr>
+
+		<tr>
+		<td class=menu >
+			<table>
+				<tr>
+					<th width=8em>repository
+					</th>
+					<td width=24em colspan=2 id=scnRepository>
+					</td>
+				</tr>
+				<tr>
+					<th width=8em>	MAP-file
+					</th>
+					<td width=24em colspan=2 id=scnMapfile>
+						no xMap data
+<!--<input type=text  style="width:100%" disabled value="---" onChange="myScenePref.rewrite(this.id)"/>-->
+					</td>
+				</tr>
+				<tr>
+					<th>	Title.
+					</th>
+					<td colspan=2>
+						<input
+							type=text
+							id=scnTitle
+							style="width:95%"
+							value="" 
+							autoComplete= "on"
+							list ="scnTitleList"
+							onChange="myScenePref.reWrite(this.id)"
+						>
+						<datalist id="scnTitleList">
+						</datalist>
+					<td>
+				</tr>
+				<tr>
+				<th>	Episode.
+				</th>
+				<td colspan=2>
+					<input	type=text
+						id=scnOpus
+						style="width:95%"
+						value=""
+						autoComplete= "on"
+						list ="scnOpusList"
+						onChange="myScenePref.reWrite(this.id)"
+					>
+					<datalist id="scnOpusList">
+					</datalist>
+				</td>
+				</tr>
+				<tr>
+				<th>	sub title.
+				</th>
+				<td colspan=2>
+					<input type=text
+						id=scnSubtitle
+						style="width:95%"
+						value=""
+						onChange="myScenePref.reWrite(this.id)"
+				>
+				</td>
+				</tr>
+				<tr>
+				<th>	S - C
+				</th>
+				<td>
+					S <input	type=text
+					id=scnScene
+					style="width:80%"
+					value="---"
+					onChange="myScenePref.rewrite(this.id)"
+					>
+				</td>
+				<td>
+					- C <input	type=text
+					id=scnCut
+					style="width:80%"
+					value="---"
+					onChange="myScenePref.rewrite(this.id)"
+					>
+				</td>
+				</tr>
+				<tr>
+				<th nowrap rowspan=5>	Time.
+				</th>
+				<td nowrap >
+					<span>head margin</span>
+					<datalist id="scnTransitionList">
+						<option value=trin>前カットからトランジション</option>
+						<option value=trout>後方カットへトランジション</option>
+						<option value=OL>オーバーラップディソルブ</option>
+						<option value=WIPE>ワイプトランジション</option>
+					</datalist>
+					<datalist id="scnMarginList">
+						<option value="0+00"> 0+00 </option>
+						<option value="1+00"> 1+00 </option>
+						<option value="2+00"> 2+00 </option>
+						<option value="3+00"> 3+00 </option>
+					</datalist>
+				</td>
+				<td>
+					<input
+						id=scnHeadMargin
+						type=text
+						value='00+00'
+						autoComplete= "on"
+						list ="scnMarginList"
+					>
+				</td>
+				</tr>
+				<tr>
+				<td>
+					<span>transit in</span>
+				</td>
+				<td>
+					<input type=text
+						id=scnTrin
+						style="width:5em"
+						value="tr-in"
+						autoComplete= "on"
+						list ="scnTransitionList"
+						onChange="myScenePref.rewrite(this.id)"
+					>
+					<input type=text
+						id=scnTrinT
+						style="width:5em"
+						value="---"
+						onChange="myScenePref.rewrite(this.id)"
+					>
+				</td>
+				</tr>
+				<tr>
+				<td>
+					<span>TIME</span>
+				</td>
+				<td>
+					<input	type=text
+						id=scnTime
+						value="---" 
+						onChange="myScenePref.rewrite(this.id)"
+					>
+				</td>
+				</tr>
+				<tr>
+				<td>
+					<span>transit out</span>
+				</td>
+				<td>
+					<input type=text
+						id=scnTrot
+						style="width:5em"
+						value="tr-out"
+						autoComplete= "on"
+						list ="scnTransitionList"
+						onChange="myScenePref.rewrite(this.id)"
+					>
+					<input type=text
+						id=scnTrotT
+						style="width:5em"
+						value="---"
+						onChange="myScenePref.rewrite(this.id)"
+					>
+				</td>
+				</tr>
+				<tr>
+				<td>
+					<span>tail margin</span>
+				</td>
+				<td>
+					<input
+						id=scnTailMargin
+						type=text
+						value='00+00'
+						autoComplete= "on"
+						list ="scnMarginList"
+					>
+				</td>
+				</tr>
+<tr>
+<td colspan=3>
+		<button
+			class=timeButton
+			id=incrBt_L
+			style='background-color:#888888;font-size:12px;'
+			onclick='myScenePref.incrFocusTarget(event);'> 
+		</button> 
+		<button
+			class=timeButton
+			id=incrBt_M
+			style='background-color:#aaaaaa;font-size:12px;'
+			onclick='myScenePref.incrFocusTarget(event);'> 
+		</button> 
+		<button
+			class=timeButton
+			id=incrBt_R
+			style='font-size:12px;'
+			onclick='myScenePref.incrFocusTarget(event);'> 
+		</button> 
+<!--
+		<button
+			onclick='nas.HTML.timeIncrement(this.parentNode.parentNode.childNodes[1],1000,3);'> +
+		</button> Sec. <button
+			onclick='nas.HTML.timeIncrement(this.parentNode.parentNode.childNodes[1],-1000,3);'> -
+		</button>
+		<button
+			onclick='nas.HTML.timeIncrement(this.parentNode.parentNode.childNodes[1],"6",3);'> +
+		</button> 6k <button
+			onclick='nas.HTML.timeIncrement(this.parentNode.parentNode.childNodes[1],"-(6)",3);'> -
+		</button>
+		<button
+			onclick='nas.HTML.timeIncrement(this.parentNode.parentNode.childNodes[1],"1",3);'> +
+		</button> k <button
+			onclick='nas.HTML.timeIncrement(this.parentNode.parentNode.childNodes[1],"-(1)",3);'> -
+		</button>-->
+	</span>
+	<br>
+</span>
+
+
+</td>
+</tr>
+				<tr>
+				<th nowrap>	created
+					<input	type=hidden id=scnCreate_time value=""/>
+					<input	type=hidden id=scnCreate_user value=""/>
+					<input	type=hidden id=scnUpdate_time value=""/>
+					<input	type=hidden id=scnUpdate_user value=""/>
+				</th>
+				<td id=scnCreate_timeTD >	日付(編集不可)
+				</td>
+				<td id=scnCreate_userTD >	ユーザ(編集不可)
+				</td>
+				</tr>
+				<tr>
+				<th>	updated
+				</th>
+				<td id=scnUpdate_timeTD >	日付(編集不可)
+				</td>
+				<td id=scnUpdate_userTD >  ユーザ(編集不可)
+				</td>
+				</tr>
+				<tr>
+				<th>	format/書式
+				</th>
+				<td colspan=2 nowrap>
+					<select
+						id=scnFormatList
+						style ='text-align:center;width:95%;'
+						onChange="myScenePref.chgProp(this.id)"
+						title = 'プリセットからフォーマットを選択してください'
+					></select>
+				</td>
+				</tr>
+				<tr>
+				<td colspan=3 nowrap style="overflow:hidden;width:320px;height:240px;">
+					<img id=scnFormPreview src=./documentFormat/timesheet/default.png width=256px>
+				<td>
+				</tr>
+
+				<tr style='display:none;''>
+				<th>	tracks
+				</th>
+				<td colspan=2 nowrap>
+					<input	type=text
+						disabled=true
+						id=scnLayers
+						
+						style="width:2em"
+						value="---"
+						onChange=myScenePref.chglayers(this.id)
+						title="重ね数の変更を行います"
+					>
+					<input	type=text
+						disabled=true
+						id=scnLayersLbls
+						style="width:16em"
+						value="---"
+						onChange=myScenePref.chglayers(this.id)
+					title="ラベルを指定します"
+					>
+					<input	type=button
+						id=scnLayerUpdate
+						value="< 詳細 >"
+						onClick=myScenePref.openTable()
+						title="セルの詳細を編集します"
+					>
+				</td>
+				</tr>
+			</table>
+		</td>
+		</tr>
+		<tr>
+			<td nowrap style="text-align:left;vertical-align:top;">
+				<div id=scnCellTable style="display:none"> 
+					<span id=scnLayerBrouser ></span>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>
+<!--	タイムシート情報(scene)	-->
+<!--    一括インポートパネル      -->
+<!-- optionPanelSCI 
+     この下側が登録内容の編集ダイアログです
+     ファイル名から以下の情報を取得するようにトライします
+     タイトル
+     エピソード
+     サブタイトル（エピソードの　description）
+     カット番号（名称）
+     
+     分解不能な場合は、拡張子を除くファイル名全体がカット番号として認識されます。
+     
+     サーバでの使用時に、タイトル・エピソード・サブタイトルを固定する場合は、
+     convertXps()
+-->
+<div class=optionPanel id=optionPanelSCI >
+<span id='dialogSCImsg'>
+選択したドキュメントを変換領域に読込みました。
+
+このまま自動変換でタイムシートに読み込む事ができます。
+手動で変換する場合は[OK]ボタンをクリック
+
+The selected document was read into the conversion area.
+
+It can be read into the dope sheet by automatic conversion as it is.
+To convert manually, click button [Directly load]
+<br>
+<!--
+複数の選択ドキュメントを変換領域に読み込みました。
+
+一括でリポジトリに登録することができます。
+不要なカットのチェックは外してください
+[カット登録]ボタンで実行
+
+Multiple selected documents were imported into the conversion area.
+
+You can register to the repository in bulk.
+Please uncheck unnecessary cuts
+Execute with [store SCi] button
+<br>
+現在のタイムシートをリポジトリに登録します。
+
+タイトル、エピソード、カット番号を確認して
+初期工程を選択してください。
+カットに指名メッセージを添えることができます。
+-->
+</span>
+<span class=titleInputLB >TITLE:</span>
+    <input class=SCiInput id=optionPanelSCI_title type=text
+        onChange='xUI.importBox.checkValue(this)'
+    >
+<span class=opusInputLB >ep#:</span>
+    <input class=SCiInput id=optionPanelSCI_opus type=text
+        onChange='xUI.importBox.checkValue(this)'
+    >
+<hr>
+<span class=titleInputLB >SUBTITLE:</span>
+    [<input class=SCiInput id=optionPanelSCI_subtitle type=text
+        onChange='xUI.importBox.checkValue(this)'
+    >]
+<hr>
+<div id=optionPanelSCIs></div>
+<!--
+ 以下カット別テンプレート
+
+　-->
+<div id=sciTemplate class=sciTemplate >
+<hr>
+<input class=SCiImportCB id=optionPanelSCI_%ID%_imptCB type=checkbox title='このカットをインポートします' checked
+    onChange='xUI.importBox.checkValue(this);'
+>
+<span  class=SCiImportLB >S-C : </span>
+    <input  class='SCiInput SCiInput_Number' id=optionPanelSCI_%ID%_sc type=text value='###'
+        onChange='xUI.importBox.checkValue(this);'
+    >
+<!-- 時間編集UI ボタン付き
+<span class=timeInputUIwithBt >
+(
+<input
+    type = text
+    class=timeInputTC 
+    id = 'optionPanelSCI_%ID%_time_'
+    value ='00+00 .'
+    onMouseDown = 'nas.sliderVALUE([event,this.id,"288","1","0",nas.FCT2Frm(this.value)]);'
+    onChange ='xUI.importBox.checkValue(this)'
+>
+)
+<span class=timeInputButtons>
+         <button
+    class='subControl subControl-incrS subControl-left-top'
+    onclick='nas.HTML.timeIncrement(this.parentNode.parentNode.childNodes[1],1000,3);'>
+</button><button
+    class='subControl subControl-decrS subControl-left-bottom'
+    onclick='nas.HTML.timeIncrement(this.parentNode.parentNode.childNodes[1],-1000,3);'>
+</button><button
+    class='subControl subControl-incr6 subControl-mid-top'
+    onclick='nas.HTML.timeIncrement(this.parentNode.parentNode.childNodes[1],"6",3);'> 
+</button><button
+    class='subControl subControl-decr6 subControl-mid-bottom'
+    onclick='nas.HTML.timeIncrement(this.parentNode.parentNode.childNodes[1],"-(6)",3);'>
+</button><button
+    class='subControl subControl-incr subControl-right-top'
+    onclick='nas.HTML.timeIncrement(this.parentNode.parentNode.childNodes[1],"1",3);'>
+</button><button
+    class='subControl subControl-decr subControl-right-bottom'
+    onclick='nas.HTML.timeIncrement(this.parentNode.parentNode.childNodes[1],"-(1)",3);'>
+</button>
+    </span>
+<br>
+</span> -->
+<!-- 時間編集UI ボタンなし-->
+<span class=timeInputUI >
+(
+<input
+    type = text
+    class=timeInputTC 
+    id = 'optionPanelSCI_%ID%_time'
+    value ='00+00 .'
+    onChange ='xUI.importBox.checkValue(this)'
+>
+)
+<br>
+</span>
+
+<!-- 時間編集UI -->
+</div>
+<!-- 以上カット別テンプレート -->
+
+<hr>
+<button id=updateSCiTarget
+    onclick='xUI.importBox.updateTarget();' 
+    style='width:400px'
+    title='カット番号と時間を編集して登録'
+    title='直接タイムシートへ'
+> タイムシートへ読込
+ カット登録　
+ 
+ </button><br>
+<button id=resetSCiTarget
+ onclick ='xUI.importBox.resetTarget(xUI.importBox.targetContents);if($("#optionPanelData").isVisible())xUI.sWitchPanel("Data");'
+ style='width:198px'
+ title='元に戻す' 
+ > リセット
+ 
+  </button>
+<button id=closeSCiDialog
+ onclick ='if(! $("#optionPanelData").isVisible())xUI.sWitchPanel("Data");$("#optionPanelSCI").dialog("close");'
+ style='width:198px'
+ title='手動で変換'
+ title='キャンセルしてダイアログを閉じる'
+ >  Ｏ　Ｋ
+    閉じる    
+ 　</button>
+<!--
+S:<input type=text style="width:64px" value='###'>-C:<input type=text style="width:64px" value='###'>
+TIME:(<input type=text style="width:64px" value='##+##'>)
+<br>
+</span>
+-->
+</div>
+<!-- optionPanelSCI -->
+
+
+
+
+<!--    一括インポートパネル      -->
+<!-- 時間編集UI -->
+<div class=optionPanel id=optionPanelTimeUI>
+<span style="margin-right:60px;"> </span>
+<span style="position:relative">
+         <button
+    class='subControl subControl-incrS subControl-left-top'
+    onclick='document.getElementById("timeInput").value=nas.Frm2FCT(nas.FCT2Frm(document.getElementById("timeInput").value)+24,3)'> 
+</button><button
+    class='subControl subControl-decrS subControl-left-bottom'
+    onclick='document.getElementById("timeInput").value=nas.Frm2FCT(nas.FCT2Frm(document.getElementById("timeInput").value)-24,3)'>
+</button><button
+    class='subControl subControl-incr6 subControl-mid-top'
+    onclick='document.getElementById("timeInput").value=nas.Frm2FCT(nas.FCT2Frm(document.getElementById("timeInput").value)+6,3)'> 
+</button><button
+    class='subControl subControl-decr6 subControl-mid-bottom'
+    onclick='document.getElementById("timeInput").value=nas.Frm2FCT(nas.FCT2Frm(document.getElementById("timeInput").value)-6,3)'>
+</button><button
+    class='subControl subControl-incr subControl-right-top'
+    onclick='document.getElementById("timeInput").value=nas.Frm2FCT(nas.FCT2Frm(document.getElementById("timeInput").value)+1,3)'>
+</button><button
+    class='subControl subControl-decr subControl-right-bottom'
+    onclick='document.getElementById("timeInput").value=nas.Frm2FCT(nas.FCT2Frm(document.getElementById("timeInput").value)-1,3)'>
+</button></span><br>
+<hr></div>
+<!-- 時間編集UI -->
+<!-- リポジトリエントリブラウザ optionPanelFile-->
+<div class=optionPanelModal id=optionPanelFile >
+<!-- りまぴん(新) ファイルブラウザインターフェース -->
+<!-- タイトル、カット等の新規作成（登録）UI-->
+    <div>
+<span class=labelMargin > product : </span> 
+<input type=text
+	class = ddpInput
+    id = titleInput
+    size=40
+	disabled=true
+    value='(*--title--*)'
+	onChange="documentDepot.currentSelection=documentDepot.buildIdentifier();"
+><input type=text
+	class = ddpInput
+    id = opusInput
+    size=12
+	disabled=true
+    value='(*--opus--*)'
+	onChange="documentDepot.currentSelection=documentDepot.buildIdentifier();"
+><br>
+<span class=labelMargin > </span>
+<input type=text
+	class = ddpInput
+    id = subtitleInput
+    size=42
+	disabled=true
+    value='(*--subtitle--*)'
+	onChange="documentDepot.currentSelection=documentDepot.buildIdentifier();"
+><hr>
+<span class=labelMargin > s - c : </span> 
+<!--    SCENE-CUT    -->
+<input	type=text
+	class = "ddpInput sciInput"
+	name=fileTest
+	id=cutInput
+	size=64
+	value='(*-- s-c# --*)'
+	disabled=true
+	onChange="documentDepot.currentSelection=documentDepot.buildIdentifier();"
+>(<input	type=text
+	class = "ddpInput sciInput"
+	name=fileTest
+	id=timeInput
+	size=12
+	value='3 + 0 .'
+	disabled=true
+	onChange="documentDepot.currentSelection=documentDepot.buildIdentifier();"
+>)
+<!--    SCENE-CUT//  -->
+<br>
+<span class=labelMargin > issue : </span> 
+<!--    issueSelector   -->
+<select
+	id=issueSelector
+	class=issueSelector
+	disabled=true
+	onChange="documentDepot.currentSelection=documentDepot.buildIdentifier(true);"
+	title='過去のバージョン'
+>
+	<option value=-1>#:---line//#:---stage//#:---job//(status)</option>
+</select>
+<!--    issueSelector// -->
+    </div>
+
+	<div id=current_identifier></div>
+
+	<div id='ddp_assignment' style='text-align:left;'>
+<!--
+<button
+title = "＊担当者指定があった場合表示される　（指定がないときは、何も表示されない）"
+onclick = 'var trgt = $("#ddp_assingn_notoText");if(trgt.is(":visible")){trgt.hide()}else{trgt.show()};'
+>▶To:<span>(担当)</span>様へ(アサインされた担当者が表示される)</button>
+-->
+<!--
+	<div id='ddp_assingn_notoText' style='text-align:left;display:none;'><hr>
+申し送りが存在すれば　担当名がボタン化　またはひねり矢印が表示される。
+クリックすると作業終了時の申し送りが表示される…トグル表示<br>
+HTML（画像を使用可能）か？<br>
+この申し送りは一時的な付箋の様な扱いで<br>
+無くても良い<br>
+永続的な保存はできない<br>
+メモ程度
+アサインメントによるソートは実装すべきか？<br>
+	</div>
+-->
+	</div>
+<hr>
+<!--  for management  -->
+	<div id=ddp-man class='documentPanelTools documentPanelTools-man' >
+	<div id=localMultiLoader class='debug'>
+<form id="multiLoader" name="multiLoader" method="post" action="javascript:void(0);" enctype="multipart/form-data">
+	一括登録 :<input type=file id=myCurrentOpus name=XPSBodys multiple=true size=256  class='show'>
+	<a href="javascript:" onClick='var tgt=document.getElementById("buildWithCSV");tgt.checked=(tgt.checked)?false:true;return false;'>
+	cvsファイルから登録</a> : <input id=buildWithCSV type=checkbox>
+	<button class='documentPanelButton-management debug'>
+	実行</button>
+</form>
+	</div>
+
+<button
+ onClick='alert("お待ち下さい");'
+ class='documentPanelButton-management debug'
+ disabled=true
+ title="local repository only"
+>一括ダウンロード </button><button
+ onClick='alert("お待ち下さい");'
+ class='documentPanelButton-management debug'
+ disabled=true
+ title="local repository only"
+>一括登録 </button><button
+ id='ddp-removeentry'
+ onClick='if(serviceAgent.currentRepository===localRepository){localRepository.removeEntry(documentDepot.currentSelection);selectSCi();}'
+ class='documentPanelButton-management'
+ disabled=true
+ title="local repository only ローカルリポジトリからカットを削除します"
+>エントリ削除</button><button
+ onClick='serviceAgent.addTitle();selectSCi();'
+ class='documentPanelButton-management debug'
+ disabled=true
+ title="タイトル登録（デバッグ）"
+>makeTitle</button><button
+ onClick='hello();'
+ disabled=true
+ class='documentPanelButton-management debug'
+ title="エピソード登録（デバッグ）"
+>makeEpisode</button><button
+ id=ddp-addentry
+ onClick='serviceAgent.addEntry();'
+ class='documentPanelButton-management'
+ disabled=true
+ title="カットを新規に登録します"
+>新規登録</button>
+	</div>
+<!-- for management -->
+
+	<div class='documentPanelTools'>
+<button
+ id='ddp-reference'
+ onClick='console.log("read to reference :" + decodeURIComponent(documentDepot.currentSelection));serviceAgent.getEntry(documentDepot.currentSelection,true);'
+ class='documentPanelButton'
+ title="参照読出  readout - reference"
+ disabled=true
+>参照</button><button
+ id='ddp-readout'
+ onClick='console.log("read :" + decodeURIComponent(documentDepot.currentSelection));serviceAgent.getEntry(documentDepot.currentSelection,false,null,null,function(){console.log(xUI.XPS);if(xUI.currentUser.sameAs(xUI.XPS.update_user)&&(xUI.XPS.currentStatus.content.match(/(Hold|Active)/))&&(xUI.sessionRetrace==0)){serviceAgent.activateEntry();};});'
+ class='documentPanelButton'
+ title="読出 readout"
+ disabled=true
+>読出</button>
+
+<input type='text' id='ddp-searchtext' size=20 ><button
+ id='ddp-search'
+ onClick='alert(this.innerHTML);'
+ class='iconButton iconButton-search'
+ title=" 検 索 "
+> </button><button
+ id='ddp-close'
+ onClick='xUI.sWitchPanel("File");'
+ class='documentPanelButton'
+ title=" ウインドウを閉じる "
+>Cancel</button>
+	</div>
+	<div>
+	<select
+	id="repositorySelector"
+	title="リポジトリ選択"
+	style="width:200;text-align:right"
+	onchange="serviceAgent.switchRepository(this.value)"
+>
+<option selected>[localRepository]
+</select>
+	</div>
+	<div></div>
+<!--
+<select
+	name="opus_numbers"
+	id="opusSelect"
+	class="document-selector document-selector-opus"
+	size=6
+onChange='setProduct();'
+>
+<option selected>（*-- no title --*）
+</select><select
+	name="cutList"
+	id="cutList"
+	class="document-selector document-selector-cut"
+	size=6
+	multiple=true
+	onChange="selectSCi();"
+	ondblclick='if(this.selectedIndex>0){document.getElementById("ddp-readout").click();}'
+>
+<option >（*-- no document --*）
+</select>
+-->
+	<div
+	name  = "opus_numbers"
+	id    = "opusSelect"
+	class ="nasHTMLSliderSelect document-selector document-selector-opus"
+onChange='setProduct();'
+>
+<option selected>（*-- no title --*）
+	</div><div
+	name  = "cutList"
+	id    = "cutList"
+	class = "nasHTMLSliderSelect document-selector document-selector-cut"
+	multiple = true
+	onChange = "selectSCi();"
+	ondblclick = 'if(this.selectedIndex>0){document.getElementById("ddp-readout").click();}'
+>
+<option>（*-- no document --*）
+	</div>
+
+	<div style='white-space:nowrap;'>
+<span align=left>
+<button
+ id='ddp-refresh'
+ onClick='documentDepot.rebuildList(true);'
+ class='iconButton iconButton-reload'
+ title="リストを最新の情報に更新"
+> </button>
+<button
+class=productFilter
+onclick="documentDepot.products.sort();documentDepot.updateOpusSelector();"
+    >sort</button><button
+class=productFilter
+onclick="documentDepot.products.reverse();documentDepot.updateOpusSelector();"
+    >reverse</button><button
+class=productFilter
+onclick='documentDepot.updateOpusSelector(new RegExp(document.getElementById("productFilterText").value),true);'
+    >hide</button><input
+id = productFilterText
+class = productFilter
+type = text
+size =12
+style="height:20px;"
+value=".+"
+    ><button
+class=productFilter
+onclick='documentDepot.updateOpusSelector(new RegExp(document.getElementById("productFilterText").value));'
+    >apply</button><button
+class=productFilter
+onclick='document.getElementById("productFilterText").value=".+";'
+    >reset</button>
+    </span>
+<span style="float:right;">
+
+<button
+id='ddp-refresh2'
+class='iconButton iconButton-reload'
+onclick="documentDepot.updateDocumentSelector();"
+title="ドキュメントを更新"
+    ></button><button
+class=numberFilter
+onclick='documentDepot.updateDocumentSelector(new RegExp("[^1-9][0-9][0-9][^0-9]*$"));'
+    >~99</button><button
+class=numberFilter
+onclick='documentDepot.updateDocumentSelector(new RegExp("1[0-9][0-9][^0-9]*$"));'
+    >~199</button><button
+class=numberFilter
+onclick='documentDepot.updateDocumentSelector(new RegExp("2[0-9][0-9][^0-9]*$"));'
+    >~299</button><button
+class=numberFilter
+onclick='documentDepot.updateDocumentSelector(new RegExp("3[0-9][0-9][^0-9]*$"));'
+    >~399</button></span>
+    </div>
+<!-- fordebug 
+<button onClick='documentDepot.documentsUpdate()'>documentsUpdate</button>
+<button onClick='documentDepot.updateOpusSelector()'>updateOpusSelector</button>
+<button onClick='documentDepot.updateDocumentSelector()'>updateDocumentSelector</button>
+<button onClick='documentDepot.rebuildList()'>rebuildList</button>
+<br>
+<button onClick='serviceAgent.currentRepository.getProducts()'>getProducts</button>
+<button onClick='serviceAgent.currentRepository.getEpisodes(false,false,documentDepot.currentProduct)'>getEpisodes</button>
+<button onClick='console.log(documentDepot.currentSelection);serviceAgent.currentRepository.getSCi(false,false,documentDepot.currentSelection)'>getSCi</button>
+
+<button onClick='console.log(serviceAgent.currentRepository)'>Repository</button>
+<button onClick='console.log(serviceAgent.currentRepository.productsData)'>productsData</button>
+<button onClick='console.log(serviceAgent.currentRepository.entryList)'>entryList</button>
+-->
+	<div><hr>
+	<button onclick="console.log(documentDepot.currentSelection);serviceAgent.currentRepository.getEntry(documentDepot.currentSelection,null,function(result){document.getElementById('dbgPreview').value += result;});">dump</button>
+	<button onclick="
+	var s = new Xps();s.parseXps(document.getElementById('dbgPreview').value);s.parseSheetLooks(documentFormat.toJSON());serviceAgent.currentRepository.pushEntry(s);">write</button>
+		<button onclick="document.getElementById('dbgPreview').value = '';">clear</button>
+	<br>
+	<textarea id=dbgPreview ></textarea>
+	</div>
+</div>
+<!-- リポジトリエントリブラウザ optionPanelFile // -->
+<!-- 新規登録ダイアログ -->
+<div class=optionPanelModal id=optionPanelNewEntry>
+	<span>TITLE-Selector</span>
+	<span>episode-Selector</span>
+</div>
+<!-- 新規登録ダイアログ -->
+<!--	各種設定	-->
+<div class=optionPanelModal id=optionPanelPref>
+<table class=UItable>
+	<tr>
+		<th class=menu colspan=3> name. / <input id='myName' type='text' autocomplete='on' list='recentUsers' size=32 value='' title='ユーザ名を入力' onChange='myPref.chgMyName(this.value)'>
+            		
+<!-- <span id=myName onClick="myPref.chgMyName()"></span> -->
+		</th>
+	</tr>
+	<tr>
+		<td colspan=2 style="text-align:center"><input type=button
+		    id=prefBtapply
+		    value="設定反映"
+			style="width:120px;" onClick="myPref.putProp();"> <input type=button
+			id=prefBtReset
+			value="リセット" style="width:120px;" onClick="myPref.getProp();"> <input
+			id=prefBtClose
+			type=button value="閉じる" style="width:120px;" onClick="myPref.close();">
+		</td>
+	</tr>
+<!--
+	<tr id=cgiMenu>
+		<td colspan=2 style="text-align:center"><input type=button
+			value="設定を保存" style="width:180px;" onClick="myPref.putProp();writeCk();">
+		<input type=button value="設定を削除" style="width:180px;"
+			onClick="dlCk();"></td>
+	</tr>
+	<tr id=airMenu>
+	-->
+	<tr>
+		<td colspan=2 style="text-align:center"><input type=button
+		    id=prefBtSave
+			value="設定を保存" style="width:180px;" 
+            onClick="myPref.putProp();writeCk();">
+		<input type=button
+		    id=prefBtDelete
+		    value="設定を削除" style="width:180px;"
+			onClick="dlCk();"></td>
+	</tr>
+	<tr>
+		<td colspan=2 class=logo>
+		<hr>
+		</td>
+	</tr>
+	<tr style='display:none;'>
+		<td id=prefLbMode colspan=2 class=toolbarR>画面モード<br />
+		<input type="radio" name="viewMode" id=vMPageImage value="PageImage" onClick='myPref.chgVM(this.value)' >
+		<a id=prefModeWP href="javascript:" onClick='return myPref.chgVM("PageImage")'>ページ画像</a>　/
+		<input type="radio" name="viewMode" id=vMWordProp value="PageImage" onClick='myPref.chgVM(this.value)' >
+		<a id=prefModeWP href="javascript:" onClick='return myPref.chgVM("PageImage")'>タイムシートワープロ</a>　/
+		<input type="radio" name="viewMode" id=vMCompact value="Scroll" onClick='myPref.chgVM(this.value)'>
+		<a id=prefModeCP href="javascript:" onClick='return myPref.chgVM("Scroll")'>コンパクトエディタ</a>
+		<hr>
+		</td>
+	</tr>
+	<tr>
+		<td id=prefLbAE colspan=2 class=toolbarR >AE キーデータオプション<br />
+		<a id=prefLbOpnAEKpnl href="javascript:" onClick='return myPref.chg("opnAEKpnl")'>キーデータ書き出しの際に詳細設定パネルを開く </a>:<INPUT
+			TYPE=CheckBox NAME=opnAEKpnl id=opnAEKpnl><br />
+<span  style='display:none;'>
+		blank method. <SELECT NAME=blmtd id=prefBlmtd onChange="myPref.chgblk(this.id)">
+			<OPTION VALUE=0>ファイル
+			<OPTION VALUE=1>不透明度
+			<OPTION VALUE=2>リニアワイプ
+			<OPTION VALUE=3>チャンネルシフト
+			<OPTION VALUE=4>動画番号トラック
+		</SELECT><SELECT NAME=blpos id=prefBlpos onChange="myPref.chgblk(this.id)">
+			<OPTION VALUE=0>最初の絵を使う
+			<OPTION VALUE=1>最後の絵を使う
+			<OPTION VALUE=2>カラセルなし
+		</SELECT><br />
+
+
+		AE Version<SELECT NAME=AEver id=prefAeVersion>
+			<OPTION VALUE=0>CS3-4
+			<OPTION VALUE=1>CS5-CC2014
+		</SELECT>	
+<!--
+			<OPTION VALUE=2>6.0
+		<SELECT NAME=keyMethod id=prefKeyMethod>
+			<OPTION VALUE=0>最少フレーム</SELECT>
+-->
+		<br>
+		<span id=prefLbFpsF>フーテージのフレームレート</span>:<INPUT TYPE=text SIZE=6 NAME=fpsF id=prefFpsF VALUE=--
+			onChange="myPref.chgfpsF(this.id)"> fps<SELECT NAME=SetFpsF id=SetFpsF
+			onChange="myPref.chgfpsF(this.id)"
+			style="text-align:center;width:100px;font-size:12px">
+			<OPTION VALUE=0>=CUSTOM=
+			<OPTION VALUE=1>コンポと同じ
+			<OPTION VALUE=2>FILE(24)
+			<OPTION VALUE=3>NTSC(29.97)
+			<OPTION VALUE=4>NDF(30)
+			<OPTION VALUE=5>PAL(25)
+			<OPTION VALUE=6>WEB(15)
+			<OPTION VALUE=7>DF24(23.98)
+			<OPTION VALUE=8>FR48(48)
+			<OPTION VALUE=9>FR60(60)
+
+		</SELECT><br />
+		<a id=prefLbTimeshift href="javascript:" onClick='return myPref.chg("timeShift")'>取り込み自動補正</a>:<INPUT
+			TYPE=CheckBox NAME=timeShift id=timeShift><br />
+		省略時サイズ:<input type=text SIZE=4 NAME=dfX id=prefDfX VALUE="---"
+			onChange="myPref.chgdfSIZE(this.id)">x<input type=text SIZE=4 NAME=dfY
+			
+id=prefDfY VALUE="---" onChange="myPref.chgdfSIZE(this.id)">:<input type=text
+			SIZE=3 NAME=dfA id=prefDfA VALUE="---" onChange="myPref.chgdfSIZE(this.id)"><SELECT
+			NAME=dfSizeSet id=prefDfSizeSet onChange="myPref.chgdfSIZE(this.id)">
+			<OPTION VALUE=0>=CUSTOM=
+			<OPTION VALUE=1>VGA(640x480,1.0)
+			<OPTION VALUE=2>DV(720x480,0.9)
+			<OPTION VALUE=3>D1(720x486,0.9)
+			<OPTION VALUE=4>D1sq(720x540,1.0)
+			<OPTION VALUE=5>D4(1440x1024,1.0)
+			<OPTION VALUE=6>D16(2880x2048,1.0)
+			<OPTION VALUE=7>std-200dpi(1772x1329,1.0)
+			<OPTION VALUE=8>std-144dpi(1276x957,1.0)
+			<OPTION VALUE=9>HD720(1280x720,1.0)
+			<OPTION VALUE=10>HDTV(1980x1080,1.0)
+			<OPTION VALUE=11>HDV(1440x1080,1.333)
+		</SELECT></span></td>
+	</tr>
+	<tr>
+		<td colspan=2 align=right>
+		<TABLE BORDER=0>
+			<TR>
+
+				<TD VALIGN=top NOWRAP ALIGN=right></TD>
+				<TD VALIGN=top NOWRAP ALIGN=right><span id=prefLbSheetInfo >シート情報</span><br />
+<span  style='display:none;'>
+				<span id=prefLbSheetLength>1枚の秒数</span><INPUT TYPE=TEXT NAME=SheetLength id=prefSheetLength VALUE=6 SIZE=2><span id=prefLbSec>秒</span><br />
+				<a id=prefLbColums href="javascript:" onClick='return myPref.chg("prefPageCol")'>1ページ2列</a>:<INPUT
+					TYPE=CheckBox NAME=PageCol id=prefPageCol checked><br />
+</span>
+				<a id=prefLbDiff href="javascript:" onClick='return myPref.chg("prefFootMark")'> 差分表示機能</a>:<INPUT
+					TYPE=CheckBox NAME=	Mark id=prefFootMark checked><br />
+
+				</TD>
+				<TD ALIGN=right NOWRAP><span id=prefLbFCT >カウンタのタイプ</span><br />
+				0.<SELECT NAME=FCTo0 id=FCTo0>
+					<OPTION VALUE=10>00000 .
+					<OPTION VALUE=20>0:00:00 .
+					<OPTION VALUE=30>000 + 00 .
+					<OPTION VALUE=40>p 1 / 0 + 00 .
+					<OPTION VALUE=50>p 1 / + 000 .
+					<OPTION VALUE=60>00:00:00;00(30)
+					<OPTION VALUE=70>00:00:00;00(60)
+					<OPTION VALUE=11>00001 _
+					<OPTION VALUE=21>0:00:01 _
+					<OPTION VALUE=31>000 + 01 _
+					<OPTION VALUE=41>p 1 / 0 + 01 _
+					<OPTION VALUE=51>p 1 / + 001 _
+				</SELECT><br />
+				1.<SELECT NAME=FCTo1 id=FCTo1>
+					<OPTION VALUE=10>00000 .
+					<OPTION VALUE=20>0:00:00 .
+					<OPTION VALUE=30>000 + 00 .
+					<OPTION VALUE=40>p 1 / 0 + 00 .
+					<OPTION VALUE=50>p 1 / + 000 .
+					<OPTION VALUE=60>00:00:00;00(30)
+					<OPTION VALUE=70>00:00:00;00(60)
+					<OPTION VALUE=11>00001 _
+					<OPTION VALUE=21>0:00:01 _
+					<OPTION VALUE=31>000 + 01 _
+					<OPTION VALUE=41>p 1 / 0 + 01 _
+					<OPTION VALUE=51>p 1 / + 001 _
+				</SELECT><br />
+				</TD>
+				<TD ALIGN=right NOWRAP></TD>
+				<TD ALIGN=right NOWRAP><span id=prefLbLoop>ループアクション</span><br />
+				<a id=prefLbCloop href="javascript:" onClick='return myPref.chg("cLoop")'>カーソル</a>:<INPUT
+					TYPE=checkbox NAME=cLoop id=cLoop checked><br />
+				<a id=prefLbSloop href="javascript:" onClick='return myPref.chg("sLoop")'>スピン</a>:<INPUT
+					TYPE=checkbox NAME=sLoop id=sLoop><br />
+				<a id=prefLbAscroll href="javascript:" onClick='return myPref.chg("autoScroll")'>自動スクロール</a>:<INPUT
+					TYPE=CheckBox NAME=autoScroll id=autoScroll checked><br />
+				<a id=prefLbTABspin href="javascript:" onClick='return myPref.chg("tabSpin")'>TABで確定</a>:<INPUT
+					TYPE=CheckBox NAME=tabSpin id=tabSpin checked><br />
+				<a id=prefLbNoSync href="javascript:" onClick='return myPref.chg("noSync")'>入力同期停止</a>:<INPUT
+					TYPE=CheckBox NAME=noSync id=noSync checked>
+				 <!--	<br />
+				<a id=prefLbUtilBar href="javascript:" onClick='return myPref.chg("prefUtilBar")'>開始時にツールバーを表示</a>:<INPUT
+					TYPE=CheckBox NAME=UtilBar id=prefUtilBar checked><br />-->
+				</TD>
+			</TR>
+		</TABLE>
+
+		</td>
+	</tr>
+	<tr>
+		<td  class=toolbarR >
+<span  style='display:none;'>
+
+			<span id=prefLbExportopt>eps export option</span> <br>
+		export size. <SELECT NAME=expSize id=prefEpsS onChange="myPref.chgSize(this.id)">
+			<OPTION VALUE=0>A4
+			<OPTION VALUE=1 selected=true>A3
+			<OPTION VALUE=2>B4(ISO)
+			<OPTION VALUE=3>B4(JIS)
+		</SELECT><br />
+</span>
+		</td>
+		<td>
+<span  style='display:none;'>
+		BGcolor<br>
+		<input id=prefBGColor type=text list=bgColorList autoComplete="on" onChange="myPref.chgColor(this.id)" />
+		<input id=prefColorpick type=color onChange="myPref.chgColor(this.id)" /><br>
+		 <span id=bgColorList>
+		<button class=colorSelect id="bgColorList00" onClick="myPref.chgColor(this.id)" value="=CUSTOM=" title="current Color"> </button>
+		<button class=colorSelect id="bgColorList01" onClick="myPref.chgColor(this.id)" value="#ffffee" title="y" style="background-color:#ffffee"> </button>
+		</span>
+<!--		<option value="#"> -->
+</span>
+		</td>
+	</tr>
+</table>
+<hr />
+
+
+</div>
+<!--	各種設定	-->
+<!--	バージョン情報	-->
+<div class=optionPanelModal id=optionPanelVer >
+	<div align=center>
+このコンテンツは、Javascriptによるアプリケーションです。<br />
+Javascriptを有効にした状態でご使用ください。<br />
+This content is an application by Javascript. <br />
+Please use with Javascript enabled<br>
+<br /><hr />
+<B>Univarsal Animation Timesheet<br>汎用タイムシートエディタ</B><br />
+<br />
+Under examination<br />
+<img src=./images/remaping.gif border=0 width=256 height=127 onClick='document.getElementById("optionPanelVer").style.display="none";'/><br />
+<span 
+	style="font-size:x-small;color:red"
+> WEB APPLICATION </span><br />
+<span style="font-size:small" id=versionString>
+index.html 2022/  kiyo <br />
+<span id=myVer0></span> <span id=myServer0>[no-server]</span><br />
+
+XPS File Ver. :nasTIME-SHEET 0.5<br />
+</span>
+<input	type=button
+	value="OK"
+	style="width:36%"
+	onClick='xUI.sWitchPanel("Ver");'
+><br />
+質問やバグの通報は<a href="http://www.nekomataya.info/bbs2/index.html" target=_balnk>NEKOMATAYA</a>まで。
+<hr>
+	</div>
+</div>
+<!--	バージョン情報	-->
+<!--    編集警告    -->
+<div class=optionPanelModal id=optionPanelRol>
+<p id=inputWarning>
+現在、入力操作は無効です。<br>
+ドキュメントの編集を行う場合は、作業にチェックインしてください。
+</p>
+<hr>
+<a
+    id=forgetWarning
+	href="javascript:void(0);"
+	onClick='document.getElementById("forgetInputWarning").checked=(document.getElementById("forgetInputWarning").checked)?false:true;'
+>今後このダイアログを表示しない/Thereafter, do not display this message.</a>
+<input type='checkbox' id=forgetInputWarning><br>
+<button
+	style="width:36%"
+	onClick='xUI.sWitchPanel("Rol");'
+>OK</button>
+</div>
+<!--    編集警告    -->
+<!--	デバッグパネル	-->
+<div class=optionPanel id=optionPanelDbg>
+<span>
+<form action="void(0)">
+<!-- 
+debug console
+デバッグコンソール
+-->
+<textarea
+	name=msg_well
+	id=msg_well
+	style="width:512px;height:96px"
+></textarea><br /><input	type=button
+	id=dbgClearMsg
+	value="cls↑"
+	style="width:64px"
+	onClick="document.getElementById('msg_well').value=''"
+><input	type=button
+	id=dbgDoAction
+	value="Do"
+	style="width:128px"
+	onClick="dbg_action(document.getElementById('cmd').value);"
+><input	type=button
+	id=dbgSelectAll
+	value="selectAll"
+	style="width:64px"
+	onClick="document.getElementById('msg_well').select()"
+><input	type=button
+	id=dbgSwitchPmenu
+	value="pMenu"
+	style="width:64px"
+	onClick="document.getElementById(this.value).style.display=(document.getElementById(this.value).style.display=='none')?'inline':'none'"
+><input	type=button
+	id=dbgDoRmpInit
+	value="nas_Rm.."
+	style="width:64px"
+	onClick="nas_Rmp_Init();"
+><input	type=button
+	id=dbgChangeUiMode
+	value="uiMode"
+	style="width:64px"
+	onClick='xUI.setUImode("next");sync("productStatus");'
+><input	type=reset
+	id=dbgResetWell
+	value="reset"
+	style="width:64px"
+><br><input	type=button
+	id=dbgClearCommand
+	value="cls↓"
+	style="width:64px"
+	onClick="document.getElementById('cmd').value=''"
+><input
+	type=button
+	id=dbgInsDgebi
+	value="document.getE..."
+	style="width:64px"
+	onClick="document.getElementById('cmd').value+='document.getElementById()'"
+><input	type=button
+	id=dbgInsJQ
+	value="$..."
+	style="width:64px"
+	onClick="document.getElementById('cmd').value+='$()'"
+><input	type=button
+	id=dbgInsForProp
+	value="list..."
+	style="width:64px"
+	onClick="document.getElementById('cmd').value+='A=new Array();for(prp in ){A.push(prp)};A.join();'"
+><input	type=button
+	id=dbgInsXui
+	value="xUI..."
+	style="width:64px"
+	onClick="document.getElementById('cmd').value+='xUI.'"
+><input	type=button
+	id=dbgInsConsLg
+	value="cons..."
+	style="width:64px"
+	onClick="document.getElementById('cmd').value+='console.log('"
+><input	type=button
+	id=dbgClosePnl
+	value="close"
+	style="width:128px;"
+	onClick="xUI.sWitchPanel('Dbg')"
+><br/>
+<button 
+ id='dbgPushEntryLR'
+ onClick='localRepository.pushEntry(xUI.XPS,function(){localRepository.getList();documentDepot.rebuildList();});return false;'
+> pushEntry-localStorage </button><button 
+ id='dbgViewRepsitoryList'
+ onClick='console.log(serviceAgent.currentRepository.entryList);return false;'
+> view-repository List </button><button 
+ id='dbgPushEntryCR'
+ onClick='serviceAgent.pushEntry(xUI.XPS,function(){serviceAgent.currentRepository.getList();documentDepot.rebuildList();});return false;'
+> pushEntry !</button>
+<button 
+ id='dbgChangeVO'
+ onClick='xUI.viewOnly=(xUI.viewOnly)?false:true;sync("productStatus");return false;'
+> viewOnly </button>
+<button 
+ id='dbgChangeLocale'
+ onClick='nas.locale=(nas.locale=="ja")? "en":"ja";nas.LangPack.chgLocale(nas.locale);return false;'
+> changeLocale </button>
+<br>
+<textarea	
+	name=cmd
+	id=cmd
+	style="width:512px;height:64px;ime-mode:inactive;"
+></textarea></form></span><hr />
+</div>
+<!--	デバッグパネル	-->
+	</div>
+<!-- 固定パネル -->
+<!-- フロートパネルUI -->
+	<div id=floatingPanels>
+<!--ノート編集-->
+<div class='optionPanelFloat optionPanelMemo' id=optionPanelMemo >
+<dl><dt class=floatPanelHeader><span >direction</span>
+	<a href="" class=minimize ><img src=./images/ui/minimize.png alt="＿"></a>
+	<a href="" class=close ><img src=./images/ui/close.png alt="×"></a>
+	<a href="" class=down ><img src=./images/ui/down.png alt="▼"></a>
+</dt></dl>
+	<div id=formMemo>
+	<table>
+	<tr>
+
+
+		<td colspan=2>
+			<span id=memoPnlCaption>タイムシートコメントを編集します</span><br>
+			<textarea name=rEsult id=rEsult cols=96 rows=8 >
+			</textarea>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type=button
+				id=memoPnlSelentAll class=toolTip value="全選択"
+				onClick='document.getElementById("rEsult").select();' /><br>
+			<input type=button
+				id=memoPnlClear class=toolTip value="消去"
+				onClick='document.getElementById("rEsult").value="";' /><br>
+			<input type=button
+				id=memoPnlTab class=toolTip value="TAB"
+				onClick='document.getElementById("rEsult").insert("\t");' /><br>
+			<input type=button
+				id=memoPnlLineFeed class=toolTip value="改行"
+				onClick='document.getElementById("rEsult").insert("\n");' /><br>
+			<input type=button
+				id=memoPnlReset class=toolTip value="リセット"
+				onClick='document.getElementById("rEsult").value=xUI.XPS.xpsTracks.noteText;' /><br>
+			<input type=button
+				id=memoPnlPut class=toolTip value="更新"
+				onClick='xUI.XPS.xpsTracks.noteText=document.getElementById("rEsult").value;xUI.setStored("force");sync("memo");' /><br>
+			<input type=button
+				id=memoPnlClose class=toolTip value="閉じる"
+				onClick='if(xUI.XPS.xpsTracks.noteText!=document.getElementById("rEsult").value){if(confirm("内容が変更されています。\n更新しますか?")){xUI.XPS.xpsTracks.noteText=document.getElementById("rEsult").value;xUI.setStored("force");sync("memo");}};xUI.sWitchPanel("Memo","hide");' /><br>
+		</td>
+		<td>
+			<span id=myWords
+				onClick="editMemo(event,document.getElementById('rEsult'));"
+
+			>word table</span>
+		</td>
+	</tr>
+	</table>
+	</div>
+</div>
+<!--ノート編集-->
+<!--	ツールボックス	-->
+  <div class='optionPanelFloat optionPanelTbx' id=optionPanelTbx >
+<dl><dt class=floatPanelHeader>keyPad
+	<a href="" class=minimize ><img src=./images/ui/minimize.png alt="＿"></a>
+	<a href="" class=close ><img src=./images/ui/close.png alt="×"></a>
+	<a href="" class=down ><img src=./images/ui/down.png alt="▼"></a>
+</dt></dl>
+    <div id=formTbx >
+<form name=test action="javascript:void(0);">
+<!-- りまぴん ツールボックスインターフェース-->
+<table
+	class=toolbox
+	id=uiTable
+>
+
+<tr>
+<td	id=l_select
+	valign=top
+	rowspan=2
+>
+<div
+	class ="nasHTMLSliderSelect tBSelector"
+	id="tBtrackSelect"
+	name="map_labels"
+	title="トラックを選択"
+	tabIndex = 0
+	style = 'width:64px;'
+	onchange = "chkValue(this.id)"
+>
+</div>
+<div
+	class ="nasHTMLSliderSelect tBSelector"
+	id="tBitemSelect"
+	name="cell_numbers"
+	title="セル番号入力"
+	tabIndex = 0
+	style = 'width:96px;'
+	onchange = "chkValue(this.id)"
+>
+</div>
+<div
+	class ="nasHTMLSliderSelect tBSelector"
+	id="tBkeywordSelect"
+	name="fav"
+	title="良く使用するワード"
+	tabIndex = 0
+	style = 'width:64px;'
+	onchange = "chkValue(this.id)"
+>
+</div>
+
+</td>
+<!--
+	<td id=tBtrackID rowspan=2>Track</td>
+	<td id=tBtrackEL rowspan=2>Cell</td>
+	<td id=tBitems rowspan=2>etc.</td>
+		<input	type=checkbox
+			name=single
+			id=single
+			checked
+		><a href="javascript:void(0)" onClick='return chg("single")'>single-click</a>
+-->
+	<td colspan=3>
+<input	type=button
+	class='skb_key skb_key_w'
+	id=skbUndo
+	name=undo
+	value="^z"
+	onclick="skbPush(this.value);"
+	title="esc"
+>
+
+<input	type=button
+	class='skb_key skb_key_w'
+	id=skbRedo
+	name=redo
+	value="^y"
+	onclick="skbPush(this.value);"
+	title="esc"
+>
+
+<input	type=button
+	class='skb_key skb_key_w'
+	id=skbHome
+	name=home
+	value=HOME
+	onclick="chkValue(this.name);"
+	title="先頭へ"
+><input	type=button
+	class='skb_key skb_key_w'
+	id=skbEnd
+	name=end
+	value=END
+	onclick="chkValue(this.name);"
+	onpointerover='console.log(this.id)'
+	title="カット尻へ"
+> 
+</td>
+</tr>
+<tr>
+
+<td>
+<!--<input	type=button
+	value=clearFS
+	id=clearFS
+	style="width:100%"
+	onclick="chkValue(this.id);"
+>
+-->
+</td>
+<td>
+	<!-- skb -->
+	
+<input	type=button
+	class='skb_key skb_key_func'
+	name=skb12
+	id=skb12
+	value="esc"
+	title="esc"
+	onclick="skbPush(this.value)"
+><input	type=button
+	class='skb_key skb_key_func'
+	name=skb13
+	id=skb13
+	value="^z"
+	title="undo"
+	onclick="skbPush(this.value)"
+><input	type=button
+	class='skb_key skb_key_func'
+	name=skb14
+	id=skb14
+	value="^y"
+	title="redo"
+	onclick="skbPush(this.value)"
+><input	type=button
+	class='skb_key skb_key_m skb_key_func'
+	name=skb15
+	id=skb15
+	value="←"
+	title="bs"
+	onclick="skbPush(this.value)"
+><br />
+<input	type=button
+	class=skb_key
+	name=skb07
+	id=skb07
+	value="7"
+	title="7"
+	onclick="skbPush(this.value)"
+><input	type=button
+	class=skb_key
+	name=skb08
+	id=skb08
+	value="8"
+	title="8"
+	onclick="skbPush(this.value)"
+><input	type=button
+	class=skb_key
+	name=skb09
+	id=skb09
+	value="9"
+	title="9"
+	onclick="skbPush(this.value)"
+><input	type=button
+	class='skb_key skb_key_m skb_key_func'
+	name=skb
+	id=skbCircle
+	value="(*)"
+	title="addPln"
+	onclick="skbPush(this.value)"
+><br />
+<input	type=button
+	class=skb_key
+	name=skb04
+	id=skb04
+	value="4"
+	title="4"
+	onclick="skbPush(this.value)"
+><input	type=button
+	class=skb_key
+	name=skb05
+	id=skb05
+	value="5"
+	title="5"
+	onclick="skbPush(this.value)"
+><input	type=button
+	class=skb_key
+	name=skb06
+	id=skb06
+	value="6"
+	title="6"
+	onclick="skbPush(this.value)"
+><input	type=button
+	class='skb_key skb_key_m skb_key_func'
+	name=skb
+	id=skbMinus
+	value="-"
+	title="-"
+	onclick="skbPush(this.value)"
+><br />
+<input	type=button
+	class=skb_key
+	name=skb01
+	id=skb01
+	value="1"
+	title="1"
+	onclick="skbPush(this.value)"
+><input	type=button
+	class=skb_key
+	name=skb02
+	id=skb02
+	value="2"
+	title="2"
+	onclick="skbPush(this.value)"
+><input	type=button
+	class=skb_key
+	name=skb03
+	id=skb03
+	value="3"
+	title="3"
+	onclick="skbPush(this.value)"
+><input	type=button
+	class='skb_key skb_key_m skb_key_func'
+	name=skb
+	id=skbDot
+	value="."
+	title="sep"
+	onclick="skbPush(this.value)"
+><br />
+<input	type=button
+	class=skb_key
+	name=skb00
+	id=skb00
+	value="0"
+	title="0"
+	onclick="skbPush(this.value)"
+><input	type=button
+	class=skb_key
+	name=skb10
+	id=skb10
+	value="("
+	title="openPln"
+	onclick="skbPush(this.value)"
+><input	type=button
+	class=skb_key
+	name=skb11
+	id=skb11
+	value=")"
+	title="closePln"
+	onclick="skbPush(this.value)"
+><input	type=button
+	class='skb_key skb_key_m skb_key_func'
+	name=skb
+	id=skbOK
+	value="↲"
+	title="ENTER"
+	onclick="chkValue('ok')"
+><br />
+	<!-- skb -->
+</td>
+<td>
+<input	type=button
+	class='skb_key skb_key_w'
+	id=skbPgup
+	name=pgup
+	value=Pgup
+	onclick="chkValue(this.name);"
+	title="１ページもどる"
+><input	type=button
+	class='skb_key skb_key_w'
+	id=skbPgdn
+	name=pgdn
+	value=Pgdn
+	onclick="chkValue(this.name);"
+	title="１ページ進む"
+>
+<br />
+<input	type=button
+	class='skb_key skb_key_w'
+	id=skbUp
+	name=up
+	title="UP"
+	value=△
+	onclick="chkValue(this.name);"
+><br /><input	type=button
+	class='skb_key skb_key_w'
+	id=skbLeft
+	name=left
+	title="left"
+	value=&lt;&lt;
+	onclick="chkValue(this.name);"
+><input type=button
+	class='skb_key skb_key_w'
+	id=skbRight
+	name=right
+	alt="RIGHT"
+	value=&gt;&gt;
+	onclick="chkValue(this.name);"
+><br /><input type=button
+	class='skb_key skb_key_w'
+	id=skbDown
+	name=down
+	alt="DOWN"
+	value=▽
+	onclick="chkValue(this.name);"
+>
+<br />
+<input type=button
+	class='skb_key skb_key_w'
+	id=skbBack
+	name=back
+	alt="spinF"
+	value=↑spin↑
+	onclick="chkValue(this.name);"
+><input type=button
+	class='skb_key skb_key_w'
+	id=skbFwd
+	name=fwd
+	alt="spinB"
+	value=↓spin↓
+	onclick="chkValue(this.name);"
+>
+</td>
+</tr>
+</table></form>
+    </div>
+  </div>
+<!--	ツールボックス    -->
+<!--	ラベル付き音響編集 -->
+<div class='optionPanelFloat optionPanelSnd' id=optionPanelSnd >
+<dl><dt class=floatPanelHeader><span id=soundPnl class=SoundPanel>音声編集</span>
+	<a href="" class=minimize ><img src=./images/ui/minimize.png alt="＿"></a>
+	<a href="" class=close ><img src=./images/ui/close.png alt="×"></a>
+	<a href="" class=down ><img src=./images/ui/down.png alt="▼"></a>
+</dt></dl>
+<div id=formSnd><fieldset id='dialogEdit'>
+label:
+<input type='text' autocomplete='on' list='sndCasts' id='soundLabel'
+    onChange="SoundEdit.setLabel(this.value);"
+>
+    <datalist id='sndCasts'></datalist>
+attributes:
+<input type='text' id='soundProps'
+    onChange="SoundEdit.setProp(this.value)"
+>
+      <select id='soundPropSelector'
+              onChange="document.getElementById('soundProps').value += ','+this.value;SoundEdit.setProp(this.value)"
+      ></select>
+     
+<!--
+
+-->
+<!-- 
+パネルの初期化が必要
+呼び出し時点のフレーム（ヘッド位置）で最寄りの音声トラックへ移動
+音声オブジェクトが存在すれば、最近接のオブジェクトを選択して音声編集モードに入る
+＊モード遷移が必要
+既存の音声オブジェクトがない場合は、当該トラックの当該フレームを始点とした音声オブジェクトを仮に作成して編集モードを開始
+以下の編集操作を行える
+
+新規	音声オブジェクトを作成
+更新	編集対象オブジェクトを編集バッファの内容で置換
+リセット	編集対象オブジェクトを初期状態に戻す（既存または新規）
+消去	音声オブジェクトを消去する（このまま更新すると削除）
+削除	消去して更新
+閉じる	編集内容を破棄または更新して編集モードを終了する
+
+新しいラベルが使用された場合は、ラベルをバッファに格納して同セッション内で以降使用可能にする
+データ保存を行って次セッション以降も使用可能な状態にすることも可能
+-->
+<hr>
+content:
+<br><textarea name=SndBody id=sndBody style="width:96%;height:96px"
+onchange=';SoundEdit.sync();'
+></textarea>
+<div id=dialogWords>
+<span>insert : </span>
+    <span id='commentCareer'
+	    onClick='editMemo(event,document.getElementById("sndBody"));'
+    ></span>
+</div>
+<div style='vertical-align:middle;'>
+IN :
+<button id=soundInpointLock type=button class="iconButton"
+	onClick='SoundEdit.syncTCL(0);'
+>🔓</button><input
+	type=text
+	id=soundInPoint
+	value="0:00:00 ."
+	class=tcInput
+	onMousedown="this.value=nas.FCT2Frm(this.value);nas.sliderVALUE([event,this.id,xUI.XPS.xpsTracks.duration-1,'0','0']);"
+    onChange='this.value=nas.Frm2FCT(nas.FCT2Frm(this.value.toString()),2,0);SoundEdit.floatTC(0);'
+><span class='subControl_SPIN'>
+<button
+	id=inPointDecr
+	class="subControl subControl-decrT spinCtl spinCtl-top"
+    onClick='return xUI.tcControl("soundInPoint",2,-1);'
+	title="IN点調整"
+> </button><button
+	id=inPointIncr
+	class="subControl subControl-incrT spinCtl spinCtl-bottom"
+    onClick='return xUI.tcControl("soundInPoint",2,1);'
+	title="IN点調整"
+> </button></span>
+
+<span style="margin-right:36px;"> </span>
+OUT :
+<button id=soundOutpointLock type=button class="iconButton"
+	onClick='SoundEdit.syncTCL(1);'
+>🔒</button><input
+	type=text
+	id=soundOutPoint
+	value="0:00:00 ."
+	class=tcInput
+	onMousedown="this.value=nas.FCT2Frm(this.value);nas.sliderVALUE([event,this.id,xUI.XPS.xpsTracks.duration-1,'0','0']);"
+    onChange='this.value=nas.Frm2FCT(nas.FCT2Frm(this.value.toString()),2,0);SoundEdit.floatTC(1);'
+><span class='subControl_SPIN'>
+<button
+	id=outPointDecr
+	class="subControl subControl-decrT spinCtl spinCtl-top"
+    onClick='return xUI.tcControl("soundOutPoint",2,-1);'
+	title="OUT点調整"
+> </button><button
+	id=outPointIncr
+	class="subControl subControl-incrT spinCtl spinCtl-bottom"
+    onClick='return xUI.tcControl("soundOutPoint",2,1);'
+	title="OUT点調整"
+> </button></span>
+<span style="margin-right:36px;"> </span>
+duration :
+<button id=soundDurationLock type=button class="iconButton"
+	onClick='SoundEdit.syncTCL(2);'
+>🔓</button><input type=text
+    id=soundDuration value="0:00:00 ." class='tcInput'
+	onMousedown="this.value=nas.FCT2Frm(this.value);nas.sliderVALUE([event,this.id,xUI.XPS.xpsTracks.duration,'1','0']);"
+    onChange='this.value=nas.Frm2FCT(nas.FCT2Frm(this.value.toString()),2,0);SoundEdit.floatTC(2);'
+><span class='subControl_SPIN'>
+<button
+	id=durationIncr
+	class="subControl subControl-incr spinCtl spinCtl-top"
+    onClick='return xUI.tcControl("soundDuration",2,1);'
+	title="duration調整"
+> </button><button
+	id=durationDecr
+	class="subControl subControl-decr spinCtl spinCtl-bottom"
+    onClick='return xUI.tcControl("soundDuration",2,-1);'
+	title="duration点調整"
+> </button>
+<!-- input type=color list='collist'>
+<datalist id='collist'>
+    <option value='#ffddff'>
+    <option value='#ffffcc'>
+    <option value='#aaeeff'>
+</datalist -->
+<button
+	id=durationSetSpin
+	class="iconButton"
+    onClick='SoundEdit.sync(true);'
+	title="スピン適用"
+>🔨</button></span>
+</div>
+</fieldset>
+
+<!-- 共通ボタン -->
+<!-- <input type=button
+    id=soundPnlGet value="↑：取込" style="width:10%"
+	onClick="SoundEdit.init();"
+><input type=button
+    id=soundPnlPut value="↓：適用" style="width:10%"
+	onClick="SoundEdit.sync();"
+><input type=button
+    id=soundPnlFix value="[[確定]]" style="width:10%"
+	onClick="SoundEdit.sync();xUI.mdChg((xUI.edmode==3)?2:0);"
+><input type=button
+    id=soundPnalselectAll value="全選択" style="width:10%"
+	onClick="document.getElementById('sndBody').select()"
+><input
+	type=reset id=soundPnlReset value="リセット" style="width:10%"
+><input type=button
+	id=soundPnlClear value="解除" style="width:10%"
+	onClick='SoundEdit.close();'
+><input
+	type=button id=soundPnlClose value="閉じる" style="width:10%"
+	onClick='xUI.sWitchPanel("Snd");'
+><br>-->
+<!-- playbackControll
+
+	<div style='height:36px;'>
+	onMouseDown='if(xUI.player.status=="stop"){xUI.player.start(3000)}else{xUI.put("----")};'
+	<button
+		style='height:32px;width:120px'
+	onMouseDown='if(xUI.player.status=="stop"){xUI.player.start()}else{xUI.player.getCount=true};'
+	onMouseUp='if(xUI.player.status=="run"){xUI.player.getCount=false;};'
+		title="stopwatch test start/mark"
+	> Start / STOP
+	</button><button
+		style='height:32px;width:120px'
+	onMouseDown='if(xUI.player.status=="run"){xUI.player.stop()}else{xUI.player.clearMark()};'
+	onMouseUp='if(xUI.player.status=="run"){xUI.player.getCount=false;};'
+		title="frameReset"
+	> mark / Reset
+	</button>|< [start/stpo]    -->  
+	<!--<button		class='iconButton  iconButton-goFWD'en
+		onclick=""
+		title=""
+	>
+	</button><button
+		class='iconButton  iconButton-goFWD'
+		onclick=""
+		title=""
+	>
+	</button><button
+		class='iconButton  iconButton-goFWD'
+		onclick=""
+		title=""
+	>
+	</button>-->
+
+<!-- </div>-->
+<hr>
+<button
+    id=soundPanelApply
+    style='width:96px;'
+	onClick="SoundEdit.sync();"
+>適用</button><button
+    id=soundPanelFix
+    style='width:96px;'
+	onClick="SoundEdit.sync();xUI.mdChg((xUI.edmode==3)?2:0);"
+>確定</button><button
+    id=soundPanelRelease
+    style='width:96px;'
+	onClick='SoundEdit.close();'
+>解除</button><button
+    id=soundPanelClose
+    style='width:96px;'
+	onClick='xUI.sWitchPanel("Snd");'
+>閉じる</button>
+
+</div>
+</div>
+<!--	ラベル付き音響編集パネル	-->
+<!-- ストップウオッチUIパネル stopwatch　-->
+<div	class= optionPanel	id = optionPanelTimer >
+
+ <button
+    id=timerClose
+    class='timerButton timerButton-sq'
+    title = 'hide timer'
+    onclick='xUI.sWitchPanel("Timer");return false;'
+>×</button>:
+ <input type=text size=12 id='timerDisplay' disabled='true' value='00:00:00:00.'>
+<span class=floating-right>
+<button
+	id=timerSwitchPrm
+    class='iconButton iconButton-goFWD'
+	onMouseDown='if(xUI.player.status=="stop"){xUI.player.start()}else{if(xUI.player.markSwap){xUI.player.getCount=true}else{xUI.player.stop()}};'
+	onMouseUp='if((xUI.player.markSwap)&&(xUI.player.status=="run")){xUI.player.getCount=false};'
+	title='START/STOP'
+></button>
+<button
+	id=timerSwitchMark
+    class='iconButton iconButton-markON'
+	onMouseDown='if(xUI.player.status=="stop"){xUI.player.start(true)}else{xUI.player.getCount=true};'
+	onMouseUp='if(xUI.player.status=="run"){xUI.player.getCount=false};'
+	title='mark'
+></button>
+<button
+	id=timerSwitchSub
+    class='iconButton iconButton-markOFF'
+	onMouseDown='if(xUI.player.status=="run"){if(xUI.player.markSwap){xUI.player.stop()}else{xUI.player.getCount=true}}else{xUI.player.clearMark()};'
+	onMouseUp='if(!(xUI.player.markSwap)&&(xUI.player.status=="run")){xUI.player.getCount=false};'
+	title='clear mark'
+></button>
+<button
+	onClick='if(xUI.player.status=="stop"){xUI.player.reset();xUI.selectCell(xUI.Select[0]+"_0");};'
+    class='iconButton iconButton-home'
+	title='go home'
+></button>
+<button
+	onClick='if(xUI.player.status=="stop"){xUI.player.buildCount()};'
+    class='iconButton iconButton-mark'
+	title='apply mark'
+></button>
+<button
+    class='iconButton iconButton-gia_d'
+	onClick='if($("#timerPref").isVisible()){$("#timerPref").hide();}else{$("#timerPref").show();};'
+	title=timer preference'
+></button>
+    <span id=timerPref style='display:none;'>
+<input
+	id=waitCount
+	class=spinCtl
+    class=timerButton
+	type=text
+	value='3'
+	onChange='document.getElementById("timerCount").onchange();'
+>
+<label for=timerCount>
+<input
+	id=timerCount
+    class='timerButton box'
+	type=checkbox
+	onChange='xUI.player.wait=(this.checked)?document.getElementById("waitCount").value*1000:0;'
+>countreader</label>
+<label for=timerLoop>
+<input
+	id=timerLoop
+	type=checkbox
+    class=timerButton
+	onChange='xUI.player.loop=(this.checked)?true:false;'
+>loop</label>
+<label for=swapButtonAssign>
+<input
+	id=swapButtonAssign
+	type=checkbox
+    class=timerButton
+	onChange='xUI.player.markSwap=(this.checked)?true:false;document.getElementById("timerSwitchPrm").title=(this.checked)?"START/Mark":"START/STOP";document.getElementById("timerSwitchSub").title=(this.checked)?"STOP/Reset":"Mark/Reset";'
+	title='change butonn function assignment'
+ <!-- input
+	id=timerStandbyPositionStart
+	type=checkbox
+    class=timerButton
+	onChange='xUI.player.standbyStart=(this.checked)?true:false;'
+	title='set standby-frame start'
+	checked
+>standby -->
+    </span>
+</span>
+</div>
+<!-- ストップウオッチUIパネル// -->
+
+<!--	カメラワーク入力UI	-->
+<div class='optionPanelFloat optionPanelCam' id=optionPanelCam >
+<dl><dt class=floatPanelHeader>camerawork
+	<a href="" class=minimize ><img src=./images/ui/minimize.png alt="＿"></a>
+	<a href="" class=close ><img src=./images/ui/close.png alt="×"></a>
+	<a href="" class=down ><img src=./images/ui/down.png alt="▼"></a>
+</dt></dl>
+<div id=formCam>
+
+*Camerawork*
+</div></div>
+<!--	カメラワーク入力UI	-->
+<!--	ステージワーク編集UI	-->
+<div class='optionPanelFloat optionPanelStg' id=optionPanelStg >
+<dl><dt class=floatPanelHeader>stagework
+	<a href="" class=minimize ><img src=./images/ui/minimize.png alt="＿"></a>
+	<a href="" class=close ><img src=./images/ui/close.png alt="×"></a>
+	<a href="" class=down ><img src=./images/ui/down.png alt="▼"></a>
+</dt></dl>
+<div id=formStg>
+*Stagework*
+</div><img src=./images/ui/cornerTip.png id=StgPanelCorner class=panelCorner onDragStart='return false;'></div>
+<!--	ステージワーク編集UI	-->
+<!--	コンポジットワーク編集UI	-->
+<div class='optionPanelFloat optionPanelSfx' id=optionPanelSfx >
+<dl><dt class=floatPanelHeader>composite
+	<a href="" class=minimize ><img src=./images/ui/minimize.png alt="＿"></a>
+	<a href="" class=close ><img src=./images/ui/close.png alt="×"></a>
+	<a href="" class=down ><img src=./images/ui/down.png alt="▼"></a>
+</dt></dl>
+	<div id=formSfx>
+
+*Compositework*
+	</div>
+</div>
+<!--	コンポジットワーク編集UI	-->
+<!--	手描きメモ編集UI	-->
+<div class='optionPanelFloat optionPanelDraw' id=optionPanelDraw >
+<dl><dt class=floatPanelHeader>drawing menu
+	<a href="" class=minimize ><img src=./images/ui/minimize.png alt="＿"></a>
+	<a href="" class=close ><img src=./images/ui/close.png alt="×"></a>
+	<a href="" class=down ><img src=./images/ui/down.png alt="▼"></a>
+</dt></dl>
+	<div id=formDraw>
+
+*hendDrawing*
+	</div>
+</div>
+<!--	手描きメモ編集UI	-->
+
+<!-- 参照用オーバーレイ画像ビュアウインドウ optionPanelRef 
+ 本来の参照用　任意画像表示オーバーレイとして使用
+-->
+<div class='optionPanelFloat optionPanelRef' id =optionPanelRef style='resize:both;'>
+<dl>
+<dt class="floatPanelHeader"><span id=ovlPnl >画像</span>
+	<a href="" class=minimize ><img src=./images/ui/minimize.png alt="＿"></a>
+	<a href="" class=close ><img src=./images/ui/close.png alt="×"></a>
+	<a href="" class=down ><img src=./images/ui/down.png alt="▼"></a>
+</dt></dl>
+    <div id = formRef >
+		<dt style="background-color:#aaaaaa;">[+][-][100%] [URL]  　[-----◆---------]</dt></dl>
+		<div id=referenceImageBox class=imageOverlay style='width:100%;height:100%;'>
+
+		</div>
+		<img src=./images/ui/cornerTip.png id=RefPanelCorner class=panelCorner> 
+    </div>
+</div>
+<!-- 参照用オーバーレイ画像ビュアウインドウ optionPanelRef-->
+
+<!--  書類フォーマット編集パネル optionPanelDocFormat -->
+<div class='optionPanelFloat optionPanelDocFormat' id =optionPanelDocFormat >
+<dl>
+	<dt class="floatPanelHeader"><span id=ovlPnl >書式編集</span>
+	<a href="" class=minimize ><img src=./images/ui/minimize.png alt="＿"></a>
+	<a href="" class=close ><img src=./images/ui/close.png alt="×"></a>
+	<a href="" class=down ><img src=./images/ui/down.png alt="▼"></a>
+</dt></dl>
+<div id=formDocFormat class=order_prop_list>
+	<input
+		type="file"
+		id="fileLister"
+		multiple
+		accept=".json,.webp,.gif,.png,.psd,.psb,.tga,.jpg,.jpeg"
+		style="display:none"
+		onchange='documentFormat.importData(this);' />
+<div style="background-color:#999;height:52px;display:block;vertical-align:middle;">
+		<button id='docFormatExpand' onclick='documentFormat.expand();' title='詳細編集'> ▼ </button>
+		<button id='docFormatStatas' class='iconButton iconButton-resize' onclick='documentFormat.setStatus();'></button>
+<!--
+		<a href="javascript:documentFormat.setStatus(null);//documentFormat.onResize= null;documentFormat.moveBox= true;">移動</a>
+		<a href="javascript:documentFormat.setStatus('ordebox');//documentFormat.onResize= documentFormat.orderbox;documentFormat.moveBox= false;">リサイズ</a>
+-->
+		<button
+			class = toolButton
+			style = 'vertical-arign:middle;'
+			onclick="document.getElementById('fileLister').click();"
+			title='設定データ読出'
+		>
+			読出
+		</button>
+		<button
+			onclick="nas.HTML.writeTextFile(documentFormat.toString(),'utf8','sheetLooks.json',false)"
+			title='設定データ書出'
+		>
+			書出
+		</button>
+		<button
+			onclick="documentFormat.reset()"
+			title='編集を破棄'
+		>
+			リセット
+		</button>
+		<button
+			onclick="xUI.sWitchPanel('DocFormat','hide')"
+			title='編集を適用してウインドウを閉じる'
+		>
+			保存・終了
+		</button>
+		<button
+			onclick="documentFormat.reset();xUI.sWitchPanel('DocFormat','hide')"
+			title='編集を破棄してウィンドウを閉じる'
+		>
+			取消・終了
+		</button>
+<!-- </div><div id=orderPropHeader> -->
+	<span class=doc_form_label > form select : </span>
+		<select id=docFormatSelect
+			style ='text-align:center;width:240px;'
+			onchange ='documentFormat.checkUIValue(event);'
+			title = '書類形式を選択します'
+		><option value = '= CUSTOM =' >= custom =</option></select> 
+	<span style='white-space:nowrap;'> タイムシート用紙を設定します。詳しくは<a href="https://docs.google.com/document/d/1hOkPcxLVa15zLpegpgMyX0tW80ZLnJ-0rJfiKrpd3dM/edit?usp=drive_link" target='_new'>こちら</a> </span>
+</div>
+<hr>
+<div id=docFormatDetail>
+	<span>
+	<span class=doc_form_label > format name : </span>
+		<input
+			type = text
+			id=docFormatName
+			value=''
+			autocomplete = on
+			size  = 32
+			style ='text-align:center;'
+			onchange ='documentFormat.checkUIValue(event);'
+			title = '任意の名前に変更できます'
+		>
+	<datalist id=format_list >
+		<option value ="横浜アニメーションラボ" label='format_list_YAL'>
+		<option value =東映動画 >
+		<option value =TDTS >
+		<option value =日本アニメーション>
+		<option value =プロダクションIG>
+		<option value =WITスタジオ>
+		<option value =BONES>
+		<option value =ねこまたや>
+		
+	</datalist>
+	|</span>
+	<span> <input type = text id=docPageLength value='6' size = 6 style='text-align:center;' onchange='documentFormat.checkUIValue(event);'> 秒 / ページ |</span>
+	<span> <input type = text id=docFrameRate value='24' size = 6 style='text-align:center;' onchange='documentFormat.checkUIValue(event);'> fps |</span>
+	<span> <label for=docColumn>二段組 </label><input type = checkbox id=docColumn checked =true onchange='documentFormat.checkUIValue(event);'> |</span>
+
+	<span>
+	<span class=doc_form_label > template : </span><input type=file id='docFormatTemplateImageFile' style ='display:none;' accept=".jpeg,.webp,.png,.gif,.psd,.tga,image/png,image/webp,image/gif,image/jpeg,image/vnd.adobe.photoshop,image/x-tga" onchange ='documentFormat.checkUIValue(event);'>
+<input
+		type  = text
+		id    = docFormatTemplateImage
+		value = ''
+		size  = 48
+		style ='text-align:center;'
+		onchange ='documentFormat.checkUIValue(event);'
+		title = 'urlを入力するかまたはファイルをドラグしてください'
+	> |</span>
+	<span>
+	<span class=doc_form_label > template解像度 : </span><input type = text id=docResolution value='300' size = 6 style='text-align:center;' onchange='documentFormat.checkUIValue(event);' title='自動で設定されます間違っていた場合は入力してください'> ppi |</span>
+<hr>
+<span style='display:inline-block;'>
+<table class='sheet' cellspacing='0' style='margin:0px;'><tbody>
+
+<tr class='thlead'><td class="sheetMargin-left left-top"></td><td class='dialogspan tlhead'></td><td class='timingspan tlhead'></td><td class='timingspan tlhead'></td><td class='timingspan tlhead'></td><td class='timingspan tlhead'></td><td class='timingspan tlhead'></td><td class='timingspan tlhead'></td></tr>
+
+<tr><td class="sheetbody left-end"></td><th> </th><th class='layerlabel trackLabel'>A</th><th class='layerlabel trackLabel'>B</th><th class='layerlabel trackLabel'>C</th><th class='layerlabel trackLabel'>D</th><th class='layerlabel trackLabel'>E</th><th class='layerlabel trackLabel'>F</th></tr>
+
+<tr><td class="sheetbody left-end"></td><td class='soundbody dnSep'> </td><td class='sheetbody nnSep focus-cell'>①</td><td class='sheetbody nnSep focus-cell'>X</td><td class='sheetbody nnSep rapid'></td><td class='sheetbody nnSep focus-range-selected'></td><td class='sheetbody nnSep section-head'></td><td class='sheetbody nnSep'></td></tr>
+
+<tr><td class="sheetbody left-end"></td><td class='soundbody dnSep'> </td><td class='sheetbody nnSep focus-spin'></td><td class='sheetbody nnSep spin-selected'></td><td class='sheetbody nnSep rapid-spin'></td><td class='sheetbody nnSep range-selected'></td><td class='sheetbody nnSep section-body'></td><td class='sheetbody nnSep'></td></tr>
+
+<tr><td class="sheetbody left-end"></td><td class='soundbody dnSep'> </td><td class='sheetbody nnSep focus-spin'></td><td class='sheetbody nnSep spin-selected'></td><td class='sheetbody nnSep rapid-spin'></td><td class='sheetbody nnSep range-selected'></td><td class='sheetbody nnSep section-body'></td><td class='sheetbody nnSep'></td></tr>
+
+
+<tr><td class="sheetbody left-end"></td><td class='soundbody dnSep'> </td><td class='sheetbody nnSep'></td><td class='sheetbody nnSep selected'></td><td class='sheetbody nnSep'></td><td class='sheetbody nnSep range-selected'></td><td class='sheetbody nnSep section-body'></td><td class='sheetbody nnSep'></td></tr>
+
+<tr><td class="sheetbody left-end"></td><td class='soundbody dnSep'> </td><td class='sheetbody nnSep'></td><td class='sheetbody nnSep selected'></td><td class='sheetbody nnSep'></td><td class='sheetbody nnSep range-selected'></td><td class='sheetbody nnSep section-body'></td><td class='sheetbody nnSep'></td></tr>
+<tr><td class="sheetbody left-end"></td><td class='soundbody dsSep'> </td><td class='sheetbody nsSep'></td><td class='sheetbody nsSep selected'></td><td class='sheetbody nsSep'></td><td class='sheetbody nsSep range-selected'></td><td class='sheetbody nsSep section-tail'></td><td class='sheetbody nsSep'></td></tr>
+
+</tbody></table>
+</span>
+<span style='display:inline-block;'>
+	<label for='docColorpickBG'     class=doc_form_label>背景 :      </label><input id=docColorpickBG type=color onChange="documentFormat.checkUIValue(event)" /> 
+	<label for='docColorpickTXT'    class=doc_form_label>文字 :      </label><input id=docColorpickTXT type=color onChange="documentFormat.checkUIValue(event)" /> 
+	<label for='docColorpickAP'     class=doc_form_label>アプリ背景 : </label><input id=docColorpickAP type=color onChange="documentFormat.checkUIValue(event)" /> 
+<br>
+	<label for='docColorpickSLCT'   class=doc_form_label>選択 :      </label><input id=docColorpickSLCT type=color onChange="documentFormat.checkUIValue(event)" /> 
+	<label for='docColorpickSLCN'   class=doc_form_label>選択範囲 :   </label><input id=docColorpickSLCN type=color onChange="documentFormat.checkUIValue(event)" /> 
+<br>
+	<label for='docColorpickRapid'  class=doc_form_label>拡張編集 :   </label><input id=docColorpickRapid type=color onChange="documentFormat.checkUIValue(event)" /> 
+	<label for='docColorpickFloat'   class=doc_form_label>範囲編集 :  </label><input id=docColorpickFloat type=color onChange="documentFormat.checkUIValue(event)" /> 
+	<label for='docColorpickSect'   class=doc_form_label>区間編集 :   </label><input id=docColorpickSect type=color onChange="documentFormat.checkUIValue(event)" /> 
+<hr>
+	<label for='docColorpickHi'     class=doc_form_label>footstamp  : </label><input id=docColorpickHi type=color onChange="documentFormat.checkUIValue(event)" /> 
+	<label for='docColorpickEdt'    class=doc_form_label>編集中 :      </label><input id=docColorpickEdt type=color onChange="documentFormat.checkUIValue(event)" /> 
+<hr>
+ 
+</span>
+<hr>
+<div>PAGE HEADER : 
+	<span> left <input type = text id=headerMarginLeft value='15' size = 6 style='text-align:center;' onchange='documentFormat.checkUIValue(event);'> mm </span> |
+	<span> top <input type = text id=headerMarginTop value='91' size = 6 style='text-align:center;' onchange='documentFormat.checkUIValue(event);'> mm </span> |
+	<span> height <input type = text id=headerBoxHeight value='320' size = 6 style='text-align:center;' onchange='documentFormat.checkUIValue(event);'> mm </span>
+</div>
+<!-- アイテムリスト -->
+<hr>
+<div id='header_item_list'>
+<span class=header_item >EP.</span>
+<span class=header_item >TITLE</span>
+<span class=header_item >S-C</span>
+<span class=header_item >TIME</span>
+<span class=header_item >USER</span>
+<span class=header_item >PAGE</span>
+
+</div>
+<hr>
+<div id= header_order></div>
+<hr>
+<div>SIGN AREA : 
+	<span> left <input type = text id=signBoxLeft value='15' size = 6 style='text-align:center;' onchange='documentFormat.checkUIValue(event);'> mm </span> |
+	<span> top <input type = text id=signBoxTop value='91' size = 6 style='text-align:center;' onchange='documentFormat.checkUIValue(event);'> mm </span> |
+	<span> right <input type = text id=signBoxRight value='320' size = 6 style='text-align:center;' onchange='documentFormat.checkUIValue(event);'> mm </span> |
+	<span> bottom <input type = text id=signBoxBottom value='6' size = 6 style='text-align:center;' onchange='documentFormat.checkUIValue(event);'> mm </span>
+</div>
+<hr>
+<div>NOTE AREA : 
+	<span> left <input type = text id=noteAreaLeft value='15' size = 6 style='text-align:center;' onchange='documentFormat.checkUIValue(event);'> mm </span> |
+	<span> top <input type = text id=noteAreaTop value='91' size = 6 style='text-align:center;' onchange='documentFormat.checkUIValue(event);'> mm </span> |
+	<span> right <input type = text id=noteAreaRight value='320' size = 6 style='text-align:center;' onchange='documentFormat.checkUIValue(event);'> mm </span> |
+	<span> bottom <input type = text id=noteAreaBottom value='6' size = 6 style='text-align:center;' onchange='documentFormat.checkUIValue(event);'> mm </span>
+</div>
+<hr>
+<div>TIMESHEET TABLE :
+	<span> left <input type = text id=docMarginLeft value='15' size = 6 style='text-align:center;' onchange='documentFormat.checkUIValue(event);'> mm </span> |
+	<span> top <input type = text id=docMarginTop value='91' size = 6 style='text-align:center;' onchange='documentFormat.checkUIValue(event);'> mm </span> |
+	<span id=spanFrameHeight> hight <input type = text id=docSheetColHeight value='320' size = 6 style='text-align:center;' onMousedown="nas.sliderVALUE([event,this.id,'200','2','2']);"
+onchange='documentFormat.checkUIValue(event);'> mm </span> |
+	<span id=spanColumnGap> span <input type = text id=docColumnSpan value='6' size = 6 style='text-align:center;' onMousedown="nas.sliderVALUE([event,this.id,'200','2','2']);" onchange='documentFormat.checkUIValue(event);'> mm </span>
+</div>
+<hr>
+<!-- アイテムリスト -->
+<div id='track_item_list'>
+
+<span class=track_item >timecode</span>
+<span class=track_item >reference</span>
+<span class=track_item >sound</span>
+<span class=track_item >dialog</span>
+<span class=track_item >cell</span>
+<span class=track_item >camerawork</span>
+<span class=track_item >memo.</span>
+<!--
+<span class=track_item >still</span>
+<span class=track_item >composite</span>
+<span class=track_item >stage</span>
+<span class=track_item >tracknote</span>
+-->
+</div>
+
+<hr>
+<div id= orderinfo>
+<!--
+	<span > <label for=ckb1>TC </label><input type = checkbox id=ckb1 onchange='document.getElementById("orderbox-tc1").style.display = (this.checked)? "inline-block":"none";'></span>
+	<span id=spanTc1> <input type = text id=columnGap value='6' size = 6 style='text-align:center;'> mm </span> | 
+	<span><label for=ref>ref.</label><input type = text id=ref value='4.25' size =5 style='text-align:center;'>mm</span> |
+	<span><label for=ckb2>TC </label><input type = checkbox id=ckb2 onchange='document.getElementById("orderbox-tc2").style.display = (this.checked)? "inline-block":"none";'></span>
+	<span id=spanTc2> <input type = text id=columnGap value='6' size = 6 style='text-align:center;'> mm </span> | 
+	<span><label for=snd>snd. </label><input type = text id=snd value='12.5' size =5 style='text-align:center;'>mm</span> | 
+	<span><label for=cell>cell </label><input type = text id=cell value='6.25' size =5 style='text-align:center;'>mm</span> | 
+	<span><label for=cam>cam.</label><input type = text id=cam value='7.75' size =5 style='text-align:center;'>mm</span> | 
+	<span><label for=ckbN>note </label><input type = checkbox id=ckbN  onchange='document.getElementById("orderbox-note").style.display = (this.checked)? "inline-block":"none";'></span>
+	<span id=spanNote class> <input type = text id=columnGap value='6' size = 6 style='text-align:center;'> mm </span>
+-->
+</div>
+<hr>
+</div></div>
+
+
+</div>
+<!-- 書類フォーマット編集パネル optionPanelDocFormat-->
+<!-- 書類画像調整パネル optionPanelImgAdjust-->
+<div
+	class = 'optionPanelFloat optionPanelImgAdjust'
+	id = optionPanelImgAdjust
+>
+<dl><dt class=floatPanelHeader> adjust
+	<a href="" class=minimize ><img src=./images/ui/minimize.png alt="＿"></a>
+	<a href="" class=close ><img src=./images/ui/close.png alt="×"></a>
+	<a href="" class=down ><img src=./images/ui/down.png alt="▼"></a>
+</dt></dl>
+<div id=formImgAdjust style='text-align:right;'>
+  <div style="background-color:#aaaaaa;height:28px;display:block;text-align:left;">
+	<button id='imgAdjustExpand' onclick='xUI.imgAdjust.expand();' title='詳細編集'> ▼ </button>
+	<button onclick="xUI.imgAdjust.reset()" title='編集を初期化'>reset</button>
+	<button onclick="xUI.imgAdjust.restore()" title='編集を破棄'>restore</button>
+	<button onclick="xUI.sWitchPanel('ImgAdjust','hide')" title='編集を適用して閉じる'>save</button>
+<!--
+	<button onclick="xUI.imgAdjust.restore();xUI.sWitchPanel('ImgAdjust','hide')" title='編集を破棄して閉じる'>discard</button>
+-->
+  </div>
+  <div style='text-align:center;'>	<img id=imgAdjustStatus src=./images/ui/imgStatResize.png onclick="xUI.imgAdjust.setMode();"><br>
+	<button id=imgAdjustUp    class=imgAdjustButton onclick='xUI.imgAdjust.adjust(event);'>↑</button><br>
+	<button id=imgAdjustLeft  class=imgAdjustButton onclick='xUI.imgAdjust.adjust(event);'>←</button>
+	<button id=imgAdjustRight class=imgAdjustButton onclick='xUI.imgAdjust.adjust(event);'>→</button><br>
+	<button id=imgAdjustDown  class=imgAdjustButton onclick='xUI.imgAdjust.adjust(event);'>↓</button>
+  </div>
+  <div
+id='imgAdjustDetail'
+  >
+	<hr>
+		<span title=傾斜>inclination</span> : <input id=imgAdjustRotation  type=text size=6 value=0   onchange='xUI.imgAdjust.chkValue(this.id);'> ° <br>
+		<span title=スケール横>scale-x</span>   :    <input id=imgAdjustScaleX    type=text size=6 value=100 onchange='xUI.imgAdjust.chkValue(this.id);'> ％ <br>
+		<span title=スケール縦>scale-y</span>   :    <input id=imgAdjustScaleY    type=text size=6 value=100 onchange='xUI.imgAdjust.chkValue(this.id);'> ％ <br>
+		<span title=left>offset-x</span>   :    <input id=imgAdjustPositionX type=text size=6 value=0   onchange='xUI.imgAdjust.chkValue(this.id);'> ㎜ <br>
+		<span title=top>offset-y</span>    :    <input id=imgAdjustPositionY type=text size=6 value=0   onchange='xUI.imgAdjust.chkValue(this.id);'> ㎜ <br>
+  </div>
+</div></div>
+<!-- 書類画像調整パネル optionPanelImgAdjust-->
+
+<!-- //Canvas編集メニュー -->
+<div id=optionPanelPaint class='optionPanelFloat optionPanelPaint' >
+<dl><dt class="floatPanelHeader">note menu
+	<a href="" class=minimize ><img src=./images/ui/minimize.png alt="＿"></a>
+	<a href="" class=close ><img src=./images/ui/close.png alt="×"></a>
+	<a href="" class=down ><img src=./images/ui/down.png alt="▼"></a>
+</dt></dl>
+
+	<div id=formPaint class='centeringForm'>
+	<div class='centeringForm blockMenu'>
+         <button id='select' class='paintTool iconButton iconButton-plus' onclick='xUI.canvasPaint.setTool(this.id)' title='select(v)'>
+</button><button id='selectRect' class='iconButton iconButton-selectBox paintTool' onclick='xUI.canvasPaint.setTool(this.id);' title ='box select(m)'>
+</button><button id='addText' class='iconButton iconButton-addText paintTool' onclick='xUI.canvasPaint.setTool(this.id)' title ='text tool(t)'>
+</button><button id='stamp' class='iconButton iconButton-footStamp paintTool' onclick='xUI.canvasPaint.setTool(this.id)' title ='stamp tool(s)'>
+</button>
+<br>
+         <button id='pen' class='paintTool iconButton iconButton-pen_3' onclick='xUI.canvasPaint.setTool(this.id)' title='ペンツール(b)'>
+</button><button id='circle' class='iconButton iconButton-circle paintTool' onclick='xUI.canvasPaint.setTool(this.id)' title ='楕円ツール(c)'>
+</button><button id='rect' class='iconButton iconButton-rect paintTool' onclick='xUI.canvasPaint.setTool(this.id)' title ='矩形ツール(r)'>
+</button>
+<br>
+         <button id='hand' class='paintTool iconButton iconButton-hand' onclick='xUI.canvasPaint.setTool(this.id)' title='hand(h)'>
+</button><button id='canvasMove' class='iconButton paintTool iconButton-move' onclick='xUI.canvasPaint.setTool(this.id);' title ='画像移動'>
+</button><button id='canvasResize' class='iconButton paintTool iconButton-resize' onclick='xUI.canvasPaint.setTool(this.id)' title ='画像スケール'>
+<!--</button><button id='' class='iconButton paintTool' onclick='xUI.canvasPaint.setTool(this.id)' title =''>-->
+</button>
+<br><hr>
+	</div>
+	<div class='centeringForm blockMenu'>
+
+         <button id='removeCanvasObject' class='iconButton iconButton-eraser paintCommand' onclick='xUI.canvasPaint.removeSelection()' title='選択オブジェクトを削除'>
+</button><button id='clearCanvasField' class='iconButton iconButton-close paintCommand' onclick='xUI.canvasPaint.clearContent()' title='すべてのオブジェクトを削除'>
+</button><button id='groupingCanvasObject' class='iconButton iconButton-group paintCommand' onclick='xUI.canvasPaint.groupingSelection()' title='選択オブジェクトをグループ化'>
+</button><button id='ungroupingCanvasObject' class='iconButton iconButton-ungroup paintCommand' onclick='xUI.canvasPaint.ungroupingSelection()' title='グループ化を解除'>
+</button>
+<br><hr>
+         <button id='note_copy' class='iconButton iconButton-copy itemCommand' onclick='xUI.canvasPaint.copy();' title='canvas copy'>
+</button><button id='note_cut' class='iconButton iconButton-cut itemCommand' onclick='xUI.canvasPaint.cut();' title='canvas cut'>
+</button><button id='note_paste' class='iconButton iconButton-paste itemCommand' onclick='xUI.canvasPaint.paste();' title='canvas paste'>
+</button><button id='note_discard' class='iconButton iconButton-destroy itemCommand' onclick='xUI.XPS.noteImages.getByLinkAddress(xUI.getTargetImageAddress()).remove();xUI.canvasPaint.syncCommand();' title='discard'>
+</button>
+<br>
+         <button id='note_undo' class='iconButton iconButton-undo itemCommand' onclick='xUI.canvasPaint.undo();' title='canvas undo'>
+</button><button id='note_redo' class='iconButton iconButton-redo itemCommand' onclick='xUI.canvasPaint.redo();' title='canvas redo'>
+</button><button id='zoomCtrl' class='iconButton iconButton-zoom itemCommand' onclick='xUI.sWitchPanel("Zoom");' title='zoomControl'>
+</button><button id='appearanceCtrl' class='iconButton iconButton-eye itemCommand' onclick='xUI.sWitchPanel("Appearance");' title='appearanceControl'>
+</button>
+<!--
+<br>
+         <button id='note_edit'    class='iconButton iconButton-addItem itemCommand' onclick='xUI.canvasPaint.set(xUI.getTargetImageAddress());' title='append noteImage|edit noteImage'>
+</button><button id='note_push'    class='iconButton iconButton-push itemCommand' onclick='xUI.canvasPaint.unset();' title='save noteImage'>
+</button><button id='note_discard' class='iconButton iconButton-destroy itemCommand' onclick='xUI.XPS.noteImages.getByLinkAddress(xUI.getTargetImageAddress()).remove();' title='discard '>
+</button>--><!--<button id='' class='iconButton iconButton- itemCommand' onclick='' title=''>
+</button>-->
+<br>
+
+	</div>
+	<div class='centeringForm blockMenu'>
+
+         <button id='note_switch'    class='iconButton iconButton-space iconButton-wide4 itemCommand' onclick='xUI.canvasPaint.switch();' title='編集状態の切り替え'> EDIT
+</button><br><span id='note_item' class='note_item note_item_focus'> ・・・ </span><hr>
+         <button id='black'    class='graphicColorChip graphicColorBlack'    onclick='xUI.canvasPaint.setColor(this.id);'>
+</button><button id='white'    class='graphicColorChip graphicColorWhite'    onclick='xUI.canvasPaint.setColor(this.id);'>
+</button><button id='red'      class='graphicColorChip graphicColorRed'      onclick='xUI.canvasPaint.setColor(this.id);'>
+</button><button id='green'    class='graphicColorChip graphicColorGreen'    onclick='xUI.canvasPaint.setColor(this.id);'>
+</button><button id='blue'     class='graphicColorChip graphicColorBlue'     onclick='xUI.canvasPaint.setColor(this.id);'>
+</button><button id='backdrop' class='graphicColorChip graphicColorBackdrop' onclick='xUI.canvasPaint.setColor(this.id);'>
+</button><br>
+<hr>
+	</div>
+	<div class='centeringForm blockMenu'>
+<button id='dot1' class='graphicToolButton oneChr' onclick='xUI.canvasPaint.setPenWidth(1);'><div class='circle circle-diameter-1'></div></button>
+<button id='dot2' class='graphicToolButton oneChr' onclick='xUI.canvasPaint.setPenWidth(2);'><div class='circle circle-diameter-2'></div></button>
+<button id='dot3' class='graphicToolButton oneChr' onclick='xUI.canvasPaint.setPenWidth(3);'><div class='circle circle-diameter-3'></div></button>
+<br>
+<button id='colorReset' class='graphicToolButton' onclick='xUI.canvasPaint.resetColor();'>[reset]</button>
+<br>
+		<div>
+	<button id='colorSelectBG' class='graphicColorSelect graphicColorSelectBG' onclick='xUI.canvasPaint.swapColor()'></button>
+	<button id='colorSelectFG' class='graphicColorSelect graphicColorSelectFG' onclick='xUI.canvasPaint.swapColor();'></button>
+		</div>
+	</div>
+	</div>
+</div>
+<!-- Canvas編集メニュー// -->
+<!-- //手描きメモ用テキスト編集UI -->
+<div class='optionPanelFloat optionPanelText' id=optionPanelText >
+<dl><dt class="floatPanelHeader">text edit
+	<a href="" class=minimize ><img src=./images/ui/minimize.png alt="＿"></a>
+	<a href="" class=close ><img src=./images/ui/close.png alt="×"></a>
+	<a href="" class=down ><img src=./images/ui/down.png alt="▼"></a>
+</dt></dl>
+	<div id = formText>
+		<textarea
+			id = 'textToolEditBox'
+			class = textEditBox
+		></textarea>
+<hr>
+		<button
+			class=modalBt
+			onclick = 'xUI.sWitchPanel("Text","close")'
+		>Cancel</button>
+		<button
+			class=modalBt
+			onclick = 'xUI.canvasPaint.putText(document.getElementById("textToolEditBox").value);'
+		>O K</button>
+	</div>
+</div>
+<!-- 手描きメモ用テキスト編集UI// -->
+<!-- //スタンプセレクタ -->
+<div class='optionPanelFloat optionPanelStamp' id=optionPanelStamp >
+<dl><dt class="floatPanelHeader">stamp select
+	<a href="" class=minimize ><img src=./images/ui/minimize.png alt="＿"></a>
+	<a href="" class=close ><img src=./images/ui/close.png alt="×"></a>
+	<a href="" class=down ><img src=./images/ui/down.png alt="▼"></a>
+</dt></dl>
+	<div id = formStamp>
+		<div id=stampList style='width:192px;height:96px;'>stamp area (準備中)
+		</div>
+	</div>
+</div>
+<!-- スタンプセレクタ// -->
+<!-- 署名編集 -->
+
+<div class='optionPanelFloat optionPanelSign' id=optionPanelSign  style='text-align:center;min-width:480px;'>
+<dl><dt class=floatPanelHeader>signature
+	<a href="" class=minimize ><img src=./images/ui/minimize.png alt="＿"></a>
+	<a href="" class=close ><img src=./images/ui/close.png alt="×"></a>
+	<a href="" class=down ><img src=./images/ui/down.png alt="▼"></a>
+</dt></dl>
+<div id='formSign'>
+	<span id=sigStage></span>:
+	<input id=sigLabel
+		type=text
+		autocomplete='on'
+		list='stampNames'
+		size=32
+		value=''
+		onchange ='SignBox.update();'
+	>
+		<datalist id='stampNames'>
+			<option value="=済=">
+			<option value="=OK=">
+			<option value="=NG=">
+			<option value="=保留=">
+		</datalist>
+	<input id=sigDate
+		type=text
+		size=32
+		onchange ='SignBox.update();'
+	>
+	<br>
+	<div id=stampList style='display:flex;vertilcal-align:bottom;text-align:right;overflow-x:scroll;overflow-y:hide;width:480px;height:64px'>
+	[
+		<span >FIX</span>
+	]
+	<
+		<span>O K</span>
+	>
+	>
+		<span>N G</span>
+	<
+	</div>
+
+		<span id=stampColorList>
+			<button class=colorSelect id="stampColorList00" onClick="myPref.chgColor(this.id)" value="=CUSTOM=" title="current Color"> </button>
+			<button class=colorSelect id="stampColorList01" onClick="myPref.chgColor(this.id)" value="#ffffee" title="y" style="background-color:#ffffee"> </button>
+		</span>
+		<input id=stampColor type=text list=stampColorList autoComplete="on" onChange="myPref.chgColor(this.id)" />
+		<input id=stampColorpick type=color onChange="myPref.chgColor(this.id)" />
+<br>
+<button
+	id=signature
+	style = 'font-size:24px;'
+>	[
+		<span >編集済データ</span>
+		<span >編集済データ</span>
+	]
+</button>
+
+
+</div></div>
+<!-- 署名編集 -->
+	</div>
+<!-- パネルUI -->
+<!-- アプリケーションステータス -->
+<div id=app_status class=application_status>***<br></div>
+<!-- アプリケーションステータス -->
+</div>
+<!-- 固定コントロール -->
+<div id=sheet_view>
+ <div class=headerTool>
+  <div id="scrollSpaceHd" class="screenSpace"></div>
+ </div>
+<!-- ここまで印刷時に非表示 -->
+<!--	<div id=spcHd class=application_status ><br></div> -->
+<!--   シート本体     -->
+<div id=xpsDocumentField style='transform: scale(1);display:frow-root;'>
+
+<div id=sheet_body>
+<!--
+	onMouseDown = " return xUI.Mouse(event)"
+	onMouseUp   = " return xUI.Mouse(event)"
+	onClick     = " return xUI.Mouse(event)"
+	onDblClick  = " return xUI.Mouse(event)"
+	onMouseOver = " xUI.Mouse(event)"
+	onMouseOut  = " xUI.Mouse(event)"
+-->
+<!--
+	style = "display:flow-root;"
+-->
+      <div align=center style='margin-top:6cm;'>
+<br><br><br><br><br><br><br><br>ただいま準備中…ちょっぴりお待ちください<br>
+あ、非常に申し訳ありませんがりまぴんはIEでは正常に動作しません。<br>サポート外です。<br>
+<h3> タイムシート編集サービス　テスト中 </h3><img src=./images/remaping.gif border=0 /><br /><img src=./images/ui/wait.gif width=48 height=48><br>
+index.html ,v 1.7 2018/03/05  support@u-at.net <br />
+<span id=myVer1></span> <span id=myServer1>[no-server]</span>
+<br>
+      </div><hr>
+<!-- <form> -->
+    <textarea id="startupContent"  ></textarea>
+    <textarea id="startupReference"></textarea>
+  </div>
+  <div id=scrollSpaceFt class=screenSpace><br></div>
+ </div>
+<!--   シート本体     -->
+  <!--
+	サーバーオンサイトの状況を真似る場合
+	この位置に　backend_variables　を置いて
+	プロパティに以下のいずれかの１行を加える
+    data-server_url='https://remaping-stg.u-at.net'
+    data-server_url='http://remaping.scivone-dev.com'
+    data-server_url='http://u-at.net'
+    アドレスはサーバーのルートを使用　2017.04.13
+以下の行は本番サーバでは無効（プロパティが無い）ため削除が必要
+      data-frame_rate
+
+以下の行はカット袋系のサービスが有効になるまで使用停止・メンテナンス
+      data-cut_bag_token
+-->
+<span id="backend_variables"
+      data-organization_token="<%= @current_membership.organization.token %>"
+      data-user_access_token="<%= @user_access_token %>"
+      data-user_token="<%= current_user.token %>"
+      data-user_name="<%= current_user.show_name %>"
+      data-user_email="<%= current_user.email %>"
+      data-episode_id="<%= @cut.episode.nil? ? nil : @cut.episode.id %>"
+      data-cut_id="<%= @cut.id %>"
+      data-product_token="<%= @cut.episode.nil? ? nil : @cut.episode.product.nil? ? nil : @cut.episode.product.token %>"
+      data-episode_token="<%= @cut.episode.nil? ? nil : @cut.episode.token %>"
+      data-cut_token="<%= @cut.token %>"
+      data-scale="<%= @cut.scale %>"
+      data-line_id="<%= @cut.line_id %>"
+      data-stage_id="<%= @cut.stage_id %>"
+      data-job_id="<%= @cut.job_id %>"
+      data-status="<%= @cut.status %>"
+      data-sheet_color="<%= @cut.episode.nil?  ? nil : @cut.episode.product.sheet_color_hex %>"
+      data-session_token="<%= @session_token %>"
+></span>
+
+<div id=underlay class=underlay><img src=./images/logo/logo_UAT.png width='256'><div>
+</body>
+</html>

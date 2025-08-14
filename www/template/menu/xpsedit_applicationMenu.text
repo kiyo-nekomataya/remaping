@@ -1,0 +1,183 @@
+﻿/*
+ electron|pulldown Menu共用
+ */
+applicationMenu
+	about
+	========
+	services
+	========
+	hide
+	hideothers
+	unhide
+	========
+	quit
+
+document
+//storeMenu
+	openDocumentXps
+	========
+	newDocumentXps
+	========
+	nodeControl_checkin
+	nodeControl_store
+	nodeControl_checkout
+	nodeControl_activate
+	nodeControl_deactivate
+	nodeControl_discard
+	========
+	nodeControl_appendLine
+	nodeControl_mergeDocument
+	========
+//新規登録（リポジトリに現在のタイムシートを登録）
+	nodeControl_entryCurrentXps
+	========
+//作業検収
+	nodeControl_receipt
+//ひきあげ
+	nodeControl_salvageJob
+//欠番処理
+	nodeControl_abort
+	========
+	extIO_importDatas
+	extIO_downloadXps
+	extIO_downloadTdts
+	extIO_downloadXdts
+	extIO
+	documentInfoXps
+	extIO_printHTML
+	extIO_exportPNG
+	extIO_buildActionSheet
+	extIO_printActionSheet
+	extIO_exportActionSheetPNG
+	========
+	authorize
+	========
+	exit
+
+editMenu
+	undo
+	redo
+	======== 
+	selection_selectAll
+	selection_cut
+	selection_copy
+	selection_paste
+	========
+	edit_timeline_rename
+	edit_timeline_tagname
+	edit_xpst_clearTL
+	edit_xpst_clearSheet
+	selectTrack
+	selestSheet
+	edit_xpst_insertBlank
+	edit_xpst_blockRemove
+	========
+	edit_xpst_addDialogTrack
+	edit_xpst_addSoundTrack
+	edit_xpst_addStilTL
+	edit_xpst_addReplacementTL
+	edit_xpst_addCameraTL
+	edit_xpst_addGeometryTL
+	edit_xpst_addSfxTL
+	edit_xpst_insertTL
+	edit_xpst_deleteTL
+	edit_xpst_reformatTL
+	edit_xpst_reformatSheet
+	edit_xpst_simplifyTL
+	edit_xpst_simplifySheet
+	========
+	pushBackup
+	restoreBackup
+	clearBackup
+	========
+	Speech
+	Speech_startSpeaking
+	Speech_stopSpeaking
+
+referenceMenu
+	exchReference
+	extIO_importReference
+	extIO_exportReference
+	selection_copyToReference
+	selection_copyFromReference
+	selection_clearReferenece
+
+stagingMenu
+	nodeControl_checkin
+	nodeControl_store
+	nodeControl_checkout
+	nodeControl_activate
+	nodeControl_discard
+	nodeControl_deactivate
+	nodeControl_receipt
+	nodeControl_salvageJob
+	nodeControl_abort
+	nodeControl_branch
+	nodeControl_offline
+	nodeControl_merge
+
+SettingsView
+//UI変更
+	change_locale
+	modecahange_master
+	modechange_restrintion
+	modechange_pgscrl
+	modechange_2column
+	modechange_management
+	========
+	preferencePanel
+//	showInfo
+	========
+	editNoteText
+	application_reload
+	forceReload
+	application_dbgMode
+	========
+	resetZoom
+	zoomIn
+	zoomOut
+	========
+	togglefullscreen
+
+
+ShowMenu
+	changeLanguage
+	========
+	lineHeight
+	100％
+	========
+	pMenu
+	toolbarHeader
+	memoEdit
+	reference
+	=========
+	debugON/OFF
+	debugConsole
+
+Window
+	app_reName
+	app_console
+	app_productManager
+	app_storyBoard
+	app_timeSheet
+	========
+	minimize
+	zoom
+	========
+	front
+	========
+	window
+	close
+
+Tools
+	calculator
+	stopwatch
+	fieldTable
+
+help
+	usage
+	documentNamingRule
+	LearnMore
+	========
+	About
+[end]

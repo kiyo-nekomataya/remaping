@@ -1,0 +1,1 @@
+@(FOR %%0 IN (%*) DO @ECHO %%0) | "C:\Program Files\Adobe\Adobe After Effects CS3\Support Files\Scripts\nas\lib\resource\picl.exe"

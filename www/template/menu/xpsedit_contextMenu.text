@@ -1,0 +1,37 @@
+﻿/*
+ contextMenu用
+ */
+allRegion
+	openDocumentXps
+	newDocumentXps
+	open
+	close
+	========
+//	renameFiles
+//	renameSelection
+//	downloadItemSet
+//	exportScript
+//	========
+//	prefix
+//	suffix
+//	replacement
+//	replacementRegex
+//	identifier
+	========
+	undo
+	redo
+
+xpsReferenceRegion
+xpsDialogRegion
+xpsSoundRegion
+xpsReplacementRegion
+xpsCameraworkRegion
+xpsStageworkRegion
+xpsSfxRegion
+xpsNoteTextRegion
+xpsSheetFooterRegion
+xpsSheetHeaderRegion
+xpsTrackLabelRegion
+
+
+[end]

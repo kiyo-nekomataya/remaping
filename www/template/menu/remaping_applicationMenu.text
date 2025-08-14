@@ -1,0 +1,197 @@
+﻿/*
+ electron|pulldown Menu共用
+ remaping(UAFEditorUI)applicationMenu
+ */
+applicationMenu
+	about
+	========
+	services
+	========
+	hide
+	hideothers
+	unhide
+	========
+	quit
+
+document
+	openDocumentXps
+	========
+	newDocumentXps
+	========
+	nodeControl_checkin
+	nodeControl_store
+	nodeControl_checkout
+	nodeControl_activate
+	nodeControl_deactivate
+	nodeControl_discard
+	========
+//新規登録（リポジトリに現在のタイムシートを登録）
+	nodeControl_entryCurrentXps
+	========
+//作業検収
+	nodeControl_receipt
+//ひきあげ
+	nodeControl_salvageJob
+//欠番処理
+	nodeControl_abort
+	========
+	nodeControl_appendLine
+	nodeControl_mergeDocument
+	========
+	extIO_importDatas
+	extIO_downloadXps
+	extIO_downloadTdts
+	extIO_downloadXdts
+	extIO
+	documentInfoXps
+	extIO_printHTML
+	extIO_exportPNG
+	extIO_buildActionSheet
+	extIO_printActionSheet
+	extIO_exportActionSheetPNG
+	========
+	authorize
+
+editMenu
+	undo
+	redo
+	======== 
+	selection_selectAll
+	selection_cut
+	selection_copy
+	selection_paste
+	========
+	ページ画像編集
+	ノート画像
+	========
+	edit_timeline_rename
+	edit_timeline_tagname
+	edit_xpst_clearTL
+	edit_xpst_clearSheet
+	selectTrack
+	selestSheet
+	edit_xpst_insertBlank
+	edit_xpst_blockRemove
+	========
+	edit_xpst_addDialogTrack
+	edit_xpst_addSoundTrack
+	edit_xpst_addStilTL
+	edit_xpst_addReplacementTL
+	edit_xpst_addCameraTL
+	edit_xpst_addGeometryTL
+	edit_xpst_addSfxTL
+	edit_xpst_insertTL
+	edit_xpst_deleteTL
+	edit_xpst_reformatTL
+	edit_xpst_reformatSheet
+	edit_xpst_simplifyTL
+	edit_xpst_simplifySheet
+	========
+	pushBackup
+	restoreBackup
+	clearBackup
+	========
+	Speech
+	Speech_startSpeaking
+	Speech_stopSpeaking
+
+referenceMenu
+	
+	========
+	exchReference
+	extIO_importReference
+	extIO_exportReference
+	selection_copyToReference
+	selection_copyFromReference
+	selection_clearReference
+
+stagingMenu
+	nodeControl_checkin
+	nodeControl_store
+	nodeControl_checkout
+	nodeControl_activate
+	nodeControl_discard
+	nodeControl_deactivate
+	nodeControl_receipt
+	nodeControl_salvageJob
+	nodeControl_abort
+	nodeControl_branch
+	nodeControl_offline
+	nodeControl_merge
+
+Tools
+	りまぴんについて
+	========
+	認証パネル
+	音響パネル
+	ドキュメントセレクタ
+	ソフトウェアキーボード
+	========
+	環境設定
+	共有情報
+	メモ編集
+	アプリケーションを再読込
+	========
+	calcurator
+	stopwatch
+	fieldTable
+
+SettingsView
+//UI変更
+	change_locale
+	modecahange_master
+	modechange_restrintion
+	modechange_pgscrl
+	modechange_2column
+	modechange_management
+	========
+	preferencePanel
+//	showInfo
+	========
+	editNoteText
+	application_reload
+	forceReload
+	application_dbgMode
+	========
+	resetZoom
+	zoomIn
+	zoomOut
+	========
+	togglefullscreen
+
+ShowMenu
+	changeLanguage
+	========
+	lineHeight
+	100％
+	========
+	pMenu
+	toolbarHeader
+	memoEdit
+	reference
+	=========
+	debugON/OFF
+	debugConsole
+
+	メインメニュー
+	サービスアカウント
+	ツールバー
+	コマンドバー
+	制作管理バー
+	カウンター
+	入力ボックス
+	========
+	シートヘッダー
+	シグネチャ
+	メモ欄
+	参照欄
+	========
+	デバッグON/OFF
+
+help
+	usage
+	documentNamingRule
+	LearnMore
+	========
+	About
+[end]

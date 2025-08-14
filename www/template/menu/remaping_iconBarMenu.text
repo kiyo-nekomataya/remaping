@@ -1,0 +1,46 @@
+﻿/*
+ iconBarMenu用
+ */
+sites
+	menuBack
+	brouse
+	seve
+	discard
+	float
+
+document
+	openDocumentXps
+	closeDocumentXps
+	importData
+	exportData
+	report
+	========
+	pman_workSlip
+	
+editMenu
+	undo
+	redo
+	======== 
+	cut
+	copy
+	paste
+	handleAll
+	releaseAll
+	documentSelector_search
+	sortItems
+	reverseItems
+
+reName
+	nameIncr
+	nameDecr
+	nameReset
+	identifier
+	timesheet
+	addGrp
+	delGrp
+	=======
+	prefix
+	suffix
+	search
+
+[end]

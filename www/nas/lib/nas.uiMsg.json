@@ -1,0 +1,963 @@
+﻿{
+  "about": {
+    "en": "about this application",
+    "ja": "このアプリケーションについて"
+  },
+  "aboutOf": {
+    "en": "about %1",
+    "ja": "%1 について"
+  },
+  "Abort": {
+    "en": "Abort",
+    "ja": "中断"
+  },
+  "aborted": {
+    "en": "process aborted.",
+    "ja": "処理を中断しました"
+  },
+  "Action": {
+    "en": "Action",
+    "ja": "動作設定"
+  },
+  "activateUpperLayer": {
+    "en": "activate upper layer",
+    "ja": "上位レイヤをアクティブ"
+  },
+  "addNewLayer": {
+    "en": "add new layer",
+    "ja": "新規動画レイヤ作成"
+  },
+  "addNewOvl": {
+    "en": "add new overlay",
+    "ja": "新規修正レイヤ作成"
+  },
+  "alertAbnomalPrccs": {
+    "en": "[！！Caution！！] Abnormal processing",
+    "ja": "[！！注意！！] 異常処理です"
+  },
+  "alertCutConflict": {
+    "en": "The same scene has already been entered.\nThis scene can not be entered",
+    "ja": "既に同じカットが登録されています\nこのカットの登録はできません"
+  },
+  "alertCutIllegal": {
+    "en": "Scene name is invalid  nThis scene can not be entered",
+    "ja": "カット番号が不正です\nこのカットの登録はできません"
+  },
+  "alertDurationchange": {
+    "en": "the duration of document is changed.",
+    "ja": "カットの継続時間が変更されます。"
+  },
+  "alertDiscardframes": {
+    "en": "contents of the erased frame are discarded.",
+    "ja": "消去されるフレームの内容は破棄されます。"
+  },
+  "alertTrackschange": {
+    "en": "layer counts of document is changed.",
+    "ja": "カットのレイヤ数が変更されます。"
+  },
+  "alertDiscardtracks": {
+    "en": "contents of the erased track are discarded.",
+    "ja": "消去されるトラックの内容は破棄されます。"
+  },
+  "alertDiscardedit": {
+    "en": "Current edits are discarded.",
+    "ja": "現在の編集内容は破棄されます。"
+  },
+  "alertNewdocumet": {
+    "en": "Create a new document",
+    "ja": "新規ドキュメントを作成します"
+  },
+  "animationDrawing": {
+    "en": "animationDrawing",
+    "ja": "動画"
+  },
+  "animationFrameSelectAll": {
+    "en": "animation frame selectAll",
+    "ja": "アニメフレーム全選択"
+  },
+  "atCreateNewLayer": {
+    "en": "to Create a new Layer",
+    "ja": "新規レイヤ作成時に"
+  },
+  "backgroundColor": {
+    "en": "background color",
+    "ja": "背景色"
+  },
+  "confirmEdit": {
+    "en": "(You can edit the contents of the text box.)",
+    "ja": "(テキストボックスの内容を編集できます)"
+  },
+  "confirmOk": {
+    "en": "Is it OK?",
+    "ja": "よろしいですか？"
+  },
+  "confirmExecute": {
+    "en": "Do you want to run it?",
+    "ja": "実行してよろしいですか?"
+  },
+  "confirmCallecho": {
+    "en": "Save the document in the download folder with the following name.",
+    "ja": "次の名前でダウンロードフォルダに書類を保存します。"
+  },
+  "confirmCallechoSwap": {
+    "en": "Save %1 in the download folder with the following name.",
+    "ja": "次の名前でダウンロードフォルダに %1 を保存します。"
+  },
+  "downloadItemSet": {
+    "en": "download files",
+    "ja": "ダウンロード"
+  },
+  "exportScript": {
+    "en": "export script",
+    "ja": "スクリプト書出"
+  },
+  "baseResolution": {
+    "en": "BaseResolution",
+    "ja": "基準解像度"
+  },
+  "BG": {
+    "en": "BG",
+    "ja": "背景"
+  },
+  "Book": {
+    "en": "MG/FG",
+    "ja": "BOOK"
+  },
+  "Cancel": {
+    "en": "Cancel",
+    "ja": "取消"
+  },
+  "Cell": {
+    "en": "Cell",
+    "ja": "セル"
+  },
+  "Change": {
+    "en": "Change",
+    "ja": "変更"
+  },
+  "Close": {
+    "en": "Close",
+    "ja": "閉じる"
+  },
+  "closeFolder": {
+    "en": "close folder",
+    "ja": "フォルダを閉じる"
+  },
+  "Common": {
+    "en": "Common",
+    "ja": "一般環境"
+  },
+  "confirmLayerName": {
+    "en": "confirm layer name",
+    "ja": "レイヤ名を確認して下さい"
+  },
+  "cut": {
+    "en": "Cut",
+    "ja": "カット番号"
+  },
+  "Delete": {
+    "en": "Delete",
+    "ja": "削除"
+  },
+  "Destruction": {
+    "en": "Destruction",
+    "ja": "破棄"
+  },
+  "document": {
+    "en": "document",
+    "ja": "ドキュメント"
+  },
+  "documentHTML": {
+    "en": "HTML document",
+    "ja": "HTML書類"
+  },
+  "documentxMap": {
+    "en": "xMap document",
+    "ja": "xMap書類"
+  },
+  "documentXps": {
+    "en": "Xps document",
+    "ja": "Xps書類"
+  },
+  "documentTdts": {
+    "en": "Tdts document",
+    "ja": "TDTS書類"
+  },
+  "documentXdts": {
+    "en": "Xdts document",
+    "ja": "XDTS書類"
+  },
+  "documentArd": {
+    "en": "ARD document",
+    "ja": "ARD書類"
+  },
+  "documentArdj": {
+    "en": "ARDJ document",
+    "ja": "ARDJ書類"
+  },
+  "documentCSV": {
+    "en": "Stylos-CSV document",
+    "ja": "Stylos-CSV書類"
+  },
+  "documentSTS": {
+    "en": "STS document",
+    "ja": "STS書類"
+  },
+  "documentTSheet": {
+    "en": "t-Sheet document",
+    "ja": "t-Sheet書類"
+  },
+  "documentTVP": {
+    "en": "TVP-csv document",
+    "ja": "TVPaint-csv書類"
+  },
+  "Documents": {
+    "en": "Documents",
+    "ja": "ドキュメント設定"
+  },
+  "Drawing": {
+    "en": "Drawing",
+    "ja": "動画"
+  },
+  "drawingFunctions": {
+    "en": "drawingFunctions",
+    "ja": "作画機能設定"
+  },
+  "DrawSettings": {
+    "en": "DrawSettings",
+    "ja": "作画設定"
+  },
+  "duplicateAnimationFrame": {
+    "en": "duplicate animation frame",
+    "ja": "アニメフレームを複製"
+  },
+  "Edit": {
+    "en": "Edit",
+    "ja": "編集"
+  },
+  "ElementsFilter": {
+    "en": "footages",
+    "ja": "素材フィルタ"
+  },
+  "Export": {
+    "en": "Export",
+    "ja": "書出"
+  },
+  "failed": {
+    "en": "Processing failed",
+    "ja": "処理できませんでした"
+  },
+  "File": {
+    "en": "File",
+    "ja": "ファイル"
+  },
+  "fileName": {
+    "en": "file name",
+    "ja": "ファイル名"
+  },
+  "Filter": {
+    "en": "Filter",
+    "ja": "フィルタ"
+  },
+  "Frame": {
+    "en": "Frame",
+    "ja": "フレーム"
+  },
+  "Framerate": {
+    "en": "Framerate",
+    "ja": "フレームレート"
+  },
+  "IMedit": {
+    "en": "ImputMedias",
+    "ja": "入力メディア編集"
+  },
+  "Import": {
+    "en": "Import",
+    "ja": "読出"
+  },
+  "IMset": {
+    "en": "ImputMedias",
+    "ja": "入力メディア登録"
+  },
+  "inputDocName": {
+    "en": "Specify the document name",
+    "ja": "ドキュメントの名前を入力"
+  },
+  "install": {
+    "en": "install",
+    "ja": "インストール"
+  },
+  "KeyDrawing": {
+    "en": "KeyDrawing",
+    "ja": "原画"
+  },
+  "layerClassify": {
+    "en": "layerClassify",
+    "ja": "レイヤ仕分"
+  },
+  "layerControl": {
+    "en": "layerControl",
+    "ja": "レイヤコントロール"
+  },
+  "layerRename": {
+    "en": "layer rename",
+    "ja": "レイヤ名変更"
+  },
+  "Layout": {
+    "en": "Layout",
+    "ja": "レイアウト"
+  },
+  "Load": {
+    "en": "Load",
+    "ja": "読込"
+  },
+  "makeNewXPS": {
+    "en": "make new eXposureSheet",
+    "ja": "新規タイムシートを作成します"
+  },
+  "modeChange": {
+    "en": "mode change",
+    "ja": "モード切替"
+  },
+  "Medias": {
+    "en": "Medias",
+    "ja": "メディア設定"
+  },
+  "newLayerBgColor": {
+    "en": "bgColor of new layer",
+    "ja": "新規レイヤの背景色"
+  },
+  "newXPS": {
+    "en": "new eXposureSheet",
+    "ja": "新規タイムシート"
+  },
+  "noAnimationFrames": {
+    "en": "no Animation Frames",
+    "ja": "アニメーションフレームがありません"
+  },
+  "noDocument": {
+    "en": "no document",
+    "ja": "ドキュメントがありません"
+  },
+  "noLayers": {
+    "en": "no layer for deploying",
+    "ja": "展開するレイヤがありません"
+  },
+  "noRemoveData": {
+    "en": "no data to remove.",
+    "ja": "削除するデータがありません"
+  },
+  "noSvaeData": {
+    "en": "no data to save.",
+    "ja": "保存するデータがありません"
+  },
+  "noTarget": {
+    "en": "no target items",
+    "ja": "対象アイテムがありません"
+  },
+  "noSigninService": {
+    "en": "(You are not signed in to the service)",
+    "ja": "（サービスにサインインしていません）"
+  },
+  "OMedit": {
+    "en": "OutputMedias",
+    "ja": "出力メディア編集"
+  },
+  "OMset": {
+    "en": "OutputMedias",
+    "ja": "出力メディア登録"
+  },
+  "Open": {
+    "en": "Open",
+    "ja": "開く"
+  },
+  "openFolder": {
+    "en": "open folder",
+    "ja": "フォルダを開く"
+  },
+  "opus": {
+    "en": "Opus",
+    "ja": "制作番号"
+  },
+  "othet": {
+    "en": "other",
+    "ja": "その他"
+  },
+  "overlayBgColor": {
+    "en": "bgColor of overlay",
+    "ja": "修正レイヤの背景色"
+  },
+  "overrideAlpha": {
+    "en": "overrideAlpha",
+    "ja": "アルファチャンネル優先"
+  },
+  "overrideColorKey": {
+    "en": "overrideColorKey",
+    "ja": "カラーキー優先"
+  },
+  "peg": {
+    "en": "peg",
+    "ja": "タップ"
+  },
+  "Preference": {
+    "en": "Preference",
+    "ja": "各種設定"
+  },
+  "previewControl": {
+    "en": "preview Control",
+    "ja": "プレビューコントロール"
+  },
+  "processing": {
+    "en": "proscessing…",
+    "ja": "処理中…"
+  },
+  "inputWarning": {
+    "en": "Input operation is invalid",
+    "ja": "入力操作は無効です"
+  },
+  "renameItems": {
+    "en": "rename item",
+    "ja": "アイテム名変更"
+  },
+  "Registration": {
+    "en": "Registration",
+    "ja": "新規登録"
+  },
+  "removeAnimationFrame": {
+    "en": "remove animation frame",
+    "ja": "アニメフレームを削除"
+  },
+  "resetSmartObj": {
+    "en": "reset smartObj",
+    "ja": "スマートオブジェクトをリセット"
+  },
+  "reverseAnimationFrame": {
+    "en": "reverse animation frame",
+    "ja": "アニメフレームを反転"
+  },
+  "requiresNumber": {
+    "en": "Please specify a numerical value",
+    "ja": "数値を指定してほしいのョ!と"
+  },
+  "requiresPositiveInteger": {
+    "en": "Please specify a positive value",
+    "ja": "正の数がいいなぁ…"
+  },
+  "requiresStrings": {
+    "en": "Please specify String value",
+    "ja": "文字列で指定してほしいのですョ!"
+  },
+  "statusEdit": {
+    "en": "editting",
+    "ja": "編集中"
+  },
+  "statusView": {
+    "en": "readonly",
+    "ja": "閲覧"
+  },
+  "statusAdmin": {
+    "en": "management",
+    "ja": "制作管理"
+  },
+  "Save": {
+    "en": "Save",
+    "ja": "保存"
+  },
+  "saveAndClose": {
+    "en": "save and close",
+    "ja": "保存して閉じる"
+  },
+  "savePsdPlease": {
+    "en": "Please save the document in psd format.",
+    "ja": "ドキュメントをpsd形式で保存してください。"
+  },
+  "saveToDonloadfolder": {
+    "en": "save to download folder",
+    "ja": "ダウンロードフォルダに保存"
+  },
+  "saveToDonloadfolderSwap": {
+    "en": "save to download folder",
+    "ja": "ダウンロードフォルダに %1 を保存"
+  },
+  "serviceNode": {
+    "en": "service node",
+    "ja": "共有サーバ"
+  },
+  "repositoryName": {
+    "en": "share name",
+    "ja": "共有名"
+  },
+  "repositoryOwner": {
+    "en": "share owner",
+    "ja": "共有オーナー"
+  },
+  "scene": {
+    "en": "Scene",
+    "ja": "シーン"
+  },
+  "sceneCut": {
+    "en": "S-C",
+    "ja": "S-C"
+  },
+  "setGuideLayer": {
+    "en": "setGuideLayer",
+    "ja": "ガイドレイヤにする"
+  },
+  "SheetLength": {
+    "en": "xSheetLength",
+    "ja": "シート１枚の長さ"
+  },
+  "shortcutKey": {
+    "en": "shartcut key scripts",
+    "ja": "ショートカットツール"
+  },
+  "Sounds": {
+    "en": "Sounds",
+    "ja": "サウンド編集"
+  },
+  "time": {
+    "en": "time",
+    "ja": "time"
+  },
+  "title": {
+    "en": "title",
+    "ja": "題名"
+  },
+  "transition": {
+    "en": "transition",
+    "ja": "トランジション"
+  },
+  "timelineTrack": {
+    "en": "timeline track",
+    "ja": "タイムライントラック"
+  },
+  "timelineRename": {
+    "en": "timeline rename",
+    "ja": "タイムライン名変更"
+  },
+  "tagEdit": {
+    "en": "timeline tag edit",
+    "ja": "タイムラインタグ編集"
+  },
+  "uninstall": {
+    "en": "uninstall",
+    "ja": "削除"
+  },
+  "Update": {
+    "en": "Update",
+    "ja": "更新"
+  },
+  "userInfo": {
+    "en": "userInfo",
+    "ja": "作業者の情報"
+  },
+  "userName": {
+    "en": "Name",
+    "ja": "名前"
+  },
+  "withColorKey": {
+    "en": "withColorKey",
+    "ja": "カラーキーで白を透過"
+  },
+  "withSmoothing": {
+    "en": "withSmoothing",
+    "ja": "スムージングする"
+  },
+  "withTransparent": {
+    "en": "with transparent",
+    "ja": "透過させる"
+  },
+
+  "workSlip": {
+    "en": "work slip",
+    "ja": "作業伝票"
+  },
+  "workTitles": {
+    "en": "workTitles",
+    "ja": "作品タイトル登録"
+  },
+  "xSheet": {
+    "en": "xSheet",
+    "ja": "タイムシート"
+  },
+  "xSheetInfo": {
+    "en": "xSheet information",
+    "ja": "タイムシート情報"
+  },
+  "pMabort": {
+    "en": "abort",
+    "ja": "作業中断"
+  },
+  "pMactivate": {
+    "en": "activate",
+    "ja": "作業再開"
+  },
+  "pMcheckin": {
+    "en": "check in",
+    "ja": "作業開始"
+  },
+  "pMcheckout": {
+    "en": "check out",
+    "ja": "作業終了"
+  },
+  "pMdeactivate": {
+    "en": "deacivate",
+    "ja": "作業保留"
+  },
+  "pMreceipt": {
+    "en": "receipt",
+    "ja": "作業検収"
+  },
+  "pMinUse": {
+    "en": "in use",
+    "ja": "作業中"
+  },
+  "pMline": {
+    "en": "line",
+    "ja": "ライン"
+  },
+  "pMcurrentLine": {
+    "en": "current line",
+    "ja": "現在のライン"
+  },
+  "pMnewLine": {
+    "en": "new line",
+    "ja": "新規ライン"
+  },
+  "pMstage": {
+    "en": "stage",
+    "ja": "工程"
+  },
+  "pMcurrentStage": {
+    "en": "current stage",
+    "ja": "現在の工程"
+  },
+  "pMnewStage": {
+    "en": "new stage",
+    "ja": "新規工程"
+  },
+  "pMjob": {
+    "en": "job",
+    "ja": "作業"
+  },
+  "pMcurrentJob": {
+    "en": "curent job",
+    "ja": "現在の作業"
+  },
+  "pMnewJob": {
+    "en": "new job",
+    "ja": "新規作業"
+  },
+  "pMaddNewScene": {
+    "en": "add new scene",
+    "ja": "新規カット追加"
+  },
+  "pMreseiptStage": {
+    "en": "check out job/check in new stage",
+    "ja": "作業検収/新規工程"
+  },
+  "toPrefix": {
+    "en": "to:",
+    "ja": " "
+  },
+  "toPostfix": {
+    "en": " ",
+    "ja": "様へ"
+  },
+  "dmPMnewDocument": {
+    "en": "I will create a new document.\nPlease enter scene number/duration and confirm with OK button.",
+    "ja": "新規カットを作成します。\nカット番号/継続時間を入力して[OK]ボタンで確定してください。"
+  },
+  "dmPMnewItemSwap": {
+    "en": "Start new %1.\nPlease enter a new %1 name. \nIf it is not on the list, please enter it with the keyboard.",
+    "ja": "新規 %1 を開始します。\n新しい %1 名を入力してください。\nリストにない場合は、キーボードで入力してください。"
+  },
+  "dmPMnewStage": {
+    "en": "Close the current stage and open the next stage.\nPlease enter a new stage name.\nIf it is not on the list, please enter it with the keyboard.",
+    "ja": "現在の工程を閉じて次の工程を開きます。\n新しい工程名を入力してください。\nリストにない場合は、工程名を入力してください。"
+  },
+  "dmPMnewAssign": {
+    "en": "We finish the job for %1 and make it editable by other users.\nIt is possible to assign the next user.\nTo assign please choose a name from the list or enter the user name directly.\nPlease input if there is a message to send.",
+    "ja": "カット%1の作業を終了して、他のユーザが編集可能な状態にします。\n次の担当者を指名することが可能です。\n指名する場合はリストから名前を選ぶか、または直接ユーザ名を入力してください。\n申し送りメッセージがあれば、入力してください。"
+  },
+  "NORMAL": {
+    "en": "NORMAL",
+    "ja": "通常"
+  },
+  "MULTIPLY": {
+    "en": "MULTIPLY",
+    "ja": "乗算"
+  },
+  "LIGHTEN": {
+    "en": "LIGHTEN",
+    "ja": "比較（明）"
+  },
+  "DARKER": {
+    "en": "DARKER",
+    "ja": "比較（暗）"
+  },
+  "DIFFERENCE": {
+    "en": "DIFFERENCE",
+    "ja": "差の絶対値"
+  },
+  "SILHOUETTE_LUMA": {
+    "en": "SILHOUETTE_LUMA",
+    "ja": "シルエットルミナンス"
+  },
+  "dm000": {
+    "en": "nas- library is required.\nPlease run the \"nasStartup.jsx\".",
+    "ja": "nasライブラリが必要です。\nnasStartup.jsx を実行してください。"
+  },
+  "dm001": {
+    "en": "The effect is limited to the session.\n If you need record, please click Save button below.",
+    "ja": "このパネルの変更はセッション限りです。記録が必要な場合は下のボタンで保存してください。"
+  },
+  "dm002": {
+    "en": "Switching the active layer with the movement of animation frames\n(only valid when using psAxe)",
+    "ja": "フレーム移動時にアクティブレイヤの移動をする\n(エクステンション使用時のみ有効)"
+  },
+  "dm003": {
+    "en": "Dialog to create a new file",
+    "ja": "新規ファイル作成ダイアログ"
+  },
+  "dm004": {
+    "en": "PsAxe use the advanced features when you create a new document",
+    "ja": "新規ドキュメント作成時にアニメ拡張機能を使う"
+  },
+  "dm005": {
+    "en": "Can not drop to zero because the number of entries.",
+    "ja": "エントリ数が0になるので削除できません。"
+  },
+  "dm006": {
+    "en": "Drop the selected entry. Are you sure?",
+    "ja": "選択されたエントリを削除します。よろしいですか？"
+  },
+  "dm007": {
+    "en": "Load the saved settings. Current settings will be overwritten.",
+    "ja": "保存中の設定を読み込みます。現在の設定は上書きされます。"
+  },
+  "dm008": {
+    "en": "You can not cancel. Are you sure?",
+    "ja": "取消はできません。よろしいですか？"
+  },
+  "dmPreferenceConfirmSave": {
+    "en": "Save the configuration to the directory [ %1 ].\nThe previous file is overwritten. Are you sure? ",
+    "ja": "設定を[ %1 ]以下に保存します。\n以前のファイルは上書きされます。よろしいですか？"
+  },
+  "dm009": {
+    "en": "Save the configuration to the directory [ %1 ].\nThe previous file is overwritten. Are you sure? ",
+    "ja": "設定を[ %1 ]以下に保存します。\n以前のファイルは上書きされます。よろしいですか？"
+  },
+  "dm010": {
+    "en": "Use the opacity key to the head movement (timeline)",
+    "ja": "ヘッド移動に不透明度キーを使用(timeline)"
+  },
+  "dm011": {
+    "en": "frame skip (timeline)",
+    "ja": "フレームスキップ(timeline)"
+  },
+  "dm012": {
+    "en": "frame skip (timeline)",
+    "ja": "フレームスキップ(timeline)"
+  },
+  "dm013": {
+    "en": "use difference mode when peg image placement",
+    "ja": "タップ画像配置時に差の絶対値にする"
+  },
+  "dm014": {
+    "en": "use semi-transparent when picture-frame arrangement",
+    "ja": "フレーム画像配置時に半透明にする"
+  },
+  "dm015": {
+    "en": "There is the same name of the layer.\n Layer after the second will not be subject to the sort.",
+    "ja": "同名のレイヤがあります。\n二つ目以降のレイヤは並び替えの対象になりません。"
+  },
+  "dmPrefConfirmSave": {
+    "en": "The setting has been changed. Do you want to apply it?",
+    "ja": "設定が変更されています。反映させますか?"
+  },
+  "dmDocumentNosave": {
+    "en": "Document has not been saved. Do you want to save?",
+    "ja": "ドキュメントは保存されていません。保存しますか？"
+  },
+  "dmDocumentNosaveExport": {
+    "en": "Document has not been saved. Do you want to export?",
+    "ja": "ドキュメントは保存されていません。書出しますか？"
+  },
+  "dmDocumentConfirmOkCancel": {
+    "en": "OK:save / Cancel:coninue without saveing",
+    "ja": "OK:保存する / Cancel:保存せずに続行"
+  },
+  "dmDocumentConfirmYNC": {
+    "en": "Yes:save / No: update without saving / Cancel:cancel processing",
+    "ja": "Yes:保存する / No:保存しないで更新 / Cancel:処理をキャンセル"
+  },
+  "dmDocumentConfirmOverwrite": {
+    "en": "There is already a file with the same name.\nAre you sure you want to overwrite?",
+    "ja": "同名のファイルがすでにあります.\n上書きしてよろしいですか?"
+  },
+  "dm016": {
+    "en": "There is already a file with the same name.\nAre you sure you want to overwrite?",
+    "ja": "同名のファイルがすでにあります.\n上書きしてよろしいですか?"
+  },
+  "dm017": {
+    "en": "Document has not been saved. Do you want to save?",
+    "ja": "ドキュメントは保存されていません。保存しますか？"
+  },
+  "dm018": {
+    "en": "It has already been started.\nDouble start since receiving the console output is prohibited.\nDo you want to reset.",
+    "ja": "すでに起動されています。\nコンソール出力を受信するので二重起動は禁止されています\nリセットしますか"
+  },
+  "dm019": {
+    "en": "specify the file name for export",
+    "ja": "書き出しのファイル名を指定してください"
+  },
+  "dm020": {
+    "en": "choose eXposure sheet to read",
+    "ja": "読み込むタイムシートを選んでください"
+  },
+  "dm021": {
+    "en": "Please select eXposure sheet file.",
+    "ja": "タイムシートファイルを選択してください。"
+  },
+  "dm022": {
+    "en": "Create a new document",
+    "ja": "新規ドキュメントを作成します"
+  },
+  "dm023": {
+    "en": "All the recorded information to the individual area to clear.\nbut it does clear the information of all the applications that use the nas library, please particular attention to those who are using the nas library in AE ,PS and others.\nIt is may be clear?",
+    "ja": "個人領域に記録した情報をすべてクリアします。\nnasライブラリを使用するすべてのアプリケーションの情報をクリアしますので、AEとPSでnasライブラリを使用している方は特にご注意ください。\nクリアして良いですか？"
+  },
+  "dm024": {
+    "en": "Information was recorded in the personal area : %1 pieces of data has been cleared.\nThe current information is located on the memory.\nData is initialized at the time of application restart.\nIf you want to initialize, please restart the application without saving.",
+    "ja": "個人領域に記録した情報 :%1 個のデータをクリアしました。\n現在の情報は、メモリ上にあります。\nデータはアプリケーション再起動の際に初期化されます。\n初期化を希望する場合は、保存せずにアプリケーションを再起動してください。"
+  },
+  "dm025": {
+    "en": "please choose Folder to import.",
+    "ja": "読み込むフォルダを指定してください"
+  },
+  "dm026": {
+    "en": "please choose Folder to export",
+    "ja": "書き出しフォルダを指定してください"
+  },
+  "dm027": {
+    "en": ":\n You will import the settings of the folder above.\nThe same name of the setting can not undo been overwritten.\nAre you sure you want to run?",
+    "ja": ":\n 上のフォルダの設定をインポートします。\n同名の設定は上書きされて取り消しはできません。\n実行してよろしいですか？"
+  },
+  "dm028": {
+    "en": ":\nIt will export the settings to a folder of the above.\nWe recommend the free folder.\nAre you sure you want to run?",
+    "ja": ":\n上のフォルダに設定をエクスポートします。\n空きフォルダ推奨します\n実行してよろしいですか？"
+  },
+  "dm029": {
+    "en": "Please save the document in psd format.",
+    "ja": "ドキュメントをpsd形式で保存してください。"
+  },
+  "dmBackupConfirm": {
+    "en": "Load the backup data on the sheet. Current data will be lost. Is it OK?",
+    "ja": "バックアップデータをシートに読み込みます。\n現在のデータは失われます。\nよろしいですか？"
+  },
+  "dmBackupDone": {
+    "en": "current data has been saved in the backup area",
+    "ja": "バックアップ領域に現在のデータを退避しました"
+  },
+  "dmBackupNodata": {
+    "en": "no data in the backup area",
+    "ja": "バックアップ領域にデータがありません"
+  },
+  "dmBackupClear": {
+    "en": "Cleared backup area",
+    "ja": "バックアップ領域をクリアしました"
+  },
+  "dmUnimplemented": {
+    "en": "this feature has not been implemented yet",
+    "ja": "この機能はまだ実装されていません"
+  },
+  "dmConfirmClosepMenu": {
+    "en": "are you sure you want to hide the drop down menu?",
+    "ja": "ドロップダウンメニューを非表示にしてよろしいですか？"
+  },
+  "dmAskUserinfo": {
+    "en":"Enter the name of the workstaff.\nIf you need to enter an e-mail address, separate it with a ':' (colon).",
+    "ja":"作業担当者の名前を入力します。\nメールアドレスを入力する場合は':(コロン)'で区切って入力してください。"
+  },
+  "dmCookieRemoved": {
+    "en": "I deleted the cookie. \nIn order to reset the value, reloading the page is necessary.\nIt will be reloaded with [OK].",
+    "ja": "クッキーを削除しました。\n値をリセットするには、ページの再読込みが必要です。\n[OK]で再読込みします。"
+  },
+  "dmAlertMenytracks": {
+    "en": "The number of specified tracks is very large.\nAutomatic generation of track name is up to 'Z'.",
+    "ja": "止めないけど…そんなにレイヤが多いとツライよ\nレイヤ名を自動でつけるのは「Z」までなので\nその先は自分でつけてね。"
+  },
+  "dmAlertCheckinFail": {
+    "en": "Check-in failed.\nplease check the status of document",
+    "ja": "作業開始に失敗しました\nドキュメントの状態を確認してください"
+  },
+  "dmAlertCheckoutFail": {
+    "en": "Check-out failed.\nplease check the status of document",
+    "ja": "作業終了に失敗しました\nドキュメントの状態を確認してください"
+  },
+  "dmAlertDataBusy": {
+    "em": "Another user has this scene working. \nYou can not work on this scene.",
+    "ja": "他のユーザが作業中です\nこのカットを作業することはできません"
+  },
+  "dmAlertCantActivate": {
+    "en": "You can not work on this data. \nPlease try Check-in procedure",
+    "ja": "このデータで作業する事はできません。\n作業開始手続を試してみてください"
+  },
+  "dmAlertCantDeactivate": {
+    "en": "Work cannot deactivate.\nThis is not active data",
+    "ja": "作業保留できません\nこれは作業中のデータではありません"
+  },
+  "dmAlertCantCheckout": {
+    "en": "Work cannot Chack-out.\nThis is not active data",
+    "ja": "作業終了できません\nこれは作業中のデータではありません"
+  },
+  "dmAlertFailAuthorize": {
+    "en": "Server authentication failed.\nPlease check ID and password",
+    "ja": "サーバ認証に失敗しました\nIDとパスワードを確認してください"
+  },
+  "dmComfirmNewxSheetprop": {
+    "en": "Set a new xSheet with the default value.\n Is it OK?",
+    "ja": "デフォルトの値で新規にシートを設定します。\n\tよろしいですか?"
+  },
+  "dmAlertNoEntry": {
+    "en": "There are no match-entry in this repository.\nPlease make sure the target repository is selected.\nYou can temporarily store it to LocalRepository or write it externally to protect the data.",
+    "ja": "リポジトリにこのカットがありません\n正しいリポジトリか確認してください\nローカルリポジトリに一時的に保存するか又は外部に書出してデータを保護することができます"
+  },
+  "dmPMrecoverLostSession": {
+    "en": "This data is currently being edited in your account.\nPlease check that the document is not open in other environment.\nPress OK to resume work from the current data.",
+    "ja": "このデータは現在あなたのアカウントで編集中です\n他の環境でドキュメントを開きっぱなしになっていないか確認してください\nOKを押すと、現在のデータから作業を再開できます\n"
+  },
+  "dmTLlabelRename": {
+    "en": "Change timeline label.",
+    "ja": "タイムラインラベルを変更します。"
+  },
+  "dmRenameLabels": {
+    "en": "Please specify a new label name set. \nThe shortfall, excess will be ignored.",
+    "ja": "新しいラベル名セットを指定してください。\n不足分、超過分は無視されます。"
+  },
+  "dmRenameLabel": {
+    "en": "Please specify a new label.",
+    "ja": "新しいラベルを指定してください。"
+  },
+  "dmReadOnly": {
+    "en": "You can not edit this document at the moment.\nTo change the document please check in and start your job.",
+    "ja": "現在ドキュメントは編集できません。\nドキュメントを変更するためにはチェックインしてジョブを開始してください。"
+  },
+  "dmRemoveThisMessage": {
+    "en": "Thereafter, do not display this message.",
+    "ja": "以後、このメッセージを表示しない。"
+  },
+  "dmTLtagEdit": {
+    "en": "Edit the note text of the track.",
+    "ja": "トラックの注釈を編集します。"
+  },
+  "jobCheckin": {
+    "en": "checkin",
+    "ja": "開始"
+  },
+  "jobInUse": {
+    "en": "in use",
+    "ja": "作業中"
+  }
+}

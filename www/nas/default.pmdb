@@ -1,0 +1,434 @@
+nasPMDB 1.0 
+# ##################### Production management database
+# '#'で開始する行はすべてコメント
+# 簡易データフォーマット
+# 
+#  ##[ブラケット]　表記はデータリジョンを示す
+# データリジョンは、以下の分類となる
+# [organization]	組織情報テーブル
+# [users]	データにリーチする事のできるユーザ一覧
+# [assets]	管理対象アセットテーブル
+# [medeias]	制作に供するメディアテーブル
+# [stages]	制作工程テーブル
+# [lines]	制作ラインテーブル
+# [pmTemplate]	ラインごとの標準的な工程テンプレート
+# [jobNames]	管理に使用するジョブ名テーブル
+# [workTitles]	管理下のタイトル一覧
+# [projects] 管理下のOpus一覧
+# [staff]	スタッフ一覧
+# 
+# 各リジョンの内容は、コレクションメンバーのJSONデータ/dumpデータ/textデータ　形式は「いずれか」を選択して使用
+# データ形式の指定は不要
+# .pmdb　設定ファイルを読み込んだ際の動作は、メンバーテーブルまたは該当プロパティの総入れ替え
+# 上位ディレクトリから管理対象まで.pmdbデータを順に読み込み、その都度リジョン内のデータをすべて上書きする
+# そのため上位ディレクトリの管理データの継承は、　既設の設定を完全に利用するか、または完全に上書きするかの二択になる
+# 内容の継承が必用な場合は、上位ディレクトリの情報から必用な部分を下位ディレクトリの設定ファイルにコピーする事　20180815
+# #################################
+##[organization]
+# JSON
+{
+	"name":"sampleさんのチーム",
+	"description":"組織サンプル",
+	"id":"0000",
+	"shortName":"spl",
+	"code":"sample",
+	"fullName":"SmapleDataRepository K.K",
+	"contact":"Sample:sample@example.com"
+}
+##[organizations]
+#プライマリ以外の組織情報コレクション
+{
+	'organizationName':{'id':'0000','fullName':'フルネーム'}	
+}
+##[assets]
+ {
+	"SCInfo":{"name":"コンテチップ","hasXPS":true,"code":"SCI","shortName":"コンテ","description":"絵コンテから生成した基礎情報","endNode":false,"callStage":["leica","animatic","roughSketch","layout","1stKeydrawing"]},
+	"leica":{"name":"プリビズ","hasXPS":true,"code":"prev","shortName":"プリビズ","description":"プリビジュアライゼーション素材","endNode":false,"callStage":["leica","animatic","roughSketch","layout","1stKeydrawing"]},
+	"draft":{"name":"ラフスケッチ","hasXPS":true,"code":"DRFT","shortName":"ラフ","description":"「原図のない」ラフスケッチ","endNode":false,"callStage":["leica","animatic","roughSketch","layout","1stKeydrawing"]},
+	"layout":{"name":"レイアウト","hasXPS":true,"code":"__LO","shortName":"LO","description":"レイアウト（原図構成）付きの時間情報ありのスケッチ","endNode":false,"callStage":["leica","animatic","roughSketch","layout","1stKeydrawing","layoutProof","layoutA-D","keydrawing","2ndKeydrawing"]},
+	"keyAnimation":{"name":"原画","hasXPS":true,"code":"__KD","shortName":"原","description":"キーアニメーション keyDrawing","endNode":false,"callStage":["KDA-D","2ndKdA-D","checkKD","preProofAD","AD"]},
+	"AnimationDrawing":{"name":"動画","hasXPS":true,"code":"__AD","shortName":"動","description":"アニメーションドローイング","endNode":false,"callStage":["ADA-D","proofAD","A-D","ADscan","ADcleanUp","HMechanicalTrace"]},
+	"cell":{"name":"セル","hasXPS":true,"code":"CELL","shortName":"仕","description":"員数の揃ったコンポジット素材（未完成のものも含む）","endNode":true,"callStage":["AdcleanUp","paint","proofPaint","retouchCell"]},
+	"characterDesign":{"name":"キャラクター設定","hasXPS":false,"code":"chrD","shortName":"キャラ","description":"キャラクターデザイン","endNode":true,"callStage":["undefined"]},
+	"propDesign":{"name":"プロップ設定","hasXPS":false,"code":"crpD","shortName":"プロップ","description":"プロップデザイン","endNode":true,"callStage":[]},
+	"BGDesign":{"name":"美術設定","hasXPS":false,"code":"bgaD","shortName":"美設","description":"美術デザイン","endNode":true,"callStage":[]},
+	"referenceSheet":{"name":"参考設定","hasXPS":false,"code":"refD","shortName":"参考","description":"その他参考設定","endNode":true,"callStage":[]},
+	"colorDesign":{"name":"色彩設計","hasXPS":false,"code":"colD","shortName":"色設","description":"メインの色彩設計（打込みデータを除く）","endNode":true,"callStage":[]},
+	"colorCoordiante":{"name":"色指定","hasXPS":true,"code":"colC","shortName":"指定","description":"色指定（打込みデータ）","endNode":true,"callStage":[]},
+	"backgroundArt":{"name":"背景","hasXPS":true,"code":"_BGA","shortName":"背景","description":"背景画","endNode":true,"callStage":[]},
+	"cast3D":{"name":"3Dアニメーション","hasXPS":true,"code":"3DCC","shortName":"3D","description":"3D-CGICast","endNode":true,"callStage":[]},
+	"EXTRA":{"name":"（空アセット）","hasXPS":false,"code":"NULL","shortName":"EXTRA","description":"無情報・EXTRAライン導入のため空の本線が出すアセット","endNode":true,"callStage":[]},
+	"ALL":{"name":"（全アセット）","hasXPS":true,"code":"_ALL","shortName":"ALL","description":"全素材・コンポジットに必要な全素材シンボル 一時アセット","endNode":false,"callStage":[]}
+}
+##[lines]
+"trunk",["本線","本線","cell","SCInfo","cell","管理本線となるセル作画ライン"]
+"backgroundArt",["背景美術","背景","backgroundArt","layout","bg__","美術作業"]
+"cast3D",["3Dアニメーション","3D","3DCast","SCInfo","__3D","3Dアニメーションキャスト"]
+"characterDesign",["キャラクター設定","キャラ設","characterDesign","EXTRA","cd","キャラクター設定"]
+"propDesign",["プロップ設定","プロップ","propDesign","EXTRA","_prp","プロップ設定"]
+"BGDesign",["美術設定","美設","BGDesign","EXTRA","_bga","美術設定作業"]
+"colorDesign",["色彩設計","色設計","colorDesign","EXTRA","colD","色彩設計"]
+"colorCoordiante",["色指定","指定","colorDesign","SCInfo","__cc","色指定"]
+"composite",["コンポジット","撮影","ALL","ALL","comp","撮影"]
+"ALL",["(全素材)","全","ALL","ALL","_all","カット情報を持って一時的に集積されるライン"]
+"null",["(未設定)","(未)","NULL","EXTRA","null","初期化前のオブジェクトに設定するダミーライン"]
+
+##[stages]
+"undefined",["未定義","(undef)","(undefined)","未定義ステージ 制作預りとして扱う。基本的にアセットストアへの編入を指す","SCInfo"]
+"init",["初期化","init","開始","初期化ステージ 制作預りとして扱う。制作開始前処理","SCInfo"]
+"characterDesign",["キャラクターデザイン","chrD","キャラデ","プロダクション管理デザイン（各話発注デザイン）＊メインデザインは別管理","characterDesign"]
+"propDesign",["プロップデザイン","prpD","プロップ","プロダクション管理デザイン（各話発注デザイン）","propDesign"]
+"colorDesign",["色彩設計","CD","色彩設計","カラーデザイン（基本色彩設計）","colorDesign"]
+"colorModel",["色彩設計カラーモデル","coMD","色彩設計M","カラーモデル（パレット）型基本色彩設計(animo toonz等)","colorDesign"]
+"colorCoordination",["色指定","CC","色指定","カット別彩色指定データ","colorDesign"]
+"coordinationModel",["色指定カラーモデル","_ccM","色指定M","カラーモデル（パレット）型カット別彩色指定データ(animo toonz等)","colorDesign"]
+"bgDesign",["美術設定","artD","美設","プロダクション内デザインワーク","BGDsign"]
+"SCInfo",["コンテチップ","_SCI","コンテチップ","絵コンテを分解してシーンをプロジェクトデータ化したものイニシャルデータなのでこれを出力する同名ステージは無い","SCInfo"]
+"leica",["ライカ","leica","ライカ","タイミングを構成したモーションラフ","draft"]
+"contChip",["絵コンテ撮","cntC","コンテ撮","コンテチップを構成したモーションラフ","draft"]
+"animatic",["プリビジュアライゼーション","__pv","PV","同上","layout"]
+"roughSketch",["ラフ原画","drft","ラフ原","同上","drfat"]
+"layout",["レイアウト","LO","LO","レイアウト上がり(原図あり)","layout"]
+"LayoutAD",["LOスキャン","LO-D","レイアウトA/D","layout to Data レイアウトをデータ化したもの","layout"]
+"fstKeydrawing",["第一原画","1G","一原","レイアウトを含むラフ原画シート付き","layout"]
+"fstKdAD",["第一原画A/D","1G-D","一原A/D","","layout"]
+"keydrawing",["原画","KD","原","原画上がり作画監督修正含む keyDrawing","keyAnimation"]
+"KDAD",["原画A/D","KD-D","原画A/D","keyAnimation to Data 原画をデータ化したもの","keyAnimation"]
+"sndKeydrawing",["第二原画","2G","二原","第一原画を原画としてフィニッシュしたもの","keyAnimation"]
+"sndKdAD",["第二原画A/D","2G-D","二原A/D","第二原画は原画相当","keyAnimation"]
+"checkKD",["原画作監修正","KD+","作監","上がりは原画として扱う","keyAnimation"]
+"preProofAD",["発注前動画検査","2G+","前動検","実質上の第三原画又は第二原画修正","keyAnimation"]
+"BGOrderMeeting",["BG打合せ","BGOM","BG打ち","グロス発注のための打合せステージ。素材の変更なし","layout"]
+"layoutProof",["美術原図整理","BGLP","原図整理","レイアウト原図を整理加筆してFIXしたもの","backgroundArt"]
+"layoutAD",["背景原図スキャン","LP-D","原図スキャン","","backgroundArt"]
+"bgArt",["背景美術","BG","背景","完成背景美術","backgroundArt"]
+"chaeckBgArt",["美術検査","BG+","美監検査","","backgroundArt"]
+"BgArtAD",["美術A/D","BG-D","背景スキャン","","backgroundArt"]
+"AD",["動画","AD","動","動画上がり animationDrawing","AnimationDrawing"]
+"ADAD",["動画A/D","AD/D","動画A/D","animation to Data 動画をデータ化したもの","AnimationDrawing"]
+"proofAD",["動画検査","AD+","動検","上がりは動画 動画検査をステージ扱いする場合に使用","AnimationDrawing"]
+"ADscan",["スキャン","AD-D","スキャン","彩色データ作成のためのデジタイズ処理・半製品ペイントデータ","cell"]
+"ADcleanUp",["動画クリンアップ","ADCL","Adcleanup","デジタイズされた動画をクリンアップする作業(これをトレースと呼ぶソフトもある)","cell"]
+"paint",["彩色","PT","PAINT","ソフトウェア作業によるセル彩色","cell"]
+"proofPaint",["彩色検査","PT+","セル検","彩色済みデータ","cell"]
+"retouchCell",["セル特効","PTfx","特効","加工済みデータ","cell"]
+"HMechanicalTrace",["マシントレース","H-mt","M-trace","動画をセルに機械転写したもの(古い形式のデータを記述するためのエントリ)","cell"]
+"Htrace",["ペイント","H-pt","彩色","セル時代の作業を記録するためのエントリ","cell"]
+"HcolorTrace",["色トレス","H-ct","色T","セル時代の作業を記録するためのエントリ","cell"]
+"HproofPaint",["セル検査","H-pp","セル検","セル時代の作業を記録するためのエントリ","cell"]
+"HretouchCell",["エアブラシ特効","H-fx","エアブラシ","セル時代の作業を記録するためのエントリ","cell"]
+"composite",["コンポジット","COMP","撮影","コンポジット工程をプロダクションに入れるべきか否かは結構悩む 制作工程上終端なので出力は無し 終了シンボルを作るか？","ALL"]
+"preCompositCheck",["撮出し検査","PCCk","撮出し","撮影前全検査(古い工程を記述するためのエントリ)","ALL"]
+"generalDirectorCheck",["監督チェック","GDCk","監督チェック","監督による作業検査","ALL"]
+"directorCheck",["演出チェック","DcCk","演出チェック","担当演出による作業検査","ALL"]
+"TP",["仕上","T&P","仕上","仕上げ一括(複合)","cell"]
+"ATP",["動仕","AT&P","動画仕上","動画仕上一括(複合)","cell"]
+"sKATP",["二原動仕","sKAT&P","二原動仕","二原動画仕上一括(複合)","cell"]
+"KATP",["原動仕","KAT&P","原動仕","原画動画仕上一括(複合)","cell"]
+
+##[pmTemplates]
+["本線",["絵コンテ撮","レイアウト","原画","第一原画","第二原画","発注前動画検査","動画","色指定","スキャン","色トレス","セル特効","撮出し検査","コンポジット"]]
+["背景美術",["美術原図整理","背景美術","美術検査"]]
+
+##[jobNames]
+["作業開始","*","init"],
+["初期化","*","init"],
+["作打済","*","init"],
+["準備","*","init"],
+["*打合せ","*","init"],
+["*発注","*","init"],
+["作画打合せ","LO","init"],
+["作画打合せ","KD","init"],
+["作画打合せ","1G","init"],
+["作画打合せ","2G","init"],
+["*","*","primary"],
+["*作業","*","primary"],
+["演出チェック","*","check"],
+["監督チェック","*","check"],
+["作監チェック","*","check"],
+["総作監チェック","*","check"],
+["メカ作監チェック","*","check"],
+["美監チェック","bgArt","check"],
+["動画検査","AD","check"],
+["動画検査","ADAD","check"],
+["セル検査","H-pt","check"],
+["彩色検査","PT","check"],
+["トレース検査","H-tr","check"],
+["トレース検査","ADscan","check"],
+["クリンアップ検査","ADcleanup","check"]
+
+##[workTitles]
+##type-dump
+"TVshowSample",["0000","名称未設定","未定","_UN","24FPS","21:00:00 .","10in-HDTV","HDTV-720p"]
+"kachi",["0001","かちかちやま","か","_KT","24FPS","20:12:00 .","10in-HDTV","HDTV-720p"]
+"Momotaro",["0002","ももたろう","も","_MT","24FPS","19:21:00 .","10in-HDTV","HDTV-720p"]
+"Urashima",["0003","うらしまたろう","う","_UR","24FPS","24:08:12 .","12in-HDTV","HDTV-1080p"]
+
+##[medeias]
+"作画フレーム300ppi",["","12in-HDTV","300dpi","drawing","SMPTE","ACME","1","参考用作画フレーム"]
+"作画フレーム200dpi",["","10in-HDTV","200dpi","drawing","trad-JA","ACME","1","参考用作画フレーム"]
+"作画フレーム192dpi",["","10in-HDTV","192dpi","drawing","trad-JA","ACME","1","参考用作画フレーム"]
+"HDTV-720p",["","HDTV","72dpi","movie","SMPTE-drop","invisible","1","HDTV省力原版"]
+"HDTV-1080p",["","HDTV2K","1080dpi","movie","SMPTE","invisible","1","HDTV"]
+"HDTV-2160p",["","HDTV4K","2160dpi","movie","SMPTE","invisible","1","4KHDTV"]
+
+##[users]
+#	サンプルユーザデータ　ところどころ同名でe-mailの異なるユーザが居ますが
+#	同姓同名のユーザが実際のいるので、その動作確認用
+#	ユーザデータのメールアドレス重複は禁止、重複の場合は後置データで先行データを上書き
+#	20180827　
+ねずみ:mouse@animals.example.com
+うし:cow@animals.example.com
+とら:tiger@animals.example.com
+うさぎ:rabbit@animals.example.com
+たつ:dragon@legend.example.com
+へび:snake@animals.example.com
+うま:horse@animals.example.com
+ひつじ:sheep@animals.example.com
+さる:monkey@animals.example.com
+とり:bird@animals.example.com
+犬丸:dog@animals.example.com
+いのしし:boar@animals.example.com
+
+たぬきスタジオ:tanuki-st@animal.example.com
+たぬき:tanuki.tanuki-st@animal.example.com
+ムジナ:mjina.tanuki-st@animal.example.com
+穴熊:anaguma.tanuki-st@animal.example.com
+
+アイナメ:ainame@fish.example.com
+イワシ:iwashi@fish.example.com
+エソ:eso@fish.example.com
+オコゼ:okoze@fish.example.com
+カサゴ:kasago@fish.example.com
+キス:kisu@fish.example.com
+クロダイ:kurodai@fish.example.com
+ケショウフグ:kesyoufugu@fish.example.com
+コノシロ:konoshiro@fish.example.com
+サバ:saba@fish.example.com
+シラウオ:shirauo@fish.example.com
+スズキ:suzuki@fish.example.com
+ソメワケベラ:somewake@fish.example.com
+セトダイ:setodai@fish.example.com
+タナゴ:tanago@fish.example.com
+チヌ:chinu@fish.example.com
+ツボダイ:tsubodai@fish.example.com
+テッポウウオ:teppouuo@fish.example.com
+トラフグ:torafugu@fish.example.com
+ナマズ:namazu@fish.example.com
+ニシキゴイ:nishikigoi@fish.example.com
+ヌタウナギ:nutaunagi@fish.example.com
+ネコザメ:nekozame@fish.example.com
+ハゼ:haze@fish.example.com
+ヒラメ:hirame@fish.example.com
+フグ:fugu@fish.example.com
+ノドグロ:nodoguro@fish.example.com
+ヘラ:hera@fish.example.com
+ホッケ:hokke@fish.example.com
+マグロ:maguro@fish.example.com
+ミゾレフグ:mizorefugu@fish.example.com
+ムツゴロウ:mutsugoro@fish.example.com
+メゴチ:megochi@fish.example.com
+モンガラカワハギ:monngarakawahagi@fish.example.com
+ヤツメウナギ:yatsumeunagi@fish.exapmle.com
+ユメカサゴ:yumekasago@fish.example.com
+ヨシキリザメ:yoshikirizame@fish.example.com
+ライギョ:raigyo@fish.example.com
+リュウグウノツカイ:ryuuguunotsukai@fish.example.com
+
+絶滅寸前:ztm@fish.example.com
+ウナギ:unagi.ztm@fish.example.com
+
+ねこ:cat@animal.example.com
+こねこ:kitty@animal.example.com
+いぬ:dog@animal.example.com
+こいぬ:puppy@animal.example.com
+かもめ:gull@bird.example.com
+
+回遊館:kaiyu@fish.example.com
+
+海洋工房:st-sea@fish.example.com
+マグロ:mgr.st-sea@fish.example.com
+スジクロギンポ:sjk.st-sea@fish.example.com
+ワカサギ:wakasagi.st-sea@fish.example.com
+サバ:saba.st-sea@fish.example.com
+レモンスズメダイ:remonnsuzumedai.st-sea@fish.example.com
+ロウソクギンポ:rousokuginnpo.st-sea@fish.example.com
+ルリハタ:rurihata.st-sea@fish.example.com
+
+ツバメ:swallow@bird.example.com
+スタジオ鳥類:st-bird@bird.example.com
+ハト:pigeon@bird.example.com
+スズメ:sparrow@bird.example.com
+オウム:parrot@bird.example.com
+シジュウカラ:tits@bird.example.com
+ワシ:eagle@bird.example.com
+アイガモ:duck.aigamo@bird.example.com
+
+
+##[Staff]
+	*制作管理*
+	*制作管理*	[プロデューサ]	
+	*制作管理*	[統括デスク]
+	*制作管理*	[デスク]
+	*制作管理*	[制作進行]
+	*演出*
+	*演出*	[監督]	
+	*演出*	[演出]	
+	*演出*	[演出助手]
+	*文芸*
+	*文芸*	[脚本]
+	*文芸*	[設定]
+	*文芸*	[デザイナー]
+	*文芸*	[キャラ設定]
+	*文芸*	[美術設定]
+	*文芸*	[小物設定]
+	*文芸*	[色設計]
+	*作画*
+	*作画*	[総作画監督]
+	*作画*	[作画監督]
+	*作画*	[メカ作画監督]
+	*作画*	[原画]
+	*作画*	[第一原画]
+	*作画*	[第二原画]
+	*作画*	[動画監督]
+	*作画*	[動画検査]
+	*作画*	[動画]
+	*美術*
+	*作画*	[美術監督]
+	*作画*	[美術監督補佐]
+	*作画*	[原図整理]
+	*作画*	[背景]
+	*仕上*
+	*仕上*	[色指定]
+	*仕上*	[トレース]
+	*仕上*	[ペイント]
+	*仕上*	[特殊効果]
+	*撮影*
+	*撮影*	[撮影監督]
+	*撮影*	[撮影監督補佐]
+	*撮影*	[撮影]
+	*無所属*
+	*無所属*	[無所属]
+	*オブザーバ*
+	*オブザーバ*	[オブザーバ]
+	*オブザーバ*	[時代考証]	
+##[staff]
+##data-type=plain
+#部門/
+#	役職
+#		所属ユーザ(ユーザリストに登録されている必用あり 重複可) 別名
+#
+	制作管理/
+		プロデューサ
+			ねずみ
+		統括デスク
+			うし
+		デスク
+			とら
+		制作進行
+			とり
+			たつ
+			うま
+			ひつじ
+	演出/
+		監督
+			犬丸:dog@animal.example.com
+		演出
+			犬丸:dog@animal.example.com
+		演出助手
+			いのしし:boar@animals.example.com
+	文芸/
+		脚本
+	    	ウナギ
+		設定制作
+		へび
+		デザイナー
+			アイナメ
+		キャラ設定
+			いわし
+		美術設定
+			ワカサギ
+		小物設定
+			クロダイ
+		色彩設計
+			ツバメ:swallow@bird.example.com
+	作画/
+		総作画監督
+		作画監督
+			いわし:iwashi@fish.example.com
+		作画監督補
+		メカ作画監督
+		メカ作画監督補
+		原画
+			ねこ:cat@animal.example.com
+			こねこ:kitty@animal.example.com
+			いぬ:dog@animal.example.com
+			こいぬ:puppy@animal.example.com
+			オコゼ:okoze@fish.example.com
+			カサゴ:kasago@fish.example.com
+			キス:kisu@fish.example.com
+		第一原画
+		第二原画
+			ねこ:cat@animal.example.com
+			かもめ:gull@bird.example.com
+		動画検査
+			サバ:saba@fish.example.com
+		動画監督
+		動画
+			スズキ:suzuki@fish.example.com
+			ソメワケベラ:somewake@fish.example.com
+			セトダイ:setodai@fish.example.com
+			タナゴ:tanago@fish.example.com
+			チヌ:chinu@fish.example.com
+			たぬきスタジオ
+			たぬき:tanuki.tanuki-st@animal.example.com
+			ムジナ:mjina.tanuki-st@animal.example.com
+			穴熊:anaguma.tanuki-st@animal.example.com
+
+			回遊館:kaiyu@fish.example.com
+	美術/
+		美術監督
+			マグロ:mgr.st-sea@fish.example.com
+		美術監督補佐
+			スジクロギンポ:sjk.st-sea@fish.example.com
+		原図整理
+			スジクロギンポ:sjk.st-sea@fish.example.com
+		背景
+			海洋工房:st-sea@fish.example.com
+			ワカサギ:wakasagi.st-sea@fish.example.com
+			サバ:saba.st-sea@fish.example.com
+			レモンスズメダイ:remonnsuzumedai.st-sea@fish.example.com
+			ロウソクギンポ:rousokuginnpo.st-sea@fish.example.com
+			ルリハタ:rurihata.st-sea@fish.example.com
+	仕上/
+		色指定
+			ツバメ:swallow@bird.example.com
+		トレース
+			アイガモ:duck.aigamo@bird.example.com
+		ペイント
+			アイガモ:duck.aigamo@bird.example.com
+			スズメ:sparrow@bird.example.com
+			オウム:parrot@bird.example.com
+			シジュウカラ:tits@bird.example.com
+			ワシ:eagle@bird.example.com
+		特殊効果
+			たぬきスタジオ:tanuki-st@animal.example.com
+			穴熊:meles.tanuki-st@animal.example.com
+	撮影/
+		撮影監督
+			　さる:mnk@animal.example.com
+		撮影
+			猿山撮影所
+			さる:mnk.mt-mnk@animal.example.com
+			ごりら:gori.mt-mnk@animal.example.com
+			オランウータン:ora.mt-mnk@animal.example.com
+			チンパンジー:pan.mt-mnk@animal.example.com
+			ニホンザル:mac.mt-mnk@animal.example.com
+		撮影助手
+	3D/
+	無所属/
+		＊	
+	オブザーバ/
+		オブザーバ
+		時代考証
+##[staff]/

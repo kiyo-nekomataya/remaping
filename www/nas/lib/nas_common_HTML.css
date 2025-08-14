@@ -1,0 +1,397 @@
+﻿/* 
+	styleSheet fot nas_common_HTML.js
+*/
+/* modalDialog 
+	padding-left :50px;
+	padding-right:50px;
+	padding-top:24px;
+
+*/
+#nas_modalDialog {
+	color:#333;
+	background-color:#fff;
+}
+@media (prefers-color-scheme: dark) {
+	#nas_modalDialog {
+		color:#eee;
+		background-color:#333;
+	}
+}
+.modalBt {
+	width:6em;
+}
+
+element.style {
+    display: block;
+    width: auto;
+    min-height: 0px;
+    max-height: none;
+    height: 718.231px;
+}
+/*
+	オプションパネル
+*/
+div.optionPanel{
+	display:none;
+	padding:0 0 0 8px;
+	vertical-align: middle;
+	color:#333;
+	background-color:#efefef;
+}
+div.optionPanel a{
+	color:#334;
+}
+@media (prefers-color-scheme:dark) {
+	div.optionPanel {
+		color:#efefef;
+		background-color:#333;
+	}
+	div.optionPanel a{
+		color:#efefff;
+	}
+}
+div.optionPanelModal {
+		display: none;
+		color:#333;
+		background-color: #efefef;
+}
+@media (prefers-color-scheme: dark)
+	div.optionPanelModal {
+		color: #efefef;
+		background-color: #333;
+}
+/* optionPanelFloat*/
+
+div.optionPanelFloat{
+	display:none;
+    position:absolute;
+	color:#333;
+    background-color:#efefef;
+    padding:0;
+    border-style:solid;
+    border-width:1px;
+    border-color:#808080;
+    z-index:7;
+  /* 角丸 */
+    -moz-border-radius: 4px ;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+@media (prefers-color-scheme: dark) {
+	div.optionPanelFloat {
+		color:#efefef;
+		background-color:#333;
+	}
+}
+div.optionPanelFloat-mobile{
+	display   :none;
+	position  :relative;
+	left      :0px;
+	background-color:#668866;
+	width     :100%;
+}
+
+a.minimize{
+    position:absolute;
+    right:32px;
+    top:1px;
+}
+a.minimize img{
+    border:none;
+}
+a.close{
+    position:absolute;
+    right:8px;
+    top:1px;
+}
+a.close img{
+    border:none;
+}
+a.down{
+    position:absolute;
+    right:8px;
+    top:1px;
+}
+a.down img{
+    border:none;
+}
+.optionPanelFloat dl dt {
+    height:25px;
+    line-height:25px;
+    text-indent:1em;
+    font-weight:bold;
+    cursor:move;
+}
+.optionPanelFloat dl dd {
+    margin:0;
+    padding:2em;
+    line-height:1.5;
+    text-indent:1em;
+}
+.floatPanelHeader {
+    background-color:#888888;
+}
+@media (prefers-color-scheme: dark) {
+    .optionPanel{
+        background-color:#333;
+    }
+    .optionPanelModal{
+        background-color:#333;
+    }
+
+    .optionPanelFloat{
+        background-color:#333;
+        border-color:#808080;
+    }
+    .floatPanelHeader {
+        background-color:#555;
+    }
+}
+
+/* 個別部分はアプリごとのcssへ移動 */
+/*
+@media screen and (min-width: 600px)
+#optionPanelVer {
+    display: none;
+    width: 480px;
+    height: 340px;
+    padding: 6px;
+    border-style: double;
+}
+@media screen and (min-width: 300px)
+#optionPanelVer {
+    display: none;
+    width: 100%;
+    height: 100%;
+    padding: 6px;
+    border-style: double;
+}
+*/
+/*以下は jQueryUIと重複でこちらは特に反映されない*/
+.ui-dialog .ui-dialog-content {
+    position: relative;
+    border: 0;
+    padding: 0.5em 1em;
+    background: none;
+    overflow: auto;
+}
+
+.ui-widget-content {
+	background-color:#efefef;
+}
+.ui-widget-header {
+	background-color:#efefef;
+}
+/*
+   mousedragscrollable
+ */
+.mousedragscrollable {
+    white-space: nowrap;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.mousedragscrollable_overlay {
+	position: fixed;
+	display : none;
+	top     : 0px;
+	left    : 0px;
+	background-color:transparent;
+}
+.mousedragscrollable_select {
+	background-color:blue;
+}
+.centeringForm {
+	vertical-align: middle;
+	text-align:center;
+	padding:4px;
+}
+.blockMenu {
+	display:inline-block;
+}
+
+button.itemSelector {
+	border-style:solid;
+	border-color:#888888;
+	color:#888888;
+	background-color:#dddddd;
+}
+
+button.itemSelector:disabled {
+	color:black;
+	border-color:black;
+	background-color:#eeeeee;
+}
+
+
+button.graphicColorSelect {
+	position:relative;
+	margin:0px;
+	width:48px;
+	height:48px;
+	color:#ffffff;
+    border-width:3px;
+	border-color:#000000;
+	border-style:solid;
+}
+.graphicColorSelectBG {
+	top:24px;
+	left:36px;
+	background-color:#ffffff;
+	z-index:7;
+}
+.graphicColorSelectFG {
+	top:6px;
+	left:-36px;
+	background-color:#222222;
+	z-index:8;
+
+}
+button.graphicToolButton {
+	margin-top:2px;
+	width:36px;
+	height:20px;
+	background-color:transparent;
+	color:#4a4a4a;
+    border-style:none;
+    vertical-align:middle;
+    /* 角丸*/
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+button.graphicToolButton:hover {
+	background-color:#8e8e8e;
+	color:#2a2a2a;
+}
+button.graphicToolButton:disabled {
+	background-color:#cbcbcb;
+	color:#808080;
+}
+
+@media (prefers-color-scheme: dark) {
+	button.itemSelector {
+		background-color:#555;
+	}
+
+	button.itemSelector:disabled {
+		color:#eee;
+		border-color:#eee;
+		background-color:#333;
+	}
+
+
+	button.graphicColorSelect {
+		color:#222;
+		border-color:#eee;
+}
+	.graphicColorSelectBG {
+		background-color:#333;
+	}
+	.graphicColorSelectFG {
+		background-color:#ddd;
+	}
+	button.graphicToolButton {
+		color:#ccc;
+	}
+	button.graphicToolButton:hover {
+		background-color:#333;
+		color:#999;
+	}
+}
+
+button.graphicColorChip {
+	margin:0px;
+	width:20px;
+	height:17px;
+	color:#ffffff;
+	border-width:1px;
+	border-color:#888888;
+	border-style:solid;
+}
+button.graphicColorChip-large {
+	width:27px;
+	height:24px;
+	border-width:1px;
+}
+button.graphicColorChip:disabled {
+	border-width:2px;
+	border-color:#222222;
+}
+button.graphicColorChip:hover {
+	border-color:#eeeeee;
+}
+
+button.graphicColorBlack       { background-color:rgb(10% 10% 10%); }
+button.graphicColorWhite       { background-color:rgb(100% 100% 100%); }
+button.graphicColorRed         { background-color:rgb(80% 10% 10%); }
+button.graphicColorGreen       { background-color:rgb(10% 40% 10%); }
+button.graphicColorBlue        { background-color:rgb(10% 10% 90%); }
+button.graphicColorBckdrop     { background-color:rgb(50% 50% 50%); }
+
+div.circle       {
+	display:inline-block;
+	border-radius:50%;
+	background-color:black;
+	border-style:none;
+}
+/*
+div.circle-diameter-1 {width:10px;height:10px;}
+div.circle-diameter-2 {width:20px;height:20px;}
+div.circle-diameter-3 {width:30px;height:30px;}
+*/
+div.circle-diameter-1 {width:2px;height:2px;}
+div.circle-diameter-2 {width:4px;height:4px;}
+div.circle-diameter-3 {width:6px;height:6px;}
+
+/*for nas.HTML.SliderSelect*/
+.nasHTMLSliderSelect {
+	display          : inline-block;
+	background-color : white;
+	border-style     : solid;
+	border-width     : 1px;
+	overflow         : hidden;
+	white-space      : nowrap;
+}
+.nasHTMLSliderSelect-h {
+	width:100%;
+}
+.nasHTMLSliderSelect-v {
+	height:100%;
+
+}
+button.sliderSelectOption {
+	border-style    : none;
+	background-color: transparent;
+	text-align      : center;
+	font-size       : 12px;
+	margin-top      : 3px;
+	margin-bottom   : 3px;
+}
+button.sliderSelectOption-mobile {
+	font-size    : 18px;
+	margin-top   : 9px;
+	margin-bottom: 9px;
+	min-width    : 52px;
+	min-height   : 24px;
+}
+button.sliderSelectOption-focus {
+	background-color:#ddd;
+}
+button.sliderSelectOption-h {
+	display      :inline;
+	margin-left  :3px;
+	margin-right :3px;
+	height       :100%;
+}
+button.sliderSelectOption-v {
+	display :block;
+	width   :100%;
+}
+
+button.sliderSelectOption:hover {
+	opacity:0.5;
+}
+button.sliderSelectOption:active {
+	background-color:#808080;
+	opacity:0.75;
+}

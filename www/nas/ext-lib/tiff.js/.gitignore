@@ -1,0 +1,14 @@
+*~
+*.map
+a.out.*
+
+tiff-*
+zlib-*
+*.o
+\#*
+.\#*
+
+tiff.raw.js
+tiff_tag.*
+
+node_modules/

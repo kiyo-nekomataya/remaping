@@ -1,0 +1,24 @@
+AE用スクリプト「レンダー乙女」インストール方法 2016.06.01
+
+AE用スクリプトのインストール方法が変わりました。
+ファイルのインストール自体はnasライブラリに全て含まれます。
+
+AEで実行する際は、以下の手順でセットアップを行ってください。
+
+1.AE上で「ファイル」＞「スクリプト」＞「スクリプトファイルを実行...」から以下のファイルを開いて実行する
+Windows
+<ユーザフォルダ>\AppData\Roaming\nas\scripts\otome\nasAeStartup.jsx
+Mac
+<ユーザフォルダ>/Library/Application Support/nas/scripts/otome/nasAeStartup.jsx
+
+このスクリプトが、nasライブラリの読みこみと環境設定を行います。
+
+機能スクリプトは同フォルダ内にあるスクリプトが利用できます。
+次のファイルがスクリプトランチャーです。
+Windows
+<ユーザフォルダ>\AppData\Roaming\nas\scripts\otome\NasMenuII+.jsx
+Mac
+<ユーザフォルダ>/Library/Application Support/nas/scripts/otome/Nas.MenuII+.jsx
+
+スクリプトランチャ−からコントロールパネルをアクセスして、起動時の自動ラウンチの接待が可能です。
+

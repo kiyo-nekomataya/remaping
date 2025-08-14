@@ -1,0 +1,1863 @@
+﻿{
+    "dataInformation": {
+        "version": "nasPMDB-FILE 1.0.0",
+        "uuid": false,
+        "dataNode": ".",
+        "timestamp": 0,
+        "contents": [
+            "configurations",
+            "assets",
+            "medias",
+            "users",
+            "staff",
+            "lines",
+            "stages",
+            "jobNames",
+            "organizations",
+            "products",
+            "workTitles",
+            "pmTemplates",
+            "pmWorkflows"
+        ]
+    },
+    "configurations": {
+        "sceneUse": "false",
+        "shotNumberUnique": "true",
+        "sheetBaseColor": "#ffeeff",
+        "receiptBaseColor": "#ffffee",
+        "storyBoardStyle": {
+            "documentDir": "vertical",
+            "columnOrder": [
+                "index",
+                "picture",
+                "dialog",
+                "description",
+                "timeText"
+            ],
+            "pageControl": false,
+            "pageDir": "ttb",
+            "pageSize": "A4"
+        },
+        "timestamp": 1569855600000
+    },
+    "assets": {
+        "UNDEFINED": {
+            "name": "(UNDEFINED)",
+            "hasXPS": "false",
+            "code": "(UDF)",
+            "shortName": "(UNDEF)",
+            "descripion": "未定義ステージのための未定義アセット",
+            "endNode": "false",
+            "callStage": [
+                "undefined"
+            ]
+        },
+        "EXTRA": {
+            "name": "(空アセット)",
+            "hasXPS": "false",
+            "code": "NULL",
+            "shortName": "EXTRA",
+            "descripion": "カットナンバーを与えられない素材に対するアセット",
+            "endNode": "true",
+            "callStage": []
+        },
+        "\tcallStage:": {
+            "callStage": []
+        },
+        "ALL": {
+            "name": "(全アセット)",
+            "hasXPS": "true",
+            "code": "_ALL",
+            "shortName": "ALL",
+            "descripion": "便宜的に設けられる総合アセット",
+            "endNode": "true",
+            "callStage": []
+        },
+        "COMPOSITE": {
+            "name": "[COMPOSITE]",
+            "hasXPS": "true",
+            "code": "[COMP]",
+            "shortName": "(撮影)",
+            "descripion": "コンポジットアセット",
+            "endNode": "false",
+            "callStage": []
+        },
+        "cComposite": {
+            "name": "[cComposite]",
+            "hasXPS": "true",
+            "code": "[REF]",
+            "shortName": "[線撮]",
+            "descripion": "リファレンスコンポジットアセット",
+            "endNode": "false",
+            "callStage": []
+        },
+        "SCInfo": {
+            "name": "コンテチップ",
+            "hasXPS": "true",
+            "code": "SCI",
+            "shortName": "コンテ",
+            "descripion": "絵コンテから得られるカット制作情報",
+            "endNode": "false",
+            "callStage": [
+                "leica",
+                "animatic",
+                "roughSketch",
+                "layout",
+                "1stKeydrawing"
+            ]
+        },
+        "leica": {
+            "name": "プリビズ",
+            "hasXPS": "true",
+            "code": "prev",
+            "shortName": "プリビズ",
+            "descripion": "ライカリール｜プリビジュアライゼーションビデオ作成のための素材",
+            "endNode": "false",
+            "callStage": [
+                "leica",
+                "animatic",
+                "roughSketch",
+                "layout",
+                "1stKeydrawing"
+            ]
+        },
+        "draft": {
+            "name": "ラフスケッチ",
+            "hasXPS": "true",
+            "code": "DRFT",
+            "shortName": "ラフ",
+            "descripion": "ショット作成のためのラフスケッチ",
+            "endNode": "false",
+            "callStage": [
+                "leica",
+                "animatic",
+                "roughSketch",
+                "layout",
+                "1stKeydrawing"
+            ]
+        },
+        "layout": {
+            "name": "レイアウト",
+            "hasXPS": "true",
+            "code": "LO",
+            "shortName": "LO",
+            "descripion": "アニメーション作成のためのレイアウト",
+            "endNode": "false",
+            "callStage": [
+                "leica",
+                "animatic",
+                "roughSketch",
+                "layout",
+                "1stKeydrawing",
+                "layoutProof",
+                "layoutA-D",
+                "keydrawing",
+                "2ndKeydrawing"
+            ]
+        },
+        "keyAnimation": {
+            "name": "原画",
+            "hasXPS": "true",
+            "code": "GEN",
+            "shortName": "原",
+            "descripion": "アニメーション線画作成のためのキーアニメーション",
+            "endNode": "false",
+            "callStage": [
+                "KDA-D",
+                "2ndKdA-D",
+                "checkKD",
+                "preProofAD",
+                "AD"
+            ]
+        },
+        "AnimationDrawing": {
+            "name": "動画",
+            "hasXPS": "true",
+            "code": "DOU",
+            "shortName": "動",
+            "descripion": "アニメーション線画",
+            "endNode": "false",
+            "callStage": [
+                "ADA-D",
+                "proofAD",
+                "A-D",
+                "ADscan",
+                "ADcleanUp",
+                "HMechanicalTrace"
+            ]
+        },
+        "cell": {
+            "name": "セル",
+            "hasXPS": "true",
+            "code": "CELL",
+            "shortName": "仕",
+            "descripion": "彩色済みアニメーション線画",
+            "endNode": "true",
+            "callStage": [
+                "AdcleanUp",
+                "paint",
+                "proofPaint",
+                "retouchCell"
+            ]
+        },
+        "characterDesign": {
+            "name": "キャラクター設定",
+            "hasXPS": "false",
+            "code": "chrD",
+            "shortName": "キャラ",
+            "descripion": "アニメーション作画のためのキャラクターデザイン",
+            "endNode": "true",
+            "callStage": [
+                "undefined"
+            ]
+        },
+        "propDesign": {
+            "name": "プロップ設定",
+            "hasXPS": "false",
+            "code": "prpD",
+            "shortName": "プロップ",
+            "descripion": "アニメーション作画のためのプロップデザイン",
+            "endNode": "true",
+            "callStage": []
+        },
+        "BGDesign": {
+            "name": "美術設定",
+            "hasXPS": "false",
+            "code": "bgaD",
+            "shortName": "美設",
+            "descripion": "アニメーション作画のための美術デザイン",
+            "endNode": "true",
+            "callStage": []
+        },
+        "referenceSheet": {
+            "name": "参考設定",
+            "hasXPS": "false",
+            "code": "refD",
+            "shortName": "参考",
+            "descripion": "アニメーション作画のための参考デザイン",
+            "endNode": "true",
+            "callStage": []
+        },
+        "colorDesign": {
+            "name": "色彩設計",
+            "hasXPS": "false",
+            "code": "colD",
+            "shortName": "色設",
+            "descripion": "アニメーション作画のための色彩デザイン",
+            "endNode": "true",
+            "callStage": []
+        },
+        "colorCoordiante": {
+            "name": "色指定",
+            "hasXPS": "true",
+            "code": "colC",
+            "shortName": "指定",
+            "descripion": "アニメーション作画のための色彩コーディネーション",
+            "endNode": "true",
+            "callStage": []
+        },
+        "backgroundArt": {
+            "name": "背景",
+            "hasXPS": "true",
+            "code": "_BGA",
+            "shortName": "背景",
+            "descripion": "背景美術",
+            "endNode": "true",
+            "callStage": []
+        },
+        "animation3D": {
+            "name": "3Dアニメーション",
+            "hasXPS": "true",
+            "code": "3DCG",
+            "shortName": "3D",
+            "descripion": "３Dアニメーションアセット",
+            "endNode": "true",
+            "callStage": []
+        },
+        "model3D": {
+            "name": "モデル",
+            "hasXPS": "false",
+            "code": "mod3",
+            "shortName": "mod",
+            "descripion": "3Dアニメーションモデル",
+            "endNode": "false",
+            "callStage": []
+        },
+        "rig3D": {
+            "name": "リグ",
+            "hasXPS": "false",
+            "code": "rig3",
+            "shortName": "rig",
+            "descripion": "3Dアニメーションリグ",
+            "endNode": "false",
+            "callStage": []
+        },
+        "material3D": {
+            "name": "マテリアル",
+            "hasXPS": "false",
+            "code": "mtl3",
+            "shortName": "mat",
+            "descripion": "3Dアニメーションマテリアル設定",
+            "endNode": "false",
+            "callStage": []
+        },
+        "set3D": {
+            "name": "セット",
+            "hasXPS": "false",
+            "code": "set3",
+            "shortName": "set",
+            "descripion": "3Dアニメーションステージセット",
+            "endNode": "false",
+            "callStage": []
+        },
+        "lighting3D": {
+            "name": "ライティング",
+            "hasXPS": "true",
+            "code": "lgt3",
+            "shortName": "lgt",
+            "descripion": "3Dアニメーションライト",
+            "endNode": "false",
+            "callStage": []
+        },
+        "camera3D": {
+            "name": "カメラ",
+            "hasXPS": "true",
+            "code": "cam3",
+            "shortName": "cam3D",
+            "descripion": "3Dアニメーションステージコンポジット",
+            "endNode": "false",
+            "callStage": []
+        },
+        "sfx3D": {
+            "name": "SFX",
+            "hasXPS": "true",
+            "code": "sfx3",
+            "shortName": "sfx3D",
+            "callStage": []
+        },
+        "\tdescription:": {
+            "endNode": "false",
+            "callStage": []
+        },
+        "timestamp": 1569855600000
+    },
+    "medias": {
+        "0000": {
+            "mediaName": "作画フレーム300ppi",
+            "id": "0000",
+            "animationField": "12in-HDTV",
+            "baseResolution": "300 ppi",
+            "mediaType": "drawing",
+            "tcType": "SMPTE",
+            "pegForm": "ACME",
+            "pixelAspect": 1,
+            "description": "参考用作画フレーム"
+        },
+        "0001": {
+            "mediaName": "作画フレーム200ppi",
+            "id": "0001",
+            "animationField": "10in-HDTV",
+            "baseResolution": "200 ppi",
+            "mediaType": "drawing",
+            "tcType": "trad-JA",
+            "pegForm": "ACME",
+            "pixelAspect": 1,
+            "description": "参考用作画フレーム"
+        },
+        "0002": {
+            "mediaName": "作画フレーム192ppi",
+            "id": "0002",
+            "animationField": "10in-HDTV",
+            "baseResolution": "192 ppi",
+            "mediaType": "drawing",
+            "tcType": "trad-JA",
+            "pegForm": "ACME",
+            "pixelAspect": 1,
+            "description": "参考用作画フレーム"
+        },
+        "0003": {
+            "mediaName": "HDTV-720p",
+            "id": "0003",
+            "animationField": "HDTVA",
+            "baseResolution": "128 ppi",
+            "mediaType": "movie",
+            "tcType": "SMPTE-drop",
+            "pegForm": "ACME",
+            "pixelAspect": 1,
+            "description": "HDTV省力原版"
+        },
+        "0004": {
+            "mediaName": "HDTV-1080p",
+            "id": "0004",
+            "animationField": "HDTVA",
+            "baseResolution": "192 ppi",
+            "mediaType": "movie",
+            "tcType": "SMPTE",
+            "pegForm": "ACME",
+            "pixelAspect": 1,
+            "description": "HDTV"
+        },
+        "0005": {
+            "mediaName": "HDTV-2160p",
+            "id": "0005",
+            "animationField": "HDTVA",
+            "baseResolution": "384 ppi",
+            "mediaType": "movie",
+            "tcType": "SMPTE",
+            "pegForm": "ACME",
+            "pixelAspect": 1,
+            "description": "4KUHDTV"
+        },
+        "timestamp": 1569855600000
+    },
+    "users": [
+        {
+            "id": "2cf5f27b-482c-48b8-b846-e08ccad4decd",
+            "handle": "管理者ユーザ",
+            "email": "administrator@u-at.net"
+        },
+        {
+            "timestamp": 1569855600000
+        }
+    ],
+    "staff": [
+        {
+            "acsess": true,
+            "type": "section",
+            "alias": "",
+            "user": null,
+            "duty": null,
+            "section": "制作管理"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "プロデューサ",
+            "section": "制作管理"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "統括デスク",
+            "section": "制作管理"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "デスク",
+            "section": "制作管理"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "制作進行",
+            "section": "制作管理"
+        },
+        {
+            "acsess": true,
+            "type": "section",
+            "alias": "",
+            "user": null,
+            "duty": null,
+            "section": "演出"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "監督",
+            "section": "演出"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "演出",
+            "section": "演出"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "演出助手",
+            "section": "演出"
+        },
+        {
+            "acsess": true,
+            "type": "section",
+            "alias": "",
+            "user": null,
+            "duty": null,
+            "section": "文芸"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "脚本",
+            "section": "文芸"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "設定制作",
+            "section": "文芸"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "デザイナー",
+            "section": "文芸"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "キャラ設定",
+            "section": "文芸"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "美術設定",
+            "section": "文芸"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "小物設定",
+            "section": "文芸"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "色彩設計",
+            "section": "文芸"
+        },
+        {
+            "acsess": true,
+            "type": "section",
+            "alias": "",
+            "user": null,
+            "duty": null,
+            "section": "作画"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "総作画監督",
+            "section": "作画"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "作画監督",
+            "section": "作画"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "作画監督補",
+            "section": "作画"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "メカ作画監督",
+            "section": "作画"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "メカ作画監督補",
+            "section": "作画"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "原画",
+            "section": "作画"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "第一原画",
+            "section": "作画"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "第二原画",
+            "section": "作画"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "動画検査",
+            "section": "作画"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "動画監督",
+            "section": "作画"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "動画",
+            "section": "作画"
+        },
+        {
+            "acsess": true,
+            "type": "section",
+            "alias": "",
+            "user": null,
+            "duty": null,
+            "section": "美術"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "美術監督",
+            "section": "美術"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "美術監督補佐",
+            "section": "美術"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "原図整理",
+            "section": "美術"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "背景",
+            "section": "美術"
+        },
+        {
+            "acsess": true,
+            "type": "section",
+            "alias": "",
+            "user": null,
+            "duty": null,
+            "section": "仕上"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "色指定",
+            "section": "仕上"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "トレース",
+            "section": "仕上"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "ペイント",
+            "section": "仕上"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "特殊効果",
+            "section": "仕上"
+        },
+        {
+            "acsess": true,
+            "type": "section",
+            "alias": "",
+            "user": null,
+            "duty": null,
+            "section": "撮影"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "撮影監督",
+            "section": "撮影"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "撮影",
+            "section": "撮影"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "撮影助手",
+            "section": "撮影"
+        },
+        {
+            "acsess": true,
+            "type": "section",
+            "alias": "",
+            "user": null,
+            "duty": null,
+            "section": "3D"
+        },
+        {
+            "acsess": true,
+            "type": "section",
+            "alias": "",
+            "user": null,
+            "duty": null,
+            "section": "無所属"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "＊",
+            "section": "無所属"
+        },
+        {
+            "acsess": true,
+            "type": "section",
+            "alias": "",
+            "user": null,
+            "duty": null,
+            "section": "オブザーバ"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "オブザーバ",
+            "section": "オブザーバ"
+        },
+        {
+            "acsess": true,
+            "type": "duty",
+            "alias": "",
+            "user": null,
+            "duty": "時代考証",
+            "section": "オブザーバ"
+        },
+        {
+            "timestamp": 1569855600000
+        }
+    ],
+    "lines": {
+        "trunk": {
+            "name": "本線",
+            "shortName": "本線",
+            "initAsset": "コンテチップ",
+            "code": "cell",
+            "description": "管理本線となるセルライン"
+        },
+        "colorCoordiante": {
+            "name": "色指定",
+            "shortName": "指定",
+            "initAsset": "レイアウト",
+            "code": "__cc",
+            "description": "色指定"
+        },
+        "backgroundArt": {
+            "name": "背景美術",
+            "shortName": "背景",
+            "initAsset": "レイアウト",
+            "code": "bg__",
+            "description": "美術作業"
+        },
+        "3Dcgi": {
+            "name": "3D-CGI",
+            "shortName": "3D",
+            "initAsset": "レイアウト",
+            "code": "3dcg",
+            "description": "総合的3D-CGI"
+        },
+        "characterDesign": {
+            "name": "キャラクター設定",
+            "shortName": "キャラ設",
+            "initAsset": "（空アセット）",
+            "code": "cd",
+            "description": "キャラクター設定"
+        },
+        "propDesign": {
+            "name": "プロップ設定",
+            "shortName": "プロップ",
+            "initAsset": "（空アセット）",
+            "code": "_prp",
+            "description": "プロップ設定"
+        },
+        "BGDesign": {
+            "name": "美術設定",
+            "shortName": "美設",
+            "initAsset": "（空アセット）",
+            "code": "_bga",
+            "description": "美術設定作業"
+        },
+        "colorDesign": {
+            "name": "色彩設計",
+            "shortName": "色設計",
+            "initAsset": "（空アセット）",
+            "code": "colD",
+            "description": "色彩設計"
+        },
+        "composite": {
+            "name": "コンポジット",
+            "shortName": "撮影",
+            "initAsset": "（全アセット）",
+            "code": "comp",
+            "description": "撮影"
+        },
+        "ALL": {
+            "name": "(全素材)",
+            "shortName": "全",
+            "initAsset": "（全アセット）",
+            "code": "_all",
+            "description": "カット情報を持って一時的に集積されるライン"
+        },
+        "null": {
+            "name": "(未設定)",
+            "shortName": "(未)",
+            "initAsset": "（空アセット）",
+            "code": "null",
+            "description": "初期化前のオブジェクトに設定するダミーライン"
+        },
+        "timestamp": 1613818800000
+    },
+    "stages": {
+        "undefined": {
+            "name": "未定義",
+            "code": "UNDF",
+            "shortName": "(undefined)",
+            "description": "未定義ステージ 制作預りとして扱う。基本的にアセットストアへの編入を指す",
+            "output": "(UNDEFINED)",
+            "stageName": "undefined"
+        },
+        "init": {
+            "name": "初期化",
+            "code": "init",
+            "shortName": "開始",
+            "description": "初期化ステージ 制作預りとして扱う。制作開始前処理",
+            "output": "SCInfo",
+            "stageName": "init"
+        },
+        "characterDesign": {
+            "name": "キャラクターデザイン",
+            "code": "chrD",
+            "shortName": "キャラデ",
+            "description": "プロダクション管理デザイン（各話発注デザイン）＊メインデザインは別管理",
+            "output": "characterDesign",
+            "stageName": "characterDesign"
+        },
+        "propDesign": {
+            "name": "プロップデザイン",
+            "code": "prpD",
+            "shortName": "プロップ",
+            "description": "プロダクション管理デザイン（各話発注デザイン）",
+            "output": "propDesign",
+            "stageName": "propDesign"
+        },
+        "colorDesign": {
+            "name": "色彩設計",
+            "code": "colD",
+            "shortName": "色彩設計",
+            "description": "カラーデザイン（基本色彩設計）",
+            "output": "colorDesign",
+            "stageName": "colorDesign"
+        },
+        "colorModel": {
+            "name": "色彩設計カラーモデル",
+            "code": "coMD",
+            "shortName": "色彩設計M",
+            "description": "カラーモデル（パレット）型基本色彩設計(animo toonz等)",
+            "output": "colorDesign",
+            "stageName": "colorModel"
+        },
+        "colorCoordination": {
+            "name": "色指定",
+            "code": "iro",
+            "shortName": "色指定",
+            "description": "カット別彩色指定データ",
+            "output": "colorDesign",
+            "stageName": "colorCoordination"
+        },
+        "composite": {
+            "name": "合成",
+            "code": "Comp",
+            "shortName": "撮影",
+            "description": "コンポジットステージ",
+            "output": "(COMPOSITE)",
+            "stageName": "composite"
+        },
+        "coComposite": {
+            "name": "参照合成",
+            "code": "cComp",
+            "shortName": "線撮",
+            "description": "参考データコンポジット",
+            "output": "(cCOMPOSITE)",
+            "stageName": "coComposite"
+        },
+        "coordinationModel": {
+            "name": "色指定カラーモデル",
+            "code": "ccM",
+            "shortName": "色指定M",
+            "description": "カラーモデル（パレット）型カット別彩色指定データ(animo toonz等)",
+            "output": "colorDesign",
+            "stageName": "coordinationModel"
+        },
+        "bgDesign": {
+            "name": "美術設定",
+            "code": "artD",
+            "shortName": "美設",
+            "description": "プロダクション内デザインワーク",
+            "output": "BGDsign",
+            "stageName": "bgDesign"
+        },
+        "SCInfo": {
+            "name": "コンテチップ",
+            "code": "_SCI",
+            "shortName": "コンテチップ",
+            "description": "絵コンテを分解してシーンをプロジェクトデータ化したものイニシャルデータなのでこれを出力する同名ステージは無い",
+            "output": "SCInfo",
+            "stageName": "SCInfo"
+        },
+        "leica": {
+            "name": "ライカ",
+            "code": "leica",
+            "shortName": "ライカ",
+            "description": "タイミングを構成したモーションラフ",
+            "output": "draft",
+            "stageName": "leica"
+        },
+        "contChip": {
+            "name": "絵コンテ撮",
+            "code": "cntC",
+            "shortName": "コンテ撮",
+            "description": "コンテチップを構成したモーションラフ",
+            "output": "draft",
+            "stageName": "contChip"
+        },
+        "animatic": {
+            "name": "プリビジュアライゼーション",
+            "code": "__pv",
+            "shortName": "PV",
+            "description": "同上",
+            "output": "layout",
+            "stageName": "animatic"
+        },
+        "roughSketch": {
+            "name": "ラフ原画",
+            "code": "drft",
+            "shortName": "ラフ原",
+            "description": "同上",
+            "output": "draft",
+            "stageName": "roughSketch"
+        },
+        "layout": {
+            "name": "レイアウト",
+            "code": "LO",
+            "shortName": "LO",
+            "description": "レイアウト上がり(原図あり)",
+            "output": "layout",
+            "stageName": "layout"
+        },
+        "LayoutAD": {
+            "name": "LOスキャン",
+            "code": "LOcvt",
+            "shortName": "レイアウトcvt",
+            "description": "layout to Data レイアウトをデータ化したもの",
+            "output": "layout",
+            "stageName": "LayoutAD"
+        },
+        "keydrawing": {
+            "name": "原画",
+            "code": "GEN",
+            "shortName": "原",
+            "description": "原画上がり作画監督修正含む keyDrawing",
+            "output": "keyAnimation",
+            "stageName": "keydrawing"
+        },
+        "KDAD": {
+            "name": "原画cvt",
+            "code": "Gcvt",
+            "shortName": "原画cvt",
+            "description": "keyAnimation to Data 原画のデータ化",
+            "output": "keyAnimation",
+            "stageName": "KDAD"
+        },
+        "sndKeydrawing": {
+            "name": "第二原画",
+            "code": "2G",
+            "shortName": "二原",
+            "description": "第一原画を原画としてフィニッシュしたもの",
+            "output": "keyAnimation",
+            "stageName": "sndKeydrawing"
+        },
+        "sndKdAD": {
+            "name": "第二原画cvt",
+            "code": "2G-D",
+            "shortName": "二原cvt",
+            "description": "第二原画は原画相当",
+            "output": "keyAnimation",
+            "stageName": "sndKdAD"
+        },
+        "checkKD": {
+            "name": "原画作監修正",
+            "code": "KD+",
+            "shortName": "作監",
+            "description": "上がりは原画として扱う",
+            "output": "keyAnimation",
+            "stageName": "checkKD"
+        },
+        "preProofAD": {
+            "name": "発注前動画検査",
+            "code": "2G+",
+            "shortName": "前動検",
+            "description": "実質上の第三原画又は第二原画修正",
+            "output": "keyAnimation",
+            "stageName": "preProofAD"
+        },
+        "BGOrderMeeting": {
+            "name": "BG打合せ",
+            "code": "BGOM",
+            "shortName": "BG打ち",
+            "description": "グロス発注のための打合せステージ。素材の変更なし",
+            "output": "layout",
+            "stageName": "BGOrderMeeting"
+        },
+        "layoutProof": {
+            "name": "美術原図整理",
+            "code": "BGLP",
+            "shortName": "原図整理",
+            "description": "レイアウト原図を整理加筆してFIXしたもの",
+            "output": "backgroundArt",
+            "stageName": "layoutProof"
+        },
+        "layoutAD": {
+            "name": "背景原図スキャン",
+            "code": "LP-D",
+            "shortName": "原図スキャン",
+            "stageName": "layoutAD"
+        },
+        "\tdescription:": {
+            "name": "\tdescription:",
+            "output": "backgroundArt",
+            "stageName": "\tdescription:"
+        },
+        "bgArt": {
+            "name": "背景美術",
+            "code": "BG",
+            "shortName": "背景",
+            "description": "完成背景美術",
+            "output": "backgroundArt",
+            "stageName": "bgArt"
+        },
+        "chaeckBgArt": {
+            "name": "美術検査",
+            "code": "BG+",
+            "shortName": "美監検査",
+            "stageName": "chaeckBgArt"
+        },
+        "BgArtAD": {
+            "name": "美術cvt",
+            "code": "BG-D",
+            "shortName": "背景スキャン",
+            "stageName": "BgArtAD"
+        },
+        "AD": {
+            "name": "動画",
+            "code": "AD",
+            "shortName": "動",
+            "description": "動画上がり animationDrawing",
+            "output": "AnimationDrawing",
+            "stageName": "AD"
+        },
+        "ADAD": {
+            "name": "動画cvt",
+            "code": "AD/D",
+            "shortName": "動画cvt",
+            "description": "animation to Data 動画をデータ化したもの",
+            "output": "AnimationDrawing",
+            "stageName": "ADAD"
+        },
+        "proofAD": {
+            "name": "動画検査",
+            "code": "AD+",
+            "shortName": "動検",
+            "description": "上がりは動画 動画検査をステージ扱いする場合に使用",
+            "output": "AnimationDrawing",
+            "stageName": "proofAD"
+        },
+        "ADscan": {
+            "name": "スキャン",
+            "code": "AD-D",
+            "shortName": "スキャン",
+            "description": "彩色データ作成のためのデジタイズ処理・半製品ペイントデータ",
+            "output": "cell",
+            "stageName": "ADscan"
+        },
+        "ADcleanUp": {
+            "name": "動画クリンアップ",
+            "code": "ADCL",
+            "shortName": "Adcleanup",
+            "description": "デジタイズされた動画をクリンアップする作業(これをトレースと呼ぶソフトもある)",
+            "output": "cell",
+            "stageName": "ADcleanUp"
+        },
+        "paint": {
+            "name": "彩色",
+            "code": "PT",
+            "shortName": "PAINT",
+            "description": "ソフトウェア作業によるセル彩色",
+            "output": "cell",
+            "stageName": "paint"
+        },
+        "proofPaint": {
+            "name": "彩色検査",
+            "code": "PT+",
+            "shortName": "セル検",
+            "description": "彩色済みデータ",
+            "output": "cell",
+            "stageName": "proofPaint"
+        },
+        "retouchCell": {
+            "name": "セル特効",
+            "code": "PTfx",
+            "shortName": "特効",
+            "description": "加工済みデータ",
+            "output": "cell",
+            "stageName": "retouchCell"
+        },
+        "HMechanicalTrace": {
+            "name": "マシントレース",
+            "code": "H-mt",
+            "shortName": "M-trace",
+            "description": "動画をセルに機械転写したもの(古い形式のデータを記述するためのエントリ)",
+            "output": "cell",
+            "stageName": "HMechanicalTrace"
+        },
+        "HcolorTrace": {
+            "name": "色トレス",
+            "code": "H-ct",
+            "shortName": "色T",
+            "description": "セル時代の作業を記録するためのエントリ",
+            "output": "cell",
+            "stageName": "HcolorTrace"
+        },
+        "HretouchCell": {
+            "name": "エアブラシ特効",
+            "code": "H-fx",
+            "shortName": "エアブラシ",
+            "description": "セル時代の作業を記録するためのエントリ",
+            "output": "cell",
+            "stageName": "HretouchCell"
+        },
+        "preCompositCheck": {
+            "name": "撮出し検査",
+            "code": "PCCk",
+            "shortName": "撮出し",
+            "description": "撮影前全検査(古い工程を記述するためのエントリ)",
+            "output": "ALL",
+            "stageName": "preCompositCheck"
+        },
+        "generalDirectorCheck": {
+            "name": "監督チェック",
+            "code": "GDCk",
+            "shortName": "監督チェック",
+            "description": "監督による作業検査",
+            "output": "ALL",
+            "stageName": "generalDirectorCheck"
+        },
+        "directorCheck": {
+            "name": "演出チェック",
+            "code": "DcCk",
+            "shortName": "演出チェック",
+            "description": "担当演出による作業検査",
+            "output": "ALL",
+            "stageName": "directorCheck"
+        },
+        "TP": {
+            "name": "仕上",
+            "code": "T&P",
+            "shortName": "仕上",
+            "description": "仕上一括(複合)",
+            "output": "cell",
+            "stageName": "TP"
+        },
+        "ATP": {
+            "name": "動仕",
+            "code": "AT&P",
+            "shortName": "動画仕上",
+            "description": "動画仕上一括(複合)",
+            "output": "cell",
+            "stageName": "ATP"
+        },
+        "KATP": {
+            "name": "原動仕",
+            "code": "KAT&P",
+            "shortName": "原動仕",
+            "description": "原画動画仕上一括(複合)",
+            "output": "cell",
+            "stageName": "KATP"
+        },
+        "sKATP": {
+            "name": "二原動仕",
+            "code": "sKAT&P",
+            "shortName": "二原動仕",
+            "description": "二原動画仕上一括(複合)",
+            "output": "cell",
+            "stageName": "sKATP"
+        },
+        "timestamp": 1569855600000
+    },
+    "jobNames": [
+        {
+            "jobName": "作業開始",
+            "targetStage": "*",
+            "jobType": "init"
+        },
+        {
+            "jobName": "初期化",
+            "targetStage": "*",
+            "jobType": "init"
+        },
+        {
+            "jobName": "作打済",
+            "targetStage": "*",
+            "jobType": "init"
+        },
+        {
+            "jobName": "準備",
+            "targetStage": "*",
+            "jobType": "init"
+        },
+        {
+            "jobName": "*打合せ",
+            "targetStage": "*",
+            "jobType": "init"
+        },
+        {
+            "jobName": "*発注",
+            "targetStage": "*",
+            "jobType": "init"
+        },
+        {
+            "jobName": "作画打合せ",
+            "targetStage": "LO",
+            "jobType": "init"
+        },
+        {
+            "jobName": "作画打合せ",
+            "targetStage": "KD",
+            "jobType": "init"
+        },
+        {
+            "jobName": "作画打合せ",
+            "targetStage": "1G",
+            "jobType": "init"
+        },
+        {
+            "jobName": "作画打合せ",
+            "targetStage": "2G",
+            "jobType": "init"
+        },
+        {
+            "jobName": "*",
+            "targetStage": "*",
+            "jobType": "primary"
+        },
+        {
+            "jobName": "*作業",
+            "targetStage": "*",
+            "jobType": "primary"
+        },
+        {
+            "jobName": "演出チェック",
+            "targetStage": "*",
+            "jobType": "check"
+        },
+        {
+            "jobName": "監督チェック",
+            "targetStage": "*",
+            "jobType": "check"
+        },
+        {
+            "jobName": "作監チェック",
+            "targetStage": "*",
+            "jobType": "check"
+        },
+        {
+            "jobName": "総作監チェック",
+            "targetStage": "*",
+            "jobType": "check"
+        },
+        {
+            "jobName": "メカ作監チェック",
+            "targetStage": "*",
+            "jobType": "check"
+        },
+        {
+            "jobName": "美監チェック",
+            "targetStage": "bgArt",
+            "jobType": "check"
+        },
+        {
+            "jobName": "動画検査",
+            "targetStage": "AD",
+            "jobType": "check"
+        },
+        {
+            "jobName": "動画検査",
+            "targetStage": "ADAD",
+            "jobType": "check"
+        },
+        {
+            "jobName": "セル検査",
+            "targetStage": "H-pt",
+            "jobType": "check"
+        },
+        {
+            "jobName": "彩色検査",
+            "targetStage": "PT",
+            "jobType": "check"
+        },
+        {
+            "jobName": "トレース検査",
+            "targetStage": "H-tr",
+            "jobType": "check"
+        },
+        {
+            "jobName": "トレース検査",
+            "targetStage": "ADscan",
+            "jobType": "check"
+        },
+        {
+            "jobName": "クリンアップ検査",
+            "targetStage": "ADcleanup",
+            "jobType": "check"
+        },
+        {
+            "timestamp": 1569855600000
+        }
+    ],
+    "organizations": {
+        "0000": {
+            "name": "0000",
+            "fullName": "未設定",
+            "code": "udf",
+            "id": "0000",
+            "serviceUrl": "file://",
+            "shortName": "undef",
+            "contact": "管理ユーザ:administrator@u-at.net",
+            "description": "管理ユーザ:administrator@u-at.net"
+        },
+        "0001": {
+            "name": "0001",
+            "fullName": "ねこまたや",
+            "code": "nkm",
+            "id": "0001",
+            "serviceUrl": "localRepository:info.nekomataya.pmdb",
+            "shortName": "(ね)",
+            "contact": "ねこまたや:kiyo@nekomataya.info",
+            "description": "ねこまたや:kiyo@nekomataya.info"
+        },
+        "0003": {
+            "name": "0003",
+            "fullName": "SmapleDataRepository K.K",
+            "code": "smpl",
+            "id": "0003",
+            "serviceUrl": "https://u-at.net/~",
+            "shortName": "spl",
+            "contact": "contact:contact@sample.example.com",
+            "description": "contact:contact@sample.example.com"
+        },
+        "0004": {
+            "name": "0004",
+            "fullName": "Smaple2DataRepository K.K",
+            "code": "spl2",
+            "id": "0004",
+            "serviceUrl": "https://u-at.net/x~",
+            "shortName": "sample2",
+            "contact": "contact:contact@sample.example.com",
+            "description": "contact:contact@sample.example.com"
+        },
+        "timestamp": 1569855600000
+    },
+    "products": {
+        "0000": {
+            "productName": "_UN_01",
+            "id": "0000",
+            "name": "01",
+            "title": "TVshowSample"
+        },
+        "0001": {
+            "productName": "_UN_02",
+            "id": "0001",
+            "name": "02",
+            "title": "TVshowSample"
+        },
+        "0002": {
+            "productName": "_UN_03",
+            "id": "0002",
+            "name": "03",
+            "title": "TVshowSample"
+        },
+        "0003": {
+            "productName": "_UN_04",
+            "id": "0003",
+            "name": "04",
+            "title": "TVshowSample"
+        },
+        "0004": {
+            "productName": "_KT_01",
+            "id": "0004",
+            "name": "01",
+            "title": "kachi"
+        },
+        "0005": {
+            "productName": "_KT_02",
+            "id": "0005",
+            "name": "2",
+            "title": "kachi"
+        },
+        "0006": {
+            "productName": "_KT_03",
+            "id": "0006",
+            "name": "3",
+            "title": "kachi"
+        },
+        "0007": {
+            "productName": "_KT_04",
+            "id": "0007",
+            "name": "4",
+            "title": "kachi"
+        },
+        "0008": {
+            "productName": "_KT_05",
+            "id": "0008",
+            "name": "05",
+            "title": "kachi"
+        },
+        "0009": {
+            "productName": "_KT_06",
+            "id": "0009",
+            "name": "06",
+            "title": "kachi"
+        },
+        "timestamp": 1569855600000
+    },
+    "workTitles": {
+        "0000": {
+            "projectName": "TVshowSample",
+            "id": "0000",
+            "fullName": "名称未設定",
+            "shortName": "未定",
+            "code": "_UN",
+            "framerate": "24FPS",
+            "format": "21:00:00 .",
+            "inputMedia": "作画フレーム200ppi",
+            "outputMedia": "HDTV-720p"
+        },
+        "0001": {
+            "projectName": "kachi",
+            "id": "0001",
+            "fullName": "かちかちやま",
+            "shortName": "か",
+            "code": "_KT",
+            "framerate": "24FPS",
+            "format": "20:12:00 .",
+            "inputMedia": "作画フレーム200ppi",
+            "outputMedia": "HDTV-720p"
+        },
+        "0002": {
+            "projectName": "Momotaro",
+            "id": "0002",
+            "fullName": "ももたろう",
+            "shortName": "も",
+            "code": "_MT",
+            "framerate": "24FPS",
+            "format": "19:21:00 .",
+            "inputMedia": "作画フレーム200ppi",
+            "outputMedia": "HDTV-720p"
+        },
+        "0003": {
+            "projectName": "Urashima",
+            "id": "0003",
+            "fullName": "うらしまたろう",
+            "shortName": "う",
+            "code": "_UR",
+            "framerate": "24FPS",
+            "format": "24:08:12 .",
+            "inputMedia": "作画フレーム200ppi",
+            "outputMedia": "HDTV-1080p"
+        },
+        "timestamp": 1569855600000
+    },
+    "pmTemplates": [
+        {
+            "line": "本線",
+            "stages": [
+                "絵コンテ撮",
+                "レイアウト",
+                "原画",
+                "動画",
+                "彩色",
+                "セル特効"
+            ],
+            "summary": [
+                "演出.原画",
+                "作画監督.原画",
+                "総作画監督.原画",
+                "動画検査.動画",
+                "彩色検査.彩色"
+            ],
+            "aggregate": [
+                "sciTime.*.レイアウト",
+                "sciCount.*.レイアウト",
+                "timelineMember.*.動画",
+                "timelineMember.*.彩色",
+                "xmapMember.primary.動画",
+                "xmapMember.primary.彩色"
+            ]
+        },
+        {
+            "line": "色指定",
+            "stages": [
+                "色指定"
+            ],
+            "summary": [
+                "色指定.色指定"
+            ]
+        },
+        {
+            "line": "背景美術",
+            "stages": [
+                "美術原図整理",
+                "背景美術",
+                "美術検査"
+            ],
+            "summary": [
+                "美術監督.原図",
+                "メカ作監.原画",
+                "総メカ作監.原画",
+                "前動検.原画",
+                "監督.撮出"
+            ]
+        },
+        {
+            "line": "3D-CGI",
+            "stages": [
+                ""
+            ],
+            "summary": [
+                "監督.モデル",
+                "作監.モデル",
+                "監督.アニメーション",
+                "作監.アニメーション",
+                "監督.カメラ",
+                "監督.SFX"
+            ]
+        },
+        {
+            "line": "コンポジット",
+            "stages": [
+                "絵コンテ撮"
+            ]
+        },
+        {
+            "timestamp": 1569855600000
+        }
+    ],
+    "pmWorkflows": [
+        {
+            "name": "UATSample",
+            "members": [
+                {
+                    "line": "本線",
+                    "stages": [
+                        "絵コンテ撮",
+                        "レイアウト",
+                        "原画",
+                        "動画",
+                        "彩色",
+                        "セル特効"
+                    ],
+                    "summary": [
+                        "演出.原画",
+                        "作画監督.原画",
+                        "総作画監督.原画",
+                        "動画検査.動画",
+                        "彩色検査.彩色"
+                    ],
+                    "aggregate": [
+                        "sciTime.*.レイアウト",
+                        "sciCount.*.レイアウト",
+                        "timelineMember.*.動画",
+                        "timelineMember.*.彩色",
+                        "xmapMember.primary.動画",
+                        "xmapMember.primary.彩色"
+                    ]
+                },
+                {
+                    "line": "色指定",
+                    "stages": [
+                        "色指定"
+                    ],
+                    "summary": [
+                        "色指定.色指定"
+                    ]
+                },
+                {
+                    "line": "背景美術",
+                    "stages": [
+                        "美術原図整理",
+                        "背景美術",
+                        "美術検査"
+                    ],
+                    "summary": [
+                        "美術監督.原図",
+                        "メカ作監.原画",
+                        "総メカ作監.原画",
+                        "前動検.原画",
+                        "監督.撮出"
+                    ]
+                },
+                {
+                    "line": "3D-CGI",
+                    "stages": [
+                        ""
+                    ],
+                    "summary": [
+                        "監督.モデル",
+                        "作監.モデル",
+                        "監督.アニメーション",
+                        "作監.アニメーション",
+                        "監督.カメラ",
+                        "監督.SFX"
+                    ]
+                },
+                {
+                    "line": "コンポジット",
+                    "stages": [
+                        "絵コンテ撮"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "UATSample2",
+            "members": [
+                {
+                    "line": "本線",
+                    "stages": [
+                        "絵コンテ撮",
+                        "レイアウト",
+                        "原画",
+                        "動画",
+                        "スキャン",
+                        "彩色",
+                        "セル特効"
+                    ],
+                    "summary": [
+                        "演出.原画",
+                        "作画監督.原画",
+                        "総作画監督.原画",
+                        "動画検査.動画",
+                        "彩色検査.彩色"
+                    ],
+                    "aggregate": [
+                        "sciTime.*.レイアウト",
+                        "sciCount.*.レイアウト",
+                        "timelineMember.*.動画",
+                        "timelineMember.*.彩色",
+                        "xmapMember.primary.動画",
+                        "xmapMember.primary.彩色"
+                    ]
+                },
+                {
+                    "line": "色指定",
+                    "stages": [
+                        "色指定"
+                    ],
+                    "summary": [
+                        "色指定.色指定"
+                    ]
+                },
+                {
+                    "line": "背景美術",
+                    "stages": [
+                        "美術原図整理",
+                        "背景美術",
+                        "美術検査"
+                    ],
+                    "summary": [
+                        "美術監督.原図",
+                        "メカ作監.原画",
+                        "総メカ作監.原画",
+                        "前動検.原画",
+                        "監督.撮出"
+                    ]
+                },
+                {
+                    "line": "3D-CGI",
+                    "stages": [
+                        ""
+                    ],
+                    "summary": [
+                        "監督.モデル",
+                        "作監.モデル",
+                        "監督.アニメーション",
+                        "作監.アニメーション",
+                        "監督.カメラ",
+                        "監督.SFX"
+                    ]
+                },
+                {
+                    "line": "コンポジット",
+                    "stages": [
+                        "絵コンテ撮"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "UATSample3",
+            "members": [
+                {
+                    "line": "本線",
+                    "stages": [
+                        "絵コンテ撮",
+                        "レイアウト",
+                        "原画",
+                        "動画",
+                        "マシントレース",
+                        "色トレス",
+                        "彩色",
+                        "セル特効"
+                    ],
+                    "summary": [
+                        "演出.原画",
+                        "作画監督.原画",
+                        "総作画監督.原画",
+                        "動画検査.動画",
+                        "彩色検査.彩色"
+                    ],
+                    "aggregate": [
+                        "sciTime.*.レイアウト",
+                        "sciCount.*.レイアウト",
+                        "timelineMember.*.動画",
+                        "timelineMember.*.彩色",
+                        "xmapMember.primary.動画",
+                        "xmapMember.primary.彩色"
+                    ]
+                },
+                {
+                    "line": "色指定",
+                    "stages": [
+                        "色指定"
+                    ],
+                    "summary": [
+                        "色指定.色指定"
+                    ]
+                },
+                {
+                    "line": "背景美術",
+                    "stages": [
+                        "美術原図整理",
+                        "背景美術",
+                        "美術検査"
+                    ],
+                    "summary": [
+                        "美術監督.原図",
+                        "メカ作監.原画",
+                        "総メカ作監.原画",
+                        "前動検.原画",
+                        "監督.撮出"
+                    ]
+                },
+                {
+                    "line": "コンポジット",
+                    "stages": [
+                        "絵コンテ撮"
+                    ]
+                }
+            ]
+        },
+        {
+            "timestamp": 1613818800000
+        }
+    ]
+}

@@ -1,0 +1,1008 @@
+<!doctype html>
+<!--[if IE 7 ]>		 <html class="no-js ie ie7 lte7 lte8 lte9" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if IE 8 ]>		 <html class="no-js ie ie8 lte8 lte9" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if IE 9 ]>		 <html class="no-js ie ie9 lte9>" dir="ltr" lang="en-US"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" dir="ltr" lang="en-US"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>jQuery 1.9.1 Released | Official jQuery Blog</title>
+
+	<meta name="author" content="jQuery Foundation - jquery.org">
+	<meta name="description" content="jQuery: The Write Less, Do More, JavaScript Library">
+
+	<meta name="viewport" content="width=device-width">
+
+	<link rel="shortcut icon" href="http://blog.jquery.com/wp-content/themes/jquery.com/i/favicon.ico">
+
+	<link rel="stylesheet" href="http://blog.jquery.com/wp-content/themes/jquery/css/base.css?v=1">
+	<link rel="stylesheet" href="http://blog.jquery.com/wp-content/themes/jquery.com/style.css">
+	<link rel="pingback" href="http://blog.jquery.com/xmlrpc.php" />
+	<!--[if lt IE 7]><link rel="stylesheet" href="css/font-awesome-ie7.min.css"><![endif]-->
+
+	<script src="http://blog.jquery.com/wp-content/themes/jquery/js/modernizr.custom.2.6.2.min.js"></script>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script>window.jQuery || document.write(unescape('%3Cscript src="http://blog.jquery.com/wp-content/themes/jquery/js/jquery-1.9.1.min.js"%3E%3C/script%3E'))</script>
+	<script src="http://code.jquery.com/jquery-migrate-1.0.0.min.js"></script>
+
+	<script src="http://blog.jquery.com/wp-content/themes/jquery/js/plugins.js"></script>
+	<script src="http://blog.jquery.com/wp-content/themes/jquery/js/main.js"></script>
+
+	<script src="//use.typekit.net/wde1aof.js"></script>
+	<script>try{Typekit.load();}catch(e){}</script>
+
+<link rel="alternate" type="application/rss+xml" title="Official jQuery Blog &raquo; Feed" href="http://blog.jquery.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Official jQuery Blog &raquo; Comments Feed" href="http://blog.jquery.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Official jQuery Blog &raquo; jQuery 1.9.1 Released Comments Feed" href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/feed/" />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://blog.jquery.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://blog.jquery.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='jQuery Migrate 1.1.0 Released' href='http://blog.jquery.com/2013/01/31/jquery-migrate-1-1-0-released/' />
+<link rel='next' title='jQuery Learning Center: Welcome!' href='http://blog.jquery.com/2013/02/15/jquery-learning-center-welcome/' />
+<meta name="generator" content="WordPress 3.4.1" />
+<link rel='canonical' href='http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/' />
+<link rel='shortlink' href='http://blog.jquery.com/?p=2566' />
+
+</head>
+<body class="jquery singular">
+
+<!--[if lt IE 7]>
+<p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+<![endif]-->
+
+<header>
+	<section id="global-nav">
+		<nav>
+			<div class="constrain">
+				<ul class="projects">
+					<li class="project jquery"><a href="http://jquery.com/" title="jQuery">jQuery</a></li>
+					<li class="project jquery-ui"><a href="http://jqueryui.com/" title="jQuery UI">jQuery UI</a></li>
+					<li class="project jquery-mobile"><a href="http://jquerymobile.com/" title="jQuery Mobile">jQuery Mobile</a></li>
+					<li class="project sizzlejs"><a href="http://sizzlejs.com/" title="Sizzle">Sizzle</a></li>
+					<li class="project qunitjs"><a href="http://qunitjs.com/" title="QUnit">QUnit</a></li>
+				</ul>
+				<ul class="links">
+					<li><a href="http://plugins.jquery.com/">Plugins</a></li>
+					<li class="dropdown"><a href="http://contribute.jquery.org/">Contribute</a>
+						<ul>
+							<li><a href="http://contribute.jquery.org/cla/">CLA</a></li>
+							<li><a href="http://contribute.jquery.org/style-guide/">Style Guides</a></li>
+							<li><a href="http://contribute.jquery.org/triage/">Bug Triage</a></li>
+							<li><a href="http://contribute.jquery.org/code/">Code</a></li>
+							<li><a href="http://contribute.jquery.org/documentation/">Documentation</a></li>
+							<li><a href="http://contribute.jquery.org/web-sites/">Web Sites</a></li>
+						</ul>
+					</li>
+					<li class="dropdown"><a href="http://events.jquery.org/">Events</a>
+						<ul>
+							<li><a href="http://events.jquery.org/2013/eu/">Europe</a></li>
+							<li><a href="http://jqueryto.com">Toronto</a></li>
+							<li><a href="http://events.jquery.org/2013/uk/">UK</a></li>
+							<li><a href="http://events.jquery.org/2013/portland/">Portland</a></li>
+						</ul>
+					</li>
+					<li class="dropdown"><a href="#">Support</a>
+						<ul>
+							<li><a href="http://learn.jquery.com/">Learning Center</a></li>
+							<li><a href="http://irc.jquery.org/">IRC/Chat</a></li>
+							<li><a href="http://forum.jquery.com/">Forums</a></li>
+							<li><a href="http://stackoverflow.com/tags/jquery/info">Stack Overflow</a></li>
+						</ul>
+					</li>
+					<li class="dropdown"><a href="http://jquery.org/">jQuery Foundation</a>
+						<ul>
+							<li><a href="http://jquery.org/about/">About</a></li>
+							<li><a href="http://jquery.org/history/">History</a></li>
+							<li><a href="http://jquery.org/team/">Team</a></li>
+							<li><a href="http://jquery.org/sponsors/">Sponsors</a></li>
+							<li><a href="http://jquery.org/donate/">Donate</a></li>
+							<li><a href="http://brand.jquery.org/">Brand Guide</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</section>
+</header>
+
+<div id="container">
+	<div id="logo-events" class="constrain clearfix">
+		<h2 class="logo"><a href="/" title="Official jQuery Blog">Official jQuery Blog</a></h2>
+
+		<!--Ads or events
+		<aside></aside> -->
+	</div>
+
+	<nav id="main" class="constrain clearfix">
+		<div class="menu-top-container">
+	<ul id="menu-top" class="menu">
+<li class="menu-item"><a href="http://jquery.com/download/">Download</a></li>
+<li class="menu-item"><a href="http://api.jquery.com/">API Documentation</a></li>
+<li class="menu-item current"><a href="http://blog.jquery.com/">Blog</a></li>
+<li class="menu-item"><a href="http://plugins.jquery.com/">Plugins</a></li>
+<li class="menu-item"><a href="http://jquery.com/browser-support/">Browser Support</a></li>
+	</ul>
+</div>
+
+		<form method="get" class="searchform" action="http://blog.jquery.com/">
+	<button type="submit" class="icon-search"><span class="visuallyhidden">search</span></button>
+	<label>
+		<span class="visuallyhidden">Search Official jQuery Blog</span>
+		<input type="text" name="s" value=""
+			placeholder="Search Official jQuery Blog">
+	</label>
+</form>
+	</nav>
+
+	<div id="content-wrapper" class="clearfix row">
+
+
+<div class="content-right twelve columns">
+	<div id="content">
+		<h1 class="entry-title">jQuery 1.9.1 Released</h1>
+				<div class="entry-posted">
+			<span class="sep">Posted on </span><a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/" title="8:28 pm" rel="bookmark"><time class="entry-date" datetime="2013-02-04T20:28:52+00:00" pubdate>February 4, 2013</time></a><span class="by-author"> <span class="sep"> by </span> <span class="author vcard"><a class="url fn n" href="http://blog.jquery.com/author/dmethvin/" title="View all posts by dmethvin" rel="author">dmethvin</a></span></span>		</div>
+				<hr>
+
+		
+<p>The jQuery team is pleased to announced that jQuery 1.9.1 is available! This release addresses the bugs and regressions that have been reported during the past few weeks. Whether you&#8217;re using 1.9.0 or using an older version, these are the droids you&#8217;re looking for.</p>
+<p>Please, please, <i>please</i>, use the <a href="http://blog.jquery.com/2013/01/31/jquery-migrate-1-1-0-released/">jQuery Migrate plugin</a> and look at the <a href="http://jquery.com/upgrade-guide/1.9/">upgrade guide</a> if you&#8217;re just starting your upgrade to jQuery 1.9. The plugin will quickly find and fix any compatibility issues, just look in the browser console. Once you fix the warnings you can remove it. Or, leave the plugin in place until you have the chance to fix your code and plugins to make them 1.9-compatible.</p>
+<p><code> &lt;script src="http://code.jquery.com/jquery-1.9.1.js"&gt;&lt;/script&gt;<br />
+ &lt;script src="http://code.jquery.com/jquery-migrate-1.1.0.js"&gt;&lt;/script&gt;<br />
+</code></p>
+<p>We&#8217;ve sent the files to the Google and Microsoft folks, so you should see them up on their CDNs shortly.</p>
+<p>Many thanks to those of you who reported bugs, and to the following people who contributed patches to the 1.9.1 release: Adam Coulombe, Andrew Plummer, Corey Frang, Danil Somsikov, Jean Boussier, Julian Aubourg, Mike Sherov, Oleg Gaidarenko, Richard Gibson, Ryunosuke Sato, and Timmy Willison.</p>
+<p>Gold-leaf-cluster thanks to Paul Irish, who mobilized special forces to find a solution for <a href="http://bugs.jquery.com/ticket/13274">13274</a>!</p>
+<h2>Change Log</h2>
+<h2>Ajax</h2>
+<ul>
+<li><a href="http://bugs.jquery.com/ticket/13276">#13276: In IE 9/10 $.parseXML() returning document object instead of XMLDOMDocument</a></li>
+<li><a href="http://bugs.jquery.com/ticket/13292">#13292: $.ajax with 1.9.0 doesn&#8217;t call anymore success function in case of 204</a></li>
+<li><a href="http://bugs.jquery.com/ticket/13306">#13306: File input added to serialized forms caused a change in behavior and only halfway follows spec</a></li>
+</ul>
+<h2>Build</h2>
+<ul>
+<li><a href="http://bugs.jquery.com/ticket/12656">#12656: Make event shorthands an excludable module</a></li>
+<li><a href="http://bugs.jquery.com/ticket/13274">#13274: IE &lt; 9: &#8220;&#8216;jquery&#8217; is undefined&#8221; w/ sourceMappingURL comment</a></li>
+<li><a href="http://bugs.jquery.com/ticket/13316">#13316: Check against jquery.min.js with TestSwarm</a></li>
+<li><a href="http://bugs.jquery.com/ticket/13335">#13335: &#8220;use strict&#8221;; break asp.net ajax postacks in FF</a></li>
+</ul>
+<h2>Deferred</h2>
+<ul>
+<li><a href="http://bugs.jquery.com/ticket/13150">#13150: Be able to determine if $.Callback() has functions</a></li>
+</ul>
+<h2>Effects</h2>
+<ul>
+<li><a href="http://bugs.jquery.com/ticket/12846">#12846: overflow:hidden is not removed when .stop() is called</a></li>
+<li><a href="http://bugs.jquery.com/ticket/13183">#13183: Wrong animation  initial value calculation (1.9.0rc1)</a></li>
+</ul>
+<h2>Event</h2>
+<ul>
+<li><a href="http://bugs.jquery.com/ticket/13208">#13208: JS error trying to get the id of the document in IE8</a></li>
+<li><a href="http://bugs.jquery.com/ticket/13360">#13360: Creating String.prototype.namespace can cause an exception in jQuery.Event</a></li>
+</ul>
+<h2>Manipulation</h2>
+<ul>
+<li><a href="http://bugs.jquery.com/ticket/13282">#13282: QtWebKit &#8212; TypeError: &#8216;[object Object]&#8216; is not a valid argument for &#8216;Function.prototype.apply&#8217; (evaluating &#8216;elem.nodeType&#8217;)</a></li>
+<li><a href="http://bugs.jquery.com/ticket/13315">#13315: minified manipulation methods fail on oldIE with XML</a></li>
+<li><a href="http://bugs.jquery.com/ticket/13233">#13233: Unexpected behavior when iterating over and manipulating detached nodes in jquery 1.9</a></li>
+</ul>
+<h2>Selector</h2>
+<ul>
+<li><a href="http://bugs.jquery.com/ticket/13182">#13182: nested has selectors broken in IE7 &amp; IE8 in versions 1.8.2+</a></li>
+<li><a href="http://bugs.jquery.com/ticket/13281">#13281: Wrong order when using .find() in IE7/8</a></li>
+<li><a href="http://bugs.jquery.com/ticket/13331">#13331: jQuery.fn.add returns incorrect order in Chrome and Safari</a></li>
+</ul>
+<h2>Support</h2>
+<ul>
+<li><a href="http://bugs.jquery.com/ticket/13089">#13089: support adds zoom style to body in Chrome/Safari</a></li>
+</ul>
+<h2>Traversing</h2>
+<ul>
+<li><a href="http://bugs.jquery.com/ticket/13349">#13349: find function slower since 1.9.0, especially in chrome</a></li>
+</ul>
+			<div id="comments">
+	
+	
+			<h2 id="comments-title">
+			31 thoughts on &ldquo;<span>jQuery 1.9.1 Released</span>&rdquo;		</h2>
+
+		
+		<ol class="commentlist">
+				<li class="comment even thread-even depth-1" id="li-comment-536404">
+		<article id="comment-536404" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://1.gravatar.com/avatar/32d406f4f1526df3788ad82a0b8b8aa7?s=68&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn">mitchell zhu</span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536404"><time pubdate datetime="2013-02-05T01:32:38+00:00">February 5, 2013 at 1:32 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>i don&#8217;t need migrate plugin and i just need $.browser,because many many plugin use $.browser<br />
+please please please support $.browser~~~~just $.browser~~ thank you</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-536407">
+		<article id="comment-536407" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://1.gravatar.com/avatar/98964f9449387bd6a6f4099ee4e37391?s=68&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn">Skoua</span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536407"><time pubdate datetime="2013-02-05T06:01:06+00:00">February 5, 2013 at 6:01 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>Thanks!</p>
+<p>I must agree with mitchell that a separate file to support $.browser only which is used by some plugins would be great.</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment even thread-even depth-1" id="li-comment-536410">
+		<article id="comment-536410" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://0.gravatar.com/avatar/e7f3f683d93f31ab75b1317c4f3395f2?s=68&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn">River</span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536410"><time pubdate datetime="2013-02-05T06:54:44+00:00">February 5, 2013 at 6:54 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>$.browser is a bad practice jQuery moved away from. Plugin authors should switch to more reliable feature detection instead of relying on browser sniffs.</p>
+<p>I&#8217;m sure someone will throw $.browser into a plugin, but you should probably avoid it for future code, almost everything can be feature tested. <a href="http://modernizr.com" rel="nofollow">http://modernizr.com</a></p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-536411">
+		<article id="comment-536411" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://1.gravatar.com/avatar/fdc1417a26db119b6b48d5c113ff9fb0?s=68&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn"><a href='http://adeelejaz.com' rel='external nofollow' class='url'>Adeel</a></span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536411"><time pubdate datetime="2013-02-05T07:05:49+00:00">February 5, 2013 at 7:05 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>I&#8217;ve extracted the $.browser code into a separate file in case someone else needs it:<br />
+<a href="https://gist.github.com/adeelejaz/4714079" rel="nofollow">https://gist.github.com/adeelejaz/4714079</a></p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment even thread-even depth-1" id="li-comment-536413">
+		<article id="comment-536413" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://0.gravatar.com/avatar/a5ab2869eacc8d706e833626e9edfbbd?s=68&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn"><a href='http://www.melonhtml5.com' rel='external nofollow' class='url'>Lee</a></span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536413"><time pubdate datetime="2013-02-05T07:37:03+00:00">February 5, 2013 at 7:37 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>Please please please add $.browser back, not only is it used to detect features (which can be replaced by moderniser or $.support), it&#8217;s also used in some cases where people only need to know browser version. </p>
+<p>For example:<br />
+if ($.browser.msie) {<br />
+$(&#8221;).html(&#8216;Out website does not support Internet Explorer, please use Chrome instead.&#8217;).appendTo($(document.body));<br />
+}</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-536414">
+		<article id="comment-536414" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://1.gravatar.com/avatar/9621087d4796f94c3df7b3e9a8225124?s=68&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn"><a href='http://epicedit.stifu.fr/' rel='external nofollow' class='url'>Stifu</a></span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536414"><time pubdate datetime="2013-02-05T08:04:18+00:00">February 5, 2013 at 8:04 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>@Lee: your example still sounds like something that could be replaced with feature sniffing. Your website does not support IE because IE does not support certain things, right? So your logic should be &#8220;browser needs features A, B and C&#8221;, not &#8220;browser should not be this particular browser brand&#8221;.</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment even thread-even depth-1" id="li-comment-536416">
+		<article id="comment-536416" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://0.gravatar.com/avatar/c104c0724758cd86c79205032b8bc528?s=68&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn"><a href='http://autopergamene.eu/' rel='external nofollow' class='url'>Anahkiasen</a></span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536416"><time pubdate datetime="2013-02-05T09:07:31+00:00">February 5, 2013 at 9:07 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>As mentioned above, you people should try something like Modernizr and detect actual features instead of plain blocking (which is bad and you should feel bad) of specific browsers.</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-536417">
+		<article id="comment-536417" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://1.gravatar.com/avatar/55a2fc90a2e9464a505c2018f1000a14?s=68&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn">noname</span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536417"><time pubdate datetime="2013-02-05T09:08:12+00:00">February 5, 2013 at 9:08 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>@Adeel: thanks! I just needed the $.browser to know which effin&#8217; browser and version was visiting my website :)</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment even thread-even depth-1" id="li-comment-536442">
+		<article id="comment-536442" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://1.gravatar.com/avatar/b16b62df06bf1d90b7b6136cb3ee1a04?s=68&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn"><a href='http://resume.christianziebarth.com' rel='external nofollow' class='url'>Christian</a></span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536442"><time pubdate datetime="2013-02-05T15:24:18+00:00">February 5, 2013 at 3:24 pm</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>&#8220;$.browser is a bad practice jQuery moved away from. Plugin authors should switch to more reliable feature detection instead of relying on browser sniffs.&#8221;</p>
+<p>I&#8217;ve explained elsewhere that feature detection does NOT always cut it. On a project I am working on now I need &#8220;$.browser&#8221; to handle a Firefox bug that cannot be sussed out with feature detection. See <a href="http://stackoverflow.com/questions/14105890/jhtmlarea-adding-unwanted-br-tag" rel="nofollow">http://stackoverflow.com/questions/14105890/jhtmlarea-adding-unwanted-br-tag</a> for some info on just one such problem. Once I figured out this was a Firefox-only problem I had to use &#8220;$.browser&#8221; to account for the unwanted BR tag in Firefox only.</p>
+<p>It is rare, fine-grained instances like this where &#8220;$.browser&#8221; is still needed. In saying this I am not recommending that &#8220;$.browser&#8221; be used to &#8220;sniff&#8221; for a certain browser at the beginning of page load and then serve totally separate large chunks of JavaScript/jQuery to different browsers as back in the old days of browser sniffing (&#8220;Here&#8217;s one enormous set of JavaScript for Internet Explorer and one for Netscape.&#8221;).</p>
+<p>Please consider re-including &#8220;$.browser.&#8221; Hopefully people can grasp what I&#8217;m saying here rather than tuning out what I&#8217;ve said and thinking that I and others are trying to &#8220;block&#8221; certain browsers or some other such bad scenario.</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-536443">
+		<article id="comment-536443" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://1.gravatar.com/avatar/905ce685f355f3301fc1f32bea3cc9f8?s=68&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn"><a href='http://polyester.se' rel='external nofollow' class='url'>Johannes</a></span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536443"><time pubdate datetime="2013-02-05T15:51:24+00:00">February 5, 2013 at 3:51 pm</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>@Christian, See the link Adeel provided above.</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment even thread-even depth-1" id="li-comment-536447">
+		<article id="comment-536447" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://1.gravatar.com/avatar/b16b62df06bf1d90b7b6136cb3ee1a04?s=68&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn"><a href='http://resume.christianziebarth.com' rel='external nofollow' class='url'>Christian</a></span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536447"><time pubdate datetime="2013-02-05T19:10:06+00:00">February 5, 2013 at 7:10 pm</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>I saw it. I am giving a reason for its inclusion in jQuery itself, emphasizing that this feature is something other than just a poor replacement for feature detecting.</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-536460">
+		<article id="comment-536460" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://0.gravatar.com/avatar/ad1ec3608f291395ed6fed8830a92d70?s=68&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn">galin</span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536460"><time pubdate datetime="2013-02-06T03:09:00+00:00">February 6, 2013 at 3:09 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>$.browser is still needed for some cases.<br />
+so reinclude it in future versions of jQuery.</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment even thread-even depth-1" id="li-comment-536463">
+		<article id="comment-536463" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://1.gravatar.com/avatar/58abbff96895b535472a67dc32455fc9?s=68&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn">Martijn</span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536463"><time pubdate datetime="2013-02-06T04:25:14+00:00">February 6, 2013 at 4:25 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>Personally I don&#8217;t see the point in saving &lt;1KB (minified) in a 91KB framework (the 33KB specified is false; just checked it) by removing features that are going to cause backward compatibility issues.</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-536472">
+		<article id="comment-536472" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://1.gravatar.com/avatar/9621087d4796f94c3df7b3e9a8225124?s=68&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn"><a href='http://epicedit.stifu.fr/' rel='external nofollow' class='url'>Stifu</a></span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536472"><time pubdate datetime="2013-02-06T08:25:30+00:00">February 6, 2013 at 8:25 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>@Martijn: it&#8217;s not just about size, but also maintenance (among other likes, like consistency, best practices, etc). Keeping old features is not &#8220;free&#8221;. If the jQuery team wants to reorganize or rethink their code (and they keep doing it), then having fewer things to worry about speeds things up.</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment byuser comment-author-dmethvin bypostauthor even thread-even depth-1" id="li-comment-536474">
+		<article id="comment-536474" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://1.gravatar.com/avatar/161a4cc619398bea1e1714036ed122cf?s=68&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn"><a href='http://methvin.com' rel='external nofollow' class='url'>dmethvin</a></span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536474"><time pubdate datetime="2013-02-06T08:27:49+00:00">February 6, 2013 at 8:27 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>And as always, you are welcome to put browser detection back via jQuery Migrate, using the older version, the gist from Adeel above, checking navigator.userAgent directly, etc.</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-536482">
+		<article id="comment-536482" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://0.gravatar.com/avatar/a77c6c82d51684541f79377485b18638?s=68&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn">honeyryderchuck</span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536482"><time pubdate datetime="2013-02-06T10:55:03+00:00">February 6, 2013 at 10:55 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>ahaha, very funny to see all the rollover over $.browser not being supported. I don&#8217;t understand all the fuss because: it&#8217;s an extensible framework, so you can just rewrite, overwrite or move features to subplugins (and use Adele&#8217;s link); jQuery is quite old in internet years and quite fat, does some things very well, some things so-so and some things which other frameworks are better at (like the already cited Modernizr), so it&#8217;s actually a wise decision to lose that fat; if you are using plugins relying on $.browser, then it probably means you are using the wrong plugin for the job developed by someone who&#8217;s either not developing it actively anymore, doesn&#8217;t pay attention to deprecation warnings or doesn&#8217;t update himself on framework changes.  </p>
+<p>jQuery handles the document and provides a very simple API for XHR requests; it is not very good at browser sniffing and browser feature detection, or for basic element feature enhancing (underscore.js). jQuery needs to be trimmed because it&#8217;s not 2007 anymore and there are other libraries that are accomplishing many tasks jQuery doesn&#8217;t need to.</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment even thread-even depth-1" id="li-comment-536485">
+		<article id="comment-536485" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://0.gravatar.com/avatar/079a6ffc52309cd9f5fc1eedae9f1f13?s=68&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn"><a href='http://greatwebguy.com' rel='external nofollow' class='url'>Jason Crow</a></span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536485"><time pubdate datetime="2013-02-06T12:59:16+00:00">February 6, 2013 at 12:59 pm</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>Some code for those asking for $.browser, hope it helps..</p>
+<p><a href="http://greatwebguy.com/jquery-2/browser-detection-shim-for-jquery-1-9/" rel="nofollow">http://greatwebguy.com/jquery-2/browser-detection-shim-for-jquery-1-9/</a></p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-536492">
+		<article id="comment-536492" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://1.gravatar.com/avatar/b16b62df06bf1d90b7b6136cb3ee1a04?s=68&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn"><a href='http://resume.christianziebarth.com' rel='external nofollow' class='url'>Christian</a></span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536492"><time pubdate datetime="2013-02-06T15:14:47+00:00">February 6, 2013 at 3:14 pm</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>&#8220;if you are using plugins relying on $.browser, then it probably means you are using the wrong plugin for the job developed by someone who’s either not developing it actively anymore, doesn’t pay attention to deprecation warnings or doesn’t update himself on framework changes.&#8221;</p>
+<p>But it doesn&#8217;t necessarily mean that. My reason for mentioning that they should still include it is based on theirs and others&#8217; false belief that $.browser is 100% equal to &#8220;feature detecting.&#8221;</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment even thread-even depth-1" id="li-comment-536564">
+		<article id="comment-536564" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://0.gravatar.com/avatar/6b18887bdea1127cf1d189b60746f017?s=68&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn">SeaGull</span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536564"><time pubdate datetime="2013-02-07T22:42:48+00:00">February 7, 2013 at 10:42 pm</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>Please, return $.browser back.<br />
+It&#8217;s the only part of &#8220;jquery-migrate&#8221; all my projects need.</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-536572">
+		<article id="comment-536572" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://0.gravatar.com/avatar/cd0a79d001de975b35e5070df542f15b?s=68&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn">dan</span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536572"><time pubdate datetime="2013-02-08T04:53:53+00:00">February 8, 2013 at 4:53 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>where to download jquery without excludable modules?</p>
+<p>why not make &#8220;browser&#8221; an &#8220;excludable module&#8221; so people that needs it download it with custom jquery</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment even thread-even depth-1" id="li-comment-536573">
+		<article id="comment-536573" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://0.gravatar.com/avatar/2abdb50caf0dc5b510330f68b02db8e4?s=68&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn"><a href='http://rosenfeld.herokuapp.com' rel='external nofollow' class='url'>Rodrigo Rosenfeld Rosas</a></span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536573"><time pubdate datetime="2013-02-08T07:03:38+00:00">February 8, 2013 at 7:03 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>I&#8217;d guess most people here complaining about $.browser being removed would be happy with just booleans like $.IE, $.IE6, $.IE7, $.IE8, $.IE9 :D Or simply $.IE(version) where all versions would return true if version is not passed in&#8230; :)</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-536575">
+		<article id="comment-536575" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://0.gravatar.com/avatar/424d1153b8de1b01826acb949db816ad?s=68&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn">Joshua Tenner</span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536575"><time pubdate datetime="2013-02-08T08:33:51+00:00">February 8, 2013 at 8:33 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>Thanks for the updates! I won&#8217;t complain about the $.browser removal.</p>
+<p>I needed an excuse to learn how to use modernizr.</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment even thread-even depth-1" id="li-comment-536602">
+		<article id="comment-536602" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://0.gravatar.com/avatar/aa01dcc5d678804b6d45dd9cbf512064?s=68&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn">aikeru</span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536602"><time pubdate datetime="2013-02-09T14:12:51+00:00">February 9, 2013 at 2:12 pm</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>Thank you for continuing to trim the fat on this awesome JavaScript library! Please don&#8217;t add &#8216;browser&#8217; back. There are many options to get it back and it IS a poor way to do what most people use it for. I HATE it when a website &#8220;doesn&#8217;t support my browser&#8221; when my browser may work just fine.</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-536671">
+		<article id="comment-536671" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://1.gravatar.com/avatar/907fa1364e68c6e4ff5d945df53f5917?s=68&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn">jeff</span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536671"><time pubdate datetime="2013-02-11T08:55:11+00:00">February 11, 2013 at 8:55 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>it is not on googles CDN yet. any reason for that?</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment even thread-even depth-1" id="li-comment-536673">
+		<article id="comment-536673" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://0.gravatar.com/avatar/6877a6843a9d71d538935bcf839cbdc7?s=68&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn"><a href='http://aulara.cn/' rel='external nofollow' class='url'>Longjie Xu</a></span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536673"><time pubdate datetime="2013-02-11T10:04:55+00:00">February 11, 2013 at 10:04 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>Yeah, zoom:1 is not necessary for some webkit browsers. Thanks for the fine tune.</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-536674">
+		<article id="comment-536674" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://0.gravatar.com/avatar/4cba0e110894655294e62c9c7b477e38?s=68&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn">KOnnark</span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536674"><time pubdate datetime="2013-02-11T10:45:15+00:00">February 11, 2013 at 10:45 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>Why it&#8217;s not available on Google CDN? </p>
+<p>I don&#8217;t understand the jQuery&#8217;s homepage: at the top there is &#8220;Download jQuery 1.9.1&#8243; and at the bottom you see &#8220;Download jQuery 1.9.0&#8243;&#8230;<br />
+If they can&#8217;t even be consistent/coherent on their own homepage, I can&#8217;t imagine what it actually is in the jQuery lib itself!!!</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment even thread-even depth-1" id="li-comment-536751">
+		<article id="comment-536751" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://0.gravatar.com/avatar/a67b401ba0f134f0ea9513930ca30c69?s=68&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn">FeedFixer</span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536751"><time pubdate datetime="2013-02-13T06:11:21+00:00">February 13, 2013 at 6:11 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>FYI The RSS feed for the jQuery blog appears to be broken. It just loads the blog default page rather than an RSS/XML file.</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-536809">
+		<article id="comment-536809" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://1.gravatar.com/avatar/b1d20cca785709659bf0992d701facb9?s=68&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn"><a href='http://www.interkul.com' rel='external nofollow' class='url'>qlwik</a></span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536809"><time pubdate datetime="2013-02-14T08:12:47+00:00">February 14, 2013 at 8:12 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>Thanks for update, think again about adding $.browser :P</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment even thread-even depth-1" id="li-comment-536949">
+		<article id="comment-536949" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://0.gravatar.com/avatar/ed316c83afeb41de7011068f1f7f0b1f?s=68&amp;d=http%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn"><a href='http://www.caughtina.com' rel='external nofollow' class='url'>Peter Mouland</a></span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-536949"><time pubdate datetime="2013-02-17T08:49:25+00:00">February 17, 2013 at 8:49 am</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>&#8220;$.browser&#8221;</p>
+<p>Some versions of chrome that have the transitionend event it is unreliably implemented i.e. it didn&#8217;t always fire after the css transition had finished.</p>
+<p>With so many new features making their way into browsers (along with a couple of bugs) like the above example, i am not sure how you would feature detect this inadequacies.</p>
+<p>To detect the bug found by @Christian might also be similar and unreliable or will involve triggering events and possibly replicating human behaviour to find the bug. Is this overkill (and hit website performance) if the browser and version number are known?</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-537015">
+		<article id="comment-537015" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://1.gravatar.com/avatar/fd55ed3477b62be6d4925989baa96eec?s=68&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn">thedavidmeister</span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-537015"><time pubdate datetime="2013-02-18T18:13:37+00:00">February 18, 2013 at 6:13 pm</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>Please put $.browser back in. Regardless of whether it&#8217;s &#8220;bad practise&#8221; to use it or not as an end user, API breaks across minor versions of a library is far worse &#8220;bad practise&#8221;!</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+	<li class="comment even thread-even depth-1" id="li-comment-537116">
+		<article id="comment-537116" class="comment">
+			<div class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://1.gravatar.com/avatar/b16b62df06bf1d90b7b6136cb3ee1a04?s=68&amp;d=http%3A%2F%2F1.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D68&amp;r=G' class='avatar avatar-68 photo' height='68' width='68' /><span class="fn"><a href='http://resume.christianziebarth.com' rel='external nofollow' class='url'>Christian</a></span> on <a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/comment-page-1/#comment-537116"><time pubdate datetime="2013-02-20T21:37:34+00:00">February 20, 2013 at 9:37 pm</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</div>
+
+			<div class="comment-content"><p>I *just* had to include the following in the same project I mentioned above):</p>
+<p>if ($.browser.mozilla) {<br />
+    $(&#8216;.jHtmlArea IFRAME&#8217;).attr(&#8216;onload&#8217;, &#8216;this.contentWindow.focus()&#8217;);<br />
+}</p>
+<p>This was because an element was not getting focus in Firefox on page load when it was in other browsers. I don&#8217;t know a way to feature detect for whether or not a form element will get focus in every browser except Firefox. But even if there is a way the point here is that I am not doing a &#8220;browser sniff&#8221; before any other JavaScript is loaded and then serving a couple thousand unique lines of JavaScript/jQuery to Firefox and not to other browsers and then serving different sets of unique code to those other browsers. I am doing a &#8220;browser detect&#8221; and serving *one line* of reparative code to Firefox. This is one example of the need to retain &#8220;$.browser.&#8221; Additionally, the plugin this line of code relates to has to itself detect if the browser is IE or Safari (note: *not* &#8220;webkit&#8221;) and do the following quick maneuvers:</p>
+<p>increaseFontSize: function () {<br />
+    if ($.browser.msie) {<br />
+        this.ec(&#8220;fontSize&#8221;, false, this.qc(&#8220;fontSize&#8221;) + 1);<br />
+    } else if ($.browser.safari) {<br />
+        this.getRange().surroundContents($(this.iframe[0].contentWindow.document.createElement(&#8220;span&#8221;)).css(&#8220;font-size&#8221;, &#8220;larger&#8221;)[0]);<br />
+    } else {<br />
+        this.ec(&#8220;increaseFontSize&#8221;, false, &#8220;big&#8221;);<br />
+    }<br />
+}</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li>
+		</ol>
+
+		
+	
+									<div id="respond">
+				<h3 id="reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/2013/02/04/jquery-1-9-1-released/#respond" style="display:none;">Cancel reply</a></small></h3>
+									<form action="http://blog.jquery.com/wp-comments-post.php" method="post" id="commentform">
+																			<p class="comment-notes">Your email address will not be published. Required fields are marked <span class="required">*</span></p>							<p class="comment-form-author"><label for="author">Name</label> <span class="required">*</span><input id="author" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email</label> <span class="required">*</span><input id="email" name="email" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label><input id="url" name="url" type="text" value="" size="30" /></p>
+												<p class="comment-form-comment"><label for="comment">Comment</label><textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p>						<p class="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href=&quot;&quot; title=&quot;&quot;&gt; &lt;abbr title=&quot;&quot;&gt; &lt;acronym title=&quot;&quot;&gt; &lt;b&gt; &lt;blockquote cite=&quot;&quot;&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=&quot;&quot;&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=&quot;&quot;&gt; &lt;strike&gt; &lt;strong&gt; </code></p>						<p class="form-submit">
+							<input name="submit" type="submit" id="submit" value="Post Comment" />
+							<input type='hidden' name='comment_post_ID' value='2566' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+						</p>
+						<p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="a2a8b18b5f" /></p>					</form>
+							</div><!-- #respond -->
+						
+</div><!-- #comments -->
+	</div>
+	<div id="sidebar" class="widget-area" role="complementary">
+	<aside class="widget">
+		<h3 class="widget-title">Categories</h3>
+		<ul>
+				<li class="cat-item cat-item-16"><a href="http://blog.jquery.com/category/events/" title="View all posts filed under Events">Events</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://blog.jquery.com/category/jquery/" title="View all posts filed under jQuery">jQuery</a>
+</li>
+	<li class="cat-item cat-item-2"><a href="http://blog.jquery.com/category/jquery-ui/" title="View all posts filed under jQuery UI">jQuery UI</a>
+</li>
+	<li class="cat-item cat-item-4"><a href="http://blog.jquery.com/category/weekly-news/" title="View all posts filed under Weekly News">Weekly News</a>
+</li>
+		</ul>
+	</aside>
+	<aside class="widget">
+		<h3 class="widget-title">Recent Posts</h3>
+		<ul>
+			<li><a href="http://blog.jquery.com/2013/02/16/jquery-migrate-1-1-1-released/">jQuery Migrate 1.1.1 Released</a></li><li><a href="http://blog.jquery.com/2013/02/15/jquery-learning-center-welcome/">jQuery Learning Center: Welcome!</a></li><li><a href="http://blog.jquery.com/2013/02/04/jquery-1-9-1-released/">jQuery 1.9.1 Released</a></li><li><a href="http://blog.jquery.com/2013/01/31/jquery-migrate-1-1-0-released/">jQuery Migrate 1.1.0 Released</a></li><li><a href="http://blog.jquery.com/2013/01/25/jquery-comes-to-portland/">jQuery Comes to Portland</a></li><li><a href="http://blog.jquery.com/2013/01/24/qunit-1-11-release-a-look-back-and-forth/">QUnit 1.11 Release: A Look Back (and Forth)</a></li><li><a href="http://blog.jquery.com/2013/01/23/a-site-to-behold-open-content-design-comes-to-jquery-2/">A Site To Behold: Open Content & Design Comes to jQuery</a></li><li><a href="http://blog.jquery.com/2013/01/16/announcing-the-jquery-plugin-registry/">Announcing the jQuery Plugin Registry</a></li><li><a href="http://blog.jquery.com/2013/01/15/jquery-1-9-final-jquery-2-0-beta-migrate-final-released/">jQuery 1.9 final, jQuery 2.0 beta, Migrate final released</a></li><li><a href="http://blog.jquery.com/2013/01/14/the-state-of-jquery-2013/">The State of jQuery 2013</a></li>		</ul>
+	</aside>
+	<aside class="widget">
+		<h3 class="widget-title">Archives</h3>
+		<ul>
+				<li><a href='http://blog.jquery.com/2013/02/' title='February 2013'>February 2013</a></li>
+	<li><a href='http://blog.jquery.com/2013/01/' title='January 2013'>January 2013</a></li>
+	<li><a href='http://blog.jquery.com/2012/12/' title='December 2012'>December 2012</a></li>
+	<li><a href='http://blog.jquery.com/2012/11/' title='November 2012'>November 2012</a></li>
+	<li><a href='http://blog.jquery.com/2012/10/' title='October 2012'>October 2012</a></li>
+	<li><a href='http://blog.jquery.com/2012/09/' title='September 2012'>September 2012</a></li>
+	<li><a href='http://blog.jquery.com/2012/08/' title='August 2012'>August 2012</a></li>
+	<li><a href='http://blog.jquery.com/2012/07/' title='July 2012'>July 2012</a></li>
+	<li><a href='http://blog.jquery.com/2012/06/' title='June 2012'>June 2012</a></li>
+	<li><a href='http://blog.jquery.com/2012/05/' title='May 2012'>May 2012</a></li>
+	<li><a href='http://blog.jquery.com/2012/04/' title='April 2012'>April 2012</a></li>
+	<li><a href='http://blog.jquery.com/2012/03/' title='March 2012'>March 2012</a></li>
+	<li><a href='http://blog.jquery.com/2012/01/' title='January 2012'>January 2012</a></li>
+	<li><a href='http://blog.jquery.com/2011/12/' title='December 2011'>December 2011</a></li>
+	<li><a href='http://blog.jquery.com/2011/11/' title='November 2011'>November 2011</a></li>
+	<li><a href='http://blog.jquery.com/2011/10/' title='October 2011'>October 2011</a></li>
+	<li><a href='http://blog.jquery.com/2011/09/' title='September 2011'>September 2011</a></li>
+	<li><a href='http://blog.jquery.com/2011/08/' title='August 2011'>August 2011</a></li>
+	<li><a href='http://blog.jquery.com/2011/06/' title='June 2011'>June 2011</a></li>
+	<li><a href='http://blog.jquery.com/2011/05/' title='May 2011'>May 2011</a></li>
+	<li><a href='http://blog.jquery.com/2011/04/' title='April 2011'>April 2011</a></li>
+	<li><a href='http://blog.jquery.com/2011/03/' title='March 2011'>March 2011</a></li>
+	<li><a href='http://blog.jquery.com/2011/02/' title='February 2011'>February 2011</a></li>
+	<li><a href='http://blog.jquery.com/2011/01/' title='January 2011'>January 2011</a></li>
+	<li><a href='http://blog.jquery.com/2010/12/' title='December 2010'>December 2010</a></li>
+	<li><a href='http://blog.jquery.com/2010/11/' title='November 2010'>November 2010</a></li>
+	<li><a href='http://blog.jquery.com/2010/10/' title='October 2010'>October 2010</a></li>
+	<li><a href='http://blog.jquery.com/2010/09/' title='September 2010'>September 2010</a></li>
+	<li><a href='http://blog.jquery.com/2010/08/' title='August 2010'>August 2010</a></li>
+	<li><a href='http://blog.jquery.com/2010/07/' title='July 2010'>July 2010</a></li>
+	<li><a href='http://blog.jquery.com/2010/06/' title='June 2010'>June 2010</a></li>
+	<li><a href='http://blog.jquery.com/2010/04/' title='April 2010'>April 2010</a></li>
+	<li><a href='http://blog.jquery.com/2010/03/' title='March 2010'>March 2010</a></li>
+	<li><a href='http://blog.jquery.com/2010/02/' title='February 2010'>February 2010</a></li>
+	<li><a href='http://blog.jquery.com/2010/01/' title='January 2010'>January 2010</a></li>
+	<li><a href='http://blog.jquery.com/2009/12/' title='December 2009'>December 2009</a></li>
+	<li><a href='http://blog.jquery.com/2009/10/' title='October 2009'>October 2009</a></li>
+	<li><a href='http://blog.jquery.com/2009/08/' title='August 2009'>August 2009</a></li>
+	<li><a href='http://blog.jquery.com/2009/07/' title='July 2009'>July 2009</a></li>
+	<li><a href='http://blog.jquery.com/2009/06/' title='June 2009'>June 2009</a></li>
+	<li><a href='http://blog.jquery.com/2009/05/' title='May 2009'>May 2009</a></li>
+	<li><a href='http://blog.jquery.com/2009/04/' title='April 2009'>April 2009</a></li>
+	<li><a href='http://blog.jquery.com/2009/03/' title='March 2009'>March 2009</a></li>
+	<li><a href='http://blog.jquery.com/2009/02/' title='February 2009'>February 2009</a></li>
+	<li><a href='http://blog.jquery.com/2009/01/' title='January 2009'>January 2009</a></li>
+	<li><a href='http://blog.jquery.com/2008/12/' title='December 2008'>December 2008</a></li>
+	<li><a href='http://blog.jquery.com/2008/11/' title='November 2008'>November 2008</a></li>
+	<li><a href='http://blog.jquery.com/2008/10/' title='October 2008'>October 2008</a></li>
+	<li><a href='http://blog.jquery.com/2008/09/' title='September 2008'>September 2008</a></li>
+	<li><a href='http://blog.jquery.com/2008/08/' title='August 2008'>August 2008</a></li>
+	<li><a href='http://blog.jquery.com/2008/07/' title='July 2008'>July 2008</a></li>
+	<li><a href='http://blog.jquery.com/2008/06/' title='June 2008'>June 2008</a></li>
+	<li><a href='http://blog.jquery.com/2008/05/' title='May 2008'>May 2008</a></li>
+	<li><a href='http://blog.jquery.com/2008/03/' title='March 2008'>March 2008</a></li>
+	<li><a href='http://blog.jquery.com/2008/02/' title='February 2008'>February 2008</a></li>
+	<li><a href='http://blog.jquery.com/2008/01/' title='January 2008'>January 2008</a></li>
+	<li><a href='http://blog.jquery.com/2007/12/' title='December 2007'>December 2007</a></li>
+	<li><a href='http://blog.jquery.com/2007/11/' title='November 2007'>November 2007</a></li>
+	<li><a href='http://blog.jquery.com/2007/10/' title='October 2007'>October 2007</a></li>
+	<li><a href='http://blog.jquery.com/2007/09/' title='September 2007'>September 2007</a></li>
+	<li><a href='http://blog.jquery.com/2007/08/' title='August 2007'>August 2007</a></li>
+	<li><a href='http://blog.jquery.com/2007/07/' title='July 2007'>July 2007</a></li>
+	<li><a href='http://blog.jquery.com/2007/06/' title='June 2007'>June 2007</a></li>
+	<li><a href='http://blog.jquery.com/2007/05/' title='May 2007'>May 2007</a></li>
+	<li><a href='http://blog.jquery.com/2007/04/' title='April 2007'>April 2007</a></li>
+	<li><a href='http://blog.jquery.com/2007/03/' title='March 2007'>March 2007</a></li>
+	<li><a href='http://blog.jquery.com/2007/02/' title='February 2007'>February 2007</a></li>
+	<li><a href='http://blog.jquery.com/2007/01/' title='January 2007'>January 2007</a></li>
+	<li><a href='http://blog.jquery.com/2006/12/' title='December 2006'>December 2006</a></li>
+	<li><a href='http://blog.jquery.com/2006/11/' title='November 2006'>November 2006</a></li>
+	<li><a href='http://blog.jquery.com/2006/10/' title='October 2006'>October 2006</a></li>
+	<li><a href='http://blog.jquery.com/2006/09/' title='September 2006'>September 2006</a></li>
+	<li><a href='http://blog.jquery.com/2006/08/' title='August 2006'>August 2006</a></li>
+	<li><a href='http://blog.jquery.com/2006/07/' title='July 2006'>July 2006</a></li>
+	<li><a href='http://blog.jquery.com/2006/06/' title='June 2006'>June 2006</a></li>
+	<li><a href='http://blog.jquery.com/2006/05/' title='May 2006'>May 2006</a></li>
+	<li><a href='http://blog.jquery.com/2006/04/' title='April 2006'>April 2006</a></li>
+	<li><a href='http://blog.jquery.com/2006/03/' title='March 2006'>March 2006</a></li>
+	<li><a href='http://blog.jquery.com/2006/02/' title='February 2006'>February 2006</a></li>
+	<li><a href='http://blog.jquery.com/2006/01/' title='January 2006'>January 2006</a></li>
+		</ul>
+	</aside>
+</div>
+</div>
+
+	</div>
+</div>
+
+<footer class="clearfix simple">
+	<div class="constrain">
+		<div class="row">
+			<div class="eight columns">
+				<h3><span>Quick Access</span></h3>
+				<div class="cdn">
+					<strong>CDN</strong>
+					<input value="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+				</div>
+				<div class="download">
+					<strong><a href="http://jquery.com/download/">Download jQuery 1.9.1 →</a></strong>
+				</div>
+				<ul class="footer-icon-links">
+					<li><a class="icon-github" href="http://github.com/jquery/jquery">GitHub <small>jQuery <br>Source</small></a></li>
+					<li><a class="icon-group" href="http://forum.jquery.com">Forum <small>Community <br>Support</small></a></li>
+					<li><a class="icon-warning-sign" href="http://bugs.jquery.com">Bugs <small>Issue <br>Tracker</small></a></li>
+				</ul>
+			</div>
+
+			<div class="four columns">
+				<h3><span>Books</span></h3>
+				<ul class="books">
+					<li>
+						<a href="http://link.packtpub.com/S3Fr9Q">
+							<span class="bottom"><img src="http://blog.jquery.com/wp-content/themes/jquery/content/books/learning-jquery-3rd-ed.jpg" alt="Learning jQuery 3rd Edition by Karl Swedberg and Jonathan Chaffer" width="92" height="114" /></span>
+							<strong>Learning jQuery Third Edition</strong><br />
+							<cite>Karl Swedberg and Jonathan Chaffer</cite>
+						</a>
+					</li>
+					<li>
+						<a href="http://www.manning.com/affiliate/idevaffiliate.php?id=648_176">
+							<span><img src="http://blog.jquery.com/wp-content/themes/jquery/content/books/jquery-in-action.jpg" alt="jQuery in Action by Bear Bibeault and Yehuda Katz" width="92" height="114" /></span>
+							<strong>jQuery in Action</strong><br />
+							<cite>Bear Bibeault and Yehuda Katz</cite>
+						</a>
+					</li>
+					<li>
+						<a href="http://jqueryenlightenment.com/">
+							<span><img src="http://blog.jquery.com/wp-content/themes/jquery/content/books/jquery-enlightenment.jpg" alt="jQuery Enlightenment by Cody Lindley" width="92" height="114" /></span>
+							<strong>jQuery Enlightenment</strong><br />
+							<cite>Cody Lindley</cite>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div id="legal">
+			<ul class="footer-site-links">
+				<li><a class="icon-pencil" href="http://learn.jquery.com/">Learning Center</a></li>
+				<li><a class="icon-group" href="http://forum.jquery.com/">Forum</a></li>
+				<li><a class="icon-wrench" href="http://api.jquery.com/">API</a></li>
+				<li><a class="icon-twitter" href="http://twitter.com/jquery">Twitter</a></li>
+				<li><a class="icon-comments" href="http://irc.jquery.org/">IRC</a></li>
+			</ul>
+			<p class="copyright">
+				Copyright 2013 <a href="http://jquery.org/team/">The jQuery Foundation</a>.<br>
+				<span class="sponsor-line"><a href="http://mediatemple.net" rel="noindex,nofollow" class="mt-link">Web hosting by Media Temple</a> | <a href="http://jquery.org/sponsors/">View sponsors</a></span>
+			</p>
+		</div>
+	</div>
+</footer>
+
+
+</body>
+</html>
+
+<!-- Performance optimized by W3 Total Cache. Learn more: http://www.w3-edge.com/wordpress-plugins/
+72.771.38.1
+Page Caching using disk (enhanced)
+
+Served from: blog.jquery.com @ 2013-02-22 04:44:56 -->

@@ -1,0 +1,172 @@
+//(nas_Otome_setup_data20160601)
+/*===========================	これはインストール設定ファイル	===============================*/
+//第一行目のシグネチャは、インストーラに記述された変数と一致する必要があるので、注意 これがデータの識別子となります。任意
+/*
+	インストールを記述するにはこのファイルを書き直します。
+	
+$id:$
+*/
+//								**インストーラー動作条件
+
+//アプリケーションが想定アプリで想定バージョンである事
+nas_Installer.locale="ja_JP";//限定…この判定はどうも簡単じゃなさそう
+//インストールパッケージ名称とバージョン
+nas_Installer.pkgName    ="nas_animation_Tools";//package名称(文字列)インストール済みの情報ファイル名にするのでファイル名使用可能なパッケージ名にしといてくらさい。
+nas_Installer.pkgVersion ="1.0.0";//バージョン番号はドット区切り3ブロックの数値文字列で
+
+/*
+AE用セットアップスクリプト用
+
+ライブラリにインストール済みのスクリプトを、AEのスクリプトフォルダにコピーして
+起動時に開始できるようにする
+更にスクリプトランチャー等のパネルアプリケーションをコピーする
+コントロールパネルの設定は一時閉鎖
+*/
+
+//置き替え先のパスを文字列で設定してください
+
+//nas_Installer.replacePath.nas=app.path + "/"+ localize("$$$/ScriptingSupport/InstalledScripts=Presets/Scripts") + "/nas";//%NAS%
+nas_Installer.replacePath.nas=Folder.scripts,toString() + "/";//%NAS%
+
+//新バージョン2011 からはターゲットパスを こちらに変更　ただし　plugin システムメニューに出すスクリプトは別
+
+//　Ps用のライブラリやスクリプトはこちらで、AE用は変わらずAEプログラムフォルダのスクリプトロケーションにインストールする。
+//　コードは可能な限り共有　ターゲット設定もしておいたほうがよさげ
+// localize("$$$/BenderSig/App/ScriptingSupport/InstalledScripts=Adobe/Adobe Photoshop CS4/Presets/Scripts") + "/"
+//app.path + "/"+ localize("$$$/ScriptingSupport/InstalledScripts=Presets/Scripts") + "/nas"
+
+nas_Installer.replacePath.install=Folder.userData.fullName+"/nas";//%INSTALL%
+
+//nas_Installer.replacePath.startup+"/プリセット/スクリプト/nas";//%INSTALL%
+//インストール先は必須(アンインストール情報を置くため)標準でNASフォルダでOK 
+
+nas_Installer.replacePath.user=Folder.userData.fullName+"/nas";//"ここを好きな文字列に置き換えて使ってください";//%USER% ユーザ指定可能
+
+//=================================以下にアプリケーション・バージョンの制限を正規表現で記述
+
+nas_Installer.myAppRegExp=new RegExp("^Adobe\\ AfterEffects$");//application.name
+/*
+Adobe Photoshop
+Adobe AfterEffects
+Extend Toolkit
+Adobe Bridge
+
+などの "app.name"で参照される文字列を正規表現でフィルタする。
+*/
+nas_Installer.myVersionRegExp=new RegExp("^(20|19|18|17|16|15|14|13|12|11|10|9)\\.[012]\\..+$");//version.name
+/*
+バーション番号を正規表現でフィルタ
+ */
+
+
+//インストールアクションのリストを配列 nas_Installer.myInstall に記述
+/*
+1 要素が 1 レコード(=コマンド)
+配列要素はすべて配列
+コマンド配列 の0番要素をコマンド文字列として1番要素以降を引数として実行
+以下のコマンドが使用可能
+["mkdir"	,引数	]	パス文字列(置換あり)
+["rmdir"	,引数	]	パス文字列(置換あり)
+[   "cd"	,引数	]	パス文字列(置換あり)
+[   "cp"	,引数,引数]	パス文字列(置換あり)
+[   "mv"	,引数,引数]	パス文字列(置換あり)
+[   "rm"	,引数	]	パス文字列(置換あり)
+[Function	,引数	]	引数は文字列
+[ "パス"	,"パス"	]	単純にファイルパス文字列ふたつ 前者を後者へコピー
+["confirm"	,引数	]	確認用メッセージ(中断機能付)
+["shutdown"]	引数なし	アプリケーションを終了する。
+分岐とかループが必要ならばとりあえずは直接書きましょう。
+
+パス文字列はインストーラを基点に相対パスで記述
+コマンドはインデックスの若い順に実行される
+存在しないディレクトリへの複製はおこなわない。エラーを記録
+ディレクトリの削除は、カラの場合のみ成功(そのままFolder.remove()を実行)。
+関数を単独で置くと1番要素を引数に実行
+
+
+*/
+//install手順とuninstall手順は当たり前だけど別なので注意
+/*
+
+	このファイルは、PhotoshopをターゲットにMacのみバージョンで分岐しています。
+
+各環境のインストールとアンインストール手順を記述してこのファイルの末尾で実行用のバッファへ当該環境の
+手順をインストールします。
+
+*/
+//Mac/Windowsほか 対象全バージョン用
+/*
+	複製内容
+		Startup/nasAeStartup.jsx
+		Shutdown/nasAeShutdown.jsx
+		ScriptUI\ Panels/NasOtome.jsx
+		ScriptUI\ Panels/nasTCJump2.jsx
+		ScriptUI\ Panels/NasMenuII+.jsx
+		ScriptUI\ Panels/dbgConsole.jsx
+		
+		
+*/
+nas_Installer.myInstall=[
+["confirm",localize({
+en:"starting Install package nasOtome \n documents that are currently open, we recommend to close.\nis good to start?",
+ja:"nasOtomeパッケージ をセットアップします。\n 開いているドキュメントは閉じておいてください。\nはじめて良いですか?"
+})],
+
+["%SOURCE%/scripts/otome/nasAeStartup.jsx","%NAS%/Startup/nasAeStartup.jsx"],
+["%SOURCE%/scripts/otome/nasAeShutdown.jsx","%NAS%/Shutdown/nasAeShutdown.jsx"],
+["%SOURCE%/scripts/otome/NasOtome.jsx","%NAS%/ScriptUI Panels/NasOtome.jsx"],
+["%SOURCE%/scripts/otome/nasTCJump2.jsx","%NAS%/ScriptUI Panels/nasTCJump2.jsx"],
+["%SOURCE%/scripts/otome/NasMenuII+.jsx","%NAS%/ScriptUI Panels/NasMenuII+.jsx"],
+["%SOURCE%/scripts/otome/dbgConsole.jsx","%NAS%/ScriptUI Panels/dbgConsole.jsx"],
+
+["confirm",localize({
+en:"I think that it is the way the error was able to install the RenderOtome package if too much there.\nIt's safer you restart the AfterEffects for just in case",
+ja:"レンダー乙女パッケージをインストールできたような気がします。\nAfterEffetsを再起動しておいてください。"
+})]
+];
+
+nas_Installer.myUnInstall=[
+["confirm",localize({
+en:"Uninstall satrtup for RenderOtome.\nIt does not perform the deletion of the library.\nIs it ok?",
+ja:"レンダー乙女関連スタートアップをアンインストールします。\nライブラリは削除されません\n始めて良いですか?"
+})],
+["rm","%NAS%/Startup/nasAeStartup.jsx"],
+["rm","%NAS%/Shutdown/nasAeShutdown.jsx"],
+["rm","%NAS%/ScriptUI Panels/NasOtome.jsx"],
+["rm","%NAS%/ScriptUI Panels/nasTCJump2.jsx"],
+["rm","%NAS%/ScriptUI Panels/NasMenuII+.jsx"],
+["rm","%NAS%/ScriptUI Panels/dbgConsole.jsx"],
+[nas_Installer.showMsg,localize({
+en:"I think that it can be uninstalled.\nPlease try to setup again, if necessary.",
+ja:"アンインストールできたと思います。\nもし必要なら再度セットアップしてみてください。"
+})]
+];
+/*
+
+
+["rmdir","%USER%/scripts"],
+["rm","%USER%/scripts/nasPsAxe.jsx"],
+
+["rmdir","%USER%/lib/resource"],
+["rmdir","%USER%/lib/(temp)"],
+["rmdir","%USER%/lib"],
+["rmdir","%USER%/lib/resource/Icons"],
+["rmdir","%USER%/lib/resource/Frames"],
+["rmdir","%USER%/lib/resource/Pegs"],
+["rmdir","%USER%"],
+*/
+/*===========================	これはインストール設定ファイル	===============================*/
+/*
+	このファイルは、Adobe Script のソースファイルです。
+	環境が整った時点でインストーラ内でevalされて各パッケージ別の情報を設定します。
+	このファイル内で以下のプロパティの設定が終了している事
+
+	nas_Installer.replacePath.nas	nasのインストール先
+	nas_Installer.replacePath.install	パッケージのインストール先
+	nas_Installer.replacePath.user	置換用ユーザパス(任意)
+
+	nas_Installer.myInstall	インストール手順
+	nas_Installer.myUnInstall	アンインストール手順
+
+		書式は…コメント読んでね
+ */

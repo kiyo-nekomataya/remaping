@@ -1,0 +1,3259 @@
+﻿/*
+ *	nas-共用メニューアイテムリスト
+ *このリストに全アプリケーションのメニューアイテムを記述する
+ *このリストのデータは翻訳のベースとなる
+ *各個のアプリケーションのメニューはこのリストのキーワードを指定して作成する
+ *
+ *アプリケーションのメニューは、以下の3種を指定可能
+ *	アプリケーションメニュー（ドロップダウンメニュー）
+ *	アイコンバーメニュー
+ *	コンテキストメニュー
+ *
+ *ソースデータのフォーマットは以下
+ *
+ *<整数ID>
+ *	type:<window|submenu|command|normal|separator|========|checkbox|radio|selector|button|text ...必須>
+ *	key:<アイテムキーワード・ユニーク・必須>
+ *	platform:<win|mac|unix|WEB|CEP|ESTK|NODE|Electron ...・任意>
+ *	app:<アプリケーションキーワード・任意 sysはアプリ共通> pman|xpse|
+ *	label:<メニューラベル・任意>
+ *	role:<ロール文字列・任意 func優先>
+ *	func:<実行関数・任意 roleを上書きする>
+ *	hotkey:<ショートカットキー・任意>
+ *	icon:<アイコンクラス名・任意>
+ *	region:<リジョンクラス名・任意>
+ *	image:<画像URL・任意>
+ *	submenu:<従属アイテム・配列・任意>
+ *	description:<ツールチップ文字列・任意 ツールチップオプションで表示>
+ *	note:<アイテムへの注釈・任意 自動作成ヘルプで表示>
+ *
+ * type,role,labelすべてが欠損すると初期化に失敗するケースあり type:windowはElectronと互換がないので欠損扱いになるので注意
+ *
+ *ID/type/key/以外のプロパティは任意（なくても良い）
+ *整数IDは、セッション内でユニークではあるが、リスト更新ごとに読み込み順にリセットされるので数値自体は意味を持たないので注意
+ *
+ *ソース上はアイテムの区分の役目のみを持っている
+ *
+ *タイプキーワード詳細
+ *type
+ *	window|submenu		サブウインドウ｜サブメニューを持つアイテムトレーラー(electron互換)
+ *	command|normal		ファンクションを実行するコマンド(electron互換)
+ *	separator|========	アイテム間の区切りを示す境界アイテム(electron互換)
+ *	checkbox			チェックボックスメニュー(electron互換)
+ *	radio				ラジオボタンメニュー(electron互換)
+ *	selector			セレクターメニュー
+ *	slider				スライダーメニュー
+ *	input				テキストインプットメニュー
+ *	button				ボタンメニュー
+ *	text				ファンクションをもたないテキストアイテム
+ *	url|file			別ウインドウでアドレスを開く(preload.js付き)
+ *	URL|FILE			指定アドレスへページ遷移する(preload.js付き)
+ *	url-|file-			別ウインドウでアドレスを開く(preload.jsなし)
+ *	URL-|FILE-			指定アドレスへページ遷移する(preload.jsなし)
+ *	openEx  			指定のアドレス|ファイルをシステムで開く(electron互換)
+ *
+ *	以下テンプレート
+ *----------------------------------------
+0
+	type:command
+	key:
+	platform:
+	app:
+	label:
+	role:
+	func:
+	hotkey:
+	icon:
+	image:
+	submenu:
+	description:
+	note:
+ */
+0
+	type:command
+	key:NOP
+	label:nop
+	func:function nop(){}
+	icon:NOP
+	submenu:
+	description:nop
+	note:有効な動作が存在しない空オブジェクト 未定値に割り付ける特殊アイテム
+0
+	type:command
+	key:UIReset
+	label:ui-reset
+	func:["menu","xUI.setToolView(\"default\");"]
+	icon:iconButton-reload
+	region:headbar
+	description:ツール・パネル類を初期値にリセットする
+	note:ツール・パネル類を初期値にリセットする
+0
+	type:window
+	key:applicationMenu
+	platform:mac && !(WEB)
+	role:applicationMenu
+	submenu:
+	description:ApplicationMenu
+	note:アプリケーション全体に関するメニュトレーラーmacネイティブメニュー専用
+0
+	type:command
+	key:about
+	role:about
+	submenu:
+	icon:iconButton-notice
+	description:aboutApplication
+	note:アバウトパネルを呼ぶ汎用ロール
+0
+	type:separator
+	key:separator
+	label:========
+	submenu:
+	note:メニューセパレータアイテム
+0
+	type:separator
+	key:separatorNW
+	platform:!(WEB)
+	label:--------
+	submenu:
+	note:WEBでは表示されないメニューセパレータ
+0
+	type:command
+	key:services
+	platform:mac && !(WEB)
+	role:services
+	submenu:
+	description:サービスメニューを呼ぶ
+	note:mac専用サービスメニュー呼び出しロール
+0
+	type:command
+	key:hide
+	platform:mac && !(WEB)
+	role:hide
+	submenu:
+	description:アプリケーションを隠す
+	note:mac専用
+0
+	type:command
+	key:hideothers
+	platform:mac && !(WEB)
+	role:hideothers
+	submenu:
+	description:他を隠す
+	note:mac専用
+0
+	type:command
+	key:unhide
+	platform:mac && !(WEB)
+	role:unhide
+	submenu:
+	description:アプリケーションを表示
+	note:mac専用
+0
+	type:command
+	key:quit
+	platform:mac && !(WEB)
+	role:quit
+	submenu:
+	description:アプリケーション終了
+	note:mac専用
+0
+	type:command
+	key:exit
+	platform:!(mac)
+	role:quit
+	submenu:
+	description:アプリケーション終了
+	note:mac以外
+0
+	type:command
+	key:application_managementMode
+	label:managementmode
+	submenu:
+	icon:iconButton-cat
+	description:管理モード切り替え
+	note:制作管理メニューを呼ぶ
+0
+	type:command
+	key:application_chgLoacle
+	label:chglocale
+	submenu:
+	icon:iconButton-dialog
+	description:chglocale_description
+	note:アプリケーションの言語を切替
+0
+	type:command
+	key:application_dbgMode
+	label:dbgmode
+	submenu:
+	icon:iconButton-debug
+	description:dbgmode_description
+	note:デバッグモード切替
+0
+	type:command
+	key:application_reload
+	label:reload
+	submenu:
+	icon:iconButton-reload
+	description:reload_description
+	note:アプリケーションを再読込する
+0
+	type:command
+	key:application_bgColor
+	label:backgroundcolor
+	submenu:
+	icon:iconButton-gia
+	description:sheetbackgroundcolor
+	note:シート背景色の設定（拡張予定）
+0
+	type:window
+	key:documentSelector
+	label:browse
+	hotkey:[CmdOrCtrl],[O]
+	submenu:
+	icon:iconButton-open_X
+	description:browse_description
+	note:ドキュメントセレクタを開いて共有上のドキュメントを選ぶ
+0
+	type:command
+	key:documentSelector_lineSelect
+	label:nodechart
+	submenu:
+	icon:iconButton-mark
+	description:nodechart_description
+	note:制作パスのラインを選択
+0
+	type:command
+	key:documentSelector_jobSelect
+	label:jobselector
+	submenu:
+	icon:iconButton-markON
+	description:jobselector_description
+	note:作業ノードを選択
+0
+	type:command
+	key:documentSelector_toReference
+	label:reference
+	submenu:
+	icon:iconButton-toReferenece
+	description:copytoreference
+	note:選択したジョブを参照エリアへ
+0
+	type:command
+	key:documentSelector_open
+	label:open
+	submenu:
+	icon:iconButton-get
+	description:importdata
+	note:選択したドキュメントを開く
+0
+	type:command
+	key:documentSelector_search
+	label:search
+	icon:search
+	submenu:
+	icon:iconButton-search
+	description:repositorysearch_description
+	note:対象リポジトリ内でドキュメントを検索
+0
+	type:command
+	key:documentSelector_close
+	label:close
+	submenu:
+	icon:iconButton-close
+	description:windowclose_description
+	note:ドキュメントセレクタを閉じる
+0
+	type:command
+	key:documentSelector_repository
+	label:chgrepository
+	submenu:
+	icon:iconButton-switch
+	description:chgrepository_description
+	note:共有を切替
+0
+	type:command
+	key:documentSelector_title
+	label:title
+	submenu:
+	icon:iconButton-product
+	description:タイトル選択
+	note:タイトルでフィルタ
+0
+	type:command
+	key:documentSelector_number
+	label:number
+	submenu:
+	icon:iconButton-sci
+	description:カット番号
+	note:カット番号でフィルタ
+0
+	type:command
+	key:documentSelector_status
+	label:status
+	submenu:
+	icon:iconButton-status
+	description:ステータス
+	note:ステータスでフィルタ
+0
+	type:command
+	key:documentSelector_sortReset
+	label:reset
+	submenu:
+	description:ソート解除
+	note:ソート条件を解除
+0
+	type:command
+	key:documentSelector_sortByName
+	label:sortByName
+	submenu:
+	description:番号ソート
+	note:カット名（番号）でソート
+0
+	type:command
+	key:documentSelector_sortByStage
+	label:sortByStage
+	submenu:
+	description:工程ソート
+	note:工程でソート
+0
+	type:command
+	key:documentSelector_sortByUid
+	label:sortByUid
+	submenu:
+	description:ユーザソート
+	note:最終作業ユーザでソート
+0
+	type:command
+	key:documentSelector_sortByDate
+	label:sortByDate
+	submenu:
+	description:日付ソート
+	note:最終更新日付でソート
+0
+	type:command
+	key:documentSelector_sortByStatus
+	label:sortByStatus
+	submenu:
+	description:ステータスソート
+	note:作業ステータスでソート
+0
+	type:command
+	key:documentSelector_line
+	label:line
+	submenu:
+	description:ライン
+	note:ラインでフィルタ
+0
+	type:command
+	key:documentSelector_type
+	label:type
+	submenu:
+	description:タイプ
+	note:データ種別でフィルタ
+0
+	type:command
+	key:documentSelector_selectEpisode
+	label:selectEpisode
+	submenu:
+	description:エピソード
+	note:エピソード選択
+0
+	type:command
+	key:documentSelector_selectEntry
+	label:selectEntry
+	submenu:
+	description:ドキュメント
+	note:ドキュメント選択
+0
+	type:window
+	key:nodeControl
+	lable:工程管理
+	submenu:
+	note:ノードコントロールコマンド群 常時表示
+0
+	type:command
+	key:nodeControl_checkin
+	label:作業開始
+	icon:checkin
+	submenu:
+	description:作業チェックイン
+	note:現在のドキュメントに作業チェックインする
+0
+	type:command
+	key:nodeControl_store
+	label:作業保存
+	icon:store
+	submenu:
+	description:作業保存
+	note:現在のドキュメントを保存する
+0
+	type:command
+	key:nodeControl_checkout
+	label:作業終了
+	icon:checkout
+	submenu:
+	description:作業チェックアウト
+	note:現在のドキュメントから作業チェックアウトする
+0
+	type:command
+	key:nodeControl_activate
+	label:作業再開
+	icon:activate
+	submenu:
+	description:作業再開
+	note:以前の作業に再度チェックインする
+0
+	type:command
+	key:nodeControl_discard
+	label:作業破棄
+	icon:destroy
+	submenu:
+	description:編集を破棄して閉じる
+	note:現在の作業を廃棄して閉じる 取消不能
+0
+	type:command
+	key:nodeControl_deactivate
+	label:作業保留
+	icon:deactivate
+	submenu:
+	description:編集を保留する
+	note:現在の作業チェックイン状態を保持して止める
+0
+	type:command
+	key:nodeControl_receipt
+	label:作業検収
+	icon:receipt
+	submenu:
+	description:工程を閉じて次の工程を開く
+	note:工程の終了を確認して工程を閉じる＝つぎの工程を開く（管理メニュー）
+0
+	type:command
+	key:nodeControl_salvageJob
+	label:作業引揚
+	icon:salvage
+	submenu:
+	description:強制的に作業を閉じる
+	note:終了していない作業を強制的に閉じる（引揚）（管理メニュー）
+0
+	type:command
+	key:nodeControl_abort
+	label:制作中断
+	icon:abort
+	submenu:
+	description:制作を中断する
+	note:エントリをソフトウェア的に削除する（欠番処理）（管理メニュー）
+0
+	type:command
+	key:nodeControl_branch
+	label:工程分岐
+	icon:branch
+	submenu:
+	description:ラインを分岐する
+	note:任意の工程の終端から並行作業を立ち上げる（管理メニュー）
+0
+	type:command
+	key:nodeControl_offline
+	label:オフライン発行
+	icon:branch
+	submenu:
+	description:オフライン分岐を発行
+	note:オフライン用データを書き出す（管理メニュー）
+0
+	type:command
+	key:nodeControl_merge
+	label:ラインマージ
+	icon:merge
+	submenu:
+	description:オフライン分岐を統合
+	note:オフライン用データを統合する（管理メニュー）
+0
+	type:window
+	key:xpstInf
+	label:タイムシート情報
+	icon:xps
+	submenu:
+	description:タイムシート情報
+	note:タイムシート(Xpst)情報パネル _ 新規作成を兼ねる
+0
+	type:command
+	key:xpstInf_close
+	label:close
+	submenu:
+	description:閉じる
+	note:パネルを閉じる
+0
+	type:window
+	key:newxMap
+	label:新規エントリ
+	icon:xmap
+	submenu:
+	description:カット袋を新規に登録
+	note:＊新規のエントリを作成（管理メニュー）
+0
+	type:command
+	key:newxMap_close
+	label:close
+	submenu:
+	description:閉じる
+	note:新規作成パネルを閉じる
+0
+	type:window
+	key:inherit
+	label:兼用設定
+	icon:inherit
+	submenu:
+	description:兼用を追加
+	note:カット袋の兼用情報を編集作成（管理メニュー）
+0
+	type:command
+	key:inherit_close
+	label:close
+	submenu:
+	description:閉じる
+	note:パネルを閉じる
+0
+	type:command
+	key:extIO
+	label:Import/Export
+	submenu:
+	description:読み込み書き出しパネルを開く
+	note:入出力パネルを開く（デバッグ用）
+0
+	type:command
+	key:extIO_importDatas
+	label:import
+	hotkey:[CmdOrCtrl],[O]
+	icon:imp
+	submenu:
+	description:読込
+	note:アプリケーション環境でテキスト入力｜ファイル等で外部データを開く
+0
+	type:command
+	key:extIO_exportFSps
+	label:export
+	hotkey:[shift],[CmdOrCtrl],[S]
+	icon:exp
+	submenu:
+	description:書出
+	note:アプリケーション環境でテキスト｜ファイル等で外部にデータを出力
+0
+	type:command
+	key:extIO_downloadXps
+	label:Export as Xps
+	hotkey:[shift],[CmdOrCtrl],[S]
+	icon:cgiStore
+	submenu:
+	description:ダウンロード保存（XPS）
+	note:形式を指定してダウンロード保存（書出の部分メニュー）
+0
+	type:command
+	key:extIO_downloadTdts
+	label:Export as Tdts
+	icon:cgiStore
+	submenu:
+	description:ダウンロード保存（TDTS）
+	note:形式を指定してダウンロード保存（書出の部分メニュー）
+0
+	type:command
+	key:extIO_downloadXdts
+	label:Export as Xdts
+	icon:cgiStore
+	submenu:
+	description:ダウンロード保存（XDTS）
+	note:形式を指定してダウンロード保存（書出の部分メニュー）
+0
+	type:command
+	key:extIO_exportHTML
+	label:Export as html
+	icon:cgiStore
+	submenu:
+	description:表示用HTMLで書出し
+	note:形式を指定してダウンロード保存（書出の部分メニュー）
+0
+	type:command
+	key:extIO_buildActionSheet
+	label:アクションシート
+	icon:xps
+	submenu:
+	description:原画アクションシートを作成
+	note:原画アクションシートを作成して保存
+0
+	type:command
+	key:extIO_printHTML
+	label:Print HTML
+	icon:printer
+	submenu:
+	description:印刷プレビュー
+	note:印刷プレビュー
+0
+	type:command
+	key:extIO_printActionSheet
+	label:-- 印刷
+	icon:printer
+	submenu:
+	description:印刷プレビュー
+	note:印刷プレビュー
+0
+	type:command
+	key:extIO_exportEPS
+	label:Export as eps
+	submenu:
+	description:epsで画像書出し（実験中）
+	note:epsデータで書き出し（中止予定）
+0
+	type:command
+	key:extIO_exportPNG
+	label:Export as png
+	submenu:
+	description:画像書き出し
+	note:png形式で書き出し
+0
+	type:command
+	key:extIO_exportActionSheetPNG
+	label:-- PNG画像で保存
+	submenu:
+	description:画像書き出し
+	note:png形式で書き出し
+0
+	type:command
+	key:authorize
+	label:Authorize
+	submenu:
+	description:認証パネル
+	note:認証パネルを表示
+0
+	type:command
+	key:authorize_signInOut
+	label:Authorize
+	submenu:
+	description:サインイン/アウト
+	note:入力データを使用してサインイン/サインアウト
+
+0
+	type:window
+	key:selection
+	label:選択範囲
+	submenu:
+	description:選択範囲
+	note:選択範囲関連コマンド
+0
+	type:command
+	key:selection_selectAll
+	label:selectAll
+	hotkey:[CmdOrCtrl],[A]
+	icon:selectBox
+	submenu:
+	description:全選択
+	note:全体を選択範囲に
+0
+	type:command
+	key:selection_cut
+	label:Cut
+	hotkey:[CmdOrCtrl],[X]
+	icon:cut
+	submenu:
+	description:カット
+	note:選択範囲を切取
+0
+	type:command
+	key:selection_copy
+	label:Copy
+	hotkey:[CmdOrCtrl],[C]
+	icon:copy
+	submenu:
+	description:複写
+	note:選択範囲を複写
+0
+	type:command
+	key:selection_paste
+	label:Paste
+	hotkey:[CmdOrCtrl],[V]
+	icon:paste
+	submenu:
+	description:貼付け
+	note:ヤンクバッファ内容を貼付け
+/*xpstタイムライン関連*/
+0
+	type:window
+	key:edit_timeline
+	label:タイムライン
+	icon:layerName
+	submenu:
+	description:タイムライン編集
+0
+	type:command
+	key:edit_timeline_rename
+	label:名前を変更
+	submenu:
+	description:rename timeline label
+	note:タイムラインの名前を変更
+0
+	type:command
+	key:edit_timeline_tagname
+	label:editTrackTag
+	func:["menu","editTrackTag(xUI.Select[0]);"]
+	icon:layerName
+	submenu:
+	description:タイムライントラックタグ編集
+0
+	type:command
+	key:editTT_close
+	label:editTN_close
+	submenu:
+	description:閉じる
+	note:パネルを閉じる
+0
+	type:window
+	key:edit_xpst
+	label:edit_xpst
+	submenu:
+	description:タイムシート編集
+	note:タイムシート編集関連コマンド
+0
+	type:command
+	key:edit_xpst_clearTL
+	label:ClearTL
+	icon:clearTL
+	submenu:
+	description:一列クリア
+	note:タイムライントラックをクリア
+0
+	type:command
+	key:edit_xpst_clearSheet
+	label:ClearAll
+	icon:clearTL
+	submenu:
+	description:シートをクリア
+	note:タイムシート全体をクリア
+0
+	type:command
+	key:edit_xpst_insertBlank
+	label:InsertBlank
+	icon:blockInsert
+	submenu:
+	description:選択範囲にカラコマを挿入
+	note:選択範囲にブランクセルを挿入
+0
+	type:command
+	key:edit_xpst_blockRemove
+	label:BlockDelete
+	icon:blockRemove
+	submenu:
+	description:ブロックで削除
+	note:選択範囲をブロック削除
+0
+	type:command
+	key:edit_xpst_addSoundTrack
+	label:addSoundTrack
+	icon:addSoundTL
+	submenu:
+	description:音声トラック追加
+	note:選択トラックの右側に音響トラックを追加
+0
+	type:command
+	key:edit_xpst_addStilTL
+	label:addStilTL
+	icon:addStilTL
+	submenu:
+	description:静止画トラック追加
+	note:選択トラックの右側に静止画トラックを追加
+0
+	type:command
+	key:edit_xpst_addReplacementTL
+	label:addCellTL
+	icon:addReplacementTL
+	submenu:
+	description:動画トラック追加
+	note:選択トラックの右側に動画トラックを追加
+0
+	type:command
+	key:edit_xpst_addCameraTL
+	label:addCameraTL
+	icon:addCameraTL
+	submenu:
+	description:カメラを追加
+	note:選択トラックの右側にカメラワークトラックを追加
+0
+	type:command
+	key:edit_xpst_addGeometryTL
+	label:addStageworkTL
+	icon:addStageworkTL
+	submenu:
+	description:ステージワークを追加
+	note:選択トラックの右側にステージワークトラックを追加
+0
+	type:command
+	key:edit_xpst_addSfxTL
+	label:addSfxTL
+	icon:addEffectsTL
+	submenu:
+	description:効果を追加
+	note:選択トラックの右側に効果トラックを追加
+0
+	type:command
+	key:edit_xpst_insertTL
+	label:InsertTL
+	icon:insertTL
+	submenu:
+	description:トラック挿入
+	note:選択トラックの左側に動画トラックを挿入
+0
+	type:command
+	key:edit_xpst_deleteTL
+	label:DeleteTL
+	icon:removeTL
+	submenu:
+	description:トラック削除
+	note:選択範囲のトラックを削除
+0
+	type:commnad
+	key:edit_xpst_reformatTL
+	label:FormatTL
+	icon:reformat
+	submenu:
+	description:タイムライン整形
+0
+	type:command
+	key:edit_xpst_reormatSheet
+	label:FormatSheet
+	icon:reformat
+	submenu:
+	description:シートを整形
+	note:タイムシートを簡易整形
+0
+	type:command
+	key:edit_xpst_simplifyTL
+	label:simplifyTL
+	icon:reformat
+	submenu:
+	description:タイムライン単整形
+	note:選択範囲のタイムラインを単純化
+0
+	type:command
+	key:edit_xpst_simplifySheet
+	label:simplifySheet
+	icon:simplify
+	submenu:
+	description:タイムシート単整形
+	note:タイムシートを単純化
+0
+	type:command
+	key:edit_xpst_circle
+	label:◯かこみ
+	icon:addCircle
+	submenu:
+	description:丸囲い
+	note:シートセルを丸で囲む
+0
+	type:command
+	key:edit_xpst_angles
+	label:△かこみ
+	icon:addAngles
+	submenu:
+	description:三角囲い
+	note:シートセルを三角で囲む
+0
+	type:command
+	key:edit_xpst_brakcets
+	label:□かこみ
+	icon:addBrackets
+	submenu:
+	description:四角囲い
+	note:シートセルを四角で囲む
+0
+	type:command
+	key:edit_xpst_incr
+	label:incrementnum
+	icon:incr
+	submenu:
+	description:incrementnum_description
+	note:選択範囲のセルの値を繰上
+0
+	type:command
+	key:edit_xpst_decr
+	label:decrementnum
+	icon:decr
+	submenu:
+	description:decrementnum_description
+	note:選択範囲のセルの値を繰下
+0
+	type:command
+	key:edit_xpst_framerate
+	label:FPS
+	icon:framerate
+	submenu:
+	description:フレームレート設定
+	note:ドキュメントフレームレートを設定
+0
+	type:window
+	key:document
+	label:ドキュメント
+	submenu:
+	description:ドキュメント操作
+	note:ドキュメント全体の操作コマンド
+0
+	type:command
+	key:pman_openNewWindow
+	app:pman
+	label:新しいウインドウを開く
+	func:["menu","pman.reName.openNewWindow();"]
+	hotkey:[Shift],[CmdOrCtrl],[N]
+	submenu:
+	icon:iconButton-notice
+	description:新しいウインドウでフォルダを開く
+	note:新しいウインドウでフォルダを開く
+0
+	type:command
+	key:pman_openFolder
+	app:pman
+	label:フォルダを開く
+	func:["menu","pman.reName.openFolder();"]
+	hotkey:[CmdOrCtrl],[O]
+	submenu:
+	icon:iconButton-openFolder
+	description:作業フォルダを開く
+	note:作業対象フォルダを開く
+0
+	type:command
+	key:pman_closeFolder
+	app:pman
+	label:フォルダを閉じる
+	func:["menu","pman.reName.initItems([],\"\",true);"]
+	hotkey:[CmdOrCtrl],[N]
+	submenu:
+	icon:iconButton-closeFolder
+	description:フォルダを閉じてアイテムセットを初期化
+	note:フォルダを閉じてアイテムセットを初期化
+0
+	type:command
+	platform:!(WEB)
+	key:renameFiles
+	label:ファイルリネーム
+	func:["menu","pman.reName.renameItem();"]
+	hotkey:[Shift],[CmdOrCtrl],[Enter]
+	submenu:
+	icon:iconButton-layerName
+	note:アイテムのファイル名を一括変更・適用
+0
+	type:command
+	platform:!(WEB)
+	key:bakeItems
+	label:ベイク
+	func:["menu","pman.reName.bakeItems();"]
+	hotkey:[Shift],[CmdOrCtrl],[S]
+	submenu:
+	icon:iconButton-STOREFS
+	note:編集アイテムをベイクしてファイル保存
+0
+	type:command
+	platform:!(WEB)
+	key:packageItems
+	label:パッケージ
+	func:["menu","pman.reName.packageItems();"]
+	hotkey:[Shift],[CmdOrCtrl],[P]
+	submenu:
+	icon:iconButton-push
+	note:現在のアイテムを納品パッケージ
+0
+	type:command
+	key:downloadItemSet
+	label:ダウンロード
+	func:["menu","pman.reName.downloadItems();"]
+	submenu:
+	icon:iconButton-OPENNF
+	description:新しい名前でダウンロード
+	note:アイテム一括ダウンロード
+0
+	type:command
+	key:exportScript
+	label:スクリプト
+	func:["menu","pman.reName.exportScript();"]
+	submenu:
+	icon:iconButton-script
+	description:リネーム用スクリプトを書出
+	note:処理スクリプト出力
+0
+	type:command
+	key:pman_workSlip
+	label:伝票
+	func:["menu","pman.reName.setSlipNote();"]
+	submenu:
+	icon:iconButton-pen_3
+	description:伝票パネル
+0
+	type:command
+	key:pman_workSlip_print
+	label:印刷伝票
+	func:["menu","pman.reName.exportWorkSlip(true,\"印刷\");"]
+	submenu:
+	icon:iconButton-printer
+	description:伝票パネル
+0
+	type:command
+	key:pman_workSlip_scan
+	label:スキャン伝票
+	func:["menu","pman.reName.exportWorkSlip(true,\"スキャン\");"]
+	submenu:
+	icon:iconButton-DBentry
+	description:伝票パネル
+0
+	type:command
+	key:pman_statusWorkSlip
+	label:ステータス伝票
+	func:["menu","pman.reName.exportStatusWorkSlip();"]
+	submenu:
+	icon:iconButton-management
+	description:伝票パネル
+0
+	type:command
+	key:pman_editText
+	label:テキスト編集
+	func:["menu","pman.reName.editTextContent();"]
+	submenu:
+	icon:iconButton-pen_3
+	description:テキスト編集
+	note:xUI.sWitchPanelに変更予定
+0
+	type:window
+	key:editMenu
+	label:編集
+	role:editMenu
+	submenu:
+	note:編集メニュー
+0
+	type:command
+	key:pman_selectrelease
+	label:選択|解除
+	func:["menu","pman.reName.selectRelease();"]
+	submenu:
+	icon:iconButton-select
+	description:アイテムの選択と解除
+	note:アイテムの選択と解除
+0
+	type:command
+	key:undo
+	label:元に戻す
+	role:undo
+	func:["menu","xUI.undo();"]
+	submenu:
+	icon:iconButton-undo
+	note:変更を元に戻す
+0
+	type:command
+	key:redo
+	label:やり直す
+	role:redo
+	func:["menu","xUI.redo();"]
+	submenu:
+	icon:iconButton-redo
+	note:変更をやり直す
+0
+	type:command
+	key:cut
+	label:切取
+	role:cut
+	func:["menu","xUI.cut(event);"]
+	submenu:
+	icon:iconButton-cut
+	description:切取
+	note:切取
+0
+	type:command
+	key:copy
+	label:複写
+	role:copy
+	func:["menu","xUI.copy(event);"]
+	submenu:
+	icon:iconButton-copy
+	description:コピーする
+	note:複写
+0
+	type:command
+	key:paste
+	label:貼付
+	role:paste
+	func:["menu","xUI.paste(event);"]
+	submenu:
+	icon:iconButton-paste
+	description:ペーストする
+	note:貼付
+0
+	type:command
+	key:handleAll
+	label:全選択
+	func:["menu","pman.reName.selectAll(true);"]
+	submenu:
+	icon:iconButton-selectAllAF
+	description:全アイテム選択
+	note:全アイテム選択
+0
+	type:command
+	key:releaseAll
+	label:全解除
+	func:["menu","pman.reName.selectAll(false);"]
+	submenu:
+	icon:iconButton-removeAF
+	description:全アイテム解除
+	note:全アイテム解除
+0
+	type:command
+	key:removeItem
+	app:pman
+	label:削除
+	func:["menu","pman.reName.remove(undefined,true);"]
+	submenu:
+	icon:iconButton-remove
+	description:アイテムを削除
+	note:アイテムをリストから削除する
+0
+	type:command
+	key:releaseGrooup
+	app:pman
+	label:グループ解除
+	func:["menu","pman.reName.remove();"]
+	submenu:
+	icon:iconButton-remove
+	description:アイテムグループを解除
+	note:アイテムグループを解除して開平する
+0
+	type:command
+	key:insertNoteAsset
+	app:pman
+	label:ノートアイテムを挿入
+	func:["menu","pman.reName.insertNoteAsset();"]
+	submenu:
+	icon:iconButton-addText
+	description: 新規ノートアイテムを挿入
+	note:新規にノートアイテムを加える
+0
+	type:command
+	key:editNoteAsset
+	app:pman
+	label:書込
+	func:["menu","pman.reName.editNote.set(pman.reName.selection[0]);"]
+	submenu:
+	icon:iconButton-editText
+	description: ノートアイテムを編集
+	note:ノートアイテムを編集
+0
+	type:command
+	key:holdNoteAsset
+	app:pman
+	label:書込終了
+	func:["menu","pman.reName.editNote.unset();"]
+	submenu:
+	icon:iconButton-toLeft
+	description: ノートアイテム編集を中断
+	note:ノートアイテムの編集を中断
+0
+	type:command
+	key:insertCanvasAsset
+	app:pman
+	label:アイテム挿入
+	func:["menu","pman.reName.insertCanvasAsset();"]
+	submenu:
+	icon:iconButton-addItem
+	description: 新規アイテムを挿入
+	note:新規に画像アイテムを挿入する
+0
+	type:command
+	key:editCanvasAsset
+	app:pman
+	label:アイテム編集
+	func:["menu","pman.reName.canvasPaint.set(pman.reName.selection[0]);"]
+	submenu:
+	icon:iconButton-editItem
+	description: 画像アイテムを編集
+	note:画像アイテムをFabric.jsで編集
+0
+	type:command
+	key:holdCanvasAsset
+	app:pman
+	label:編集終了
+	func:["menu","pman.reName.canvasPaint.unset();"]
+	submenu:
+	icon:iconButton-toLeft
+	description: アイテムの編集を中断する
+	note:Fabric.jsの編集を中断
+0
+	type:command
+	key:sortItems
+	app:pman
+	label:並替
+	func:["menu","pman.reName.itemSort(false,true);"]
+	submenu:
+	icon:iconButton-sort
+	description:名前順に整列
+	note:アイテムを名前順に整列
+0
+	type:command
+	key:reverseItems
+	label:逆並び
+	func:["menu","pman.reName.itemSort(true,true);"]
+	submenu:
+	icon:iconButton-reverse
+	description:アイテムの順序を逆転
+	note:逆順
+0
+	type:command
+	key:pman_hide
+	label:アイテムを隠す
+	app:pman
+	func:["menu","pman.reName.hide();"]
+	description:選択したアイテムを隠す
+	note:toolboxitems
+	icon:iconButton-hide
+0
+	type:command
+	key:pman_hideothers
+	label:他を隠す
+	app:pman
+	func:["menu","pman.reName.hide(undefined,true);"]
+	description:他のアイテムを隠す
+	note:toolboxitems
+	icon:iconButton-hideN
+0
+	type:command
+	key:pman_unhide
+	label:すべて表示
+	app:pman
+	func:["menu","pman.reName.hide([],true,\"show\");"]
+	description:非表示のアイテムをすべて表示
+	note:toolboxitems
+	icon:iconButton-eye
+0
+	type:command
+	key:pasteAndMatchStyle
+	platform:mac && ! WEB
+	label:ペーストしてスタイルを合わせる
+	role:pasteAndMatchStyle
+	submenu:
+	note:形式を合わせて貼付
+0
+	type:command
+	key:delete
+	platform:mac && ! WEB
+	label:削除
+	role:delete
+	submenu:
+	note:削除
+0
+	type:window
+	key:Speech
+	platform:mac && !(WEB)
+	label:スピーチ
+	role:Speech
+	submenu:
+	description:読み上げ
+	note:読み上げメニュー
+0
+	type:command
+	key:Speech_startSpeaking
+	platform:mac && !(WEB)
+	label:読み上げを開始
+	role:startSpeaking
+	submenu:
+	note:読み上げ開始
+0
+	type:command
+	key:Speech_stopSpeaking
+	platform:mac && !(WEB)
+	label:読み上げを停止
+	role:stopSpeaking
+	submenu:
+	note:読み上げ停止
+0
+	type:window
+	key:historyMenu
+	label:history
+0
+	type:window
+	key:reName_historyMenu
+	label:history
+	
+0
+	type:command
+	key:reName_history_bwd
+	label:戻る
+	func:["menu","pman.reName.history.select('bwd');"]
+	icon:iconButton-goBWD
+	description:ヒストリを戻る
+	note:ヒストリ
+0
+	type:command
+	key:reName_history_fwd
+	label:進む
+	func:["menu","pman.reName.history.select('fwd');"]
+	icon:iconButton-goFWD
+	description:ヒストリを進める
+	note:ヒストリ
+0
+	type:command
+	key:reName_history_remove
+	label:削除
+	func:["menu","pman.reName.history.remove();"]
+	icon:iconButton-remove
+	description:ヒストリアイテムを削除
+	note:
+0
+	type:command
+	key:reName_history_init
+	label:クリア
+	func:["menu","pman.reName.history.init();"]
+	icon:iconButton-init
+	description:ヒストリを初期化
+	note:ヒストリを全削除
+0
+	type:selector
+	key:reName_history_list
+	label:リスト
+	size:20
+	func:pman.reName.history.select(parseInt(arguments[0]))
+	submenu:
+	options:return pman.reName.history.dump();
+	icon:iconButton-list
+	description:リストを出力
+	note:デバッグ用
+0
+	type:command
+	key:pullDownMenu
+	platform:WEB && !(Electron)
+	label:メニュー
+	func:["menu","xUI.sWitchPanel(\"menu\",\"switch\");"]
+	description:プルダウンメニュー切り替え
+	note:プルダウンメニュー切り替え
+0
+	type:window
+	key:reName
+	label:リネーム
+	submenu:
+	description:
+	note:リネームメニュー
+0
+	type:checkbox
+	key:prefix
+	label:prefixButton
+	func:["menu","xUI.sWitchPanel(\"prefix\");"]
+	submenu:
+	icon:iconButton-prefix
+	description:グループプレフィックスメニュー切替
+	note:グループプレフィックスメニューを表示｜非表示
+0
+	type:checkbox
+	key:suffix
+	label:postfixButton
+	func:["menu","xUI.sWitchPanel(\"suffix\");"]
+	submenu:
+	icon:iconButton-postfix
+	description:アイテムポストフィックスメニュー切替
+	note:アイテムポストフィックスメニューを表示｜非表示
+0
+	type:checkbox
+	key:search
+	label:検索パネル
+	func:["menu","xUI.sWitchPanel(\"Search\");"]
+	submenu:
+	icon:iconButton-search
+	description:検索・置換
+	note:検索置換パネル
+0
+	type:command
+	key:searchPnl
+	label:検索パネル
+	func:["menu","xUI.sWitchPanel(\"Search\");"]
+	submenu:
+	icon:iconButton-search
+	description:検索・置換
+	note:検索置換パネル
+0
+	type:checkbox
+	key:thumbnail
+	label:サムネイルコントロール
+	func:["menu","xUI.sWitchPanel(\"ThumbnailSize\");"]
+	submenu:
+	icon:iconButton-thumbnail
+	description:サムネイルコントロール
+	note:サムネイルコントロールパネル
+0
+	type:checkbox
+	key:preview
+	label:ズーム
+	func:["menu","xUI.sWitchPanel(\"PreviewSize\");"]
+	submenu:
+	icon:iconButton-zoom
+	description:ズームコントロール
+	note:画面ズームコントロール
+
+0
+	type:window
+	key:flipMenu
+	label:簡易再生
+	submenu:
+	note:簡易再生(指パラ)
+0
+	type:checkbox
+	key:flipControl
+	label:フリップ再生
+	func:["menu","xUI.sWitchPanel(\"flip_control\");"]
+	submenu:
+	icon:iconButton-preview
+	description:フリップコントロール
+	note:パラパラ再生機能のコントロールパネル
+0
+	type:checkbox
+	key:flipSeekbar
+	label:シークバー
+	func:["menu","xUI.sWitchPanel(\"flip_seekbar\");"]
+	icon:iconButton-seekbar
+	description:フリップシークバー
+	note:パラパラ機能のシークバーコントロール
+0
+	type:checkbox
+	key:lightBoxControl
+	label:ライトボックス
+	func:["menu","xUI.sWitchPanel(\"lightBoxControl\");"]
+	icon:iconButton-ONS
+	description:lightboxControll
+	note:ライトボックススイッチ
+0
+	type:checkbox
+	key:lightBoxProp
+	label:ライトボックス設定
+	func:["menu","xUI.sWitchPanel(\"lightBoxProp\");"]
+	icon:iconButton-ONSsetting
+	description:lightboxPropControll
+	note:ライトボックス設定
+0
+	type:checkbox
+	key:ubfilter
+	label:UAFBundleFilter
+	func:["menu","xUI.sWitchPanel(\"UBFilter\");"]
+	submenu:
+	icon:iconButton-filter
+	description:UAFフィルタ
+	note:UAFバンドルフィルタ
+0
+	type:command
+	key:ubfilertPnl
+	label:検索パネル
+	func:["menu","xUI.sWitchPanel(\"UBFilter\");"]
+	submenu:
+	icon:iconButton-filter
+	description:UAFフィルタ
+	note:UAFバンドルフィルタ
+0
+	type:checkbox
+	key:fnfilter
+	label:FunctionFilter
+	func:["menu","xUI.sWitchPanel(\"FNFilter\");"]
+	submenu:
+	icon:iconButton-filter
+	description:関数フィルタ
+	note:フィルタ制御関数パネル
+0
+	type:command
+	key:nameIncr
+	label:増番
+	func:["menu","pman.reName.setName(\"++\");"]
+	submenu:
+	icon:iconButton-incr
+	description:番号を上げる
+	note:
+0
+	type:command
+	key:nameDecr
+	label:減番
+	func:["menu","pman.reName.setName(\"--\");"]
+	submenu:
+	icon:iconButton-decr
+	description:番号を下げる
+	note:
+0
+	type:command
+	key:addGrp
+	label:グループ名追加
+	func:["menu","pman.reName.setGroup(false);"]
+	submenu:
+	icon:iconButton-addGrp
+	description:原画アセット名にグループを追加
+	note:
+0
+	type:command
+	key:delGrp
+	label:グループ名削除
+	func:["menu","pman.reName.setGroup(true);"]
+	submenu:
+	icon:iconButton-delGrp
+	description:原画アセット名のグループを削除
+	note:
+0
+	type:command
+	key:nameReset
+	label:ファイル名にリセット
+	func:["menu","pman.reName.setName(\"\");"]
+	submenu:
+	icon:iconButton-reload
+	description:名前をファイル名に戻す
+	note:
+0
+	type:command
+	key:renameItems
+	label:ファイル名を変更
+	func:["menu","pman.reName.renameItem();"]
+	submenu:
+	icon:iconButton-layerName
+	description:ディスク上のファイル名を変更する
+	note:
+0
+	type:command
+	key:showItemInfo
+	label:アイテム情報を表示
+	func:["menu","pman.reName.showInfo();"]
+	icon:iconButton-layerName
+	description:アイテム情報を表示
+	note:選択アイテムにしたほうが良いかも…
+0
+	type:command
+	key:setThumbnailImage
+	label:画像を更新
+	func:["menu","pman.reName.updateImages();"]
+	icon:iconButton-layerName
+	description:画像を更新
+0
+	type:command
+	key:openWithNewWindow
+	platform:! WEB || Electron
+	label:新規ウィンドウで開く
+	func:["menu","pman.openData(pman.reName.selection,false,\"-newWindow-\");"]
+	hotkey:[Shift],[CmdOrCtrl],[O]
+	icon:iconButton-layerName
+	description:新規ウインドウでアイテムを開く
+0
+	type:command
+	key:openWithExternalTool
+	platform:! WEB || Electron
+	label:%name% 
+	func:["menu","pman.openData(pman.reName.selection,false,\"%name%\");"]
+	hotkey:[CmdOrCtrl],[Enter]
+	icon:iconButton-layerName
+	description:%name%でアイテムを開く
+0
+	type:command
+	key:openFolderWidthFinder
+	platform:mac && (! WEB || Electron)
+	label:ファインダで表示
+	func:["menu","pman.openData(pman.reName.selection,true,\"system\");"]
+	hotkey:[Shift],[Enter]
+	icon:iconButton-layerName
+	description:ファインダで開く
+0
+	type:command
+	key:openFolderWidthFileExplorer
+	platform:win && (! WEB || Electron)
+	label:エクスプローラーで表示
+	func:["menu","pman.openData(pman.reName.selection,true,\"system\");"]
+	hotkey:[Shift],[Enter]
+	icon:iconButton-layerName
+	description:ファイルエクスプローラで表示
+0
+	type:command
+	key:identifier
+	label:カット番号挿入
+	func:["menu","pman.reName.setxMapName();"]
+	submenu:
+	icon:iconButton-Idf
+	description:カット番号を挿入
+	note:カット番号セット
+0
+	type:command
+	key:timesheet
+	label:タイムシート
+	func:["menu","pman.reName.setXpsName();"]
+	submenu:
+	icon:iconButton-xps
+	description:タイムシート名設定
+	note:タイムシートっぽい名前をつける
+0
+	type:window
+	key:SettingsView
+	label:設定|表示
+	submenu:
+0
+	type:command
+	key:resetScreen
+	label:初期画面
+	func:["menu","xUI.setToolView('default');"]
+	submenu:
+	icon:iconButton-reset
+	description:ツールを初期状態に
+	note:操作画面のツール類を初期状態に戻す
+0
+	type:checkbox
+	key:rename_setting
+	label:動作設定
+	func:["menu","xUI.sWitchPanel(\"rename_setting\");"]
+	submenu:
+	icon:iconButton-gear
+	description:リネーム動作設定
+	note:リネーム動作設定パネル
+0
+	type:checkbox
+	key:saveSlipsAuto
+	label:伝票を自動で保存
+	submenu:
+	icon:iconButton-management
+	func:["menu","pman.reName.saveSlipsAuto = !(pman.reName.saveSlipsAuto);xUI.sync(\"saveSlipsAuto\");"]
+	note:伝票を自動で保存
+0
+	type:checkbox
+	key:numOrder
+	app:pman
+	label:降順整列
+	func:["menu","pman.numOrderUp = !(pman.numOrderUp);xUI.sync(\"numOrder\")"]
+	icon:iconButton-sort
+	description:整列方向を下から上へ
+	note:若い番号の素材を下に配置
+0
+	type:checkbox
+	key:nameExt
+	label:マルチネーム
+	submenu:
+	icon:iconButton-multiname
+	func:["menu","pman.reName.nameExt = !(pman.reName.nameExt);xUI.sync(\"nameExt\");"]
+	note:マルチアセット名拡張
+0
+	type:checkbox
+	key:sortAuto
+	label:自動ソート
+	submenu:
+	icon:iconButton-sortLayers
+	func:["menu","pman.reName.sortAuto = !(pman.reName.sortAuto);xUI.sync(\"sortAuto\");"]
+	note:自動ソートスイッチ
+0
+	type:checkbox
+	key:showThumbnail
+	label:サムネイル表示
+	checked:true
+	icon:iconButton-thumbnail
+	func:["menu","pman.reName.switchThumbnail();"]
+	submenu:
+
+0
+	type:slider
+	key:thumbnailSize
+	label:サムネイルサイズ
+
+0
+	type:slider
+	key:thumbnailSizeSlider
+	label:サムネイルサイズ
+	min:32
+	max:256
+	value:152
+	step:8
+	func:["menu","pman.reName.thumbnailSizeSlider = this.value;xUI.sync(\"thumbnailSizeSlider\");"]
+	submenu:
+
+0
+	type:submenu
+	key:renameDigits
+	label:連番桁数
+	submenu:
+	icon:
+	descrption:ラジオボタンはサブメニュー扱いで一組になるコントロールが共通のメニュー項目のkeyをname値として共有する 後置する識別部は数式化して与える
+	note:syncメソッドへの引数は親のキー、または個々のキーを
+0
+	type:radio
+	key:renameDigits_0
+	name:renameDigits
+	label:1:0
+	func:["menu","pman.reName.renameDigits = 1;xUI.sync(\"renameDigits\");"]
+	submenu:
+0
+	type:radio
+	key:renameDigits_00
+	name:renameDigits
+	label:2:00
+	func:["menu","pman.reName.renameDigits = 2;xUI.sync(\"renameDigits\");"]
+	submenu:
+0
+	type:radio
+	key:renameDigits_000
+	name:renameDigits
+	label:3:000
+	func:["menu","pman.reName.renameDigits = 3;xUI.sync(\"renameDigits\");"]
+	submenu:
+0
+	type:radio
+	key:renameDigits_0000
+	name:renameDigits
+	label:4:0000
+	func:["menu","pman.reName.renameDigits = 4;xUI.sync(\"renameDigits\");"]
+	submenu:
+0
+	type:radio
+	key:renameDigits_00000
+	name:renameDigits
+	label:5:00000
+	func:["menu","pman.reName.renameDigits = 5;xUI.sync(\"renameDigits\");"]
+	submenu:
+0
+	type:command
+	platform:!(WEB)
+	key:reload
+	label:ページ再読み込み
+	role:reload
+	submenu:
+	note:ページ再読み込みロール
+0
+	type:command
+	platform:!(WEB)
+	key:forceReload
+	label:強制再読み込み
+	role:forceReload
+	submenu:
+	note:ページ強制再読み込みロール
+0
+	type:command
+	platform:!(WEB)
+	key:toggleDevTools
+	label:開発ツール
+	role:toggleDevTools
+	submenu:
+	note:開発ツール切り替え
+0
+	type:command
+	platform:!(WEB)
+	key:resetZoom
+	label:元のサイズに
+	role:resetZoom
+	submenu:
+0
+	type:command
+	platform:!(WEB)
+	key:zoomIn
+	label:ズームイン
+	role:zoomIn
+	submenu:
+0
+	type:command
+	platform:!(WEB)
+	key:zoomOut
+	label:ズームアウト
+	role:zoomOut
+	submenu:
+0
+	type:command
+	platform:!(WEB)
+	key:togglefullscreen
+	label:全画面切替
+	role:togglefullscreen
+	submenu:
+0
+	type:window
+	key:Window
+	label:ウインドウ
+	submenu:
+0
+	type:window
+	key:applications
+	label:Applications
+	submenu:
+
+0
+	type:file
+	key:app_reName
+	label:リネームツール
+	func:./index.html
+	submenu:
+0
+	type:file
+	key:app_console
+	label:コンソール
+	func:./index_console.html
+	submenu:
+0
+	type:file
+	key:app_productManger
+	label:UAF
+	func:./index_uaf.html
+	submenu:
+0
+	type:file
+	key:app_storyBoard
+	label:ストーリーボード
+	func:./sbdConvert.html
+	submenu:
+0
+	type:file
+	key:app_timeSheet
+	label:タイムシート編集
+	func:./index_xpsedit.html
+	submenu:
+0
+	type:command
+	platform:mac && !(WEB)
+	key:minimize
+	label:しまう
+	role:minimize
+	submenu:
+0
+	type:command
+	platform:mac && !(WEB)
+	key:zoom
+	label:拡大/縮小
+	role:zoom
+	submenu:
+0
+	type:command
+	key:front
+	platform:mac && !(WEB)
+	label:全てを手前に移動
+	role:front
+	submenu:
+0
+	type:window
+	key:window
+	platform:mac && !(WEB)
+	role:window
+0
+	type:command
+	platform:!(WEB)
+	key:close
+	label:ウインドウを閉じる
+	role:close
+	submenu:
+0
+	type:window
+	key:Tools
+	label:ツール
+	submenu:
+0
+	type:file-
+	key:calculator
+	label:電卓
+	func:./calculator/index.html
+	submenu:
+0
+	type:url-
+	key:stopwatch
+	func:http://www.nekomataya.info/tools/nasSTW/StopWatch.html
+	submenu:
+0
+	type:openEx
+	key:fieldTable
+	label:フィールド換算表
+	func:http://www.nekomataya.info/tools/documents/frame_exch.html
+	submenu:
+0
+	type:window
+	key:help
+	label:ヘルプ
+	role:help
+	submenu:
+0
+	type:url-
+	key:usage
+	label:使い方ガイド
+	role:usage
+	func:https://docs.google.com/document/d/1A7vo-pw1Vgs7tRagJpOSKwoQnsYcvvFejxq_OIewYdk/edit?usp=sharing
+	submenu:
+0
+	type:url-
+	key:documentNamingRule
+	label:UAF画稿名ルール
+	func:https://docs.google.com/document/d/1JKSUdLJruRgcWUaLdNDQzifRwtrh8sNjHOn89FDyrhA/edit?usp=sharing
+	submenu:
+0
+	type:
+	key:LearnMore
+	label:LearnMore
+	func:https://electronjs.org
+	submenu:
+0
+	type:command
+	key:About
+	label:aboutof
+	func:["menu","xUI.sWitchPanel(\"Ver\")"]
+	submenu:
+0
+	type:command
+	key:pushBackup
+	label:pushBackup
+	icon:put
+	submenu:
+	description:バックアップ更新
+	note:作業データをバックアップ
+0
+	type:command
+	key:restoreBackup
+	label:restoreBackup
+	icon:get
+	submenu:
+	description:バックアップ復帰
+	note:作業バックアップを復帰
+0
+	type:command
+	key:clearBackup
+	label:clearBackup
+	submenu:
+	description:バックアップをクリア
+	note:作業バックアップ領域をクリア
+0
+	type:window
+	key:referenceMenu
+	label:参照欄
+	description:参照メニュー
+	note:タイムシート参照欄操作メニュー
+
+0
+	type:command
+	key:exchReference
+	label:交換
+	submenu:
+	description:参照エリアと交換
+	note:編集エリアと参照エリアの内容を全交換
+0
+	type:command
+	key:extIO_importReference
+	label:importReference
+	submenu:
+	description:参照読込
+	note:ファイルブラウザを開き参照エリアへ読み込むデータを選択
+0
+	type:command
+	key:extIO_exportReference
+	label:exportReference
+	submenu:
+	description:参照書出
+	note:参照エリアのデータを保存
+0
+	type:command
+	key:selection_copyToReference
+	label:copy to Ref.
+	icon:toReference
+	submenu:
+	description:参照エリアへ転記
+	note:参照エリアに編集内容を転記
+0
+	type:command
+	key:selection_copyFromReference
+	label:copy from Ref.
+	icon:fromReference
+	submenu:
+	description:参照エリアから転記
+	note:参照エリアから編集エリアへ転記
+0
+	type:command
+	key:selection_clearReference
+	label:clear Ref.
+	icon:eraser
+	submenu:
+	description:参照エリア消去
+	note:参照エリアの内容をクリア
+0
+	type:window
+	key:aboutPanel
+	label:about
+	icon:xps
+	submenu:
+	description:アプリ情報
+	note:アプリケーション情報パネルを表示
+0
+	type:command
+	key:aboutPanel_close
+	label:close
+	submenu:
+	description:閉じる
+	note:アバウトパネルを閉じる
+0
+	type:window
+	key:dialogPanel
+	label:dialogPanel
+	icon:dialogEdit
+	submenu:
+	description:台詞編集
+	note:台詞編集パネル
+0
+	type:command
+	key:dialogPanel_apply
+	label:apply
+	submenu:
+	description:適用
+	note:編集内容をタイムラインに適用
+0
+	type:command
+	key:dialogPanel_fix
+	label:fix
+	submenu:
+	description:確定
+	note:編集内容を確定してパネルを閉じる
+0
+	type:command
+	key:dialogPanel_resete
+	label:reset
+	submenu:
+	description:編集解除
+	note:編集内容を破棄する
+0
+	type:command
+	key:dialogPanel_textInsert
+	label:textInsert
+	submenu:
+	description:単語挿入
+	note:カーソル位置に挿入
+0
+	type:command
+	key:dialogPanel_addAttribute
+	label:addAttribute
+	submenu:
+	description:属性追加
+	note:台詞に属性を加える
+0
+	type:command
+	key:dialogPanel_close
+	label:close
+	submenu:
+	description:閉じる
+	note:台詞編集パネルを閉じる
+0
+	type:window
+	key:skb
+	label:softwareKB
+	submenu:
+	description:ソフトウェアキーボード
+	note:ソフトウェアキーボードを開く
+0
+	type:command
+	key:skb_close
+	label:close
+	submenu:
+	description:閉じる
+	note:ソフトウェアキーボーを閉じる
+0
+	type:window
+	key:preference
+	label:各種設定
+	icon:iconButton-gia
+	submenu:
+	description:各種環境設定
+	note:環境設定パネル
+0
+	type:command
+	key:preferencePanel
+	label:環境設定
+	icon:iconButton-gia
+	submenu:
+	func:["menu","xUI.sWitchPanel('Pref');"]
+	description:各種環境設定
+	note:環境設定パネル
+0
+	type:command
+	key:preferencePanel_reset
+	label:reset
+	submenu:
+	description:reset
+	note:編集内容をリセット
+0
+	type:command
+	key:preferencePanel_apply
+	label:apply
+	submenu:
+	description:apply
+	note:編集内容をアプリケーションに適用
+0
+	type:command
+	key:preferencePanel_save
+	label:save
+	submenu:
+	description:設定を保存
+	note:設定をクッキーで保存
+0
+	type:command
+	key:preferencePanel_clear
+	label:clear
+	submenu:
+	description:設定を削除
+	note:設定クッキーを削除
+0
+	type:command
+	key:preferencePanel_close
+	label:close
+	submenu:
+	description:閉じる
+	note:環境設定パネルを閉じる
+0
+	type:window
+	key:repositoryInfo
+	label:リポジトリの情報を見る
+	icon:info
+	submenu:
+	description:共有情報
+	note:共有情報パネルを開く
+0
+	type:command
+	key:repositoryInfo_
+	submenu:
+0
+	type:command
+	key:memoEdit
+	label:メモ編集
+	icon:pen_3
+	submenu:
+	description:メモ欄
+	note:メモ欄用編集パネルを開く
+0
+	type:command
+	key:memoEdit_
+	submenu:
+0
+	type:command
+	key:memoEdit_close
+	label:close
+	submenu:
+	description:閉じる
+	note:メモ編集UIを閉じる
+0
+	type:window
+	key:stbd
+	label:絵コンテ
+	submenu:
+	description:絵コンテ表示
+	note:現在選択中のエピソードを絵コンテ表示でみる
+0
+	type:command
+	key:stbd_close
+	submenu:
+	description:閉じる
+	note:パネルを閉じる
+0
+	type:window
+	key:application_xpst
+	submenu:
+	description:タイムシート画面設定
+	note:タイムシート画面表示設定
+0
+	type:command
+	key:application_xpst_pageColumns
+	label:段組
+	submenu:
+	description:タイムシート段組
+	note:タイムシートの段組指定
+0
+	type:command
+	key:application_xpst_pageLength
+	label:pageLength
+	submenu:
+	description:ページ長
+	note:タイムシートのページ長（秒数）
+0
+	type:command
+	key:application_xpst_diff
+	label:DIFF
+	submenu:
+	description:タイムシート差分表示
+	note:参照エリアとの差分を表示（旧フットスタンプ）
+0
+	type:command
+	key:application_xpst_cursorLoop
+	label:cursorLoop
+	submenu:
+	description:カーソルキーでループ
+	note:矢印キーでシート上下をループ接続
+0
+	type:command
+	key:application_xpst_spinLoop
+	label:spinLoop
+	submenu:
+	description:スピン動作でループ
+	note:スピン操作でシート上下をループ接続
+0
+	type:command
+	key:application_xpst_tabFix
+	label:tabFix
+	submenu:
+	description:タブで確定
+	note:タブキーを確定操作に含める
+0
+	type:command
+	key:application_xpst_syncInput
+	label:syncInput
+	submenu:
+	description:入力同期
+	note:キー入力を画面に同期
+0
+	type:command
+	key:application_xpst_restrictionMode
+	label:制限モード]
+	submenu:
+	description:制限モード切り替え
+	note:タイムシートを制限表示モードに切替
+0
+	type:command
+	key:application_xpst_pageMode
+	label:表示モード ]
+	submenu:
+	description:表示モード切り替え
+	note:ページ｜スクロール表示の切替
+0
+	type:command
+	key:application_xpst_zoom
+	label:zoom
+	icon:zoom
+	submenu:
+	description:zoomChange
+	note:タイムシートのズーム表示切替
+0
+	type:command
+	key:application_xpst_unZoom
+	label:100%
+	submenu:
+	description:zoom100%
+	note:タイムシートのズーム表示解除
+0
+	type:command
+	key:application_xpst_referenceArea
+	label:references
+	submenu:
+	description:参照エリア
+	note:参照エリアの表示
+0
+	type:command
+	key:application_xpst_home
+	label:HOME
+	icon:goHome
+	submenu:
+	description:開始位置
+	note:開始位置へ戻る
+0
+	type:command
+	key:application_xpst_end
+	label:END
+	icon:goHome
+	submenu:
+	description:末尾
+	note:カット末尾へ
+0
+	type:window
+	key:menu
+	label:dropdownMenu
+	submenu:
+	description:ドロップダウンメニュー
+	note:ドロップダウンメニューの表示
+0
+	type:command
+	key:menu_close
+	submenu:
+	description:閉じる
+	note:ドロップダウンメニューを非表示
+0
+	type:window
+	key:accountMenu
+	label:accountMenu
+	submenu:
+	description:service account show/hide
+	note:アバターメニューの表示
+0
+	type:window
+	key:accountMenu_pref
+	label:preferrence
+	submenu:
+	description:ユーザ情報編集
+	note:UATサービス互換
+0
+	type:command
+	key:accountMenu_teams
+	submenu:
+	description:チーム設定
+	note:UATサービス互換
+0
+	type:command
+	key:accountMenu_members
+	submenu:
+	description:メンバー管理
+	note:UATサービス互換
+0
+	type:command
+	key:accountMenu_selectTeam
+	submenu:
+	description:チーム切替
+	note:UATサービス互換
+0
+	type:command
+	key:accountMenu_auth
+	label:login|logout
+	submenu:
+	description:ログイン｜ログアウト
+	note:UATサービス互換
+0
+	type:window
+	key:toolbar
+	label:buttonToolbar
+	icon:util
+	submenu:
+	description:ボタンツールバー
+	note:ボタンツールバーを表示
+0
+	type:command
+	key:toolbar_FWD
+	label:commandBarFWD
+	submenu:
+	description:メニュー切替左
+	note:ツールバーのメニューセットを切替
+0
+	type:command
+	key:toolbar_BWD
+	label:commandBarBWD
+	submenu:
+	description:メニュー切替右
+	note:ツールバーのメニューセットを切替
+0
+	type:window
+	key:toolbar_custom
+	label:カスタムツールバー
+	submenu:
+	description:カスタムツールバーの編集
+	note:ユーザ編集可能なカスタムツールバーをつくる
+0
+	type:command
+	key:toolbar_close
+	submenu:
+	description:閉じる
+	note:パネルを閉じる
+0
+	type:window
+	key:frControl
+	label:フレームカウンター
+	submenu:
+	description:フレームカウンター表示
+	note:フレームカウンターパネル表示
+0
+	type:command
+	key:frControl_close
+	submenu:
+	description:閉じる
+	note:パネルを閉じる
+0
+	type:window
+	key:inputControl
+	label:入力ボックス
+	submenu:
+	description:input box show/hide
+	note:入力コントロールエリアの表示
+0
+	type:command
+	key:inputControl_spinAdd
+	label:spinAdd
+	submenu:
+	description:スピン量加算
+	note:コマ送り量を増やす
+0
+	type:command
+	key:inputControl_spinSub
+	label:spinSub
+	submenu:
+	description:スピン量減算
+	note:コマ送り量を減らす
+0
+	type:command
+	key:inputControl_selectionSpin
+	label:selectionSpin
+	submenu:
+	description:選択範囲をスピン量に
+	note:選択範囲をスピン量に設定する
+0
+	type:command
+	key:inputControl_OK
+	label:OK
+	hotkey:[enter]
+	icon:OK
+	submenu:
+	description:適用
+	note:入力を適用する
+0
+	type:command
+	key:inputControl_cancel
+	label:cancel
+	hotkey:[esc]
+	icon:NG
+	submenu:
+	description:キャンセル
+	note:入力をキャンセルする
+0
+	type:command
+	key:inputControl_close
+	submenu:
+	description:閉じる
+	note:入力エリアを隠す
+0
+	type:window
+	key:memoArea
+	label:メモ欄
+	icon:pen_3
+	submenu:
+	description:メモ欄の表示
+	note:メモ欄の表示切り替え
+0
+	type:command
+	key:memoArea_close
+	label:close
+	submenu:
+	description:閉じる
+	note:メモ欄を非表示
+0
+	type:window
+	key:dbgConsole
+	label:debugConsole
+	icon:debug
+	submenu:
+	description:debug_ON
+	note:デバッグコンソール表示
+0
+	type:command
+	key:dbgConsole_close
+	label:close
+	submenu:
+	description:閉じる
+	note:デバッグコンソールを閉じる
+0
+	type:window
+	key:viewSource
+	label:ソース
+	icon:degub
+	submenu:
+	description:データをテキスト閲覧
+	note:データをソーステキストで編集する
+0
+	type:command
+	key:viewSource_close
+	label:close
+	submenu:
+	description:閉じる
+	note:ソースパネルを閉じる
+0
+	type:window
+	key:cameraworkPanel
+	label:cameraPanel
+	submenu:
+	description:カメラワーク編集ウインドウ
+	note:カメラワーク編集ウインドウ
+0
+	type:command
+	key:cameraworkPanel_button
+	label:button
+	submenu:
+	description:button
+	note:定形入力コマンド
+0
+	type:command
+	key:cameraworkPanel_close
+	label:close
+	submenu:
+	description:閉じる
+	note:カメラワーク編集パネルを閉じる
+0
+	type:window
+	key:soundPanel
+	label:soundEdit
+	icon:soundEdit
+	submenu:
+	description:音響編集パネル
+	note:SE音楽等のスポッティング編集パネルを表示
+0
+	type:command
+	key:soundPanel_breve
+	label:𝅜
+	submenu:
+	description:𝅜
+	note:breve
+0
+	type:command
+	key:soundPanel_wholeNote
+	label:𝅝
+	submenu:
+	description:𝅝
+	note:全音符
+0
+	type:command
+	key:soundPanel_harfNote
+	label:𝅗𝅥
+	submenu:
+	description:𝅗𝅥
+	note:2分音符
+0
+	type:command
+	key:soundPanel_quarterNote
+	label:𝅘𝅥
+	submenu:
+	description:𝅘𝅥
+	note:4分音符
+0
+	type:command
+	key:soundPanel_eighthNote
+	label:♪
+	submenu:
+	description:♪
+	note:8分音符
+0
+	type:command
+	key:soundPanel_close
+	label:close
+	submenu:
+	description:閉じる
+	note:音響編集パネルを閉じる
+0
+	type:window
+	key:AEK
+	label:AfterEffectsKeyData
+	icon:aek
+	submenu:
+	description:アフターエフェクトキーデータ
+	note:アフターエフェクトキーデータ調整パネル
+0
+	type:command
+	key:AEK_close
+	label:close
+	submenu:
+	description:閉じる
+	note:パネルを閉じる
+0
+	type:window
+	key:stopWatch
+	label:stopWatch
+	icon:goToTime
+	submenu:
+	description:ストップウオッチ機能切り替え
+	note:ストップウオッチパネル表示
+0
+	type:command
+	key:stopWatch_GOSTOP
+	label:START|STOP
+	icon:goToTime
+	submenu:
+	description:計測開始｜停止
+	note:計測スイッチ
+0
+	type:command
+	key:stopWatch_MARK
+	label:MARK
+	icon:pen_1
+	submenu:
+	description:マーク
+	note:計測マーク
+0
+	type:command
+	key:stopWatch_eraceMark
+	label:eraseMark
+	icon:eraser
+	submenu:
+	description:マーク消去
+	note:マーク消去
+0
+	type:command
+	key:stopWatch_applyMark
+	label:applyMark
+	icon:hummer
+	submenu:
+	description:マークを区間へ
+	note:ストップウオッチのマークを入力に変換
+0
+	type:window
+	key:allRegion
+	label:allRegion
+	region:
+	note:コンテキストメニューリジョングループ全体
+0
+	type:window
+	key:headerRegion
+	label:headerRegion
+	region:onHeadline
+	note:コンテキストメニューリジョングループ
+0
+	type:window
+	key:headbarRegion
+	label:headbaregion
+	region:onHeadbar
+	note:コンテキストメニューリジョングループ
+0
+	type:window
+	key:ibcSelectorRegion
+	label:ibcSelectorRegion
+	region:onIbcSelector
+	note:コンテキストメニューリジョングループ
+0
+	type:window
+	key:historyRegion
+	label:historyRegion
+	region:onHistory
+	note:コンテキストメニューリジョングループ
+0
+	type:window
+	key:listRegion
+	label:listRegion
+	region:onRenamelist
+	note:pman_renameコンテキストメニューリジョングループ
+0
+	type:window
+	key:previewRegion
+	label:previewRegion
+	region:onPreview
+	note:コンテキストメニューリジョングループ
+0
+	type:window
+	key:bodyRegion
+	label:bodyRegion
+	region:
+	note:コンテキストメニューリジョングループ
+0
+	type:window
+	key:footerRegion
+	label:footerRegion
+	region:onFooter
+	note:コンテキストメニューリジョングループ
+
+0
+	type:window
+	key:xpsReferenceRegion
+	label:参照トラック
+	region:onXpsReference
+	note:コンテキストメニューリジョングループ
+0
+	type:window
+	key:xpsDialogRegion
+	label:セリフトラック
+	region:onXpsDialog
+	note:コンテキストメニューリジョングループ
+0
+	type:window
+	key:xpsSoundRegion
+	label:音響トラック
+	region:onXpsSound
+	note:コンテキストメニューリジョングループ
+0
+	type:window
+	key:xpsReplacementRegion
+	label:通常トラック
+	region:onXpsReplacement
+	note:コンテキストメニューリジョングループ
+0
+	type:window
+	key:xpsCameraworkRegion
+	label:カメラワークトラック
+	region:onXpsCamerawork
+	note:コンテキストメニューリジョングループ
+0
+	type:window
+	key:xpsStageworkRegion
+	label:ジオメトリトラック
+	region:onXpsStgwork
+	note:コンテキストメニューリジョングループ
+0
+	type:window
+	key:xpsSfxRegion
+	label:効果トラック
+	region:onXpsSfxwork
+	note:コンテキストメニューリジョングループ
+0
+	type:window
+	key:xpsNoteTextRegion
+	label:メモ欄
+	region:onXpsNoteText
+	note:コンテキストメニューリジョングループ
+0
+	type:window
+	key:xpsSheetHeaderRegion
+	label:シートヘッダー
+	region:onXpsHeader
+	note:コンテキストメニューリジョングループ
+0
+	type:window
+	key:xpsTrackLabelRegion
+	label:トラックラベル
+	region:onXpsTracklabel
+	note:コンテキストメニューリジョングループ
+0
+	type:window
+	key:xpsSignetureRegion
+	label:シグネチャ
+	region:onXpsSignature
+	note:コンテキストメニューリジョングループ
+
+0
+	type:selector
+	key:ibcSelect
+	label:セレクタリスト
+	size:6
+	func:xUI.ibCP.switch(arguments[0])
+	options:return Array.from(xUI.ibCP.options,(e)=>{e.selected = (xUI.ibCP.activePalette == e.value)?true:false;return e;})
+0
+	type:command
+	key:x0
+	label:等倍表示
+	func:["menu","pman.reName.changeView(event,0);"]
+	
+0
+	type:command
+	key:x1
+	label:画面にフィット
+	func:["menu","pman.reName.changeView(event,1);"]
+	
+0
+	type:command
+	key:x2
+	label:2倍
+	func:["menu","pman.reName.changeView(event,2);"]
+	
+0
+	type:command
+	key:x3
+	label:3倍
+	func:["menu","pman.reName.changeView(event,3);"]
+0
+	type:command
+	key:copyImage
+	label:画像をコピー
+	func:["menu","pman.reName.copyImage(event);"]
+	icon:iconButton-copyimage
+	description:画像をコピーする
+	note:画像をクリップボードへ複写
+0
+	type:command
+	key:copyImageURL
+	label:アイテムのアドレスをコピー
+	func:["menu","pman.reName.copyItemURL(event);"]
+	icon:iconButton-copyimageurl
+	description:アイテムのアドレスをコピー
+	note:アイテムのURLをクリップボードへ複写
+0
+	type:command
+	key:downloadImage
+	label:アイテムをダウンロード
+	func:["menu","pman.reName.downloadItem(event);"]
+	icon:iconButton-downloadimage
+	description:アセットをダウンロードして保存...
+	note:アセットをダウンロードして保存
+0
+	type:command
+	key:updateItems
+	label:アイテムを更新
+	func:["menu","pman.reName.updateItems(event);"]
+	icon:iconButton-updateitems
+	description:最新状態に更新...
+	note:アセットを最新状態に更新
+0
+	type:window
+	key:console
+	label:console
+	description:developmentConsole
+	note:開発用コンソール
+0
+	type:command
+	key:openScript
+	label:スクリプトを読み込む
+	func:["menu","alert(\"openScript\")"]
+	icon:iconButton-openScript
+	description:スクリプトファイルを読み込む
+	note:スクリプトファイルを読み込んで実行
+0
+	type:command
+	key:saveLog
+	label:スクリーンを保存
+	func:["menu","alert(\"seveLog\")"]
+	icon:iconButton-saveLog
+	description:現在のスクリーン内容を保存
+	note:現在のスクリーン内容を保存
+/*
+	sbde
+*/
+0
+	type:window
+	key:navigationMenu
+	label:navi
+0
+	type:command
+	key:pgMove
+	label:ページ指定
+	icon:iconButton-countReader
+0
+	type:command
+	key:reloadSbd
+	label:絵コンテ再読込
+	icon:iconButton-reload
+0
+	type:command
+	key:goHead
+	label:先頭ページ
+	icon:iconButton-goPrev
+0
+	type:command
+	key:bwd10
+	label:10ページ戻る
+	icon:iconButton-goFBWD
+0
+	type:command
+	key:bwd
+	label:戻る
+	icon:iconButton-goBWD
+0
+	type:command
+	key:fwd
+	label:進む
+	icon:iconButton-goFWD
+0
+	type:command
+	key:fwd10
+	label:10ページ進む
+	icon:iconButton-goFFWD
+0
+	type:command
+	key:goTail
+	label:最終ページへ
+	icon:iconButton-goNext
+0
+	type:command
+	key:bookmarkSbd
+	label:ブックマーク
+	icon:iconButton-layerName
+//sbdConvert document
+0
+	type:command
+	key:openDocumentStbd
+	label:開く
+	func:["menu","document.getElementById(\"fileSelect\").click();"]
+	description:"ストーリボードを開く"
+	icon:iconButton-openX
+
+0
+		type:command
+		key:sbde_setImage
+		label:画像を指定
+		func:["menu","document.getElementById(\"imageSelect\").click();"]
+		description:"画像を指定"
+		note:"これは削除予定"
+		icon:iconButton-layerName
+
+0
+		type:command
+		key:sbde_saveAs
+		label:別名保存
+		func:["menu","downloadSTDB();"]
+		description:"名前をつけて保存"
+		icon:iconButton-storeAs
+
+0
+		type:command
+		key:sbde_recentFiles
+		label:最近使ったファイル
+		description:""
+		icon:iconButton-cat
+
+0
+		key:sbde_reloadDocument
+		label:再読込
+		func:["menu","showMsg(\"ロード開始\");myAjax=loadData();"]
+		description:"再読み込み"
+		icon:iconButton-reload
+
+//sbde-edit
+0
+		key:sbde_selectShot
+		label:select
+		func:""
+		description:"現在のショットを選択"
+		icon:iconButton-cat
+
+0
+		key:sbde_selectColumn
+		label:selectCol
+		func:""
+		description:"カラムを選択"
+		icon:iconButton-cat
+
+0
+		key:sbde_cut
+		label:cut
+		func:""
+		description:"切取"
+		icon:iconButton-cut
+
+0
+		key:sbde_copy
+		label:copy
+		func:""
+		description:"複写"
+		icon:iconButton-copy
+
+0
+		key:sbde_paste
+		label:paste
+		func:""
+		description:"貼付け"
+		icon:iconButton-paste
+
+0
+		type:window
+		key:sbde_preference
+		label:pref
+		func:""
+		description:""
+0
+		type:window
+		key:show_hide
+		label:show/hide
+0
+		type:command
+		key:sbde_player
+		label:プレイヤ
+		func:["menu","switchScreen(\"player\");"]
+		description:プレイヤーに切り替え
+
+0
+		type:command
+		key:sbde_page
+		label:絵コンテ
+		func:["menu","switchScreen(\"s-board\");"]
+		description:"ページ表示に切り替え"
+
+0
+		type:command
+		key:sbde_console
+		label:console
+		func:["menu","document.getElementById('toolHeader').style.display=(document.getElementById('toolHeader').style.display !='none')?'none':'block';this.innerHTML=(document.getElementById('toolHeader').style.display=='none')?'consoleON':'consoleOFF';"]
+		description:
+0
+		type:window
+		key:sbde_tools
+		label:tools
+
+0
+		type:command
+		key:sbde_navigationPost
+		label:ナビポスト
+		func:["menu","chgPanel(\"navigationPost\");"]
+		description:""
+
+0
+		type:command
+		key:sbde_toolBarMenu
+		label:toolBar
+		func:""
+		description:""
+
+0
+		type:window
+		key:sbde_options
+		label:options
+
+0
+		type:window
+		key:playerMenu
+		label:プレイヤ
+		description:""
+
+0
+		type:command
+		key:sbde_play_stop
+		label:play/stop
+		func:""
+		description:""
+
+0
+		type:command
+		key:sbde_setWorkAreaStart
+		label:
+		func:""
+		description:""
+
+0
+		type:command
+		key:sbde_setWorkAreaEnd
+		label:
+		func:""
+		description:""
+
+0
+		type:command
+		key:sbde_resetWorkArea
+		label:
+		func:""
+		description:""
+
+		type:window
+		key:sbde_bookmarks 
+		label:Bookmarks
+
+/*
+	pman xmsp|xps|common
+ */
+/*
+	remaping xpst xpsedit
+*/
+0
+	type:command
+	key:openDocumentXps
+	label:ドキュメントを開く
+	func:["menu","xUI.openDocument();"]
+	icon:iconButton-openX
+	description:"ドキュメントを開く"
+0
+	type:command
+	key:newDocumentXps
+	label:新規ドキュメント
+	func:["menu","xUI.sWitchPanel('Scn','show');"]
+	icon:iconButton-close
+	description:"新規ドキュメントを作成"
+
+0
+	type:command
+	key:xmap_workslip
+	label:納品伝票
+
+0
+	type:command
+	key:nodeControl_checkin
+	label:チェックイン
+
+0
+	type:command
+	key:nodeControl_store
+	label:データプッシュ
+
+0
+	type:command
+	key:nodeControl_checkout
+	label:チェックアウト
+
+0
+	type:command
+	key:nodeControl_activate
+	label:作業再開
+
+0
+	type:command
+	key:nodeControl_deactivate
+	label:作業中断
+
+0
+	type:command
+	key:nodeControl_discard
+	label:作業破棄
+
+0
+	type:command
+	key:nodeControl_appendLine
+	label:ラインを開く
+
+0
+	type:command
+	key:nodeControl_mergeDocument
+	label:オフラインデータをマージ
+
+0
+	type:command
+	key:nodeControl_exportDocument
+	label:オフライン外注
+
+0
+	type:command
+	key:nodeControl_entryCurrentXps
+	label:新規登録
+
+0
+	type:command
+	key:importLocalDocument
+	label:ファイル読込
+	func:["menu","xUI.importDocument(\"body\");"]
+	icon:
+	description:ローカルファイルを読み込む
+
+0
+	type:command
+	key:exportAsXps
+	label:ファイル書出
+	func:["menu","xUI.data_well.value=xUI.XPS.toString();callEcho();"]
+	icon:
+	description:
+	note:
+
+0
+	type:command
+	key:exportAsTdts
+	label:ダウンロードTDTS
+	func:["menu","xUI.data_well.value=XPS2TDTS(xUI.XPS,\"tdts\");callEchoExport(\"xdts\");"]
+	icon:
+	description:
+	note:
+
+0
+	type:command
+	key:exportAsXdts
+	label:ダウンロードXDTS
+	func:["menu","xUI.data_well.value=XPS2TDTS(xUI.XPS,\"xdts\");callEchoExport(\"xdts\");"]
+	icon:
+	description:
+	note:
+
+0
+	type:command
+	key:import_export
+	label:
+	func:["menu","xUI.sWitchPanel(\"Data\");"]
+	icon:
+	description:
+	note:
+
+0
+	type:command
+	key:documentInfoXps
+	label:シート情報
+	func:["menu","xUI.sWitchPanel('Scn','show');"]
+	icon:
+	description:
+	note:
+
+0
+	type:command
+	key:exportAsHTML
+	label:表示用HTMLで書出し
+	func:["menu","printHTML();"]
+	icon:
+	description:
+	note:
+
+0
+	type:command
+	key:convertToKeyframeActionSheet
+	label:アクションシート
+	func:["menu","printHTML(false,\"action\");"]
+	icon:
+	description:原画アクションシートに変換
+	note:
+
+0
+	type:command
+	key:printAsConvertedKeyframeActionSheet
+	label:--　印刷
+	func:["menu","printHTML(false,\"action\");"]
+	icon:
+	description:原画アクションシートに変換して印刷
+	note:
+0
+	type:command
+	key:exportImageAsConvertedKeyframeActionSheet
+	label:--　画像で保存
+	func:["menu","printHTML(false,\"action\");"]
+	icon:
+	description:原画アクションシートに変換して画像保存
+	note:
+
+0
+	type:command
+	key:change_locale
+	label:言語切替
+	func:["menu","nas.locale=(nas.locale=='ja')? 'en':'ja';nas.LangPack.chgLocale(nas.locale);"]
+	icon:
+	description:言語切り替え
+	note:日・英切り替え_繁簡韓予定
+0
+	type:checkbox
+	key:modecahange_master
+	label:画像マスタ
+	func:["menu",""]
+	icon:
+	description:
+	note:
+0
+	type:checkbox
+	key:modechange_management
+	label:管理モード
+	func:["menu","xUI.setUImode('next');xUI.sync('productStatus');"]
+	icon:
+	description:
+	note:
+0
+	type:checkbox
+	key:modechange_restrintion
+	label:制限モード
+	func:["menu","xUI.setRestriction(! xUI.restrintion);"]
+	icon:
+	description:
+	note:
+0
+	type:checkbox
+	key:modechange_pgscrl
+	label:ページモード
+	func:["menu","xUI.viewMode=(xUI.viewMode=='Scroll')?'PageImage':'Scroll';xUI.resetSheet(undefined,undefined,xUI.applySheetlooks);"]
+	icon:
+	description:
+	note:
+0
+	type:checkbox
+	key:modechange_2column
+	label:二段組
+	func:["menu","xUI.PageCols=(xUI.PageCols==1)?2:1;xUI.resetSheet(undefined,undefined,function(){})"]
+	icon:
+	description:
+	note:
+0
+	type:command
+	key:setting_xpst
+	label:各種設定
+	func:["menu","xUI.sWitchPanel('Pref');"]
+	icon:
+	description:
+	note:
+
+/* edit Xpst*/
+0
+	type:command
+	key:selectTrackAllFrames
+	label:全選択
+	func:["menu","alert(\"select ALL\")"]
+	icon:
+	description:
+	note:
+0
+	type:command
+	key:renameTrackLabel
+	label:名前変更
+	func:["menu","alert(\"renameTrackLabel\")"]
+	icon:
+	description:
+	note:トラック名を編集
+
+
+
+/*
+	remaping xmap
+*/
+0
+	type:window
+	key:storeMenu
+	label:リポジトリ
+0
+	type:command
+	key:selectRepository
+	label:リポジトリ選択
+0
+	type:window
+	key:stagingMenu
+	label:工程管理
+
+0
+	type:window
+	key:stagingMenu
+	label:工程管理
+
+0
+	type:window
+	key:canvasMenu
+	label:描画メニュー
+
+0
+	type:command
+	key:canvasPaint
+	icon:iconButton-trace
+	label:
+	func:["menu","xUI.sWitchPanel(\"Paint\")"]
+0
+//最終の整数ID:0は記述終了のサインコード

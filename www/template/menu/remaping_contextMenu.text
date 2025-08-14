@@ -1,0 +1,41 @@
+﻿/*
+ contextMenu用
+ */
+allRegion
+	openDocumentXps
+	newDocumentXps
+	open
+	close
+	========
+	UIReset
+	========
+	undo
+	redo
+	========
+	calcurator
+	stopwatch
+	fieldTable
+headerRegion
+	About
+
+xpsReferenceRegion
+	exchReference
+	extIO_importReference
+	extIO_exportReference
+	selection_copyToReference
+	selection_copyFromReference
+	selection_clearReference
+	
+xpsDialogRegion
+xpsSoundRegion
+xpsReplacementRegion
+xpsCameraworkRegion
+xpsStageworkRegion
+xpsSfxRegion
+xpsNoteTextRegion
+xpsSheetFooterRegion
+xpsSheetHeaderRegion
+xpsTrackLabelRegion
+xpsSignetureRegion
+
+[end]
