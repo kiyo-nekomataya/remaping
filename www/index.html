@@ -7,35 +7,35 @@
 <title>remaping..</title>
     <link rel="shortcut icon" href="./images/icons/favicon_remaping.ico">
 <!-- 
-ローカル開発用ライブラリ    /~kiyo/remaping.js/nas
+ローカル開発用ライブラリ    ./nas
 運用共用ライブラリ   https://nekomataya.info/nas
 -->
     <script src="cordova.js"></script>
     <script src="components/loader.js"></script>
+<!-- css -->
     <link href="./css/remaping.css" type="text/css" rel=stylesheet media="screen,tv">
     <link href="./css/remaping_prt.css" type="text/css" rel=stylesheet media="print">
+    <link href="https://nekomataya.info/nas/lib/nas_common_HTML.css" type="text/css" rel=stylesheet media="screen,tv">
+    <link href="https://nekomataya.info/nas/ext-lib/jquery-ui-1.13.1.custom/jquery-ui.min.css" type="text/css" rel="stylesheet">
+    <link href="https://nekomataya.info/nas/ext-lib/perfect-scrollbar/css/perfect-scrollbar.css" type="text/css" rel="stylesheet">
 
     <link rel="stylesheet" href="components/loader.css">
     <link rel="stylesheet" href="css/style.css">
-
-
 <!--
 <link href="/remaping/template/remaping_.css" type="text/css" rel=stylesheet media="screen,tv">
 <link href="/remaping/template/remaping_prt.css" type="text/css" rel=stylesheet media="print">
 -->
-    <link href="https://nekomataya.info/nas/lib/nas_common_HTML.css"    type="text/css" rel=stylesheet media="screen,tv">
-    <link href="./css/jquery-ui.css" type="text/css" rel="stylesheet">
 <!-- cdn -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.2/markdown-it.min.js" integrity="sha512-ohlWmsCxOu0bph1om5eDL0jm/83eH09fvqLDhiEdiqfDeJbEvz4FSbeY0gLJSVJwQAp0laRhTXbUQG+ZUuifUQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
     </script>
 <!-- cdn -->
-    <script src=./lib/jquery.js></script>
-    <script src=./lib/jquery-ui.js></script>
+    <script src=https://nekomataya.info/nas/ext-lib/jquery-3.6.0.min.js></script>
+    <script src=https://nekomataya.info/nas/ext-lib/jquery-ui-1.13.1.custom/jquery-ui.js></script>
+    <script src=https://nekomataya.info/nas/ext-lib/jquery-longpress/jquery.longpress.js></script>
 
-    <script src=./lib/jquery.longpress.js></script>
-    <script src=./lib/ecl/ecl.js></script>
-    <script src=./lib/csv/csvsimple.js></script>
+    <script src=https://nekomataya.info/nas/ext-lib/ecl/ecl.js></script>
+    <script src=https://nekomataya.info/nas/ext-lib/csv/csvsimple.js></script>
     <script src=https://nekomataya.info/nas/ext-lib/psd.js/dist/psd.min.js></script>
     <script src=https://nekomataya.info/nas/ext-lib/tga-js/dist/umd/tga.js></script>
     <script src=https://nekomataya.info/nas/ext-lib/tiff.js/tiff.min.js></script>
@@ -76,9 +76,8 @@
  -->
 <script src=https://nekomataya.info/nas/scripts/remaping_/airUI.js></script>
 <script src=https://nekomataya.info/nas/scripts/remaping_/nodeUI.js></script>
-
-   <script src=https://nekomataya.info/nas/scripts/remaping_/configPM.js></script>
 <!-- 
+<script src=https://nekomataya.info/nas/configPM.js></script>
     <script src=./pmdb/configPMDB.js></script>
 
 -->
@@ -105,12 +104,22 @@
     <script src=https://nekomataya.info/nas/lib/lib_TSX.js></script>
     <script src=https://nekomataya.info/nas/lib/lib_TDTS.js></script>
 
-<!-- /*  開発用テストコード   2016.07.16  追加*/ これらはすべてremaping.jsへ統合予定-->
+<!-- /*  開発用テストコード   2016.07.16  追加*/ これらはすべてremaping.jsへ統合予定--
+
+<script src=https://nekomataya.info/nas/scripts/remaping/serviceAgent.js></script>
+<script src=https://nekomataya.info/nas/scripts/remaping/serviceAgent.SessionControls.js ></script>
+
+<script src=https://nekomataya.info/nas/scripts/remaping/serverio_test.js                ></script>
+<script src=https://nekomataya.info/nas/scripts/remaping/documentPanel.js                ></script>
+<script src=https://nekomataya.info/nas/scripts/remaping/xUI.SessionControl.js           ></script>
+<script src=https://nekomataya.info/nas/scripts/remaping/newTaskController.js            ></script>
+-->
     <script src=https://nekomataya.info/nas/scripts/remaping_/serviceAgent.js></script>
     <script src=https://nekomataya.info/nas/scripts/remaping_/serverio_test.js></script>
     <script src=https://nekomataya.info/nas/scripts/remaping_/filePanelTest.js></script>
 
     <script src=https://nekomataya.info/nas/scripts/remaping_/newTaksController.js></script>
+
 <!-- /*  AdobeExtension/Scripts 準互換 多言語化リソース  */ -->
 
     <script src=https://nekomataya.info/nas/lib/nas_locale.js></script>
