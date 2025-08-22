@@ -1,0 +1,28 @@
+Adobe After Effects 6.5 Keyframe Data
+
+Anchor Point
+Expression Data
+this.source.layer(1).position;
+
+End of Expression Data
+
+Position
+Expression Data
+this.source.layer(1).anchorPoint
+
+End of Expression Data
+
+Scale
+Expression Data
+[10000/this.source.layer(1).scale[0],10000/this.source.layer(1).scale[1]]
+
+End of Expression Data
+
+Rotation
+Expression Data
+-this.source.layer(1).rotation
+
+End of Expression Data
+
+
+End of Keyframe Data

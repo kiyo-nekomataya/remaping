@@ -1,0 +1,50 @@
+﻿/*
+	properyクラスにメソッドを増設
+	ターゲットキーを複製するメソッド
+
+	property.duplicateKey(index integer,time float)
+
+	指定されたキーを指定された時間位置に複製
+	引数省略は不可 戻り値は新規キーのIndex
+	複写元と複写先の時間が同じ場合はAE側で[よろしく]なってるみたいだけど
+	実質意味ないのでなにもしないで戻すことにする
+*/
+Property.prototype.duplicateKey=function(myIndex,myTime)
+{
+//プロパティタイプがPROPERTYの際のみ実行(ほかにはキーがない)
+	if(this.propertyType!=PropertyType.PROPERTY){return false}
+//引数が不正なら処理失敗
+	if((! myIndex)||(this.numKeys<myIndex)||isNaN(myTime)){return false;};
+//指定時間と指定キーのtime値が同じ場合は処理をスキップ
+	if(myTime==this.keyTime(myIndex)){return myIndex;};
+//ここからUndoGroup
+	app.beginUndoGroup("キーフレーム複製");
+//新しいキーを作成
+	var newKeyIndex = this.addKey(myTime);
+//古いキー
+	var oldKeyIndex = (newKeyIndex>myIndex)? myIndex:myIndex+1;
+//値の複写
+	this.setValueAtKey(newKeyIndex,this.keyValue(oldKeyIndex));
+//キープロパティ複写(順序がまずいかも?)
+if(this.isSpatial)
+{
+	this.setTemporalContinuousAtKey(newKeyIndex,this.keyTemporalContinuous(oldKeyIndex));
+	this.setTemporalAutoBezierAtKey(newKeyIndex,this.keyTemporalAutoBezier(oldKeyIndex));
+	this.setSpatialTangentsAtKey(newKeyIndex,this.keyInSpatialTangent(oldKeyIndex),this.keyOutSpatialTangent(oldKeyIndex));//タンゼント
+	this.setSpatialContinuousAtKey(newKeyIndex,this.keySpatialContinuous(oldKeyIndex));
+	this.setSpatialAutoBezierAtKey(newKeyIndex,this.keySpatialAutoBezier(oldKeyIndex));
+	this.setRovingAtKey(newKeyIndex,this.keyRoving(oldKeyIndex));//ロービング
+}
+if(this.isInterpolationTypeValid(KeyframeInterpolationType.BEZIER))
+{
+	this.setTemporalEaseAtKey(newKeyIndex,this.keyInTemporalEase(oldKeyIndex),this.keyOutTemporalEase(oldKeyIndex));
+	this.setInterpolationTypeAtKey(newKeyIndex,this.keyInInterpolationType(oldKeyIndex),this.keyOutInterpolationType(oldKeyIndex));//補間タイプ
+}
+	this.setSelectedAtKey(newKeyIndex,this.keySelected(oldKeyIndex));//選択?
+//グループ閉じる
+	app.endUndoGroup();
+//新しいキーのインデックス返す
+	return newKeyIndex;
+};//
+//Test	
+app.project.activeItem.layer(1).position.duplicateKey(2,1.5);

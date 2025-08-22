@@ -1,0 +1,58 @@
+﻿Adobe After Effects 8.0 Keyframe Data
+
+Effects	円 #1	中心 #2
+Expression Data
+[width/2,height/2]
+End of Expression Data
+
+Effects	円 #1	半径 #3
+Expression Data
+height*0.3
+End of Expression Data
+
+Effects	円 #2	中心 #2
+Expression Data
+[height*0.2,height*0.2]
+End of Expression Data
+
+Effects	円 #2	半径 #3
+Expression Data
+height*0.15
+
+End of Expression Data
+
+Effects	円 #3	中心 #2
+Expression Data
+[height*0.2,height*0.8]
+End of Expression Data
+
+Effects	円 #3	半径 #3
+Expression Data
+height*0.15
+
+End of Expression Data
+
+Effects	円 #4	中心 #2
+Expression Data
+[width-height*0.2,height*0.2]
+End of Expression Data
+
+Effects	円 #4	半径 #3
+Expression Data
+height*0.15
+
+End of Expression Data
+
+Effects	円 #5	中心 #2
+Expression Data
+[width-height*0.2,height*0.8]
+End of Expression Data
+
+Effects	円 #5	半径 #3
+Expression Data
+height*0.15
+
+End of Expression Data
+
+
+End of Keyframe Data

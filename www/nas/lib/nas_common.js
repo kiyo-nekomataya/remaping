@@ -4,8 +4,8 @@
  * 共用可能スクリプト部分
  * アニメーション一般ライブラリ
  * AE等のAdobe Script 環境で使用可能な機能を提供します
- * 2023/12/15
  * モジュール使用可能バージョン
+ * 2025/07/22
  */
 'use strict';
 /*=======================================*/
@@ -586,19 +586,21 @@ Date.prototype.setNASString = function (nasString) {
  *  @property  {boolean} Nodejs
  *      Node.js 環境下であるか否かのフラグ
  *      Electron上ではMainプロセス｜Browserプロセスがこれに当たる サンドボックスはフラグを判定する
- *  @property  {boolean} Cordova
- *      Cordova環境の判定フラグ
+ *  @property  {String} Cordova
+ *      false|iPad|iPhone|Android...
+ *      Cordova環境変数 
  *      devicereadyイベントの判定は別口に置く
  *  @property  {String} Electron
- *      none|browser|sandbox|renderer
+ *      none|browser|(sandbox)|renderer
  *      Electron環境の使用状況
  *      electronIpcが存在しない（使用不能）な場合もあることに注意
  *      
  *  @property  {boolean} ESTK
  *      Adobe ESTS環境下であるか否かのフラグ
  *  @property  {String} platform
- *      稼働環境指示変数 AIR|UXP|CEP|CSX|iPhone|iPad|Android|Chrome|Safari|Opera|MSIE|Edg|Mozilla|NN|unknown
- *      Eletron に関してはさらに preload|hub|spokeの3環境があるので要注意
+ *      UI稼働環境指示変数 AIR|UXP|CEP|CSX|Electron|Cordova(iPhone|iPad|Android)|Chrome|Safari|Opera|MSIE|Edg|Mozilla|NN|unknown
+ *      Codova判定の場合は appHost.Cordova(iPhone|iPad|Android)
+ *      Electron 判定の場合は preload|hub|spokeの3環境があるので要注意
  *  @property  {String} version
  *      稼働環境バージョン変数 各環境ごとに意味が異なるので注意
  *  @property  {String} os
@@ -1774,6 +1776,24 @@ nas.UserSignature.prototype.toString = function(opt){
         	].join("\t")+postfix[this.status];
     };
 };
+/*
+	作業チェックアウト
+ライン	0:	(本線)
+ステージ	2:	原画
+ジョブ	2:	原画演出検査
+
+
+作業終了の署名をして「原画演出検査」を終了しますか？
+
+[取消] [サイン][カスタムスタンプ]
+	┌───┐	
+	│ICN│	
+	└───┘	
+	kiyo	
+CT: 09/10	
+					」
+チェックアウト後は他のスタッフが作業を開始できるようになります
+*/
 /**
  *  @params {String} stage
  *  @params {String} template
@@ -1815,6 +1835,34 @@ nas.UserSignature.prototype.toHTML = function(stage,template){
 /*test
     var A = new nas.UserSignature("123:[OK	2022.01.01	kiyo@nekomataya.info]");
     var B = new nas.UserSignature("123","[OK	2022.01.01	kiyo@nekomataya.info]");
+*/
+/**
+	@params {Number} id
+ シグネチャボックスの情報をモーダル表示
+テスト用関数を後付で拡張
+ */
+nas.UserSignature.prototype.showSignatueInfo = function showSignatueInfo(id){
+	if(this.parent){
+		var infoMsg = JSON.stringify(this,0,2);
+		var dialogTitle = localize({ja:'署名詳細',us:'Signature Details'});
+		nas.HTML.showModalDialog('alert',infoMsg,dialogTitle);
+	};
+};
+/*TEST
+var stream = `
+CT:0
+	[	2022.01.23	kiyo:kiyo@nekomataya.info]
+	(composite	2022.01.24	たぬき:tanuki@animal.example.com)
+LO:1
+	[-済-	2022.01.24	kiyo:kiyo@nekomataya.info]
+	<監督OK	2022.01.25	鮒:funa@animal.example.com>
+	<演出	2022.01.25	亀:kame@animal.example.com>
+	(演出	2022.01.25	亀:kame@animal.example.com)
+`;
+xUI.XPS.signatures.parse(stream);
+
+document.getElementById('signbox').innerHTML = xUI.XPS.signatures.toHTML();
+//xUI.showSignatueInfo(1)
 */
 /**
  *    nas.UserSignature　オブジェクトコレクション
@@ -4495,6 +4543,8 @@ nas.parseFrame('120F');
  * クッキーに保存したので　クッキー読み取り時に更新
  */
 nas.CURRENTUSER = new nas.UserInfo(config.myName);
+console.log("common:")
+console.log(nas.CURRENTUSER)
 /**
  * 時間関連設定
  * @type {Number}

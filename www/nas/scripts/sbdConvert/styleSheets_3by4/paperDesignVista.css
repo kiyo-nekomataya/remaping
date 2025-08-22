@@ -1,0 +1,41 @@
+﻿/*	paperDesign.css						*/
+/*	絵コンテエディタ のためのスタイルシート			*/
+/*	Nekomataya/kiyo 2008		画面印刷共用 vistaSize	*/
+
+/*========== 絵コンテ全体 ============*/
+
+table	{
+		width:180mm;
+		height:245mm;
+}
+.cutNumber{	width:13mm;
+}
+.pictureArea{	width:88.8mm;
+}
+.contentText{	width:27mm;
+		padding-left:2mm;
+		padding-right:2mm;
+}
+.dialogText{	width:29mm;
+		padding-left:2mm;
+		padding-right:2mm;
+}
+.timeText{	width:13mm;
+}
+.columnLabel{	height:48mm;
+}
+
+/*
+このファイルのサイズを変更して絵コンテのサイズを調整可能です。
+セリフ・音声欄が絵のそばにあるコンテ用紙には対応できません。
+ゴメンネ
+
+cutNumber	カット番号を書く欄の幅
+pictureArea	画像欄の幅
+contentText	ト書き欄の幅を文書幅と左右の余裕で
+dialogText	セリフ・音声欄の幅を文書幅と左右の余裕で
+timeText	時間表示欄の幅
+columnLabel	一段の高さ
+table.width	コンテ枠全体の幅と高さを指定(段数は自動計算します。)
+
+*/

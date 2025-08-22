@@ -5,9 +5,22 @@
  *
  * 各アプリケーションごとのファイルでなく共用リソースとして一旦統合
  * 2016.06.01
+このデータはリソースとして nas.uiMsg.json に変換済み
+リソースは nas_locale.js内で初期化されるため
+このファイルを読み込んでも、遅延読み込みの結果データが上書きされる可能性が高い
+このファイルは将来的に廃棄 2022.01.17
  */
+'use strict';
+/*=======================================*/
+if ((typeof config != 'object')||(config.on_cjs)){
+    var config  = require('./nas_common').config;
+    var appHost = require('./nas_common').appHost;
+    var nas     = require('./nas_locale').nas;
+};
+if (typeof nas == "undefined")     var nas = {};
 
 nas.uiMsg = {};
+nas.uiMsg.note = 'over write message.js';
 nas.uiMsg.about                 = {en: "about this application", ja: "このアプリケーションについて"};
 nas.uiMsg.aboutOf               = {en: "about %1", ja: "%1 について"};
 
@@ -43,6 +56,7 @@ nas.uiMsg.baseResolution        = {en: "BaseResolution", ja: "基準解像度"};
 nas.uiMsg.BG                    = {en: "BG", ja: "背景"};
 nas.uiMsg.Book                  = {en: "MG/FG", ja: "BOOK"};
 nas.uiMsg.Cancel                = {en: "Cancel", ja: "取消"};
+nas.uiMsg.Ok                    = {en: "OK", ja: "OK"};
 nas.uiMsg.Cell                  = {en: "Cell", ja: "セル"};
 nas.uiMsg.Change                = {en: "Change", ja: "変更"};
 nas.uiMsg.Close                 = {en: "Close", ja: "閉じる"};
@@ -95,6 +109,13 @@ nas.uiMsg.modeChange            = {en: "mode change", ja: "モード切替"};
 nas.uiMsg.Medias                = {en: "Medias", ja: "メディア設定"};
 nas.uiMsg.newLayerBgColor       = {en: "bgColor of new layer", ja: "新規レイヤの背景色"};
 nas.uiMsg.newXPS                = {en: "new eXposureSheet", ja: "新規タイムシート"};
+nas.uiMsg.newItem               = {en: "new item", ja: "新規アイテム"};
+nas.uiMsg.newItemName          = {en: "new item name", ja: "新規アイテム名"};
+//nas.uiMsg.new                = {en: "new ", ja: "新規"};
+//nas.uiMsg.new                = {en: "new ", ja: "新規"};
+//nas.uiMsg.new                = {en: "new ", ja: "新規"};
+//nas.uiMsg.new                = {en: "new ", ja: "新規"};
+
 nas.uiMsg.noAnimationFrames     = {en: "no Animation Frames", ja: "アニメーションフレームがありません"};
 nas.uiMsg.noDocument            = {en: "no document", ja: "ドキュメントがありません"};
 nas.uiMsg.noLayers              = {en: "no layer for deploying", ja: "展開するレイヤがありません"};
@@ -105,8 +126,10 @@ nas.uiMsg.noSigninService       = {en: "(You are not signed in to the service)",
 nas.uiMsg.OMedit                = {en: "OutputMedias", ja: "出力メディア編集"};
 nas.uiMsg.OMset                 = {en: "OutputMedias", ja: "出力メディア登録"};
 nas.uiMsg.Open                  = {en: "Open", ja: "開く"};
+nas.uiMsg.OpenFolder            = {en: "Open folder", ja: "フォルダを開く"};
 nas.uiMsg.opus                  = {en: "Opus", ja: "制作番号"};
 nas.uiMsg.othet                 = {en: "other", ja: "その他"};
+nas.uiMsg.overlay               = {en: "overlay", ja: "オーバーレイ"};
 nas.uiMsg.overlayBgColor        = {en: "bgColor of overlay", ja: "修正レイヤの背景色"};
 nas.uiMsg.overrideAlpha         = {en: "overrideAlpha", ja: "アルファチャンネル優先"};
 nas.uiMsg.overrideColorKey      = {en: "overrideColorKey", ja: "カラーキー優先"};
@@ -386,8 +409,8 @@ nas.uiMsg.dmConfirmClosepMenu = {
     ja:"ドロップダウンメニューを非表示にしてよろしいですか？"
 };
 nas.uiMsg.dmAskUserinfo = {
-    en:"please enter user name and e-mail address.",
-    ja:"ユーザ名とメールアドレスを入力してください。"
+    en:"Enter the name of the workstaff. If you need to enter an e-mail address, separate it with a ':' (colon).",
+    ja:"作業担当者の名前を入力します。メールアドレスを入力する場合は':(コロン)'で区切って入力してください。"
 }
 nas.uiMsg.dmCookieRemoved = {
     en:"I deleted the cookie. \nIn order to reset the value, reloading the page is necessary.\nIt will be reloaded with [OK].",
@@ -463,8 +486,7 @@ nas.uiMsg.dmTLtagEdit = {
 	en:"Edit the note text of the track.",
 	ja:"トラックの注釈を編集します。"
 };
-
-
+//console.log('loaded : nas_messages.js');
 /*
 
  nas.uiMsg.	={en:"	,ja:"};
@@ -474,3 +496,7 @@ nas.uiMsg.dmTLtagEdit = {
  };
  */
 //=========nas.uiMsg
+/*=======================================*/
+if ((typeof config == 'object')&&(config.on_cjs)){
+    exports.nas  = nas;
+};

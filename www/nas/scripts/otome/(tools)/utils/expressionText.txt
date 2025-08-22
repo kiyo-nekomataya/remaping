@@ -1,0 +1,256 @@
+
+	Grobal
+comp(name)
+footage(name)
+thisComp
+thisLayer
+thisProperty
+time
+colorDepth
+posterizeTime(framesPerSecond)
+timeToFrames(t = time + thisComp.displayStartTime, fps = 1.0 / thisComp.frameDuration, isDuration = false)
+framesToTime(frames, fps = 1.0 / thisComp.frameDuration)
+timeToTimecode(t = time + thisComp.displayStartTime, timecodeBase = 30, isDuration = false)
+timeToNTSCTimecode(t = time + thisComp.displayStartTime, ntscDropFrame = false, isDuration = false)
+timeToFeetAndFrames(t = time + thisComp.displayStartTime, fps = 1.0 / thisComp.frameDuration, framesPerFoot = 16, isDuration = false)
+timeToCurrentFormat(t = time + thisComp.displayStartTime, fps = 1.0 / thisComp.frameDuration, isDuration = false)
+
+
+	Vector Math
+add(vec1, vec2)
+sub(vec1, vec2)
+mul(vec, amount)
+div(vec, amount)
+clamp(value, limit1, limit2)
+dot(vec1, vec2)
+cross(vec1, vec2)
+normalize(vec)
+length(vec)
+length(point1, point2)
+lookAt(fromPoint, atPoint)
+
+
+	Rondom numbers
+seedRandom(seed, timeless = false)
+random()
+random(maxValOrArray)
+random(minValOrArray, maxValOrArray)
+gaussRandom()
+gaussRandom(maxValOrArray)
+gaussRandom(minValOrArray, maxValOrArray)
+noise(valOrArray)
+
+
+	interpolations
+linear(t, value1, value2)
+linear(t, tMin, tMax, value1, value2)
+ease(t, value1, value2)
+ease(t, tMin, tMax, value1, value2)
+easeIn(t, value1, value2)
+easeIn(t, tMin, tMax, value1, value2)
+easeOut(t, value1, value2)
+easeOut(t, tMin, tMax, value1, value2)
+
+
+	Color Conversion
+rgbToHsl(rgbaArray)
+hslToRgb(hslaArray)
+
+
+	Other Math
+degreesToRadians(degrees)
+radiansToDegrees(radians)
+
+
+	Javascript Math
+Math.cos(value)
+Math.acos(value)
+Math.tan(value)
+Math.atan2(y, x)
+Math.sqrt(value)
+Math.exp(value)
+Math.pow(value, exponent)
+Math.log(value)
+Math.abs(value)
+Math.round(value)
+Math.ceil(value)
+Math.floor(value)
+Math.min(value1, value2)
+Math.max(value1, value2)
+Math.PI
+Math.E
+Math.LOG2E
+Math.LOG10E
+Math.LN2
+Math.LN10
+Math.SQRT2
+Math.SQRT1_2
+
+
+	Comp
+layer(index)
+layer(name)
+layer(otherLayer, relIndex)
+marker
+numLayers
+activeCamera
+width
+height
+duration
+displayStartTime
+frameDuration
+shutterAngle
+shutterPhase
+bgColor
+pixelAspect
+name
+
+
+	Footage
+width
+height
+duration
+frameDuration
+pixelAspect
+name
+
+
+	Layer Sub-objects
+source
+effect(name)
+effect(index)
+mask(name)
+mask(index)
+
+
+	Layer General
+width
+height
+index
+parent
+hasParent
+inPoint
+outPoint
+startTime
+hasVideo
+hasAudio
+enabled
+active
+audioActive
+sampleImage(point, radius = [.5, .5], postEffect = true, t = time)
+
+
+	Layer Properties
+anchorPoint
+position
+scale
+rotation
+opacity
+audioLevels
+timeRemap
+marker
+name
+
+
+	Layer 3D
+orientation
+rotationX
+rotationY
+rotationZ
+lightTransmission
+castsShadows
+acceptsShadows
+acceptsLights
+ambient
+diffuse
+specular
+shininess
+metal
+
+
+	Layer Space Transforms
+toComp(point, t = time)
+fromComp(point, t = time)
+toWorld(point, t = time)
+fromWorld(point, t = time)
+toCompVec(vec, t = time)
+fromCompVec(vec, t = time)
+toWorldVec(vec, t = time)
+fromWorldVec(vec, t = time)
+fromCompToSurface(point, t = time)
+
+
+	Camera
+pointOfInterest
+zoom
+depthOfField
+focusDistance
+aperture
+blurLevel
+active
+
+
+	Light
+pointOfInterest
+intensity
+color
+coneAngle
+coneFeather
+shadowDarkness
+shadowDiffusion
+
+
+	Effect
+active
+param(name)
+param(index)
+name
+
+
+	Mask
+maskOpacity
+maskFeather
+maskExpansion
+invert
+name
+
+
+	Property
+value
+valueAtTime(t)
+velocity
+velocityAtTime(t)
+speed
+speedAtTime(t)
+wiggle(freq, amp, octaves = 1, amp_mult = .5, t = time)
+temporalWiggle(freq, amp, octaves = 1, amp_mult = .5, t = time)
+smooth(width = .2, samples = 5, t = time)
+loopIn(type = "cycle", numKeyframes = 0)
+loopOut(type = "cycle", numKeyframes = 0)
+loopInDuration(type = "cycle", duration = 0)
+loopOutDuration(type = "cycle", duration = 0)
+key(index)
+key(markerName)
+nearestKey(t)
+numKeys
+active
+enabled
+propertyGroup(countUp = 1)
+propertyIndex
+
+
+	Key
+value
+time
+index
+
+
+	MarkerKey
+comment
+chapter
+url
+frameTarget
+eventCuePoint
+cuePointName
+parameters
+

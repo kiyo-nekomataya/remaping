@@ -1,0 +1,36 @@
+﻿/*
+ *	汎用クリップターゲット追従エクスプレッション
+ *	アニメーション業務で良く指定される形式のカメラワーク指定をAE上でトレースする際の
+ *	補助エクスプレッションです
+ *	使用方法は、以下のアドレスを参照のこと
+ *	このエクスプレッションは、アンカーポイント・位置・スケール・回転 各レイヤーで
+ *	同じコードを使用できます
+ *	2024 06/05 nekomataya/kiyo 
+ */
+if((thisLayer.source.numLayers)&&(thisLayer.source.numLayers>1)){
+	var myTarget=thisLayer.source.layer(1);//第一レイヤを仮取得
+	if(myTarget.name!="camara"){
+		for(var lidx=1;lidx<=thisLayer.source.numLayers;lidx++){
+			if(myTarget.name=="camara"){
+				myTarget=thisLayer.source.layer(lidx);break;
+			};
+		};
+	};
+}else{
+	var myTarget=this;//カメラレイヤがないので解決をすべて保留して自身を参照
+};
+if(thisProperty.propertyIndex == thisLayer.transform.anchorPoint.propertyIndex){
+//anchorPoint
+	myTarget.position
+}else if(thisProperty.propertyIndex == thisLayer.transform.position.propertyIndex){
+//position
+	[(myTarget.anchorPoint[0]*(thisComp.width/myTarget.width)),(myTarget.anchorPoint[1]*(thisComp.height/myTarget.height))];
+}else if(thisProperty.propertyIndex == thisLayer.transform.scale.propertyIndex){
+//scale
+	mul([(100/myTarget.scale[0]*(thisComp.width/myTarget.width)),(100/myTarget.scale[1]*(thisComp.height/myTarget.height))],100);
+}else if(thisProperty.propertyIndex == thisLayer.transform.rotation.propertyIndex){
+//rotation
+	-myTarget.rotation;
+}else{
+	thisProperty;
+};

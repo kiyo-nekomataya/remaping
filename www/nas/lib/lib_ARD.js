@@ -1,24 +1,31 @@
 ﻿/**
- *    @fileoverview ARD2XPS(ARDStream)
- *
- *    ARDファイルをXPS互換テキストにコンバートする
- *    引き数は、ARDデータのテキストストリーム
- *    コンバート失敗時は ""
+ *    @fileoverview
+ *  AE Remap(http://bryful.yuzu.bz/software/junk/AE_Remap111.zip)の
+ *  データを読み書きするためのライブラリ<br />
+ *  AE Remapは(02.2019)現在 次バージョンに移行して更新停止
  */
-
+'use strict';
+/*=======================================*/
+if((typeof window == 'undefined')&&(typeof app == 'undefined')){
+    var nas = require('./xpsio');
+};
 
 /**
- * @return {string}
+ *  ARDデータをXPS互換テキストにコンバートする
+ *  @param {String} ARDStream
+ *   改行を含むARDデータ全体
+ *  @return {string}
+ *   XPS互換サブセットテキスト
  */
 function ARD2XPS(ARDStream) {
-    /**
+    /*
      * データ冒頭のみチェックして明確に違うストリームの場合はエラーを返す
      */
     if (!ARDStream.match(/^#TimeSheetGrid\x20SheetData/)) {
         return "";
     }
 
-    /**
+    /*
      * ARDデータをオブジェクト化する。デフォルトの値は、変換時に書きなおすので決め打ち
      */
     var myARD = {
@@ -41,9 +48,8 @@ function ARD2XPS(ARDStream) {
             [],
         ]
     };
-    /**
+    /*
      * ラインで分割して配列に取り込み
-     * @type {Array}
      */
     myARD.SrcData = [];
     if (ARDStream.match(/\r/)) {
@@ -51,11 +57,11 @@ function ARD2XPS(ARDStream) {
     }
 
     myARD.SrcData = ARDStream.split("\n");
-    /**
+    /*
      * データ走査・モード切替つつパラメータ取得
-     * @type {number}
      */
     var cellIndex = 0;
+    var dataStatus;
     for (var line = 1; line < myARD.SrcData.length; line++) {
         if (myARD.SrcData[line] == "") {
             continue;//空行スキップ
@@ -89,7 +95,7 @@ function ARD2XPS(ARDStream) {
                     break;
             }
         }
-        /**
+        /*
          * モードにしたがってパラメータ取得
          */
         switch (dataStatus) {
@@ -109,18 +115,17 @@ function ARD2XPS(ARDStream) {
         }
 
     }
-    var myXps = new Xps(myARD.LayerCount * 1, parseInt(myARD.FrameCount));
-
-    myXps.init(parseInt(myARD.LayerCount), parseInt(myARD.FrameCount));
-
+//ダイアログトラック 1,コメントトラック 1を追加して初期化
+    var myXps = new nas.Xps();
+    myXps.init(parseInt(myARD.LayerCount) + 2, parseInt(myARD.FrameCount));
     if (myARD.CmpFps) {
-        myXps.framerate = parseInt(myARD.CmpFps);
+        myXps.framerate.parse(myARD.CmpFps);
     }
-
     if (myARD.CellNames) {
+console.log(myARD.CellNames);
         for (var lid = 0; lid < myARD.CellNames.length; lid++) {
             if (myARD.CellNames[lid]) {
-//                myXps.layers[lid].name = myARD.CellNames[lid];
+console.log(myXps.xpsTracks[lid+1]);
                 myXps.xpsTracks[lid+1].id = myARD.CellNames[lid];
             }
         }
@@ -139,24 +144,26 @@ function ARD2XPS(ARDStream) {
 }
 
 /**
+ *　nas.XpsデータをARDデータにコンバートする
+ *  @param {Object nas.Xps or String} sourceXPS
+ *  @returns {String} 
+ *      ARDテキストデータ
+ */
+/*<pre>
  * 引数はオブジェクトでも、ストリームでも受け付ける。
- * コンバートするXPSをARD互換形式で書き出すことができる。
- * 文字コードのコンバートは特にしていないので、
- * 必要なら何か別のコンバート手段を利用してShift-JISに変換されたし。
- *
- * @param sourceXPS
- * @returns {boolean}
- * @constructor XPS2ARD(myXPS)
+ * コンバートするXPSをARD互換形式で戻す。
+ * 文字コードのコンバートは特にしていないので、必要したがって書き出しの際にShift-JISに変換すること。
+ *</pre>
  */
 function XPS2ARD(sourceXPS) {
-    /**
+    /*
      * 引数がソースであっても処理する。XPSでない場合はfalse
      */
-    if (sourceXPS instanceof Xps) {
+    if (sourceXPS instanceof nas.Xps) {
         var sourceXPS = sourceXPS;
     } else {
         if ((sourceXPS instanceof String) && (sourceXPS.match(/^nasTIME-SHEET/))) {
-            var sourceXPS = new Xps();
+            var sourceXPS = new nas.Xps();
             if (!sourceXPS.parseXps(sourceXPS)) {
                 return false;
             }
@@ -165,10 +172,9 @@ function XPS2ARD(sourceXPS) {
         }
     }
 
-    /**
+    /*
      * sourceXPSからtiming関連タイムラインを抽出
      * プロパティをチェックして必要なタイムラインのIDを抽出する
-     * @type {Array}
      */
     var myTarget = [];
     for (var ix = 1; ix < (sourceXPS.xpsTracks.length-1); ix++) {
@@ -177,25 +183,25 @@ function XPS2ARD(sourceXPS) {
         }
     }
 
-    /**
+    /*
      * ARD互換のオブジェクトを作成
      * @type {{LayerCount: number, FrameCount, SrcWidth: (string|*), SrcHeight: (*|string), PageFrame: number, CmpFps: *, SrcAspect: number, CmpAspect: (*|string), EmptyCell: number, CellNames: Array, Cell: Array}}
      */
     var myARD = {
         "LayerCount": 0,
         "FrameCount": sourceXPS.duration(),
-        "SrcWidth": sourceXPS.xpsTracks[myTarget[0]].sizeX,
-        "SrcHeight": sourceXPS.xpsTracks[myTarget[0]].sizeY,
-        "PageFrame": (xUI) ? xUI.PageLength : 6 * sourceXPS.framerate,
-        "CmpFps": sourceXPS.framerate,
-        "SrcAspect": 1,
-        "CmpAspect": sourceXPS.xpsTracks[myTarget[0]].aspect,
-        "EmptyCell": 0,
-        "CellNames": [],
-        "Cell": []
+        "SrcWidth"  : sourceXPS.xpsTracks[myTarget[0]].sizeX,
+        "SrcHeight" : sourceXPS.xpsTracks[myTarget[0]].sizeY,
+        "PageFrame" : (xUI) ? xUI.PageLength : 6 * sourceXPS.framerate,
+        "CmpFps"    : sourceXPS.framerate,
+        "SrcAspect" : 1,
+        "CmpAspect" : sourceXPS.xpsTracks[myTarget[0]].aspect,
+        "EmptyCell" : 0,
+        "CellNames" : [],
+        "Cell"      : []
     };
 
-    /**
+    /*
      * レイヤ名を組む
      * option="timing"のものだけpushしてIDを控える
      * @type {Array}
@@ -292,3 +298,12 @@ function XPS2ARD(sourceXPS) {
  * この形式で各フォーマットのコンバータを作って一元化したいが、どうよ？
  * 逆変換も欲しいね。
  */
+ /*=======================================*/
+if((typeof window == 'undefined')&&(typeof app == 'undefined')){
+    exports.ARD2XPS = ARD2XPS;
+    exports.XPS2ARD = XPS2ARD;
+}
+/*  eg. for import
+    const { ARD2XPS , XPS2ARD } = require('./lib_ARD.js');
+
+*/

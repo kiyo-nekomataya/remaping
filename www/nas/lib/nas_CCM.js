@@ -1,20 +1,22 @@
 ﻿/**
  * @fileoverview 色変換ライブラリ nasCCM.js
  * 色空間等の変換ライブラリです。
- * $Id: nas_CCM.js,v 1.2.4.1 2009/09/17 21:54:22 nori Exp $
+ * v 1.2.4.1 2021/02/09
+ *   モジュール化のためのソース変更
  */
-
+/*=======================================*/
+if(typeof nas == 'undefined') var nas = {};
+//旧システム互換コード　移植終了後に撤去
 myFilename = ("$RCSfile: nas_CCM.js,v $").split(":")[1].split(",")[0];
 myFilerevision = ("$Revision: 1.2.4.1 $").split(":")[1].split("$")[0];
-
 try {
     nas.Version["CCM-lib"] = "CCM-lib:" + myFilename + " :" + myFilerevision;
 } catch (err) {
-    nas.CCM.nas = {};
+    nas = {};
     nas.Version["CCM-lib"] = "CCM-lib:" + myFilename + " :" + myFilerevision;
 }
+//旧コード//
 nas.CCM = {};
-
 // 
 //  色変換に必要な基礎情報(初期値)パラメータセットがあれば上書き(予定)
 // 	 とりあえずまるごとJavaScriptにコンバートする
@@ -47,3 +49,6 @@ nas.CCM.oRGB = [0.64, 0.3, 0.15, 0.33, 0.6, 0.06];
 nas.CCM.oGAMMA = 2.2;
 
 //変換関数の移植はまだ、行列関連はcommonライブラリに移動 2005/11/25
+
+/*=======================================*/
+if(typeof module != 'undefined') module.exports = nas.CCM;

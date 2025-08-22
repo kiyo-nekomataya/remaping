@@ -58,7 +58,7 @@
  * @constructor
  */
 function XpsStore() {
-    if ((nas.isAdobe) && (app.name.match(/After/i))) {
+    if ((appHost.ESTK) && (app.name.match(/After/i))) {
         this.body = false;//false or CompItem
     } else {
         this.body = [];//シート保存変数
@@ -398,7 +398,7 @@ function XpsStore() {
      * @returns {*}
      */
     this.getInfo = function (index) {
-//		if(AEVersion<7){return this.AE65Prop};//AE65の場合はダミープロパティを返す
+//		if(appHost.version<7){return this.AE65Prop};//AE65の場合はダミープロパティを返す
         if (!index) {
             if (this.selected) {
                 index = this.selected.index;

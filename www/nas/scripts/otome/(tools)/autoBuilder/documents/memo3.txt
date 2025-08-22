@@ -1,0 +1,136 @@
+﻿/*
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+/*
+	ターゲットフォルダを取得
+	フォルダ以下のフッテージを掘ってインポート
+	インポートファイルがセレクトされた状態で
+	選択アイテムを総当たりでフッテージとしての種別を推測
+	(
+		movie・セル等	(ムービー)
+		BG/Book等	(静止画)
+		LO・frame等	(参考画像)
+		タイムシート等	(フッテージに登録しない参考画像 後続の処理対象にならないオプションでフッテージから削除)
+	)
+	ルートにフッテージキャリアがあればそこにフッテージを移動(AE7以降)
+		標準で「_footages」
+	処理対象フッテージを1点ずつプリコンポジションする。(グループ分割)
+		AE7以降ではアイテムキャリアを作ってそこに移動
+		_nas_group_[グループ名] で名前空間を形成する?
+	用途予測にしたがって、mapデータを生成する。(予定)
+	この_nas_名前空間内のアイテムをマップグループとして処理する。
+
+	用途予測でセルと判断したものは、コンポ内部のセルに白クリップを行い、オプションにしたがってスムージング等の処理を行う。
+	prototype.js の each() メソッドを実装した方がよいか?
+	
+	
+ */
+nas.otome.divideFootageItems=function()
+{
+	try{var myXPS=XPS}catch(err){nas.otome.writeConsole(err.toString());return;};
+	if(app.version.split(".")[0]*1<7){
+		alert("フォルダ振り分けはAE6.5では使用できません。¥nこの機能はAE7以降でご使用ください");
+		return;
+	};
+//ケース見落としていた。　総アイテム数が０のときは何もする意味がないのでリターン
+	if ((! app.project)||(!app.project.items.length)){alert("no items");return 0;}
+
+	var portCount=0;
+	var myItems=app.project.selection;//初期化
+//アイテム数0なら対象をデフォルトに変更	
+	if(myItems.length==0){
+		var myTargetFolder=app.project.item(1).parentFolder;//裏技でRootを取得
+		for(var itmIdx=1;itmIdx<=myTargetFolder.items.length;itmIdx++){
+			myItems.push(myTargetFolder.items[itmIdx]);//Rootフォルダのアイテムをすべて登録(あとで分類)
+		}
+	}
+//var targetFolderReg=new RegExp("_(bg|etc|frame|lo|paint|sound|system|rough|key|draw(ing)?)$","i");
+
+//移動操作に先立って移動先の親フォルダがなければ作成（undo）
+		if(! (app.project.items.getByName(nas.ftgFolders.ftgBase[0])))
+		{
+			nas.otome.mkWorkFolders();//ファンクションコールで全部作る
+		}
+//移動処理開始
+var tansItems=new Array;//サブの移動アイテムスタックループセットごとか?
+
+// undo group 設定（カテゴリ別フッテージ振り分け）
+	app.beginUndoGroup("フッテージ振り分け");	
+//=========================振分移動ループ処理
+	for(var itmIdx=0;itmIdx<myItems.length;itmIdx++)
+	{
+		if(nas.otome.isPsdFolder(myItems[itmIdx].parentFolder)){continue};	//親フォルダがpsdフォルダなら処理スキップ
+		var myCatg=nas.otome.guessFtgCtg(myItems[itmIdx]);//推定エンジンに渡す
+		if(myCatg==false){continue};//処理スキップ
+		
+		var myDestFoldrItem=app.project.items.getByName(nas.ftgFolders.names[0]).items.getByName(nas.ftgFolders.names[myCatg]);
+//		if((myDestFoldrItem)&&(myItems[itmIdx].parentFolder.name!=myDestFoldrItem.name)){myItems[itmIdx].parentFolder=myDestFoldrItem};
+//		continue;
+//フォルダアイテムのケース
+/*
+	この条件を満たした場合はPSDコンポのレイヤフォルダ　またはフッテージ格納フォルダであるはずなので移動対象
+	ただし自動インポートの際はフォルダはセレクトされないので自然と移動対象外になるので
+	その場合は親コンポから移動するように設定する
+
+	フォルダの移動はアイテム移動スタックで処理
+*/
+//コンポアイテムのケース
+/*
+	コンポアイテムが移動対象の場合は背景コンポである可能性が高いので以下の検査を行い
+	合致していたら背景コンポであるとみなし対象のレイヤ格納フォルダをアイテム移動スタックに積み
+	このファンクションの最後に解決する
+*/
+		if(
+			(myItems[itmIdx] instanceof CompItem)&&
+			(nas.otome.isPsdComp(myItems[itmIdx]))
+		){
+			var targetFolder=myItems[itmIdx].layer(1).source.parentFolder;
+			for(var lid=0;lid<myItems[itmIdx].layers.length;lid++){
+				if(nas.otome.isPsdFolder(targetFolder))
+				{
+					tansItems.push([targetFolder,myDestFoldrItem]);//ターゲットと移動先をプッシュ
+					break;
+				}
+				targetFolder=myItems[itmIdx].layer(lid+1).source.parentFolder;
+			}
+			
+		}
+//移動操作開始	
+
+		if((myDestFoldrItem)&&(myItems[itmIdx].parentFolder.name!=myDestFoldrItem.name))
+		{
+			myItems[itmIdx].parentFolder=myDestFoldrItem;//移動
+//移動時にXPSの情報に合わせてフッテージを調整
+			portCount++;
+		}else{
+//選択対象外のアイテムをスキップする必要があるかも＞＞このタイミングではフォルダアイテムをすべて除外すべき
+			if(!(myItems[itmIdx] instanceof FolderItem)){
+				myItems[itmIdx].parentFolder=app.project.items.getByName(nas.ftgFolders.ftgBase[0]).items.getByName(nas.ftgFolders.unknown[0]);
+				portCount++;
+			}
+		}
+	};
+
+//=========================指定アイテム振分移動ループ処理終了
+
+//=========================全てのアイテム処理後に派生移動アイテムがあれば移動
+//ただしアイテム移動先が存在しない場合は処理をスキップ
+	for(var itmIdx=0;itmIdx<tansItems.length;itmIdx++){
+		if(tansItems[itmIdx][1]){tansItems[itmIdx][0].parentFolder=tansItems[itmIdx][1];portCount++;};	
+	}
+//=========================サブ移動アイテム移動終了
+//undo 閉じる
+	app.endUndoGroup();
+return portCount;
+};
+//	nas.otome.divideFootageItems();

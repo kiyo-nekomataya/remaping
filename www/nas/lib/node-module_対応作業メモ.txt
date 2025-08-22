@@ -1,0 +1,154 @@
+﻿nsa-lib
+node-module_対応作業メモ
+
+nas/
+README.md
+	_backyard/
+	ext-lib/	外部ライブラリ ＞＞移設予定
+	lib/		ライブラリ本体ディレクトリ　分類して再構成
+	moduleTest/	
+	pmdb/		
+	resource/
+	scripts/
+		XpsConverter.js
+		axe/
+		mkFrame.jsx
+		nasPrefPs.jsx
+		otome/
+		pman/
+		psAxeSplash.jsx
+		remaping/
+		sbdConvert/
+		xpsedit/
+
+	setup/
+	test_draftSource/
+
+
+ライブラリ名称
+nas
+	Object名としてはなんとかなる
+	
+var nas = require('./nas/index.js');
+
+import nas from './nas/index.js';
+
+<script type="module" src=./nas/index.js></script>
+
+	(temp)/
+	_nouse/
+	etc/
+	pixelBenderKernel/
+	resource/
+
+//	UAF-core モジュール nas
+config.js
+
+nas_common.js
+nas_AnimationValues.js
+nas_CCM.js
+fsio.js
+
+//	uaf-locale nas
+nas_locale.js
+messages.js
+
+//	uaf-pmdb nas
+pmio.js
+//	uaf-stdb nas
+storyboard.js
+
+//	uaf-xmap xMap
+mapio.js
+
+//   uaf-xpst Xps
+xpsio.js
+lib_NoteImage.js
+cameraworkDescriptionDB.js
+
+postscriptConvert.js
+lib_AEK.js
+lib_ARD.js
+lib_ARDJ.js
+lib_STS.js
+lib_TDTS.js
+lib_TSH.js
+lib_TSX.js
+lib_TVP.js
+lib_stylosCSV.js
+
+
+//	HTML_common
+nas_common_HTML.js
+nas_common_HTML.css
+
+//	AdobeES_common
+nas_GUIlib.js
+
+//	AXE
+Photoshop_Startup.jsx
+additionalLodaer.jsx
+xpsQueue.js
+newXps.jsx
+psCCfontFix.js
+nas.XpsStore.js
+nas_psAxeLib.js
+nas_axeEventHandler.js
+
+//	otome
+otome.systemWatcher.js
+nas_OtomeLib.js
+nas_Otome_config.js
+
+//	uaf-user-service
+nasLibInstall.js
+nas_preferenceLib.js
+nas_version.js
+nasTitleDB.js
+
+//
+sever	 :	node    /console
+WEB		 :	import  /html
+
+electron :	node    /html
+
+CEP		 :	node    /html
+ES		 :	incrude /console
+
+
+	require | exports
+	import  | export
+
+	incrude
+	script
+/*IMPORT MODULES inHTML*/
+<script type='module' src = ./uaf-modules/index-nas.js.js >
+/*IMPORT MODULES inCode*/
+if (typeof require == 'function'){
+	var nas = require("./uaf-modules/index-nas.js");
+} else if (typeof navigator != 'undefined'){
+	var nas = import("./uaf-modules/index-nas.js");
+}
+
+/*EXPORT OBJECT*/
+if (typeof require == 'function'){
+//require|exports
+	exports.nas = nas
+} else if (typeof navigator != 'undefined'){
+//import|export
+	export { nas };
+}
+
+
+
+処理系を限定する
+WEB			直接ユーザがブラウザでAccessする環境
+	export/import
+Electron	フルスペック環境
+	export/import	
+CEP+AdobeES	準フルスペック環境 (Node+)
+	exports/require
+	
+NodeConsole	サーバ環境(未成)
+	export/import
+AdobeES

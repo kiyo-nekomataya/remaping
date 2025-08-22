@@ -1,0 +1,154 @@
+﻿/*　follow_posIIについて
+　このフォルダにあるアニメーションプリセット"follow_posII.ffx " のエクスプレッションソースです
+このアニメーションプリセットを適用すると、フッテージアイテムに対してタイムシートの指定に従う形で
+日本のアニメ業界の指定方法による移動を処理可能です
+
+各エフェクトの数値を調整して利用して下さい
+
+ 	解像度(dpi)
+コンポジットステージの想定解像度を指定します
+キーフレームを使用したカット内での値の変更は可能ですが、推奨されません 
+
+	follow速度(mm/k)
+引き速度を(mm/k)形式で行います
+指定の解像度を元にピクセルに換算します
+
+	follow方向
+移動方向を角度で指定します
+指定形式は地図の北（１２時）方向を0度時計回りに360度を数えるコンパス方式です
+
+	(台)
+移動方向を反転させます
+標準でfollow方向の指定なので台引き指定の際にご利用下さい
+
+	stepFrames
+移動の際にフレームをスキップします
+0.5mm/2kの指定の場合は、ふたコマあたりに0.5mmの移動です
+コマ数を指定して下さい
+
+**このバーションでは、移動に対してレイヤー名による指定が可能です
+移動指定を以下の形式でサンプルのようにレイヤー名を付けてください
+エクスプレッションは名前を読んでそこからパラメータを抽出します
+名前指定を行った場合は、フォロー速度や方向等をカット途中で変更できません
+例
+"follow(0.125mm/k) →"
+"slide(2mm/2k) 45度 200dpi"
+	レイヤの名前に"slide"または"台"が含まれていると、移動方向を逆転します。
+	速度は、mm cm in px いずれかの単位が使えます。
+	コマうちの引きの場合は / の後ろ k の前に コマ数で指定します。
+	1コマ引きの場合はもちろん省略可能。
+	解像度は、dpi または dpc で。
+	引き方向は[矢印]または[角度]で。
+	矢印だと９０度単位でしか指定できませんので細かい角度を指定する場合は
+	45° / 45度 / 45d(egrees) これらのいずれかで指定してください。
+	0(=360)度が12時方向です。
+名前で指定されないパラメータは、各エフェクトにセットした値が使用されます
+以下の値は初期状態での値です
+解像度:144dpi;引き速度:0mm/k;方向:90度;台:off;フレームステップ:1	
+いつも使用する値を設定してアニメーションプリセットを保存しなおしておくと便利です
+
+パラメータにキーフレームを作成すると名前による指定はキャンセルされます
+
+--- おことわり
+このプログラムの著作権は「ねこまたや」にあります。
+あなたは、このプログラムのこの著作権表示を改変しないかぎり
+自由にプログラムの使用・複製・再配布などを行うことができます。
+あなたは、このプログラムを自己の目的にしたがって改造することができます。
+その場合、このプログラムを改造したものであることを明記して、この著作権表示を
+添付するように努めてください。
+このプログラムを使うも使わないもあなたの自由なのです。
+作者はこのプログラムを使用したことによって起きたいかなる
+不利益に対しても責任を負いません。
+あなたは、あなたの判断と責任においてこのプログラムを使用するのです。
+なんか、困ったことがあったら以下で連絡してもらえると何とかなるかもしれません。
+http://www.nekomataya.info/
+mailto:support@nekomataya.info
+そんな感じです。
+
+2015/04/04
+
+*/
+/*-----------------------------------------------------------解像度(dpi)*/
+//	解像度取得
+var Resolution = valueAtTime(time);var Resolution_unit ="dpi";
+if((! numKeys)&&(thisLayer.name.match(/([1-9][0-9]*¥.?[0-9]*)(dp[ic])/))){
+	Resolution=RegExp.$1; Resolution_unit=RegExp.$2	;
+}
+(Resolution_unit=="dpc")?Resolution*2.54:Resolution;
+/*-----------------------------------------------------------follow速度(mm/k)*/
+//	引き速度取得
+var mySpd=valueAtTime(time);var myUnit="mm";
+var spdRegex=new RegExp("([0-9]+¥.?[0-9]*)(mm|cm|in|pt|px)/[0-9]?k","i");
+if((! numKeys)&&( thisLayer.name.match(spdRegex) )){
+	var mySpd=RegExp.$1;var myUnit=RegExp.$2;
+}
+//	速度をmmに変換
+	switch(myUnit){
+case	"cm":	divider=10 ;	break;
+case	"in":	divider=25.40 ;	break;
+default	:	divider=1;
+	}
+	mySpd/divider;
+/*-----------------------------------------------------------follow方向*/
+//	引き方向取得
+var	followAngle = valueAtTime(time);
+if((! numKeys)&&(thisLayer.name.match(/([0-9]+¥.?[0-9]*)[度°d][^p]/i))){
+	followAngle = RegExp.$1;
+}else{
+	if(thisLayer.name.match(/([→↓↑←])/)){
+		switch(RegExp.$1){
+case	"→":	followAngle = 90	;break;
+case	"↓":	followAngle = 180	;break;
+case	"↑":	followAngle = 0 	;break;
+case	"←":	followAngle = 270	;break;
+		}
+	}
+}
+followAngle;
+
+/*-----------------------------------------------------------(台)*/
+//	台フラグ取得
+var SlideFlag=valueAtTime(time)
+if((! numKeys)&&(thisLayer.name.match(/(Slide)/i) ||thisLayer.name.match(/台/))){SlideFlag=true;}
+SlideFlag;
+
+/*-----------------------------------------------------------stepFrames*/
+//	移動ステップ量
+var stepFrames=valueAtTime(0);
+var spdRegex=new RegExp("([0-9]+¥.?[0-9]*)(mm|cm|in|pt|px)/([0-9]?)k","i");
+if((! numKeys)&&( thisLayer.name.match(spdRegex))){
+	stepFrames=parseInt(RegExp.$3);
+}
+(stepFrames>0)?stepFrames:1;
+
+/*-----------------------------------------------------------移動(XY)*/
+//初期オフセットをソースの中央に設定
+var offsetX = width/2;var offsetY = height/2;
+//リザルト初期化
+var followX =0;
+var followY =0;
+//ステップフレームを取得
+var stepFrames=effect("stepFrames").param(1).valueAtTime(0);
+//積算ステップ
+var currentStep=Math.floor((time/thisComp.frameDuration)/stepFrames);
+//開始フレームから現在まで移動をループで積む
+for(var f=0;f<currentStep;f++){
+	var targetTime=f*(thisComp.frameDuration*currentStep);
+//解像度をミリあたりの値に直す
+var DPM=effect("解像度(dpi)").param(1).valueAtTime(targetTime)/25.40;
+//フレームごとの移動距離を取得
+var _shift=effect("follow速度(mm/k)").param(1).valueAtTime(targetTime);
+//フレームごとの方向オフセットを取得（三角関数は３時方向反時計まわり）
+var _angle = effect("follow方向").param("角度").valueAtTime(targetTime) - 90;
+//チェックがはいっていたら方向を反転
+if (effect("(台)").param("チェックボックス").valueAtTime(targetTime) == true) {FollowFlag = "SLIDE"} else {FollowFlag = "FOLLOW"}
+	if (FollowFlag == "FOLLOW") {_angle = _angle +180}
+//移動距離を計算
+followX += DPM*_shift * Math.cos(Math.PI * (_angle / 180));
+followY += DPM*_shift * Math.sin(Math.PI * (_angle / 180));
+}
+//
+	_X= offsetX + followX ;
+	_Y= offsetY + followY ;
+
+[_X,_Y];

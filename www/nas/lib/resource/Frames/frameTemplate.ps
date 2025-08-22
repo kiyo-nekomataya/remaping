@@ -5,9 +5,9 @@
 %%Pages: 1
 % ↑これが用紙の大きさです 単位はポイント(1/72インチ)で左から順に
 % 左下X座標 左下Y座標 右上X座標 右上Y座標
-% 100 F / 10 in
-                                                                                                                   % 画面縦横比 9 : 16
-% 2011.09.02	Nekomataya/kiyo
+% 100 F / %BASEWIDTH% mm
+% 画面縦横比  : %ASPECTH% : %ASPECTW%
+% %DATE%	Nekomataya/kiyo
 %%EndComment
 % 単位換算
 /cm {28.3464 mul} def
@@ -25,7 +25,7 @@
 %			（1 ポイント = 1/72 インチ）
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 基準フレーム幅(100フレームの幅)
-/BaseWidth {%BASEWIDTH%} def
+/BaseWidth {%BASEWIDTH% mm} def
 
 % %%%% フレーム単位変換関数(ここは、書き換えない様にして下さい)
 /fl {60 add 160 div BaseWidth mul} def
@@ -44,8 +44,8 @@
 	/SafeWidth {100 fl 0.93 mul} def
 % タイトル安全フレーム幅
 	/TitleSafeWidth {100 fl 0.8 mul} def
-% 仕上げマージン幅 110%
-	/MarginWidth {100 fl 1.1 mul} def
+% 仕上げマージン幅 両サイド各16 mm (=32 mm)
+	/MarginWidth {100 fl 32 mm add} def
 % フレームの縦横比率(使わないものをコメントアウトして下さい)
 % テレビ
 %	/AspectH {3} def
@@ -53,10 +53,10 @@
 % HDTV
 %	/AspectH {9} def
 %	/AspectW {16} def
-%　35mm フィルム
+% 35mm フィルム
 %	/AspectH {16} def
 %	/AspectW {22} def
-%　ビスタ
+% ビスタ
 %	/AspectH {1} def
 %	/AspectW {1.85} def
 
@@ -70,7 +70,8 @@
 % 用紙上端からタップ中心までの距離
 	/PegBarOffset {0 cm} def
 % タップ中心からフレーム中心までの距離
-	/FrameOffset {%FRAMEOFFSET%} def
+%	/FrameOffset {%FRAMEOFFSET% mm} def
+	/FrameOffset {PaperHeight 2 div} def
 
 % タップ穴を表示するか否かまたはタップ位置をトンボで打つか、外形を描くか
 % 0:非表示/1:トンボ打ち/2:外形描画/3:黒で塗りつぶし
@@ -82,9 +83,15 @@
 /SecPlus (+) def
 /Koma (K\)) def
 /Ver ( AJA Fr01 ) def
+
 /textArea false def
 
 /showVer false def
+
+/showTitleSafe true def
+/showSafe true def
+/showMargin true def
+
 %ねこまたやロゴの表示
 /Logo false def
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -625,12 +632,12 @@ grestore
 	.2 in CrossDraw
 	grestore
 %		タイトルセーフ
-
+showTitleSafe {
 	gsave
 	currentpoint translate
 	DrawTitleSafeArea
 	grestore
-	
+}if
 
 	gsave
 	currentpoint translate
@@ -643,16 +650,19 @@ grestore
 	grestore
 
 % 安全フレーム記入部
+showSafe{
 	gsave
 	currentpoint translate
 	DrawSafeFrame
 	grestore
+}if
 % マージンフレーム記入部
+showMargin{
 	gsave
 	currentpoint translate
 	DrawMarginFrame
 	grestore
-
+}if
 % 文字ベースライン出して・カレントポイントをセンターへ
 	PaperWidth 2 div CBaseHeight moveto
 

@@ -1,0 +1,385 @@
+﻿0519
+
+UATools/reName
+
+画像キャッシュ注意
+フルパスで一致した場合キャッシュを表示するおそれがつよいので　キャッシュの強制クリアタイミングを設ける
+	img_0001.jpg あたりだと高確率で衝突する
+
+フォルダクローズは、必ずキャッシュクリア
+
+session.clearCache ?
+
+ファイル名の部分置換機能が必要
+拡張子変更機能
+セルグループを　A~Gよりも拡張 最低でも　J,K程度まで
+任意文字列のsetName も要る
+
+
+ペダルスイッチ
+スキャンボタン
+
+
+キー入力不正が発生する可能性あり
+目撃したが原因は不明
+
+閉じる前にトラップ
+「まだ名前変更していないエントリーがあります フォルダを閉じても良いですか？」
+と警告を設定する
+
+
+複数ファイルのダウンロード参考コード
+
+function multi_download() {
+    handleDownload("001.jpg");
+    handleDownload("002.jpg");
+    handleDownload("003.jpg");
+}
+function handleDownload(name) {
+    
+    // IE
+    if (window.navigator.msSaveBlob) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "cgi-bin/sample.py?f="+name, true);
+        xhr.responseType = "blob";
+        xhr.onload = function (e) {
+            var blob = xhr.response;
+            window.navigator.msSaveBlob(blob, name);
+        }
+        xhr.send();
+        return;
+    }
+    
+    // chrome,firefox
+    var a = document.createElement('a');
+    a.download = name;
+    a.href = "cgi-bin/sample.py?f="+name;
+    
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    
+    
+}
+----
+制作の検収または納品の際にファイルリストを作るのが良い
+リネームツールがリストを書き出す
+
+リストの書き出し先は_etc/ or _backyard/に統一するのが良いか？
+
+サイズ規定を参考付けて
+タップ１件ごとにサイズを統一するのが良い
+
+Google Drive
+	リンク共有	発注
+	リンクの削除	受注
+	アップロードデータを作る機能をUATに作成する
+	データアップロードで納品
+
+pman メニュー関連に着手
+
+tga.open('/Users/kiyo/Desktop/EVA/SE13_A02_01_t1/\(フッテージ\)/_sozai/D0001.tga', () => {
+  document.body.appendChild(tga.getCanvas());
+});
+
+-------
+表示オプション　設定ビューアをベースにする
+
+表示サイズ変更の際にクリックポイントを一致させる
+ドラグスクロールを実装する
+-------
+pman.preview = {};
+pman.preview.status      = 1;//表示倍率0はAUTO
+pman.preview.currentItem = [0,0,0];//三連整数アイテムID 0は未指定 [タイトル,カテゴリ,アイテム]
+pman.preview.sync        = false;//打ち合わせ用同期フラグ
+pman.preview.width       = 800;//現在表示しているアイテムのpixelサイズ
+pman.preview.height      = 800;
+
+var checkPreiew =function(myTarget){
+	alert("checkImageSize :"+pman.preview.status );
+	pman.preview.width  = myTarget.width;
+	pman.preview.height = myTarget.height;
+}
+/*
+ *	表示状態変更 倍率を指定する
+ *	0以下はプリセット表示
+ * 0	
+ * -1	
+ * -2	
+ * -4	
+ * 正数は倍率
+ */
+pman.preview.changeView=function(myTarget,myStatus){
+	if((typeof myStatus == 'undfined')&&(myStatus!=0)){
+		pman.preview.status = (pman.preview.status +1) % 4;
+	}else{
+		pman.preview.status = myStatus % 4;
+	};
+
+	if(pman.preview.status==0){
+		if(myTarget.width>=myTarget.height){
+	  myTarget.width=pman.preview.width;
+		}else{
+	  myTarget.height=pman.preview.height;
+		}
+	}else{
+	  var currentSize=[640,480];
+	//alert("size "+pman.preview.status +": setSize :"+ pman.preview.status * currentSize[0]);
+	　if(myTarget.width>=myTarget.height){
+//		$("#viewImage").width(pman.preview.status * currentSize[0]);
+		myTarget.width=(pman.preview.status * currentSize[0]);
+	  }else{
+//		$("#viewImage").height(pman.preview.status * currentSize[1]);
+		myTarget.height=(pman.preview.status * currentSize[1]);
+	  }
+	}
+}
+//=====================================
+	var currentStatus=[0,0,0];
+	var myStatus="";
+	myStatus.responseText="";
+/*
+ */
+function putStatus(myStatus){
+	myItem=JSON.parse(myStatus);
+	if(pman.preview.currentItem.toString() != myItem.toString()){
+		myEntries.setView(myItem);
+//		document.title="change item";
+	}else{
+//		document.title="no change item";
+	}
+		pman.preview.sync=false;
+	if(document.getElementById("viewSync").checked){
+//		document.title+=" : 待受再開";
+		ckStatus(true);
+	}
+}
+function ckStatus(forse){
+		if(! forse){return}
+		if(pman.preview.sync){
+//			document.title="ckStatus stay";
+			return;
+		}else{
+//			document.title+="ckStatus on";
+			pman.preview.sync=true;
+		}
+		$.get('./update.php',{status:JSON.stringify(pman.preview.currentItem),mode:"check"},putStatus);
+//	if((document.getElementById("viewSync").checked)||(forse)){
+//	}
+//	myStatus=sendRequest(putStatus,'','GET','./status.txt',true,true);
+}
+function sendStatus(){
+//	alert(JSON.stringify(pman.preview.currentItem));
+	$.get("./update.php",{status:JSON.stringify(pman.preview.currentItem),mode:"update"})
+}
+function setView(myParam){
+	myEntries.setView(myParam);
+	if(document.getElementById("viewSync").checked){
+		sendStatus();
+	};
+}
+
+function keyCommand(ev){
+	var myKeyCode=ev.keyCode;
+	switch(myKeyCode){
+	case	83://[s]
+		document.getElementById('viewSync').checked=(document.getElementById('viewSync').checked)?false:true;
+		ckStatus(document.getElementById('viewSync').checked);
+	break;
+	case	77://[m] menu on/off
+		if($('#myList').dialog('isOpen')){
+			$('#myList').dialog('close')
+		}else{
+			$('#myList').dialog('open')
+		}
+	break;
+	case	48://[0]
+		changeView(document.getElementById("viewImage"),0);
+	break;
+	case	49://[1]
+		changeView(document.getElementById("viewImage"),1);
+	break;
+	case	50://[2]
+		changeView(document.getElementById("viewImage"),2);
+	break;
+	case	51://[3]
+		changeView(document.getElementById("viewImage"),3);
+	break;
+	case	188://[<(,)]
+		setView("Back");
+	break;
+	case	190://[>(.)]
+		setView("Next");
+	break;
+	}
+}
+
+
+
+/*
+reName編集時の xUI.InputUnit
+	xUI.InputUnit = function(address,content,props){
+
+アドレス（状態）
+	Select(focus)	[-1,-1]
+	Selection		[Array]
+アイテム操作	引数
+	追加	ファイルパスまたはアイテムパス
+	削除 
+	移動
+	変名
+	
+	
+データ構造
+	{
+		address:{
+			focus:f,
+			selection:[array of Number]
+		},
+		command
+		manipurate:{
+			action:{String},//add|remove|move|rename
+			data:[array]
+		}
+	}
+タイムシートと異なり「フォーカスなし」がある フォーカスなしの際の値は -1
+便宜的にアドレスを[グループID,アイテムID]とする
+リネームツールのグループアドレスは固定で -1
+アセットブラウザとして扱う場合は0から始まるセッション内ユニークID
+アイテムアドレスは -1 または 0から開始のアイテムID
+初期値	[-1,-1]
+フォーカスは必ずしも操作対象アドレスではない
+実際の操作対象アドレスはセレクションがそれにあたる
+
+セレクションは、単に操作時点の選択状態にとどまらない
+タイムシートと異なり値に対する操作範囲となる
+
+操作を記録して反操作をスタックする観点では同一
+
+new xUI.InputUnit(
+	[-1,-1]
+)
+アドレス指定は可変長整数ID の配列
+-１は予約でルートグループ（シリアル配列IDに一致しない）
+[-1]0,1,2,3,4,5......
+
+各IDは以下の様になる
+[6,2,0,-1]
+
+先頭のIDは自分自身のID
+それ以降の要素は親アイテムのID
+配置によりこのIDは流動的に変更される
+固定の識別子ではなく現在のパスを表すID
+
+よって
+アドレスは単純にアイテムのシリアルIDを整数で指定可能
+
+
+selectionはシリアルIDの配列
+
+名前設定(writeText)
+3,[3,4,5,6],"たぬき,うま,しか,いのしし","狸,馬,鹿,猪"
+
+移動(itemMove - 'placebefor|placeafter|inside|placeatend|placeatbegin')
+追加|削除
+setItem
+4,[2,3,1],[全アイテム],[全アイテム]
+*/
+
+
+/*
+ *	@params {Array|String|Number} idx
+ *		セレクトするIDの配列またはID
+ *	@params	{string}	mode
+ *		選択追加フラグ select|append|remove
+ *
+ *	アイテムセレクト関数
+ *	引数で選択状態を操作する 配列,リスト文字列,ID
+ *	switch     引数を選択または解除切り替え
+ *	select     引数を選択
+ *	deselect   引数を選択解除
+ */ 
+pman.reName.check = function(idx,mode){
+	if(!mode) mode = 'switch';
+	if(!(idx instanceof Array)) idx = [idx];
+console.log(idx);
+	var targetArray = [];
+	for(var i = 0;i < idx.length;i ++){
+		if(String(idx[i]).match(/\,/)){
+			targatArray = targatArray.concat(String(idx[i]).split(","));
+		}else{
+			target.Array.push(idx[i]);
+		};
+	};
+	targetArray = Array.from(targetArray,function(elm){return nas.parseNumber(elm)});
+
+	var currentFocus = pman.reName.focus;
+//itemList|Group
+	if(evt.target.id.indexOf("rename_item_")>=0){
+		var itemID = pman.reName.parseId(evt.target.id);//get item number;
+		var targetItem = pman.reName.items[itemID];
+		if(evt.target.id.indexOf("icon_ovl_rename_item_")>=0){
+//グループ表示操作ではフォーカス移動なし
+				targetItem.sWitchClose((!targetItem.close));
+				return;
+		};
+		if ((evt.metaKey)||(evt.ctrlKey)){
+//with[ctrl]|[cmd]
+			targetItem.checked = (targetItem.checked)? false:true;
+			if(
+				(pman.reName.focus < 0)&&
+				(targetItem.checked)
+			){
+				pman.reName.focus = itemID ;
+				pman.reName.setPreview(itemID);
+			};
+			for(var i = 0 ; i < pman.reName.items.length ; i ++){
+				document.getElementById(['ckb_rename_item',i].join('_')).checked = pman.reName.items[i].checked;
+				if(pman.reName.items[i].checked){
+					nas.HTML.addClass(document.getElementById(['cnt_rename_item',i].join('_')),'elementContainer-selected');
+				}else{
+					nas.HTML.removeClass(document.getElementById(['cnt_rename_item',i].join('_')),'elementContainer-selected');
+				};
+			};
+		}else if(evt.shiftKey){
+//with [shift]
+			if(pman.reName.focus == itemID) return;//NOP
+			if(pman.reName.focus < 0){
+				pman.reName.focus = itemID ; pman.reName.setPreview(itemID);
+			};
+			var range = [pman.reName.focus,itemID];
+			if(pman.reName.focus > itemID) range.reverse();
+			for(var i = 0 ; i < pman.reName.items.length ; i ++){
+				pman.reName.items[i].checked = ((i < range[0])||(i > range[1])) ? false:true;
+				document.getElementById(['ckb_rename_item',i].join('_')).checked = pman.reName.items[i].checked;
+				if(pman.reName.items[i].checked){
+					nas.HTML.addClass(document.getElementById(['cnt_rename_item',i].join('_')),'elementContainer-selected');
+				}else{
+					nas.HTML.removeClass(document.getElementById(['cnt_rename_item',i].join('_')),'elementContainer-selected');
+				};
+			};
+		}else{
+//nomal
+			if(pman.reName.focus != itemID){
+				if(pman.reName.focus >= 0) nas.HTML.removeClass(document.getElementById(['cnt_rename_item',pman.reName.focus].join('_')),'elementContainer-focus');
+					nas.HTML.addClass(   document.getElementById(['cnt_rename_item',itemID].join('_')),'elementContainer-focus');
+				pman.reName.focus = itemID; pman.reName.setPreview(itemID);//focus move
+			}
+			for(var i = 0 ; i < pman.reName.items.length ; i ++){
+				pman.reName.items[i].checked = (i == itemID) ? true:false;
+				document.getElementById(['ckb_rename_item',i].join('_')).checked = pman.reName.items[i].checked;
+				if(pman.reName.items[i].checked){
+					nas.HTML.addClass(document.getElementById(['cnt_rename_item',i].join('_')),'elementContainer-selected');
+				}else{
+					nas.HTML.removeClass(document.getElementById(['cnt_rename_item',i].join('_')),'elementContainer-selected');
+				};
+			};
+		};
+		var checkedItems = pman.reName.items.filter(function(e){return (e.checked);});
+		if (checkedItems.length == 0) pman.reName.focus = -1;
+		if (currentFocus != pman.reName.focus) this.setPreview(pman.reName.focus);
+	}else if(evt.target.id.indexOf("basefolder")>=0){
+		document.getElementById('openFolder').click();
+	};
+//console.log(pman.reName.focus);
+}

@@ -1,0 +1,131 @@
+﻿/*layer("Time").effect.length.property(1)
+	カラムコレクションのTimeレイヤに設定して該当カットのカット尺を返すエクスプレッション
+カットナンバーの同じカラムをスキャンして加算。そのカット内ならば同じ値を返す。
+慣例にしたがって「カット尺」でありそのカットの素材としての継続時間ではない。
+
+2008/01/21
+/*layer("Time").effect.length.property(1)
+	カラムコレクションのTimeレイヤに設定して該当カットのカット尺を返すエクスプレッション
+カットナンバーの同じカラムをスキャンして加算。そのカット内ならば同じ値を返す。
+慣例にしたがって「カット尺」でありそのカットの素材としての継続時間ではない。
+
+2008/01/21
+プロジェクト初期時点でキーが消失した時のエラーを抑制
+*/
+	var myStartTime =0;
+	var myEndTime =0;
+	var myCutNo=thisComp.layer("CUT No.").text.sourceText;
+
+if(thisComp.layer("CUT No.").text.sourceText.numKeys){
+	if(thisComp.layer("CUT No.").text.sourceText.valueAtTime(thisComp.layer("CUT No.").text.sourceText.nearestKey(time).time)==myCutNo){
+//最近接キーのカット番号一致
+		myStartTime	=thisComp.layer("CUT No.").text.sourceText.nearestKey(time).time;
+
+		if(thisComp.layer("CUT No.").text.sourceText.nearestKey(time).index<thisComp.layer("CUT No.").text.sourceText.numKeys){
+			myEndTime	=thisComp.layer("CUT No.").text.sourceText.key(
+				thisComp.layer("CUT No.").text.sourceText.nearestKey(time).index+1
+			).time;
+		}else{
+	//カット番号がラストキーなのでタイムテキストの最終キーを参照
+		myEndTime=(
+			(thisComp.layer("Time").text.sourceText.numKeys)&&
+			(thisComp.layer("Time").text.sourceText.key(thisComp.layer("Time").text.sourceText.numKeys).time>time)
+		)? thisComp.layer("Time").text.sourceText.key(thisComp.layer("Time").text.sourceText.numKeys).time:time;
+		}
+	}else{
+//最近接キーと不一致(最近接が後方)
+		if(thisComp.layer("CUT No.").text.sourceText.nearestKey(time).index==1){
+			myStartTime	=0;//キーが先頭なので0から集計
+		}else{
+			myStartTime	=thisComp.layer("CUT No.").text.sourceText.key(
+				thisComp.layer("CUT No.").text.sourceText.nearestKey(time).index-1
+			).time;
+		}
+		myEndTime	=thisComp.layer("CUT No.").text.sourceText.nearestKey(time).time;
+	}
+
+var myTotalFrames=0;
+var myStartFrame	=Math.round(myStartTime/thisComp.frameDuration);
+var myEndFrame		=Math.round(myEndTime/thisComp.frameDuration);
+for(var myFrame=myStartFrame ; myFrame<myEndFrame ; myFrame++){
+	var checkTime=myFrame*thisComp.frameDuration;
+	if(this.text.sourceText.valueAtTime(checkTime).match(/^([0-9]+)¥ *¥+¥ *([0-9]+)¥ *¥.?$/)){
+		myTotalFrames+=(RegExp.$1*1)*(1/thisComp.frameDuration)+(RegExp.$2*1);
+	}
+}
+myTotalFrames;
+}else{
+0;//no keys in CutNumber
+}
+
+
+
+
+/*layer("Time").effect.transition.property(1)
+	カラムコレクションのTimeレイヤに設定して該当カットのトランジション値を返すエクスプレッション
+カットナンバーの同じカラムを検索。そのカット内にトランジションの設定があれば、相当ショットのデータとして返す。
+慣例にしたがってトランジション長の半分の時間がそのカットの継続時間に加算される。
+
+コンテフォーマット的には、トランジション情報は、OUT情報のみをカットに記録する。
+トランジションINは、前のカットのOUT情報を参照する仕様に定める。
+
+トランジションの書式は以下のものとする。
+WIPE [C012 / C013] ( 06 + 00 .)
+O.L  [c6B / c7] ( 1 + 12 .)
+
+トランジションキーワード [自カット/対象カット]( トランジション尺 )
+
+キーワードは 省略不可(/(WIPE|O¥.?L.?|trout)/i)
+
+自カット/対象カットは、[括弧]ごと省略可
+トランジション尺は、省略不可
+2008/01/30
+プロジェクト初期時点でキーが消失した時のエラーを抑制
+*/
+var myStartTime	=0;var myEndTime	=0;
+var myCutNo=thisComp.layer("CUT No.").text.sourceText;
+if(thisComp.layer("CUT No.").text.sourceText.numKeys){
+if (thisComp.layer("CUT No.").text.sourceText.valueAtTime(
+	thisComp.layer("CUT No.").text.sourceText.nearestKey(time).time)==myCutNo
+){
+	myStartTime	=thisComp.layer("CUT No.").text.sourceText.nearestKey(time).time;
+	if(thisComp.layer("CUT No.").text.sourceText.nearestKey(time).index<thisComp.layer("CUT No.").text.sourceText.numKeys){
+	myEndTime	=thisComp.layer("CUT No.").text.sourceText.key(
+				thisComp.layer("CUT No.").text.sourceText.nearestKey(time).index+1
+			).time;
+	}else{
+	//カット番号がラストキーなのでタイムテキストの最終キーを参照
+		myEndTime=(
+			(thisComp.layer("Time").text.sourceText.numKeys)&&
+			(thisComp.layer("Time").text.sourceText.key(thisComp.layer("Time").text.sourceText.numKeys).time>time)
+		)? thisComp.layer("Time").text.sourceText.key(thisComp.layer("Time").text.sourceText.numKeys).time:time;
+	}
+}else{
+	if(thisComp.layer("CUT No.").text.sourceText.nearestKey(time).index=1){
+	myStartTime	=0;//キーが先頭なので0から集計
+	}else{
+	myStartTime	=thisComp.layer("CUT No.").text.sourceText.key(
+				thisComp.layer("CUT No.").text.sourceText.nearestKey(time).index-1
+			).time;
+	}
+	myEndTime	=thisComp.layer("CUT No.").text.sourceText.nearestKey(time).time;
+}
+
+var myTotalFrames=0;
+var myTrinString="";
+var myTroutString="";
+var myTrinTime="";
+var myTroutTime="";
+
+var myStartFrame	=myStartTime/thisComp.frameDuration;
+var myEndFrame	=myEndTime/thisComp.frameDuration;
+
+for(var myFrame=myStartFrame ; myFrame<myEndFrame ; myFrame++){
+	if(this.text.sourceText.valueAtTime(myFrame*thisComp.frameDuration).match(/^(WIPE|O¥.?L.?|trout)(¥[¥s*.+¥s*¥/¥s*.+¥s*¥])?([0-9]+)¥s*¥+¥s*([0-9]+)¥s*¥.?$/i)){
+		myTotalFrames+=(RegExp.$3*1)*(1/thisComp.frameDuration)+(RegExp.$4*1);
+	}
+}
+myTotalFrames;
+}else{
+0;
+}

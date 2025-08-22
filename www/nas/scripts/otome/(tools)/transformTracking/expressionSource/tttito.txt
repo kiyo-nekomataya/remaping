@@ -1,0 +1,543 @@
+﻿*ttT.I/T.O
+**ガイドポイント
+	マーカー
+	タイムリマップ
+	モーショントラッカー
+	マスク
+	エフェクト
+	トランスフォーム
+***ガイドポイント/トランスフォーム/[ アンカーポイント ]: ADBE Anchor Point:￥r￥n---(
+//ガイド表示nullオブジェクトのアンカーポイントをレイヤ中央に固定
+[width/2,height/2];
+
+---)￥r￥n
+***ガイドポイント/トランスフォーム/[ スケール ]: ADBE Scale:￥r￥n---(
+//ガイド表示nullオブジェクトのサイズを50X50pxに固定
+[100*(50/width),100*(50/height)];
+
+---)￥r￥n
+***ガイドポイント/トランスフォーム/[ 回転 ]: ADBE Rotate Z:￥r￥n---(
+//ガイド表示nullオブジェクトを菱形に固定
+45;
+---)￥r￥n
+	レイヤースタイル
+	マテリアルオプション
+	オーディオ
+***ガイドポイント/[ アンカーポイント ]: ADBE Anchor Point:￥r￥n---(
+//ガイド表示nullオブジェクトのアンカーポイントをレイヤ中央に固定
+[width/2,height/2];
+
+---)￥r￥n
+***ガイドポイント/[ スケール ]: ADBE Scale:￥r￥n---(
+//ガイド表示nullオブジェクトのサイズを50X50pxに固定
+[100*(50/width),100*(50/height)];
+
+---)￥r￥n
+***ガイドポイント/[ 回転 ]: ADBE Rotate Z:￥r￥n---(
+//ガイド表示nullオブジェクトを菱形に固定
+45;
+---)￥r￥n
+**消失点コントローラ
+	マーカー
+	タイムリマップ
+	モーショントラッカー
+	マスク
+	エフェクト
+	トランスフォーム
+***消失点コントローラ/トランスフォーム/[ アンカーポイント ]: ADBE Anchor Point:￥r￥n---(
+[width/2,height/2];
+---)￥r￥n
+***消失点コントローラ/トランスフォーム/[ スケール ]: ADBE Scale:￥r￥n---(
+[75,75]
+---)￥r￥n
+***消失点コントローラ/トランスフォーム/[ 回転 ]: ADBE Rotate Z:￥r￥n---(
+try{45+thisComp.layer("メインコントローラ").effect("follow方向")("角度")}catch(err){45}
+---)￥r￥n
+	レイヤースタイル
+	マテリアルオプション
+	オーディオ
+***消失点コントローラ/[ アンカーポイント ]: ADBE Anchor Point:￥r￥n---(
+[width/2,height/2];
+---)￥r￥n
+***消失点コントローラ/[ スケール ]: ADBE Scale:￥r￥n---(
+[75,75]
+---)￥r￥n
+***消失点コントローラ/[ 回転 ]: ADBE Rotate Z:￥r￥n---(
+try{45+thisComp.layer("メインコントローラ").effect("follow方向")("角度")}catch(err){45}
+---)￥r￥n
+**メインコントローラ
+	マーカー
+	タイムリマップ
+	モーショントラッカー
+	マスク
+	エフェクト
+***メインコントローラ/エフェクト/正比率オフセット/[ スライダ ]: ADBE Slider Control-0001:￥r￥n---(
+if(numKeys==1){
+//正比率点指定キーはキー数1のみが有効それ以外は変形ナシ
+	var frameOffset=(time-nearestKey(time).time)/thisComp.frameDuration;
+	frameOffset*1
+}else{
+	0;
+}
+
+---)￥r￥n
+***メインコントローラ/エフェクト/消失点オフセット(%)/[ スライダ ]: ADBE Slider Control-0001:￥r￥n---(
+//消失点コントローラの位置が消失点までの何%に当たるかを指定する
+//100%で消失点の指定となるマイナス値は逆側に消失点を求める
+if(valueAtTime(time)==0){1}else{valueAtTime(time)}
+
+---)￥r￥n
+***メインコントローラ/エフェクト/follow方向/[ 角度 ]: ADBE Angle Control-0001:￥r￥n---(
+//follow方向
+/*
+	方位角で指定 12時方向を0度6時方向を180度で指定する360度法
+	キーがない場合は当該レイヤの方向を反映する
+*/
+if(numKeys){valueAtTime(time)}else{this.rotation};
+---)￥r￥n
+***メインコントローラ/エフェクト/フレームスキップ/[ スライダ ]: ADBE Slider Control-0001:￥r￥n---(
+/*
+キーの値を切り捨て整数化して、かつ中間値補完はナシ(常に固定)
+前方キーが無ければプロパティの値を参照。あればキーの値を参照
+*/
+if (numKeys){
+	if(time>nearestKey(time).time){Math.floor(nearestKey(time).value);
+	}else{
+		if(nearestKey(time).index>1){Math.floor(key(nearestKey(time).index-1).value);}else{Math.floor(valueAtTime(time))}
+	}
+
+}else{
+	Math.floor(valueAtTime(time));
+}
+---)￥r￥n
+***メインコントローラ/エフェクト/解像度(dpi)/[ スライダ ]: ADBE Slider Control-0001:￥r￥n---(
+if(valueAtTime(time)){Math.abs(valueAtTime(time))}else{144};
+
+---)￥r￥n
+***メインコントローラ/エフェクト/フレームサイズ(mm)/[ スライダ ]: ADBE Slider Control-0001:￥r￥n---(
+//0回避のためデフォルト値を与える
+(effect("フレームサイズ(mm)")(1)==0)? 254:valueAtTime(time);
+
+---)￥r￥n
+***メインコントローラ/エフェクト/frameAspect/[ スライダ ]: ADBE Slider Control-0001:￥r￥n---(
+(effect("frameAspect")(1)==0)?16/9:valueAtTime(time);
+---)￥r￥n
+	トランスフォーム
+***メインコントローラ/トランスフォーム/[ アンカーポイント ]: ADBE Anchor Point:￥r￥n---(
+[width/2,height/2]
+---)￥r￥n
+***メインコントローラ/トランスフォーム/[ スケール ]: ADBE Scale:￥r￥n---(
+[100,100]
+---)￥r￥n
+	レイヤースタイル
+	マテリアルオプション
+	オーディオ
+***メインコントローラ/[ アンカーポイント ]: ADBE Anchor Point:￥r￥n---(
+[width/2,height/2]
+---)￥r￥n
+***メインコントローラ/[ スケール ]: ADBE Scale:￥r￥n---(
+[100,100]
+---)￥r￥n
+**消失点参考
+	マーカー
+	タイムリマップ
+	モーショントラッカー
+	マスク
+	エフェクト
+	トランスフォーム
+***消失点参考/トランスフォーム/[ 位置 ]: ADBE Position:￥r￥n---(
+//消失点
+/*指定点のベクトルを延長して求める消失点
+汎用性のため、コンポジット座標で提供される
+*/
+try {
+var v1=thisComp.layer("メインコントローラ").position;
+var v0=thisComp.layer("消失点コントローラ").position;
+var myVpOffset=1/(thisComp.layer("メインコントローラ").effect("消失点オフセット(%)")("スライダ")/100) ;
+var myOffsetVector=sub(v0,v1);
+//
+add(mul(myOffsetVector,myVpOffset),v1);
+}catch(err){
+valueAtTime(time)
+}
+---)￥r￥n
+	レイヤースタイル
+	マテリアルオプション
+	オーディオ
+***消失点参考/[ 位置 ]: ADBE Position:￥r￥n---(
+//消失点
+/*指定点のベクトルを延長して求める消失点
+汎用性のため、コンポジット座標で提供される
+*/
+try {
+var v1=thisComp.layer("メインコントローラ").position;
+var v0=thisComp.layer("消失点コントローラ").position;
+var myVpOffset=1/(thisComp.layer("メインコントローラ").effect("消失点オフセット(%)")("スライダ")/100) ;
+var myOffsetVector=sub(v0,v1);
+//
+add(mul(myOffsetVector,myVpOffset),v1);
+}catch(err){
+valueAtTime(time)
+}
+---)￥r￥n
+**パースガイド
+	マーカー
+	タイムリマップ
+	モーショントラッカー
+	マスク
+	エフェクト
+***パースガイド/エフェクト/hasControler/[ チェックボックス ]: ADBE Checkbox Control-0001:￥r￥n---(
+//自レイヤの上のコントローラレイヤの存在をTRUE/FALSEで返すプロパティ
+/*なぜこんものを書かんとだめなんじゃ！こらアドビ怒るぞ*/
+var targetName="メインコントローラ";
+var myResult=false;
+	for(mIdx=1;mIdx<thisComp.numLayers;mIdx++){if(thisComp.layer(mIdx).name==targetName){myResult=true;break;}}
+myResult;
+
+---)￥r￥n
+***パースガイド/エフェクト/isScale/[ チェックボックス ]: ADBE Checkbox Control-0001:￥r￥n---(
+//指定点１
+if(effect("hasControler")(1).value){
+	thisComp.layer("メインコントローラ").effect("isScale")(1).valueAtTime(time);
+}else{
+	valueAtTime(time);
+}　
+
+---)￥r￥n
+***パースガイド/エフェクト/レーザー/[ 開始点 ]: ADBE Laser-0001:￥r￥n---(
+effect("焦点")("ポイント")
+---)￥r￥n
+***パースガイド/エフェクト/レーザー/[ 終了点 ]: ADBE Laser-0002:￥r￥n---(
+var hasCtrl=false;
+for(lIdx=1;lIdx<thisComp.numLayers;lIdx++){if(thisComp.layer(lIdx).name=="ガイドポイント"){hasCtrl=true;break;}}
+if(hasCtrl){
+	toComp(fromComp(thisComp.layer("ガイドポイント").position));
+}else{
+	valueAtTime(time);
+}
+---)￥r￥n
+***パースガイド/エフェクト/レーザー/[ 外側のカラー ]: ADBE Laser-0009:￥r￥n---(
+effect("レーザー")("内側のカラー");
+---)￥r￥n
+***パースガイド/エフェクト/レーザー 2/[ 開始点 ]: ADBE Laser-0001:￥r￥n---(
+effect("焦点")("ポイント")
+---)￥r￥n
+***パースガイド/エフェクト/レーザー 2/[ 終了点 ]: ADBE Laser-0002:￥r￥n---(
+toComp(effect("指定点2")("ポイント"))
+
+---)￥r￥n
+***パースガイド/エフェクト/レーザー 2/[ 外側のカラー ]: ADBE Laser-0009:￥r￥n---(
+effect("レーザー 2")("内側のカラー");
+---)￥r￥n
+***パースガイド/エフェクト/解像度(dpi)/[ スライダ ]: ADBE Slider Control-0001:￥r￥n---(
+//	解像度
+/*
+コントローラがあれば、そちらを参照
+*/
+if(effect("hasControler")(1).value){
+	thisComp.layer("メインコントローラ").effect("解像度(dpi)")("スライダ");
+}else{
+	if(valueAtTime(time)){Math.abs(valueAtTime(time))}else{144};
+}
+
+---)￥r￥n
+***パースガイド/エフェクト/正比率点/[ スライダ ]: ADBE Slider Control-0001:￥r￥n---(
+//	正比率点
+/*
+正比率点はキーフレームで不変形点の指定を行う。キーフレームの数は１以上
+常に第一キーの位置を参照
+*/
+if(effect("hasControler")(1).value){
+	thisComp.layer("メインコントローラ").effect("正比率オフセット")("スライダ").key(1).time
+}else{
+	if(numKeys>=1){
+//正比率点指定キーはキー1のみが有効それ以外は変形ナシ
+		key(1).time;
+	}else{
+		0;
+	}
+}
+---)￥r￥n
+***パースガイド/エフェクト/フレームオフセット/[ スライダ ]: ADBE Slider Control-0001:￥r￥n---(
+//	フレームオフセット
+/*
+	同レイヤの正比率点にキーがあればそちらを参照
+	指定用ターゲットレイヤがあればそちらを参照
+	なにもない場合は常にゼロを返す
+*/
+//myTime=this.key(1).time;
+/*
+正比率点はキーフレームで不変形点の指定を行う。キーフレームの数は１個に固定
+値はキーフレームからのフレームオフセットを計算して各フレームに提供する
+*/
+if(effect("hasControler")(1).value){
+	var myTarget=thisComp.layer("メインコントローラ");
+	myTarget.effect("正比率オフセット")("スライダ").valueAtTime(time)
+}else{
+//フレームスキップ適用後のフレームを算出
+//最終参照 Time
+var refTime=0;
+var refVal=effect("フレームスキップ")(1).value;
+//前方キーインデックスを取得
+if (effect("フレームスキップ")(1).numKeys){
+
+	if(time>=effect("フレームスキップ")(1).nearestKey(time).time){
+		refTime=effect("フレームスキップ")(1).nearestKey(time).time;
+	}else{
+		if(effect("フレームスキップ")(1).nearestKey(time).index>1){
+			refTime=effect("フレームスキップ")(1).key(effect("フレームスキップ")(1).nearestKey(time).index-1).time;
+		}
+	}
+};
+//参照時間と現在時の差を求めてスキップされた値を得る
+//((参照時-現在時)/フレーム継続時)/(スキップ値+1)
+var targetFrame=Math.floor(refTime/thisComp.frameDuration)+((refVal+1)*Math.floor(Math.round((time-refTime)/thisComp.frameDuration)/(refVal+1)));
+
+//	var frameOffset=(time-effect("正比率点")("スライダ").key(1).time)/thisComp.frameDuration;
+	var frameOffset=targetFrame-Math.round(effect("正比率点")("スライダ").key(1).time/thisComp.frameDuration);
+frameOffset*1;
+}
+---)￥r￥n
+***パースガイド/エフェクト/消失点オフセット(%)/[ スライダ ]: ADBE Slider Control-0001:￥r￥n---(
+//	消失点オフセット(%)
+if(effect("hasControler")(1).value){
+thisComp.layer("メインコントローラ").effect("消失点オフセット(%)")(1).value;
+}else{
+	if(valueAtTime(time)){valueAtTime(time);}else{100};
+}
+
+---)￥r￥n
+***パースガイド/エフェクト/フレームスキップ/[ スライダ ]: ADBE Slider Control-0001:￥r￥n---(
+//	フレームスキップ
+if(effect("hasControler")(1).value){
+thisComp.layer("メインコントローラ").effect("フレームスキップ")(1).value;
+}else{
+/*
+キーの値を切り捨て整数化して、かつ中間値補完はナシ(常に固定)
+前方キーが無ければプロパティの値を参照。あればキーの値を参照
+*/
+if (numKeys){
+	if(time>nearestKey(time).time){Math.floor(nearestKey(time).value);
+	}else{
+		if(nearestKey(time).index>1){Math.floor(key(nearestKey(time).index-1).value);}else{Math.floor(valueAtTime(time))}
+	}
+
+}else{
+	Math.floor(valueAtTime(time));
+}
+}
+
+---)￥r￥n
+***パースガイド/エフェクト/焦点/[ ポイント ]: ADBE Point Control-0001:￥r￥n---(
+//	焦点
+/*　焦点は、指定点のベクトルを延長して求める消失点
+汎用性のため、コンポジット座標で提供される
+指定ポイント自体はレイヤ座標で指定
+*/
+var v1=effect("指定点2")("ポイント");
+var v0=effect("指定点1")("ポイント");
+var myVpOffset=1/(effect("消失点オフセット(%)")("スライダ")/100) ;
+//var myVpOffset=effect("速度2(mm/k)")(1)/effect("速度1(mm/k)")(1);
+var myOffsetVector=sub(v0,v1);
+//s
+toComp(add(mul(myOffsetVector,myVpOffset),v1));
+
+---)￥r￥n
+***パースガイド/エフェクト/指定点1/[ ポイント ]: ADBE Point Control-0001:￥r￥n---(
+//指定点１
+if(effect("hasControler")(1).value){
+	fromComp(thisComp.layer("消失点コントローラ").position);
+}else{
+	valueAtTime(time);
+}　
+
+---)￥r￥n
+***パースガイド/エフェクト/速度1(mm/k)/[ スライダ ]: ADBE Slider Control-0001:￥r￥n---(
+//	速度１
+if(effect("hasControler")(1).value){
+	effect("速度2(mm/k)")(1).value*(thisComp.layer("メインコントローラ").effect("消失点オフセット(%)")("スライダ")-100)/100;
+}else{
+	effect("速度2(mm/k)")(1)*(effect("消失点オフセット(%)")("スライダ")-100)/100;
+}
+---)￥r￥n
+***パースガイド/エフェクト/指定点2/[ ポイント ]: ADBE Point Control-0001:￥r￥n---(
+//指定点２
+if(effect("hasControler")(1).value){
+	fromComp(thisComp.layer("メインコントローラ").position);
+}else{
+	valueAtTime(time);
+}　
+
+---)￥r￥n
+***パースガイド/エフェクト/速度2(mm/k)/[ スライダ ]: ADBE Slider Control-0001:￥r￥n---(
+//	速度２
+if(effect("hasControler")(1).value){
+	thisComp.layer("メインコントローラ").effect("速度(mm/k)")("スライダ");
+}else{
+	valueAtTime(time);
+}
+
+---)￥r￥n
+***パースガイド/エフェクト/トラックIN/[ チェックボックス ]: ADBE Checkbox Control-0001:￥r￥n---(
+//方向反転
+if(effect("hasControler")(1).value){
+	!(thisComp.layer("メインコントローラ").effect("方向反転")(1).value);
+}else{
+	!valueAtTime(time);
+}　
+
+---)￥r￥n
+***パースガイド/エフェクト/follow方向/[ 角度 ]: ADBE Angle Control-0001:￥r￥n---(
+//	follow方向
+if(effect("hasControler")(1).value){
+var flip=(thisComp.layer("メインコントローラ").effect("方向反転")("チェックボックス").value)?-1:1;
+thisComp.layer("メインコントローラ").effect("follow方向")("角度")*flip;
+}else{
+	valueAtTime(time);
+}
+
+---)￥r￥n
+***パースガイド/エフェクト/歪曲高(px)/[ スライダ ]: ADBE Slider Control-0001:￥r￥n---(
+//	歪曲高
+/*
+	スキュー変形の平行四辺形の高さを求める
+*/
+var myVec=sub(effect("指定点2")("ポイント"),effect("指定点1")("ポイント"));
+// 2次元のベクトルを与えて360度角を求める関数。(反時計)
+function vec2deg(Vector)
+{
+ 	var x=Vector[0];var y=Vector[1];
+	var	myRadians=(y==0)?0:Math.atan(y/x);
+ 	if (x<0){myRadians+=Math.PI};
+	return Math.floor(180. * (myRadians/Math.PI)* 10000)/10000;//degrees;
+}
+var d=effect("follow方向")("角度")-vec2deg(myVec);
+//
+Math.cos(degreesToRadians(d))*length(effect("指定点2")("ポイント"),fromComp(effect("焦点")("ポイント")));
+---)￥r￥n
+***パースガイド/エフェクト/移動総量/[ スライダ ]: ADBE Slider Control-0001:￥r￥n---(
+//	総移動量
+//解像度はエフェクトを参照
+var myResolution=effect("解像度(dpi)")(1);//(dpi)
+//キーフレームによる積算移動量を計算
+
+	if(effect("isScale")(1).valueAtTime(time)){
+/*
+	計測基点(正比率点のキーフレーム位置)から、現在時までをフレームごとに積算
+*/
+//scale
+var myShiftScl=1;//初期値1
+var flipFlag=(effect("フレームオフセット")("スライダ")<0)?-1:1;
+if(effect("正比率点")("スライダ")>=0){
+	var fMax=Math.round(Math.abs(effect("フレームオフセット")("スライダ")));
+		for(f=0;f<fMax;f++){
+			var baseLength=(length(effect("焦点")("ポイント"),toComp(effect("指定点2")("ポイント")))/myResolution)*25.4;
+			var spd=effect("速度2(mm/k)")("スライダ").valueAtTime((effect("正比率点")("スライダ")+f)*flipFlag*thisComp.frameDuration)/2;
+			var myScaleTip=(effect("フレームオフセット")("スライダ")<0)?(baseLength+spd)/(baseLength-spd):(baseLength-spd)/(baseLength+spd);
+			myShiftScl*=myScaleTip;
+		}
+}else{
+	0;
+}
+//
+(myShiftScl);
+//
+	}else{
+/*
+	計測基点(正比率点のキーフレーム位置)から、現在時までをフレームごとに積算
+*/
+//skew
+var myShiftVol=0;//初期値0
+var flipFlag=(effect("フレームオフセット")("スライダ")<0)?-1:1;
+if(effect("フレームオフセット")("スライダ").value){
+	var fMax=Math.round(effect("フレームオフセット")("スライダ"));
+	for(f=0;f<Math.abs(fMax);f++){
+		myShiftVol+=effect("速度2(mm/k)")("スライダ").valueAtTime(
+			(effect("正比率点")("スライダ").value+(f*flipFlag))*thisComp.frameDuration
+		);
+	}
+}else{
+	0;
+}
+//
+(myShiftVol*flipFlag)*myResolution/25.4;
+	}
+---)￥r￥n
+	トランスフォーム
+***パースガイド/トランスフォーム/[ アンカーポイント ]: ADBE Anchor Point:￥r￥n---(
+[width/2,height/2];
+---)￥r￥n
+***パースガイド/トランスフォーム/[ 位置 ]: ADBE Position:￥r￥n---(
+[thisComp.width/2,thisComp.height/2]
+---)￥r￥n
+***パースガイド/トランスフォーム/[ スケール ]: ADBE Scale:￥r￥n---(
+[100*thisComp.width/width,100*thisComp.height/height]
+---)￥r￥n
+	レイヤースタイル
+	マテリアルオプション
+	オーディオ
+***パースガイド/[ アンカーポイント ]: ADBE Anchor Point:￥r￥n---(
+[width/2,height/2];
+---)￥r￥n
+***パースガイド/[ 位置 ]: ADBE Position:￥r￥n---(
+[thisComp.width/2,thisComp.height/2]
+---)￥r￥n
+***パースガイド/[ スケール ]: ADBE Scale:￥r￥n---(
+[100*thisComp.width/width,100*thisComp.height/height]
+---)￥r￥n
+**AJA_Fr01AE144dpi.eps
+	マーカー
+	タイムリマップ
+	モーショントラッカー
+	マスク
+	エフェクト
+	トランスフォーム
+	レイヤースタイル
+	マテリアルオプション
+	オーディオ
+**deformScale
+	マーカー
+	タイムリマップ
+	モーショントラッカー
+	マスク
+	エフェクト
+***deformScale/エフェクト/hasGuide/[ チェックボックス ]: ADBE Checkbox Control-0001:￥r￥n---(
+//自レイヤの上のコントローラレイヤの存在をTRUE/FALSEで返すプロパティ
+/*なぜこんものを書かんとだめなんじゃ！こらアドビ怒るぞ*/
+var targetName="パースガイド";
+var myResult=false;
+if(this.index>1){
+	for(mIdx=1;mIdx<this.index;mIdx++){if(thisComp.layer(mIdx).name==targetName){myResult=true;break;}}
+}
+myResult;
+
+---)￥r￥n
+***deformScale/エフェクト/transformTracking/[ アンカーポイント ]: ADBE Geometry2-0001:￥r￥n---(
+if(effect("hasGuide")("チェックボックス").valueAtTime(time)){
+	fromComp(thisComp.layer("パースガイド").effect("焦点")("ポイント"));
+}else{
+this.valueAtTime(time);
+}
+---)￥r￥n
+***deformScale/エフェクト/transformTracking/[ 位置 ]: ADBE Geometry2-0002:￥r￥n---(
+effect("transformTracking")("アンカーポイント")
+---)￥r￥n
+***deformScale/エフェクト/transformTracking/[ スケールの高さ ]: ADBE Geometry2-0003:￥r￥n---(
+//トラックINチェックで拡大を反転して適用
+var myTime=time;
+if(effect("hasGuide")(1).valueAtTime(time)){
+	if(thisComp.layer("メインコントローラ").effect("isScale")(1).value){
+		(thisComp.layer("パースガイド").effect("トラックIN")(1).value)?
+			thisComp.layer("パースガイド").effect("移動総量")(1).valueAtTime(myTime)*100:
+			(1/thisComp.layer("パースガイド").effect("移動総量")(1).valueAtTime(myTime))*100;
+	}else{
+		this.valueAtTime(time)
+	}}else{
+	this.valueAtTime(time)
+};
+
+---)￥r￥n
+	トランスフォーム
+	レイヤースタイル
+	マテリアルオプション
+	オーディオ

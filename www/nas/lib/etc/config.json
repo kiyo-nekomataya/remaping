@@ -1,0 +1,410 @@
+﻿{
+  "dbg": true,
+  "on_cjs": true,
+  "welcomeMsg": "UATools application test version",
+  "windowTitle": "ver. 0.4.0",
+  "useHeaderLogo": true,
+  "headerLogo": "<img src='/images/logo/UATimesheet.png' alt='UATimesheet' width=141 height=24 border=0 />",
+  "headerLogo_url": "https://docs.google.com/document/d/14XIjRraSci35fLcZdCtrwIJ7G1Z13Wku5e1hzu1QOCc/edit?usp=sharing",
+  "headerLogo_urlComment": "UATimesheet簡易マニュアル",
+  "useworkTitle": false,
+  "workTitles": [
+    "タイトル",
+    "",
+    "title",
+    "//www.example.com",
+    "commentText",
+    "かちかちやま",
+    "",
+    "かちかちやま",
+    "/help/katikati.html",
+    "公式サイト(のつもり)",
+    "かちかち山Max",
+    "",
+    "ALTTxt",
+    "linkURI",
+    "commentText"
+  ],
+  "SheetLooks": {
+    "SheetTextColor": "#111111",
+    "SheetBaseColor": "#efffef",
+    "AppBaseColor": "#ffffef",
+    "SelectedColor": "#9999ff",
+    "RapidModeColor": "#ffff44",
+    "FloatModeColor": "#88eeee",
+    "SectionModeColor": "#ff44ff",
+    "SelectionColor": "#f8f8dd",
+    "FootStampColor": "#ffffff",
+    "EditingColor": "#eebbbb",
+    "SelectingColor": "#ccccaa",
+    "CellWidthUnit": "px",
+    "TimeGuideWidth": 36,
+    "ActionWidth": 20,
+    "DialogWidth": 36,
+    "SoundWidth": 30,
+    "SheetCellWidth": 42,
+    "SheetCellNarrow": 4,
+    "StillCellWidth": 12,
+    "GeometryCellWidth": 52,
+    "SfxCellWidth": 46,
+    "CameraCellWidth": 72,
+    "CommentWidth": 120,
+    "ColumnSeparatorWidth": 4
+  },
+  "SBLooks": {
+    "DocumentColor": "#efefff"
+  },
+  "UAFLooks": {
+    "DocumentColor": "#efefff"
+  },
+  "PMANLooks": {
+    "DocumentColor": "#efefff"
+  },
+  "myWords": [
+    [
+      "↖",
+      "←",
+      "↙",
+      "⇄",
+      ""
+    ],
+    [
+      "↑",
+      "◯",
+      "↓",
+      "⇅",
+      ""
+    ],
+    [
+      "↗",
+      "→",
+      "↘",
+      "〜",
+      ""
+    ],
+    [
+      "◎",
+      "＊",
+      "○",
+      "●",
+      "□",
+      "■",
+      "◇",
+      "◆"
+    ],
+    [
+      "△",
+      "▲",
+      "▽",
+      "▼",
+      "☆",
+      "★"
+    ],
+    [
+      "PAN ",
+      "Follow ",
+      "Slide ",
+      "mm/k",
+      "]X[",
+      "ゴンドラ",
+      "ブレ",
+      "画面動"
+    ],
+    [
+      "つけPAN",
+      "TU",
+      "TB",
+      "中OL",
+      "FI",
+      "FO",
+      "ZOOM IN",
+      "ZOOM OUT"
+    ],
+    [
+      "[A]",
+      "[B]",
+      "[C]",
+      "[D]",
+      "[E]",
+      "[F]",
+      "[G]",
+      "[]"
+    ],
+    [
+      "(1)",
+      "(2)",
+      "(3)",
+      "(4)",
+      "(5)",
+      "(6)",
+      "(7)",
+      "()"
+    ],
+    [
+      "兼用",
+      "透過光",
+      " / ",
+      "回転",
+      "ローリング",
+      "特効",
+      "",
+      ""
+    ],
+    [
+      "BG",
+      "MG",
+      "FG",
+      "OVL",
+      "BOOK",
+      "",
+      "",
+      ""
+    ],
+    [
+      "%stage%:[%user% %date%]",
+      "[%user% %date%]",
+      "(%user% %date%)",
+      "<%user% %date%>",
+      "---<済 %user% %date%>---"
+    ]
+  ],
+  "ApplicationIdf": "2d37215d-d6ea-4485-89b5-700ab0214a1e",
+  "SheetBaseColor": "#efffef",
+  "myTitle": "",
+  "mySubTitle": "",
+  "myOpus": "",
+  "myFrameRate": "24fps(24)",
+  "Sheet": "6+0",
+  "DialogColumns": "1",
+  "SoundColumns": "0",
+  "SheetLayers": "4",
+  "CameraworkColumns": "1",
+  "StageworkColumns": "0",
+  "SfxColumns": "0",
+  "myScene": "",
+  "myCut": "",
+  "myFileName": "$TITLE#$OPUS[$SUBTITLE]_s$SCENE-c$CUT($TC)",
+  "myName": "",
+  "myNames": [],
+  "NameCheck": false,
+  "BlankMethod": "file",
+  "BlankPosition": "end",
+  "AEVersion": "8.0",
+  "KEYMethod": "min",
+  "TimeShift": true,
+  "FootageFramerate": "auto",
+  "defaultSIZE": "1280,720,1",
+  "SpinValue": 3,
+  "SpinSelect": false,
+  "SheetLength": 6,
+  "SheetPageCols": 2,
+  "FootMark": true,
+  "TabSpin": true,
+  "NoSync": false,
+  "Counter0": [
+    3,
+    0
+  ],
+  "Counter1": [
+    5,
+    1
+  ],
+  "SLoop": false,
+  "CLoop": true,
+  "AutoScroll": true,
+  "TSXEx": true,
+  "ViewMode": "WordProp",
+  "InputMode": 1,
+  "ToolView": "000000000000000000111110000001010000000000000000",
+  "ToolViewIbCs": "0",
+  "ServiceUrl": "http://www.nekomataya.info/cgi-bin/remaping/rmpEcho.cgi?",
+  "HttpsServiceUrl": "//nekomataya.sakura.ne.jp/cgi-bin/remaping/rmpEcho.cgi?",
+  "SheetSubSeparator": 6,
+  "FavoriteWords": [
+    "X",
+    "-",
+    "・",
+    "",
+    "カラ",
+    "△",
+    "▽",
+    "▲",
+    "▼",
+    "▫",
+    "▪",
+    "▴",
+    "▵",
+    "▾",
+    "▿",
+    "◈",
+    "◉",
+    "◦",
+    "◦",
+    "·",
+    "→",
+    "←",
+    "移動",
+    "↑",
+    "|",
+    "↓",
+    "⇑",
+    "‖",
+    "⇓",
+    "?",
+    "___",
+    "----",
+    "[#]",
+    "(#)",
+    "<#>",
+    "[*]",
+    "(*)",
+    "<*>"
+  ],
+  "menuset": {
+    "app_template": {
+      "applicationMenu": "template/menu/app_template_applicationMenu.text",
+      "contextMenu": "template/menu/app_template_contextMenu.text",
+      "iconBarMenu": "template/menu/app_template_iconBarMenu.text"
+    },
+    "console": {
+      "applicationMenu": "template/menu/console_applicationMenu.text",
+      "contextMenu": "template/menu/console_contextMenu.text",
+      "iconBarMenu": "template/menu/console_iconBarMenu.text"
+    },
+    "uat": {
+      "applicationMenu": "template/menu/uat_applicationMenu.text",
+      "contextMenu": "template/menu/pman_contextMenu.text",
+      "iconBarMenu": "template/menu/pman_iconBarMenu.text"
+    },
+    "remaping": {
+      "applicationMenu": "template/menu/remaping_applicationMenu.text",
+      "contextMenu": "template/menu/remaping_contextMenu.text",
+      "iconBarMenu": "template/menu/remaping_iconBarMenu.text"
+    },
+    "pman_reName": {
+      "applicationMenu": "template/menu/pman_reName_applicationMenu.text",
+      "contextMenu": "template/menu/pman_contextMenu.text",
+      "iconBarMenu": "template/menu/pman_iconBarMenu.text"
+    },
+    "pman": {
+      "applicationMenu": "template/menu/pman_applicationMenu.text",
+      "contextMenu": "template/menu/pman_contextMenu.text",
+      "iconBarMenu": "template/menu/pman_iconBarMenu.text"
+    },
+    "xpsedit": {
+      "applicationMenu": "template/menu/xpsedit_applicationMenu.text",
+      "contextMenu": "template/menu/xpsedit_contextMenu.text",
+      "iconBarMenu": "template/menu/xpsedit_iconBarMenu.text"
+    },
+    "sbde": {
+      "applicationMenu": "template/menu/sbde_applicationMenu.text",
+      "contextMenu": "template/menu/sbde_contextMenu.text",
+      "iconBarMenu": "template/menu/sbde_iconBarMenu.text"
+    }
+  },
+  "extApps": {
+    "members": {
+      "sys": {
+        "name": "system",
+        "type": [
+          "*"
+        ],
+        "platform": [
+          "Mac",
+          "Win"
+        ],
+        "descrption": "アイテムをシステム標準のアプリで開く"
+      },
+      "ae": {
+        "name": "AfterEffects",
+        "type": [
+          "aep"
+        ],
+        "platform": [
+          "Mac",
+          "Win"
+        ],
+        "applicationpath": {
+          "Mac": "/Applications/Adobe After Effects 2022/Adobe After Effects 2022.app",
+          "Win": "C:\\Program Files\\Adobe\\Adobe After Effects 2022\\Support Files\\AfterFX.exe"
+        }
+      },
+      "ot": {
+        "name": "OpenToonz",
+        "type": [
+          "aep"
+        ],
+        "platform": [
+          "Mac",
+          "Win",
+          "Unix"
+        ],
+        "applicationpath": {
+          "Mac": "/Applications/Adobe After Effects 2022/Adobe After Effects 2022.app",
+          "Win": "C:\\Program Files\\Adobe\\Adobe After Effects 2022\\Support Files\\AfterFX.exe"
+        }
+      },
+      "photoshop": {
+        "name": "photoshop",
+        "type": [
+          "psd",
+          "psb",
+          "tga",
+          "tiff",
+          "png"
+        ],
+        "platform": [
+          "Mac",
+          "Win"
+        ],
+        "applicationpath": {
+          "Mac": "/Applications/Adobe Photoshop 2020/Adobe Photoshop 2020.app",
+          "Win": "C:\\Program Files\\Adobe\\Adobe Photoshop 2022\\Photoshop.exe"
+        }
+      },
+      "clip": {
+        "name": "クリップスタジオ",
+        "type": [
+          "clip",
+          "psd",
+          "psb",
+          "tga",
+          "tiff",
+          "png"
+        ],
+        "platform": [
+          "Mac",
+          "Win"
+        ],
+        "applicationpath": {
+          "Mac": "/Applications/CLIP STUDIO 1.5/App/CLIP STUDIO PAINT.app",
+          "Win": "C:\\Program Files\\CELSYS\\CLIP STUDIO 1.5\\CLIP STUDIO PAINT\\CLIPStudioPaint.exe"
+        }
+      },
+      "tvp": {
+        "name": "tvPaint",
+        "type": [
+          "tvpp",
+          "psd",
+          "psb",
+          "tga",
+          "tiff",
+          "png"
+        ],
+        "platform": [
+          "Mac",
+          "Win"
+        ],
+        "applicationpath": {
+          "Mac": "/Applications/TVPaint Animation 11 Pro.app",
+          "Win": "C:\\Program Files\\TVPaint Developpement\\TVPaint Animation 11 Pro (64bits)\\TVPaint Animation 11 Pro (64bits).exe"
+        }
+      }
+    }
+  },
+  "pman_startupItems": [],
+  "useCookie": [
+    false
+  ],
+  "StageworkColumns": "undefined"
+}

@@ -1,0 +1,31 @@
+﻿/*
+	UnitValue	基底クラス
+*/
+function UnitValue()
+{
+	this.unit="point";//
+	this.dim=1;//値のとる次数 1-N 整数
+	this.value=new Array();//
+	for(var idx;idx<this.dim;idx++){this.value[idx]=0;};//値 0で初期化する
+	this=function(){
+		if(this.dim==1){return this.value[0];}//一次元の時は第一要素のみ返す
+		return this.value;//それ以外は配列をまるごと返す
+	}
+	this.toString=function(){return this.value.toString()}
+}
+
+/*
+nas_KeyFrameオブジェクトを作成する
+
+AEのキーフレームと互換有り
+以下のプロパティがある(AEでのアトリビュート)
+
+Value	タイムラインごとに保持する値は異なるオブジェクトである
+	一般的に 単位付き数値で 1次元 2次元 - n次元の値をとる
+	値の次数は Value.dim
+	値の単位は Value.unit
+	で与えられる。//参 UnitValue
+	ただし それ以外の値をとる可能性もあるので留意
+
+*/
+

@@ -1,0 +1,64 @@
+/*
+時間記録キーを全て走査して、値が（括弧）付きのキーを全て削除    2018 04 05
+*/
+var myTargetProp=app.project.activeItem.layer(3).text.sourceText;
+
+var A=new Array;
+for (var idx=0;idx<myTargetProp.numKeys;idx++){
+	var kidx=idx+1;
+	var currentValue=myTargetProp.keyValue(kidx).text
+	if(currentValue.indexOf("(") >= 0){
+	    A.push([kidx,currentValue]);
+	}
+}
+A.reverse();
+for (var ix=0;ix<A.length;ix++){
+        myTargetProp.removeKey(A[ix][0]);
+}
+
+/*
+	カット番号をキーIDに揃えるスクリプト　2016 03.21
+*/
+var myTargetProp=app.project.activeItem.layer(4).text.sourceText;
+
+var A=new Array;
+for (var idx=0;idx<myTargetProp.numKeys;idx++){
+	var kidx=idx+1;
+	var currentValue=myTargetProp.keyValue(kidx).text
+		A.push([kidx,Math.round(myTargetProp.keyTime(kidx)/app.project.activeItem.frameDuration),currentValue,nas.Zf(kidx,3)]);
+		myTargetProp.setValueAtKey(kidx,nas.Zf(kidx,3));
+}
+A.join("\n");
+
+
+/*
+	インサートのための操作
+	対象トラックの対象フレーム後方のキーを全て選択する
+*/
+/*
+	インサートのための操作
+	対象トラックの対象フレーム後方のキーを全て選択する
+*/
+nas.eStoryBoard.insertColumn=function(myIndex,myLength,compOption)
+{
+	if(! myIndex){myIndex=Math.round(this.targetCC.time/this.targetCC.frameDuration);};
+	if(! myLength){myLength=1;};
+	if(compOption==undefined){compOption=false}
+
+var targetProps=["columnPosition","columnScale","pageIndex","scaleFit","timeText","cutNumber","contentText","soundText"]
+var targetTime=myIndex*this.targetCC.frameDuration;
+//	ターゲットプロパティの後方キーをすべて選択する(うしろから順)
+
+	for(var idx=0;idx<targetProps.length;idx++)
+	{
+		var targetProp=this[targetProps[idx]];
+		var myEx=true;
+if((targetProp.numKeys)&&(myEx)){
+//ターゲットタイムラインのキーを後方から総当たりでチェック 時間より大きければ選択に追加
+		for(var kidx=targetProp.numKeys;kidx>0;kidx--){
+			if(targetProp.keyTime(kidx)>targetTime){targetProp.setSelectedAtKey(kidx,true);}else{break;}
+		}
+};//キーがなければ処理不要
+	}
+}
+nas.eStoryBoard.insertColumn(false,1,false);

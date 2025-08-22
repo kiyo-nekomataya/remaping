@@ -748,7 +748,7 @@ console.log(myObj);
 			if(this.target) this.target.innerHTML = this.newContent;//先に書き換える、onChangeで参照可能かつ変更可能に
 		};
 		if(this.onChange instanceof Function){this.onChange(event)};
-		if((this.target)&&(this.target.innerHTML == "")) this.target.innerHTML+="<br />";//空文字列の時 改行ひとつと置換
+		if(this.target.innerHTML=="") this.target.innerHTML+="<br />";//空文字列の時 改行ひとつと置換
 		var myResult = (this.status)? this.newContent:null;
 		this.clear();//クリア
 		return myResult;//
@@ -815,8 +815,8 @@ nas.showModalDialog(type[,msg[,title[,startValue[,myFunction]]]])
     タイプ2のconfirm|promptは選択肢が(yes/no/cancel)になる。
     @params {String | Array of String}    msg
     メッセージテキスト メッセージはタグ使用可能
-    msgが配列であった場合は、0番要素をプロンプトの上１番要素の内容をプロンプトの下側に表示させる
-    ボタンUI等は第二メッセージに配置したほうが作業性が高い
+    msgが配列であった場合は、0番要素をプロンプトに１番以降の要素を文字列として連結してプロンプトの下側に表示させる
+    ボタンUI等は第二メッセージ以降に配置したほうが作業性が高い
     @params {String}    title
     ウインドウタイトル
     @params {String}    startValue
@@ -853,7 +853,7 @@ nas.HTML.showModalDialog = function(type,msg,title,startValue,callback,fullscree
 		};
 	nas.HTML.type       = type;
 	nas.HTML.msg01      = msg[0].replace(/\r?\n/g,"<br>");
-	nas.HTML.msg02      = msg[1];//UIのリターン置きかえは無し
+	nas.HTML.msg02      = msg.splice(1).join('');//UIのリターン置きかえは無し
 	nas.HTML.title      = title
 	nas.HTML.startValue = startValue;
 	nas.HTML.status     = 0;//状態初期値 0:yes 1:no 2:cancel
@@ -1279,7 +1279,7 @@ nas.HTML.setCssRule('th.dialogBox','border-width:2px;height:2cm','both')
 //2023 追加分の関数なのでIEは完全に対象外	
  */
 
-nas.HTML.setCssRule= function( selector, property, region ) {
+nas.HTML.setCssRule = function( selector, property, region ) {
 	if(region instanceof Array){
 		var target = region;
 	}else{
@@ -1293,6 +1293,7 @@ nas.HTML.setCssRule= function( selector, property, region ) {
 		default	  :target = [0,1,2];
 		};
 	};
+console.log(document.styleSheets[0]);
 	if( document.styleSheets[0].insertRule ){
 		target.forEach(function(e){
 			var targetRule = nas.HTML.findCssRule(selector,e);
@@ -1473,18 +1474,18 @@ nas.HTML.writeTextFile = function (contentText,encoding,path,noconfirm){
 				function(result){
 					if(result){
 						var savefile = nas.File.join(savedir,result);
-console.log(savefile);
 						if(fs){
-							fs.writeFileSync(savefile,content,{encoding:'utf-8'});
-							pman.reName.setItem(savefile);
+console.log(savefile + " : fs.writefileSync");
+							fs.writeFileSync(savefile,contentText,{encoding:'utf-8'});
 						}else{
+console.log(savefile + " : parentModule.postMassage!");
 							uat.MH.parentModule.window.postMessage({
 								channel:'callback',
 								from:{name:xUI.app,id:uat.MH.objectIdf},
 								to:{name:'hub',id:uat.MH.parentModuleIdf},
 								command:'electronIpc.writeFileSync(...arguments);',
-								content:[savefile,content,{encoding:"utf-8"}],
-								callback:'pman.reName.setItem("'+ savefile +'")'
+								content:[savefile,contentText,{encoding:"utf-8"}],
+								callback:''
 							});//electronIpc.writeFileSync(savefile,content,{encoding:'utf-8'});
 						};
 					};
@@ -1627,33 +1628,36 @@ nas.HTML.miniTextEdit = {
 };
 /**
  *	@params {String}	content
- *	@params {String}	msg
+ *	@params {String|Array}	msg
  *	@params {String}	title
  *	@params {Function}	callback
  *	簡易テキストエディタ を立ち上げる
  *	引数を表示して編集を促す
  *	ファイル保存｜ダウンロード｜クリップボード転送をサポート
- *	callbackテキストの内容を引き渡すことが可能
+ *	callback関数は保留テキストの内容を引き渡すことが可能に20240626
  */
 nas.HTML.miniTextEdit.init = function(content,msg,title,filename,callback){
+	if(!(msg instanceof Array)) msg = [msg]
 	if(typeof content == 'undefined') content = this.content;
-	if(typeof msg == 'undefined')     msg     = this.msg;
+	if(typeof msg[0] == 'undefined')     msg[0]     = this.msg;
 	if(typeof title == 'undefined')   title   = this.title;
 	if(typeof filename == 'undefined')   filename = this.filename;
 	this.content = content;
-	this.msg     = msg;
+	this.msg     = msg[0];
 	this.title   = title;
 	this.filename = filename;
-	var msgs = [msg];
-	msgs.push('<br><hr><button class=modalBt onclick="nas.HTML.miniTextEdit.downloadContent()">Download</button><button class=modalBt onclick="nas.HTML.miniTextEdit.sendClipboard()">Copy</button><button class=modalBt onclick="nas.HTML.miniTextEdit.clear()">Clear</button><button class=modalBt onclick="nas.HTML.miniTextEdit.reset()">Reset</button><br>filename:<input id=miniTextFilename type=text size = 42><br><textarea id="miniTextContent" style="height:320px;width:480px;">QQX</textarea>');
+	msg.push('<br><hr>');
+	if(appHost.platform == 'Electron')
+		msg.push('<button class=modalBt onclick="nas.HTML.miniTextEdit.writeContent()">Save</button>');
+	msg.push('<button class=modalBt onclick="nas.HTML.miniTextEdit.downloadContent()">Download</button><button class=modalBt onclick="nas.HTML.miniTextEdit.sendClipboard()">Copy</button><button class=modalBt onclick="nas.HTML.miniTextEdit.clear()">Clear</button><button class=modalBt onclick="nas.HTML.miniTextEdit.reset()">Reset</button><br>filename:<input id=miniTextFilename type=text size = 42><br><textarea id="miniTextContent" style="height:320px;width:480px;">QQX</textarea>');
 	nas.showModalDialog(
 		"alert",
-		msgs,
+		msg,
 		title,
 		'',
 		function(){
 			nas.HTML.miniTextEdit.content = document.getElementById("miniTextContent").value;
-			if(callback instanceof Function) callback(nas.HTML.miniTextEdit.content);}
+		}
 	);
 	$("#nas_modalDialog").keyup(function(e) {
 		if ((e.keyCode == 13)&&(e.target == document.getElementById("miniTextContent"))){
@@ -1662,6 +1666,12 @@ nas.HTML.miniTextEdit.init = function(content,msg,title,filename,callback){
 	});//*/
 	this.reset();
 }
+//編集位置に単語を挿入
+nas.HTML.miniTextEdit.insert = function(str){
+	document.getElementById("miniTextContent").insert(str);
+	document.getElementById("miniTextContent").focus();
+}
+
 //ミニテキストエディタをクリア
 nas.HTML.miniTextEdit.clear = function(){
 	document.getElementById("miniTextContent").value = '';
@@ -1685,7 +1695,7 @@ nas.HTML.miniTextEdit.writeContent = function(){
 	if (document.getElementById('miniTextContent')){
 		nas.HTML.miniTextEdit.content  = document.getElementById('miniTextContent').value;
 		nas.HTML.miniTextEdit.filename = document.getElementById('miniTextFilename').value;
-		nas.HTML.writeTextFile(nas.HTML.miniTextEdit.content,'',nas.HTML.miniTextEdit.filename);
+		nas.HTML.writeTextFile(nas.HTML.miniTextEdit.content,'utf-8',nas.HTML.miniTextEdit.filename);
 	};
 }
 //現在の内容をクリップボードへ転送してオブジェクトを更新
@@ -2284,13 +2294,13 @@ Array.from(document.getElementsByClassName('nasHTMLSliderSelect')).forEach(funct
 	mime type 一点につき アイコンのURLを１点登録が可能
 	mime type は、nasシステムとして拡張されたtypeStringで
 	先行のディレクトリとして システムで使用するデータリジョンが追加されているケースがある
-	現在のデータリジョンは timesheet のみ
+	現在のデータリジョンは timesheet|uaf
 	application/pdf				一般のpdf
-	timesheet/application/pdf	timesheetリジョンないのpdfデータに与えられる一時的なmime-type
+	timesheet/application/pdf	timesheetリジョン内のpdfデータに与えられる一時的なmime-type
 
 	urlには、iconとして利用される画像のurlが格納される
 	url:"" の エントリはシステムで準備された画像のurlと置換される
-	nas.File.join("template/images/pman-ui",<type-string>)
+	nas.File.join("css/images/pman-ui",<type-string>)
 */
 nas.HTML.typeIcons = {
 "application/ard":{type:"application/ard",url:""},
@@ -2306,6 +2316,15 @@ nas.HTML.typeIcons = {
 "application/tdts":{type:"application/tdts",url:""},
 "application/xdts":{type:"application/xdts",url:""},
 "application/zip":{type:"application/zip",url:""},
+"application/vnd.google-apps.document":{type:"application/vnd.google-apps.document",url:""},
+"application/vnd.google-apps.drawing":{type:"application/vnd.google-apps.drawing",url:""},
+"application/vnd.google-apps.form":{type:"application/vnd.google-apps.form",url:""},
+"application/vnd.google-apps.jam":{type:"application/vnd.google-apps.jam",url:""},
+"application/vnd.google-apps.map":{type:"application/vnd.google-apps.map",url:""},
+"application/vnd.google-apps.presentation":{type:"application/vnd.google-apps.presentation",url:""},
+"application/vnd.google-apps.script":{type:"application/vnd.google-apps.script",url:""},
+"application/vnd.google-apps.site":{type:"application/vnd.google-apps.site",url:""},
+"application/vnd.google-apps.spreadsheet":{type:"application/vnd.google-apps.spreadsheet",url:""},
 "image/bmp":{type:"image/bmp",url:""},
 "image/gif":{type:"image/gif",url:""},
 "image/jpeg":{type:"image/jpeg",url:""},
@@ -2370,27 +2389,27 @@ nas.HTML.getTypeIcon = function getTypeIcon(mimetype,asTimesheet){
 	if(! mimetype) mimetype  = "";
 	mimetype = mimetype.replace(/^(timesheet|storyboard|pmdb)\//i,"");
 	if(asTimesheet) mimetype = nas.File.join("timesheet",mimetype);
-console.log(mimetype);
-console.log(nas.HTML.typeIcons[mimetype]);
+//console.log(mimetype);
+//console.log(nas.HTML.typeIcons[mimetype]);
 	if(nas.HTML.typeIcons[mimetype]){
 //データあり
 		if(nas.HTML.typeIcons[mimetype].url == "" ){
 //ファイルとして存在
-			return nas.File.join("template/images/pman-ui/documenticons",mimetype) + ".png";
+			return nas.File.join("css/images/pman-ui/documenticons",mimetype) + ".png";
 		}else{
 //一時データとして存在
 			return nas.HTML.typeIcons[mimetype].url;
-		}
+		};
 	}else{
 //一時データを生成
 		nas.HTML.typeIcons[mimetype] = {
 			type : mimetype,
-			url  : "template/images/pman-ui/documenticons/default.png"
+			url  : "css/images/pman-ui/documenticons/default.png"
 		};
 		return nas.HTML.typeIcons[mimetype].url;
 /*
 		var baseImg = new Image();
-		baseImg.src = "template/images/pman-ui/documenticons/default.png"
+		baseImg.src = "css/images/pman-ui/documenticons/default.png"
 		return nas.HTML.mkIcon(
 			128,128,
 			mimetype,
@@ -2438,6 +2457,32 @@ nas.HTML.mkIcon = function mkIcon(width,height,mimetype,baseImg,cash){
 	}, 'image/png');
 	return nas.HTML.typeIcons[mimetype];
 }
+
+/**
+ * @params {String} url
+ * @params {Function} callback
+ * 	指定されたURLからJSONデータを取得してコールバック関数に渡す
+ */
+nas.HTML.fetchJSON = async function fetchAndDisplayJSON(url,callback) {
+    try {
+        // URLからJSONデータを取得
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const jsonData = await response.json();
+// callback渡し 
+		if(callback instanceof Function){
+			callback(jsonData);
+		}else{
+			console.log(jsonData);
+		};
+    } catch (error) {
+        console.error('Error fetching or displaying JSON data:', error);
+    }
+}
+//TEST nas.HTML.fetchJSON("./package.json",console.log);
+
 
 /*=======================================*/
 if((typeof window == 'undefined')&&(typeof app == 'undefined')){

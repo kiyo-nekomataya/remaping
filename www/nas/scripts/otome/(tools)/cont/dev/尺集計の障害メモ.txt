@@ -1,0 +1,78 @@
+﻿C14 なぜか 15+18 本来 0+18のはずだが?
+
+//sourceText のエクスプレッションを以下から 抜き出しに変更
+/*変更前*/
+if(	thisComp.layer("ColumnInformation").position.numKeys){
+//カラムキーあり(全カラム)
+	if(	thisComp.layer("ColumnInformation").position.nearestKey(time).time==time)
+	{
+		if(nearestKey(time).time==time){text.sourceText}else{"¥("+text.sourceText+"¥)"}
+
+	}else{
+		""
+	};
+}else{"--no entory--";}
+/*変更後
+	カラム位置との連携は切る
+	フリー記述に近づけて解釈側での対応を強化
+*/
+if(text.sourceText.nearestKey(time).time==time){this.value}else{""};
+
+
+
+//lengthのエクスプレッションを変更
+
+/*layer("Time").effect.length.property(1)
+	カラムコレクションのTimeレイヤに設定して該当カットのカット尺を返すエクスプレッション
+カットナンバーの同じカラムをスキャンして加算。そのカット内ならば同じ値を返す。
+慣例にしたがって「カット尺」でありそのカットの素材としての継続時間ではない。
+
+2008/01/21
+プロジェクト初期時点でキーが消失した時のエラーを抑制
+*/
+	var myStartTime =0;
+	var myEndTime =0;
+	var myCutNo=thisComp.layer("CUT No.").text.sourceText;
+
+if(thisComp.layer("CUT No.").text.sourceText.numKeys){
+	if(thisComp.layer("CUT No.").text.sourceText.valueAtTime(thisComp.layer("CUT No.").text.sourceText.nearestKey(time).time)==myCutNo){
+//最近接キーのカット番号一致
+		myStartTime	=thisComp.layer("CUT No.").text.sourceText.nearestKey(time).time;
+
+		if(thisComp.layer("CUT No.").text.sourceText.nearestKey(time).index<thisComp.layer("CUT No.").text.sourceText.numKeys){
+			myEndTime	=thisComp.layer("CUT No.").text.sourceText.key(
+				thisComp.layer("CUT No.").text.sourceText.nearestKey(time).index+1
+			).time;
+		}else{
+			myEndTime	=myStartTime+(6*thisComp.frameDuration);//ラストキーなので暫定的に6カラム分だけ検索
+		}
+	}else{
+//最近接キーと不一致(最近接が後方)
+		if(thisComp.layer("CUT No.").text.sourceText.nearestKey(time).index==1){
+			myStartTime	=0;//キーが先頭なので0から集計
+		}else{
+			myStartTime	=thisComp.layer("CUT No.").text.sourceText.key(
+				thisComp.layer("CUT No.").text.sourceText.nearestKey(time).index-1
+			).time;
+		}
+		myEndTime	=thisComp.layer("CUT No.").text.sourceText.nearestKey(time).time;
+	}
+
+var myTotalFrames=0;
+var myStartFrame	=Math.round(myStartTime/thisComp.frameDuration);
+var myEndFrame		=Math.round(myEndTime/thisComp.frameDuration);
+//JS独特の計算誤差の吸収が必要 01/29
+for(var myFrame=myStartFrame ; myFrame<myEndFrame ; myFrame++){
+	var checkTime=myFrame*thisComp.frameDuration;
+	if(this.text.sourceText.valueAtTime(checkTime).match(/^([0-9]+)¥ *¥+¥ *([0-9]+)¥ *¥.?$/)){
+		myTotalFrames+=(RegExp.$1*1)*(1/thisComp.frameDuration)+(RegExp.$2*1);
+	}
+}
+myTotalFrames;
+}else{
+0;//no keys in CutNumber
+}
+
+
+
+修正分をオリジナルに反映した後ライカを再出力 (c033から)

@@ -1,14 +1,25 @@
 ﻿'use strict';
 /*=======================================*/
+// load order:2
+/*=======================================*/
+if ((typeof config != 'object')||(config.on_cjs)){
+    var config    = require( './nas_common' ).config;
+    var appHost   = require( './nas_common' ).appHost;
+    var nas       = require( './nas_common' ).nas;
+}
+
+/*=======================================*/
 if(typeof nas == 'undefined') var nas = {};
 
 /* ***  実行環境の判定オブジェクト  ****
 appHost オブジェクト
 	appHost.Nodejs   ;Bool
 	appHost.ESTK     ;Bool
-	appHost.platform ;CEP|CSX|AIR|Chrome|Safari|Opera|MSIE|Netscape|Mozilla|unknown
-	appHost.version  ;platform-version
-	appHost.os       ;Win|Mac|Other
+	appHost.Cordoba  ;Bool
+	appHost.Electron ;String renderer|sandbox|browser
+	appHost.platform ;String UXP|CEP|CSX|AIR|Electron|Chrome|Safari|Opera|MSIE|Netscape|Mozilla|unknown
+	appHost.version  ;String platform-version
+	appHost.os       ;String Win|Mac|iOS|Android|Linux|Other
 */
 //nas.Image
 /**
@@ -111,11 +122,15 @@ nas.Image.convert2Blob = function(src,callback){
  	ドキュメントに1点のみ与えられるdescription欄ための画像 アドレスIDはなし
  RenameItemと異なりすべてのtypeで編集が可能
  
+ asset
+ 	pman｜pman.reNameで扱うアセットに付属する画像 アドレスIDは、ブラウズアイテムの持つid(uuid)
+コレクションはアプリ本体が持ち、同時にブラウズアイテムにプロパティとして接続する
+ 
   new nas.NoteImage('./timesheet.png','page:1');
   new nas.NoteImage('./anotation.png','cell:1_12');
   new nas.NoteImage('./description.png','description:');
   
-  初期化の際に必ずしも画層データは必要ないその場合はキャッシュ画像はnull設定される
+  初期化の際に必ずしも画像データは必要ない その場合キャッシュ画像はnull設定される
   画像の専有サイズは、都度sheetLooksから計算される
 
   new nas.NoteImage(null,'page:1');
@@ -128,7 +143,7 @@ nas.Image.convert2Blob = function(src,callback){
  */
 nas.NoteImage = function NoteImage(img,address,size,parent){
 	this.parent     = null      ;//parentCollection
-    this.type       = "cell"    ;//description|page|cell|note(予)|memo(予)
+    this.type       = "cell"    ;//description|page|cell|asset|note(予)|memo(予)
     this.link       = ""        ;//アタッチ座標 (座標タイプcell:String eg.0_0 |page:Number eg.1 | description:nullSrtring eg.""
     this.content    = ""        ;//画像パス,URL URI dataURL
     this.size       = new nas.Size("0mm","0mm")          ;//画像サイズ
@@ -472,7 +487,7 @@ console.log('get psd fromURL:'+imgurl);
 //標準の読出失敗画像を設定してここで設定したほうがユーザにわかりやすい
 					};
 				}else if(
-					(appHost.platform == 'Electron')&&(img.match(/\.(tif|tiff)$/i))
+					(Tiff)&&(img.match(/\.(tif|tiff)$/i))
 				){
 console.log('tiff not supported.');
 				};
@@ -540,6 +555,7 @@ console.log('detect TIFF');
 				}).catch(function(err){
 					console.log(err);
 				});
+//			if(appHost.platform != 'Electron')console.log('but TIFF not suported');
 		};
 	}else if((typeof HTMLImageElement == 'function')&&(img instanceof HTMLImageElement)){
 //画像を設定
@@ -675,7 +691,7 @@ console.log(img);
     読み込み時にすでにcanvasデータが存在する場合、キャッシュを初期化する（要fabricCanvas）
 */
 nas.NoteImage.prototype.initCanvas = function initCanvas(callback){
-    //NOP cavasaddon で拡張されるまでの間の　ダミー関数
+    //NOP cavasaddon で拡張されるまでの間のダミー関数
 };
 /**
  *	@params {Function} callback
@@ -923,10 +939,7 @@ var imgs = `[
 var testImages = new nas.NoteImageCollection();
 testImages.parse(imgs)
 */
-
 /*=======================================*/
-if((typeof config == 'object')&&(config.on_cjs)){
-    exports.config  = config;
-    exports.appHost = appHost;
-    exports.nas     = nas;
-};
+if ((typeof config == 'object')&&(config.on_cjs)){
+    exports.nas = nas;
+}

@@ -1,0 +1,94 @@
+%!PS-Aobe-3.0 EPSF-3.0
+%%TITLE: epsscale.eps
+%%Creater: kiyo
+%%Pages: 1
+%%BoundingBox: 0 0 2606 112
+%% エリアは 460 mm × 20 mm
+% 画像空白部分を調整するには、バウンディングボックスの値を書き換えてください
+% 4つの数字は それぞれ 「左下X座標 左下Y座標 右上X座標 右上Y座標」です 
+% ---- 定規の長さに　1 cm 加えた程度が見た目がすっきりします。
+% (1/72 インチ単位)
+% 参考 
+% 10 cm = 283 )  15 cm = 425 ) 20 cm = 566 ) 30 cm = 856 )
+% 45 cm =  1275) 60 cm = 1700 )
+% % 28.3464 が 1cm
+%%EndComment
+
+/cm {28.3464 mul} def
+%%%%%%%%%%%%%%  この下の行を書き換えると定規の長さが変わります
+%%%%% 長さ と cm の間には半角の空白を必ず入れてください。
+%%%%% チャートの名前は右端に表示されます括弧の中だけを書き換えてください。
+% % Scale
+/ScaleWidth {45 cm} def
+% % TEXT
+/ChartName (eps scale 45cm) def
+%%%%%% ANIMO Ver3 で使用するときは
+%%%%%% この下の行のコメント記号をはずして有効にしてください。
+% % 60 72 div dup scale
+%%%%%%%%%%%%%%%%%%%%%%%%%%% 基本単位を1/60インチにする
+ 144 72 div dup scale
+% % DATAs
+/PaperWidth {ScaleWidth 1 cm add} def
+/PaperHeight {56} def
+
+
+
+% % スケール描画
+/DrawScale
+
+{ newpath
+ ScaleWidth 2 div neg 0 cm moveto
+ ScaleWidth 0 rlineto
+
+ .05 cm setlinewidth
+ 0 setgray
+ stroke
+
+ newpath
+ ScaleWidth 2 div neg .1 cm ScaleWidth 2 div
+{ 0 moveto
+ 0 .35 cm rlineto } for
+ .01 cm setlinewidth
+ 0 setgray
+ stroke
+
+ newpath
+ ScaleWidth 2 div neg .5 cm ScaleWidth 2 div
+{ 0 moveto
+ 0 .5 cm rlineto } for
+ .02 cm setlinewidth
+ 0 setgray
+ stroke
+
+ newpath
+ ScaleWidth 2 div neg 1 cm ScaleWidth 2 div .1 add
+{ 0 moveto
+ 0 .7 cm rlineto } for
+ .03 cm setlinewidth
+ 0 setgray
+ stroke
+
+} def
+
+%%EndProlog
+
+ newpath
+	PaperWidth 2 div PaperHeight 2 div moveto
+% %		用紙中心へ移動
+gsave
+currentpoint translate
+
+% % cm スケール描画
+gsave
+0 cm 0 cm neg moveto
+	currentpoint translate
+
+ DrawScale
+
+grestore
+	grestore
+
+
+%%%%%%%%%%%%%%
+showpage
+%%Trailer

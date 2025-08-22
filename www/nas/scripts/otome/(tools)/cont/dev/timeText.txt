@@ -1,0 +1,30 @@
+﻿if(	thisComp.layer("ColumnInformation").position.numKeys){
+if(	thisComp.layer("ColumnInformation").position.nearestKey(time).time==time
+){	text.sourceText}else{""};}else{"--no entory--";}
+
+
+ここの書式は、以下のように変更して集計と別表示にする.
+1カラムに対して複数の記述を改行・空白等でで区切って書き込みできることにする。(要するに普通のコンテ)
+
+種目	形式
+累積時間	##+##
+トランジション時間	(O.L.?|WIPE|trin|trout|.*)¥(対象カット番号¥)¥[##+##¥] 
+それ以外のコメント	無視する
+
+
+表示はそのまま
+例
+
+1+12
+O.L.(c12)[2+12]	>この書き方をした時のみ認識する。インかアウトかは(対応カット番号)で判別
+
+ここまで(3+0)
+
+順不同
+集計は別のプロパティで
+
+トランジション種別はドロップダウンリストで選択
+
+分解ルーチン追加(要)	2008/01/21
+
+

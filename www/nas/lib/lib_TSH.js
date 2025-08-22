@@ -2,31 +2,13 @@
  *	@fileoverview TSH2XPS(TSHStream)
  *	TSHファイルをXPS互換テキストにコンバートする
  *	引き数は、TSHデータのテキストストリーム,
+ * データファイル名でなくblob渡しに変更する必要あり
  */
-
-/**
- * 全角数字を半角にして数字以外の文字を捨てる
- * 書き戻し用関数　nasライブラリの汎用サポート部に入れたほうが良いかも
- * @param myStr
- * @returns {XML|string}
- */
-nas.clipNum = function (myStr) {
-    return myStr.replace(/[０１２３４５６７８９]/g,
-        function (h) {
-            var n = "０１２３４５６７８９".indexOf(h);
-            return (n !== -1) ? ("0123456789").charAt(n) : h;
-        }
-    ).replace(/[^0-9]/g, "");
+'use strict';
+/*=======================================*/
+if((typeof window == 'undefined')&&(typeof app == 'undefined')){
+    var nas = require('./xpsio');
 };
-
-/**
- * clipNum("!2２３４．．００．９ｑｌｌ");
- *
- * 置き換えパターンは場合によっては下記も
- * ０１２３４５６７８９．，＃－＿｜
- * 0123456789.,#-_|
- */
-
 /**
  * @param TSHStream
  * @returns {*}
@@ -43,7 +25,7 @@ function TSH2XPS(TSHStream) {
      * CSVデータをオブジェクト化する
      * @type {{}}
      */
-    myTSH = {};
+    var myTSH = {};
 
     /**
      * ラインで分割して配列に取り込み
@@ -72,17 +54,17 @@ function TSH2XPS(TSHStream) {
             //固定長レコードなので、全数から空フィールドの数をひいてCountをとる
             if (currentCount > myTSH.layerCount) {
                 myTSH.layerCount = currentCount
-            }
-        }
-    }
+            };
+        };
+    };
     /**
      * 各ラインを更にテキストの配列に分解
      */
     for (var idx = 0; idx < myTSH.SrcData.length; idx++) {
         if (myTSH.SrcData[idx].length > 1) {
             myTSH.SrcData[idx] = myTSH.SrcData[idx].split("\t")
-        }
-    }
+        };
+    };
     myTSH.body = function (layerID, frameID) {
         return (this.SrcData[frameID + 2][layerID]);
     };
@@ -128,17 +110,17 @@ function TSH2XPS(TSHStream) {
          * @type {string}
          */
         resultStream += "[CELL\tN\t";
-        for (idx = 0; idx < this.layerCount; idx++) {
+        for (var idx = 0; idx < this.layerCount; idx++) {
             resultStream += this.layerLabel(idx) + "\t";
         }
         resultStream += "]";
         resultStream += myLineFeed;
 
-        for (frm = 0; frm < this.frameDuration; frm++) {
+        for (var frm = 0; frm < this.frameDuration; frm++) {
             resultStream += "\t";
             //T-Sheetはダイアログデータをサポートしないので1フィールドスキップ
             resultStream += "\t";
-            for (idx = 0; idx < this.layerCount; idx++) {
+            for (var idx = 0; idx < this.layerCount; idx++) {
                 if (frm == 0) {
                     var currentValue = this.body(idx, frm);
                 } else {
@@ -172,11 +154,11 @@ function XPS2TSH(myXPS) {
     /**
      * 引数がソースであっても処理する。XPSでない場合はfalse
      */
-    if (myXPS instanceof Xps) {
+    if (myXPS instanceof nas.Xps) {
         var sourceXPS = myXPS;
     } else {
         if ((myXPS instanceof String) && (myXPS.match(/^nasTIME-SHEET/))) {
-            var sourceXPS = new Xps();
+            var sourceXPS = new nas.Xps();
             if (!sourceXPS.readIN(myXPS)) {
                 return false;
             }
@@ -266,3 +248,12 @@ function XPS2TSH(myXPS) {
  * この形式で各フォーマットのコンバータを作って一元化したいが、どうよ？
  * 逆変換も欲しいね。
  */
+/*=======================================*/
+if((typeof window == 'undefined')&&(typeof app == 'undefined')){
+    exports.TSH2XPS = TSH2XPS;
+    exports.XPS2TSH = XPS2TSH;
+}
+/*  eg. for import
+    const { TSH2XPS , XPS2TSH } = require('./lib_TSH.js');
+
+*/

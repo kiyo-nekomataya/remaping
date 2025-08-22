@@ -1,0 +1,481 @@
+﻿========================================================== エクスプレッションリスト
+*stub
+**消失点コントローラ
+	マスク
+	エフェクト
+	モーショントラッカー
+***消失点コントローラ/[ アンカーポイント ]: :
+---(
+[width/2,height/2];
+---)
+
+***消失点コントローラ/[ スケール ]: :
+---(
+[75,75]
+---)
+
+***消失点コントローラ/[ 回転 ]: :
+---(
+45+thisComp.layer("メインコントローラ").effect("follow方向")("角度")
+---)
+
+**消失点参考
+	マスク
+	エフェクト
+	モーショントラッカー
+***消失点参考/[ 位置 ]: :
+---(
+//消失点
+/*
+指定点のベクトルを延長して求める消失点
+汎用性のため、コンポジット座標で提供される
+*/
+var v1=thisComp.layer("メインコントローラ").position;
+var v0=thisComp.layer("消失点コントローラ").position;
+var myVpOffset=1/(thisComp.layer("メインコントローラ").effect("消失点オフセット(%)")(1)/100) ;
+var myOffsetVector=sub(v0,v1);
+//
+add(mul(myOffsetVector,myVpOffset),v1);
+---)
+
+**メインコントローラ
+	マスク
+	エフェクト
+***メインコントローラ/エフェクト/正比率オフセット/[ スライダ ]: ADBE Slider Control-0001:
+---(
+if(numKeys==1){
+//正比率点指定キーはキー数1のみが有効それ以外は変形ナシ
+	var frameOffset=(time-nearestKey(time).time)/thisComp.frameDuration;
+	frameOffset*1
+}else{
+	0;
+}
+
+---)
+
+***メインコントローラ/エフェクト/消失点オフセット(%)/[ スライダ ]: ADBE Slider Control-0001:
+---(
+//消失点コントローラの位置が消失点までの何%に当たるかを指定する
+//100%で消失点の指定となるマイナス値は逆側に消失点を求める
+if(valueAtTime(time)==0){1}else{valueAtTime(time)};
+
+---)
+
+***メインコントローラ/エフェクト/follow方向/[ 角度 ]: ADBE Angle Control-0001:
+---(
+//follow方向
+/*
+	方位角で指定 12時方向を0度6時方向を180度で指定する360度法
+	キーがない場合は当該レイヤの方向を反映する
+*/
+if(numKeys){valueAtTime(time)}else{this.rotation};
+---)
+
+***メインコントローラ/エフェクト/フレームスキップ/[ スライダ ]: ADBE Slider Control-0001:
+---(
+/*
+キーの値を切り捨て整数化して、かつ中間値補完はナシ(常に固定)
+前方キーが無ければプロパティの値を参照。あればキーの値を参照
+*/
+if (numKeys){
+	if(time>nearestKey(time).time){Math.floor(nearestKey(time).value);
+	}else{
+		if(nearestKey(time).index>1){Math.floor(key(nearestKey(time).index-1).value);}else{Math.floor(valueAtTime(time))}
+	}
+
+}else{
+	Math.floor(valueAtTime(time));
+}
+---)
+
+***メインコントローラ/エフェクト/解像度(dpi)/[ スライダ ]: ADBE Slider Control-0001:
+---(
+if(valueAtTime(time)){Math.abs(valueAtTime(time))}else{144};
+
+---)
+
+***メインコントローラ/エフェクト/フレームサイズ(mm)/[ スライダ ]: ADBE Slider Control-0001:
+---(
+(effect("フレームサイズ(mm)")(1)==0)? 254:valueAtTime(time);
+//0回避のためデフォルト値を与える
+---)
+
+***メインコントローラ/エフェクト/frameAspect/[ スライダ ]: ADBE Slider Control-0001:
+---(
+(effect("frameAspect")(1)==0)?16/9:valueAtTime(time);
+---)
+
+	モーショントラッカー
+***メインコントローラ/[ アンカーポイント ]: :
+---(
+[width/2,height/2]
+---)
+
+***メインコントローラ/[ スケール ]: :
+---(
+[100,100]
+---)
+
+**ガイドポイント
+	マスク
+	エフェクト
+	モーショントラッカー
+***ガイドポイント/[ アンカーポイント ]: :
+---(
+//ガイド表示nullオブジェクトのアンカーポイントをレイヤ中央に固定
+[width/2,height/2];
+
+---)
+
+***ガイドポイント/[ スケール ]: :
+---(
+//ガイド表示nullオブジェクトのサイズを50X50pxに固定
+[100*(50/width),100*(50/height)];
+
+---)
+
+***ガイドポイント/[ 回転 ]: :
+---(
+//ガイド表示nullオブジェクトを菱形に固定
+45;
+---)
+
+**パースガイド
+	マスク
+	エフェクト
+***パースガイド/エフェクト/hasControler/[ チェックボックス ]: ADBE Checkbox Control-0001:
+---(
+//自レイヤの上のコントローラレイヤの存在をTRUE/FALSEで返すプロパティ
+/*なぜこんものを書かんとだめなんじゃ！こらアドビ怒るぞ*/
+var targetName="メインコントローラ";
+var myResult=false;
+	for(mIdx=1;mIdx<thisComp.numLayers;mIdx++){if(thisComp.layer(mIdx).name==targetName){myResult=true;break;}}
+myResult;
+
+---)
+
+***パースガイド/エフェクト/isScale/[ チェックボックス ]: ADBE Checkbox Control-0001:
+---(
+//指定点１
+if(effect("hasControler")(1).value){
+	thisComp.layer("メインコントローラ").effect("isScale")(1).valueAtTime(time);
+}else{
+	valueAtTime(time);
+}　
+
+---)
+
+***パースガイド/エフェクト/レーザー/[ 開始点 ]: ADBE Laser-0001:
+---(
+effect("焦点")("ポイント")
+---)
+
+***パースガイド/エフェクト/レーザー/[ 終了点 ]: ADBE Laser-0002:
+---(
+var hasCtrl=false;
+for(lIdx=1;lIdx<thisComp.numLayers;lIdx++){if(thisComp.layer(lIdx).name=="ガイドポイント"){hasCtrl=true;break;}}
+if(hasCtrl){
+	toComp(fromComp(thisComp.layer("ガイドポイント").position));
+}else{
+	this.valueAtTime(time);
+}
+---)
+
+***パースガイド/エフェクト/レーザー/[ 外側のカラー ]: ADBE Laser-0009:
+---(
+effect("レーザー")("内側のカラー");
+---)
+
+***パースガイド/エフェクト/レーザー 2/[ 開始点 ]: ADBE Laser-0001:
+---(
+effect("焦点")("ポイント")
+---)
+
+***パースガイド/エフェクト/レーザー 2/[ 終了点 ]: ADBE Laser-0002:
+---(
+toComp(effect("指定点2")(1))
+
+---)
+
+***パースガイド/エフェクト/レーザー 2/[ 外側のカラー ]: ADBE Laser-0009:
+---(
+effect("レーザー 2")("内側のカラー");
+---)
+
+***パースガイド/エフェクト/解像度(dpi)/[ スライダ ]: ADBE Slider Control-0001:
+---(
+//	解像度
+/*
+コントローラがあれば、そちらを参照
+*/
+if(effect("hasControler")(1).value){
+	thisComp.layer("メインコントローラ").effect("解像度(dpi)")(1);
+}else{
+	if(this.value){Math.abs(this.value)}else{144};
+}
+
+---)
+
+***パースガイド/エフェクト/正比率点/[ スライダ ]: ADBE Slider Control-0001:
+---(
+//	正比率点
+/*
+正比率点はキーフレームで不変形点の指定を行う。キーフレームの数は１以上
+常に第一キーの位置を参照
+*/
+if(effect("hasControler")(1).value){
+	thisComp.layer("メインコントローラ").effect("正比率オフセット")("スライダ").key(1).time
+}else{
+	if(numKeys>=1){
+//正比率点指定キーはキー1のみが有効それ以外は変形ナシ
+		key(1).time;
+	}else{
+		0;
+	}
+}
+---)
+
+***パースガイド/エフェクト/フレームオフセット/[ スライダ ]: ADBE Slider Control-0001:
+---(
+//	フレームオフセット
+/*
+	同レイヤの正比率点にキーがあればそちらを参照
+	指定用ターゲットレイヤがあればそちらを参照
+	なにもない場合は常にゼロを返す
+*/
+//myTime=this.key(1).time;
+/*
+正比率点はキーフレームで不変形点の指定を行う。キーフレームの数は１個に固定
+値はキーフレームからのフレームオフセットを計算して各フレームに提供する
+*/
+if(effect("hasControler")(1).value){
+	var myTarget=thisComp.layer("メインコントローラ");
+	myTarget.effect("正比率オフセット")("スライダ").valueAtTime(time)
+}else{
+//フレームスキップ適用後のフレームを算出
+//最終参照 Time
+var refTime=0;
+var refVal=effect("フレームスキップ")(1).value;
+//前方キーインデックスを取得
+if (effect("フレームスキップ")(1).numKeys){
+
+	if(time>=effect("フレームスキップ")(1).nearestKey(time).time){
+		refTime=effect("フレームスキップ")(1).nearestKey(time).time;
+	}else{
+		if(effect("フレームスキップ")(1).nearestKey(time).index>1){
+			refTime=effect("フレームスキップ")(1).key(effect("フレームスキップ")(1).nearestKey(time).index-1).time;
+		}
+	}
+};
+//参照時間と現在時の差を求めてスキップされた値を得る
+//((参照時-現在時)/フレーム継続時)/(スキップ値+1)
+var targetFrame=Math.floor(refTime/thisComp.frameDuration)+((refVal+1)*Math.floor(Math.round((time-refTime)/thisComp.frameDuration)/(refVal+1)));
+
+//	var frameOffset=(time-effect("正比率点")("スライダ").key(1).time)/thisComp.frameDuration;
+	var frameOffset=targetFrame-Math.round(effect("正比率点")("スライダ").key(1).time/thisComp.frameDuration);
+frameOffset*1;
+}
+---)
+
+***パースガイド/エフェクト/消失点オフセット(%)/[ スライダ ]: ADBE Slider Control-0001:
+---(
+//	消失点オフセット(%)
+if(effect("hasControler")(1).value){
+thisComp.layer("メインコントローラ").effect("消失点オフセット(%)")(1).value;
+}else{
+	if(this.value){this.value;}else{100};
+}
+
+---)
+
+***パースガイド/エフェクト/フレームスキップ/[ スライダ ]: ADBE Slider Control-0001:
+---(
+//	フレームスキップ
+if(effect("hasControler")(1).value){
+thisComp.layer("メインコントローラ").effect("フレームスキップ")(1).value;
+}else{
+/*
+キーの値を切り捨て整数化して、かつ中間値補完はナシ(常に固定)
+前方キーが無ければプロパティの値を参照。あればキーの値を参照
+*/
+if (numKeys){
+	if(time>nearestKey(time).time){Math.floor(nearestKey(time).value);
+	}else{
+		if(nearestKey(time).index>1){Math.floor(key(nearestKey(time).index-1).value);}else{Math.floor(this.value)}
+	}
+
+}else{
+	Math.floor(this.value);
+}
+}
+
+---)
+
+***パースガイド/エフェクト/焦点/[ ポイント ]: ADBE Point Control-0001:
+---(
+//	焦点
+/*　焦点は、指定点のベクトルを延長して求める消失点
+汎用性のため、コンポジット座標で提供される
+指定ポイント自体はレイヤ座標で指定
+*/
+var v1=effect("指定点2")("ポイント");
+var v0=effect("指定点1")("ポイント");
+var myVpOffset=1/(effect("消失点オフセット(%)")("スライダ")/100) ;
+//var myVpOffset=effect("速度2(mm/k)")(1)/effect("速度1(mm/k)")(1);
+var myOffsetVector=sub(v0,v1);
+//s
+toComp(add(mul(myOffsetVector,myVpOffset),v1));
+
+---)
+
+***パースガイド/エフェクト/指定点1/[ ポイント ]: ADBE Point Control-0001:
+---(
+//指定点１
+if(effect("hasControler")(1).value){
+	fromComp(thisComp.layer("消失点コントローラ").position);
+}else{
+	this.value;
+}　
+
+---)
+
+***パースガイド/エフェクト/速度1(mm/k)/[ スライダ ]: ADBE Slider Control-0001:
+---(
+//	速度１
+if(effect("hasControler")(1).value){
+	effect("速度2(mm/k)")(1).value*(thisComp.layer("メインコントローラ").effect("消失点オフセット(%)")("スライダ")-100)/100;
+}else{
+	effect("速度2(mm/k)")(1)*(effect("消失点オフセット(%)")("スライダ")-100)/100;
+}
+---)
+
+***パースガイド/エフェクト/指定点2/[ ポイント ]: ADBE Point Control-0001:
+---(
+//指定点２
+if(effect("hasControler")(1).value){
+	fromComp(thisComp.layer("メインコントローラ").position);
+}else{
+	this.value;
+}　
+
+---)
+
+***パースガイド/エフェクト/速度2(mm/k)/[ スライダ ]: ADBE Slider Control-0001:
+---(
+//	速度２
+if(effect("hasControler")(1).value){
+	thisComp.layer("メインコントローラ").effect("速度(mm/k)")("スライダ");
+}else{
+	this.value;
+}
+
+---)
+
+***パースガイド/エフェクト/トラックIN/[ チェックボックス ]: ADBE Checkbox Control-0001:
+---(
+//方向反転
+if(effect("hasControler")(1).value){
+	!(thisComp.layer("メインコントローラ").effect("方向反転")(1).value);
+}else{
+	!this.value;
+}　
+
+---)
+
+***パースガイド/エフェクト/follow方向/[ 角度 ]: ADBE Angle Control-0001:
+---(
+//	follow方向
+if(effect("hasControler")(1).value){
+thisComp.layer("メインコントローラ").effect("follow方向")("角度")
+}else{
+	this.value;
+}
+
+---)
+
+***パースガイド/エフェクト/歪曲高(px)/[ スライダ ]: ADBE Slider Control-0001:
+---(
+//	歪曲高
+/*
+	スキュー変形の平行四辺形の高さを求める
+*/
+var myVec=sub(effect("指定点2")("ポイント"),effect("指定点1")("ポイント"));
+// 2次元のベクトルを与えて360度角を求める関数。(反時計)
+function vec2deg(Vector)
+{
+ 	var x=Vector[0];var y=Vector[1];
+	var	myRadians=(y==0)?0:Math.atan(y/x);
+ 	if (x<0){myRadians+=Math.PI};
+	return Math.floor(180. * (myRadians/Math.PI)* 10000)/10000;//degrees;
+}
+var d=effect("follow方向")("角度")-vec2deg(myVec);
+//
+Math.cos(degreesToRadians(d))*length(effect("指定点2")("ポイント"),fromComp(effect("焦点")("ポイント")));
+---)
+
+***パースガイド/エフェクト/移動総量/[ スライダ ]: ADBE Slider Control-0001:
+---(
+//	総移動量
+//解像度はエフェクトを参照
+var myResolution=effect("解像度(dpi)")(1);//(dpi)
+//キーフレームによる積算移動量を計算
+
+	if(effect("isScale")(1).valueAtTime(time)){
+/*
+	計測基点(正比率点のキーフレーム位置)から、現在時までをフレームごとに積算
+*/
+//scale
+var myShiftScl=1;//初期値1
+var flipFlag=(effect("フレームオフセット")("スライダ")<0)?-1:1;
+if(effect("正比率点")("スライダ")>=0){
+	var fMax=Math.round(Math.abs(effect("フレームオフセット")("スライダ")));
+		for(f=0;f<fMax;f++){
+			var baseLength=(length(effect("焦点")("ポイント"),toComp(effect("指定点2")("ポイント")))/myResolution)*25.4;
+			var spd=effect("速度2(mm/k)")("スライダ").valueAtTime((effect("正比率点")("スライダ")+f)*flipFlag*thisComp.frameDuration)/2;
+			var myScaleTip=(effect("フレームオフセット")("スライダ")<0)?(baseLength+spd)/(baseLength-spd):(baseLength-spd)/(baseLength+spd);
+			myShiftScl*=myScaleTip;
+		}
+}else{
+	0;
+}
+//
+(myShiftScl);
+//
+	}else{
+/*
+	計測基点(正比率点のキーフレーム位置)から、現在時までをフレームごとに積算
+*/
+//skew
+var myShiftVol=0;//初期値0
+var flipFlag=(effect("フレームオフセット")("スライダ")<0)?-1:1;
+if(effect("フレームオフセット")("スライダ").value){
+	var fMax=Math.round(effect("フレームオフセット")("スライダ"));
+	for(f=0;f<Math.abs(fMax);f++){
+		myShiftVol+=effect("速度2(mm/k)")("スライダ").valueAtTime(
+			(effect("正比率点")("スライダ").value+(f*flipFlag))*thisComp.frameDuration
+		);
+	}
+}else{
+	0;
+}
+//
+(myShiftVol*flipFlag)*myResolution/25.4;
+	}
+---)
+
+	モーショントラッカー
+***パースガイド/[ アンカーポイント ]: :
+---(
+[width/2,height/2];
+---)
+
+***パースガイド/[ 位置 ]: :
+---(
+[thisComp.width/2,thisComp.height/2]
+---)
+
+***パースガイド/[ スケール ]: :
+---(
+[100*thisComp.width/width,100*thisComp.height/height]
+---)
+

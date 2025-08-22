@@ -1,0 +1,42 @@
+Adobe After Effects 7.0 Keyframe Data
+
+	Units Per Second	24
+	Source Width	4680
+	Source Height	1654
+	Source Pixel Aspect Ratio	1
+	Comp Pixel Aspect Ratio	1
+
+Transform	Anchor Point
+	Frame	X pixels	Y pixels	Z pixels	
+		2340	827	0	
+
+Expression Data
+this.source.layer(1).position;
+End of Expression Data
+
+Transform	Position
+	Frame	X pixels	Y pixels	Z pixels	
+		800	450	0	
+
+Expression Data
+this.source.layer(1).anchorPoint
+End of Expression Data
+
+Transform	Scale
+	Frame	X percent	Y percent	Z percent	
+		100	100	100	
+
+Expression Data
+[10000/this.source.layer(1).scale[0],10000/this.source.layer(1).scale[1]]
+End of Expression Data
+
+Transform	Rotation
+	Frame	degrees	
+		0	
+
+Expression Data
+-this.source.layer(1).transform.rotation
+End of Expression Data
+
+
+End of Keyframe Data

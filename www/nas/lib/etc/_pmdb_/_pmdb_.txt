@@ -1,0 +1,30 @@
+﻿_pmdb_配下のファイル群は開発用の一時的な設定初期化ファイルとなる
+
+	configPMDB.js
+開発用pmdbオブジェクト初期化コード
+サンプルデータを含む動作確認用
+
+	configPMDB_mini.js
+開発用pmdbオブジェクト初期化コード
+動作に必要な最小限のpmdbを作成するコード
+
+	nas.Pm.pmdb.json
+実運用の際に使用する同名のオブジェクト
+nas.Pm.pmdb をダンプした JSON
+一般的な手順でrequireして使う場合は一時オブジェクトに読み出してparseConfigでオブジェクトに設定する必要がある
+実運用時にはnas/etc/nas.Pm.pmdb.jsonに移動される
+
+	setupPMDB.js
+pmdbの読み出しサンプルコード
+
+
+
+以下の設定ファイルはpmdbデータ運用に伴い統合される
+ Adobeスクリプト系列のスクリプトはpmdb環境に統合
+
+nas.outputMedias.bodys.pref
+nas.outputMedias.selected.pref
+nas.registerMarks.bodys.pref
+nas.registerMarks.selected.pref
+nas.workTitles.bodys.pref
+nas.workTitles.selected.pref

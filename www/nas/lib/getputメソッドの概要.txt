@@ -1,0 +1,246 @@
+﻿xUI.put
+
+Xpst.put
+xMap.put
+
+xMap及びXpsのデータ編集メソッド
+アプリケーション上のUNDO機能を管理する
+
+UNDO単位は、任意回数のオブジェクトの内容編集（変更）
+
+xUI.putメソッドの引数に含まれる {Object:xUI.InputUnit} を管理下のxMapまたはXpstに対して順次入力する
+入力に際して入力以前の値を控えて再処理が可能な状態を維持する
+
+単独の入力に対して関連オブジェクトの変更を伴う場合がある。
+その際は関連するオブジェクトへの入力（変更）をキュー配列へ加えて記録する
+
+各オブジェクトの入力はオブジェクトごとに仕様を統一した窓口メソッド XXX.put があり
+引数をputメソッドへ受け渡し、変更前の値と変更後の値を受け取り、返す
+
+xUI.UndoBuffer上のデータは以下の構成となる
+	UndoBuffer:{
+		undoStack:[Array]       ,//アンドウスタック配列 各エントリはInputUnitを要素とする配列
+		undoPt   :{Number Int}  ,//アンドウポインタ 整数値
+		skipCt   :{Number Int}  ,//再描画抑制カウンタ
+		storePt  :{Number Int}  ,//ドキュメントごとの保存ポインタ
+	}
+
+Undoスタック内のデータは入力１件ごとに処理される入力キュー配列
+UNDO時はキュー内の入力は逆順で解決される
+キュー配列の要素は 入力オブジェクト{Object:xUI.InputUnit}
+
+	xUI.InputUnit:{
+        target    : {Object:<入力ターゲット>},//入力対象オブジェクトへの参照
+        addrress  : {String:<入力対象プロパティ名>|Array:<タイムシート入力開始位置>},//入力対象
+        value     : {String:<入力値ストリーム>},//文字列化した入力値
+        backup    : {String:<入力先の書き換え前の値ストリーム>},//文字列化した入力前の値
+        selection : {Array :[[<入力範囲左上セル座標>],[<入力範囲右下セル座標>]]},//入力範囲
+	}
+
+
+各オブジェクトの窓口メソッドは、配下のオブジェクトへ入力を振り分ける
+
+	xMap
+		assetStore
+		pmu
+			nodeManager
+
+	Xpst
+		xpsTracks
+		pmu
+			nodeManager
+
+タイムライントラックの編集を行う場合は、アドレス解釈を行う
+
+	Xps.xpsTracks[<トラックID>][<フレームID>]
+	これを"<トラックID>_<フレームID>"または[<トラックID>,<フレームID>]の形式で入力開始座標として与える
+	入力開始座標と入力ストリームを与えられたXps.putメソッドは
+	[入力開始座標,入力成功値,入力前値,入力成功範囲]
+	の形式で戻値を出す
+
+アセットストアの編集を行う場合は、アドレス解釈を行う
+
+	xMap.assetStore[<assetID>].groups[<groupID>].elements[<elementID>] = 値
+	xMap.assetStore[<assetID>].groups[<groupID>] = 値
+	xMap.assetStore[<assetID>] = 値
+	これを
+	[<assetID>,<groupID>,<elementID>]
+	[<assetID>,<groupID>]
+	[<assetID>]
+	の形式で入力対象IDとして与える
+
+	入力IDと入力ストリームでメンバーの書き換えが可能
+	アセット、グループが指定された場合はその配下のエレメント全てが書き換えられる
+
+その他のオブジェクトプロパティは
+
+	<Object>[<property>][<property>]... = 値
+	これを文字列"<property>.<property>"の形式で指定する
+
+eg
+	<Xpst>.put("name","s-c1234");
+	<Xpst>.put("xpsTracks.noteText","タイムシートの注釈テキスト\n\n");
+	<xMap>.put("memo","カット袋の申し送りメモテキスト");
+	<xMap>.put("extra","");
+
+削除する場合は値引き数としてnullを与える
+
+
+制作管理ノードは各オブジェクトでプロパティ<Object>.pmu.nodeManagerの配下に置かれるので以下のようにノードパスで入力する
+
+	<Xpst>.put("pmu.nodeManager.<ジョブ>.<ステージ>.<ライン>.",{String:入力ストリーム});
+	<xMap>.put("pmu.nodeManager.<ジョブ>.<ステージ>.<ライン>.",{String:入力ストリーム});
+
+ノードパスは各ノードのgetPathメソッドで得られる値
+確実性を期すためにgetPath('id')で得られる数値ID形式を推奨
+Xpstオブジェクトの場合、維持できるノードが一つのみなので、与えられたノードパスで現在のノードを上書きする
+xMapオブジェクトの場合、対象のノード内容が書き換えられるが、xUI.putを通して編集する場合には、進捗管理上変更を禁止されるノードが存在する
+禁止ノードが指定された場合falseが戻る
+
+
+マルチセレクトの拡張
+
+セレクタ座標
+	Xpst.timelineTrack	[track,frame]
+アセットアドレス
+	xMap.assetStore		[group, name]
+
+ともに１つのInputUnitで指定できるアドレスは一箇所に限られる
+
+複数の領域またはプロパティを同時に変更する場合は、複数のInputUnitをputメソッドに与える
+
+
+** 各オブジェクトのputメソッドでは基本的に書き込みの成否を判断することはない（データの読み込み｜マージ時に使用する）
+xUI.putメソッドでは、undo|redo制御とともにデータの状態による書き込みの可｜不可の判断を行う
+
+
+アセットストアのget|putメソッド xMap.assetGet|xMap.assetPut
+
+編集対象アセットは選択されたラインの最終アセットのみ
+
+引数アドレスは
+
+<アセット>.プロパティ
+    *
+    asset
+    name
+    groups
+    link
+<アセット>.<グループ>.プロパティ
+        *
+        comment
+        content
+        elements
+        id
+        link
+        name
+        parent
+        type
+<アセット>.<グループ>.<エレメント>.プロパティ
+            *
+            comment
+            content
+            id
+            link
+            name
+            parent
+            type
+
+ノードマネージャのアドレス指定 get|putメソッド
+
+nodeManager.get|nodeManager.put
+
+編集対象ノードはxMapとXpsで異なる
+Xpsではノードのプロパティのみが編集対象　追加も削除も不可
+xMapではプロパティ編集に加えてエントリの追加と削除が行なわれる
+削除されたノードは一般の書き出しには現れないが、アクセスは可能
+
+引数アドレスは文字列　"<ジョブID>.<ステージID>.<ラインID>."
+ノードパスに準ずるのでフル指定でも可
+eg:
+    "0.5.0."
+    "0:[彩色発注].5:彩色.0:(本線)."
+    "[彩色発注].彩色.(本線)."
+
+上記のようにルート記述を含む3要素指定はジョブノードの指定となる
+
+ルート記述を含む1要素2要素指定は、それぞれラインとステージの指定となる
+
+"1:(背景美術).","(背景美術).","1."　(ライン)
+"3:動画.0:(本線).","動画.(本線).","3.0."（ステージ）
+
+各要素の形式混在は許容されるがアプリケーション内部での使用時はid形式の使用を強く推奨
+
+ノードパス上の"*"アスタリスクは、該当する領域の最終ノードを示す
+＊正しく「最終更新時間の遅い」ノードを返すべきか？　検討
+
+    "*."             本線（例外的に本線？）
+    "*.5.0."        彩色工程の最終ジョブ
+    "*.0:(本線)."    本線ラインの最終ステージ
+
+未指定(=="")は、開始ノード
+
+ジョブノードはステージごとにIDがリセットされるので0指定をしても良い
+ステージはラインごとにIDのリセットがなく通番なので、本線以外の分岐ライン内部での開始ステージは""（ヌルストリング）で指定する。
+他のノードも""は開始ノード
+
+
+<ライン>.
+    *
+    asset
+    name
+    groups
+    link
+<ステージ>.<ライン>.
+        *
+        comment
+        content
+        elements
+        id
+        link
+        name
+        parent
+        type
+<ジョブ>.<ステージ>.<ライン>.
+            *
+            comment
+            content
+            id
+            link
+            name
+            parent
+            type
+            
+get|putメソッドのテスト
+
+put 引数一覧
+Xps
+    @params {String}    address
+        オブジェクトキー
+    @params    {String}        content
+        各オブジェクトごとの入力形式文字列 主にJSON
+        対応オブジェクトの getメソッドで得られる
+
+Xps.xpsTracks
+    @params {Array|String}    address
+        [開始アドレス,フレームID] タイムシート上の入力の先頭位置
+    @params    {String}        content
+        コンマ、改行区切り文字列リスト 1フレームあたり1要素
+        
+    ~.put(address,value)
+    
+         アドレス:{Array}    [trackID,frameID],{String}inputValue
+    pmu
+        nodeManager
+            Xpsの場合は基本的にnodeManager自体が単一のノード(job.stage.line.)を持ちノードツリーを維持しない
+            nodeManager.getNode('')　nodeManager.getNode('*')
+            nodeManager.getNodeByNodepath('')　nodeManager.getNodeByNodepath('*')
+            いずれかでノードを取得するのが望ましい
+            
+        
+xMap
+    assetStore
+    pmu
+        nodeManager
+
+

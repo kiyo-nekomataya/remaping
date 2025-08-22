@@ -33,10 +33,25 @@
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %%%%%%%% ここから下は変更しないで下さいね
 
+% margin draw
+% 書き込み禁止範囲を描画
+% 横幅10インチ 高さ5/8インチ
+/MarginDraw
+{
+	newpath
+	360 neg 22.5     moveto
+	360 22.5         lineto
+	360 22.5 neg     lineto
+	360 neg 22.5 neg lineto
+	closepath
+	0.02 cm setlinewidth
+	0.3 setgray
+	stroke
+} def
 
 % hall drawing
 % レジストリ孔を描く
-%　直径 1/4 インチ
+% 直径 1/4 インチ
 /HallDraw
 {
 		PegForm 1 gt
@@ -152,6 +167,13 @@ stroke
  newpath
 	PaperWidth 2 div PaperHeight 2 div moveto
 %		タップ中心へ移動
+% マージン描画
+
+gsave
+currentpoint translate
+	MarginDraw
+grestore
+
 % センタレジストリホール
 gsave
 currentpoint translate

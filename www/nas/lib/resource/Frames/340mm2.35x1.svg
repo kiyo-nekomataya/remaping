@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_レイヤー_1" data-name="レイヤー_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1021.04 434.81">
+  <!-- Generator: Adobe Illustrator 29.3.0, SVG Export Plug-In . SVG Version: 2.1.0 Build 146)  -->
+  <defs>
+    <style>
+      .st0 {
+        stroke-width: 1.42px;
+      }
+
+      .st0, .st1, .st2, .st3, .st4 {
+        fill: none;
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .st1 {
+        stroke-dasharray: 1 3;
+      }
+
+      .st1, .st3, .st4 {
+        stroke-width: .57px;
+      }
+
+      .st1, .st4 {
+        stroke-dashoffset: 2px;
+      }
+
+      .st2 {
+        stroke-width: .43px;
+      }
+
+      .st4 {
+        stroke-dasharray: 2 3;
+      }
+    </style>
+  </defs>
+  <rect class="st0" x="28.63" y="12.35" width="963.78" height="410.12"/>
+  <path class="st3" d="M503.32,217.4h14.4M510.52,210.2v14.4M121.41,217.4h7.2M125.01,213.8v7.2M117.81,381.45h14.4M125.01,374.25v14.4M506.92,381.45h7.2M510.52,377.85v7.2M506.92,53.36h7.2M510.52,49.76v7.2M117.81,53.36h14.4M125.01,46.16v14.4"/>
+  <path class="st2" d="M28.63,217.4h14.17M992.41,217.4h-14.17M510.52,422.46v-14.17M510.52,12.35v14.17"/>
+  <rect class="st4" x="62.36" y="26.7" width="896.31" height="381.41"/>
+  <rect class="st1" x=".28" y=".28" width="1020.47" height="434.24"/>
+</svg>

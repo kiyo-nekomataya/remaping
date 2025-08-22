@@ -1,0 +1,15 @@
+﻿アニメーションプリセットメモ
+
+BlackBold.ffx	境界線を黒で強調　3px
+fog.ffx	フォギーかける　Gamma 0.5 >ブラー滑らか7px > ガンマ　2.0
+follow_pos.ffs	フォロー（SL）を数値で指定（変形エフェクト）
+follow_posII.ffs	上に同じだが名前参照の上位置プロパティに連結してある
+follow_byName	名前参照して移動　二次元値のプロパティに適用
+HirokoLight.ffx	otakonで使用したヒロコチャンの光彩　レイヤースタイル版
+kacAE_III.ffx	バージョン３そのまま
+OlmSmooth.ffx	OLMSmoothを適用
+MaskKey.ffx	ぽこぽこ用スケッチアップファイルの窓抜きエフェクト　白で単色合成してkeyLightを設定する
+simpleCam.ffx	最もシンプルなカメラ追従エクスプレッション
+outputMedia.ffx 指定のレイヤの配置を現在のコンポに強制的に一致させるエフェクト アンカーポイントと位置を中央に　幅と高さを比率を無視して一杯
+アンチフリッカ.ffx	直上のレイヤの差分を追従するトレーサーエクスプレッション
+セルぶれ.ffx	セルぶれっぽい振動をレイヤに加えるエフェクトエクスプレッションセット

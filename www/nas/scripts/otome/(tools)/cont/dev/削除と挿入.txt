@@ -1,0 +1,107 @@
+﻿/*
+	カラムコレクションのカラム削除
+
+	eStoryBoard.deleteColumn(columnIndex integer,length integer,compLength bool)
+	指定カラムインデックスから後方へlength分の登録を削除
+	指定省略時はタイムマーカーのあるIndex
+	length省略時は 1カラム消去
+	compLength オプションで操作分のフレームをコンポの継続時間から削除 デフォルトはtrue
+ */
+//当該時間にカラムの登録があれば削除して 後方のカラムをすべて前方へ移動
+//カラムコレクションの継続時間を1フレーム分詰める
+//
+//カラム登録があるか否かは ColumnInformation の position タイムラインのキーで判別
+
+操作対象となるタイムライン一覧
+	ローテーションは対象にしたくないのでエクスプレッションで固定
+/*
+ColumnInformation
+	Page	nas.eStoryBoard.pageIndex
+	ScaleFitting	nas.eStoryBoard.scaleFit
+	position	nas.eStoryBoard.columnPosition	(カラム登録の本体キー)
+	scale	nas.eStoryBoard.columnScale
+Time
+	text.sourceText	nas.eStoryBoard.timeText
+CUT No.
+	text.sourceText	nas.eStoryBoard.cutNumber
+Content
+	text.sourceText	nas.eStoryBoard.contentText
+Dialog
+	text.sourceText nas.eStoryBoard.soundText
+ */
+//カラムの消去
+nas.eStoryBoard.removeColumn=function(myIndex)
+{
+//エントリーインデックスで指定された時間位置にキーが存在する場合のみそのキーを削除する
+	var targetTime=myIndex*this.targetCC.frameDuration;
+//これが指定時間 ただしAEの計算誤差があるので一致判定は注意
+//一致判定は keyTime()で得た時間をフレームに再評価してから操作すること
+	var targetProps=["columnPosition","columnScale","pageIndex","scaleFit","timeText","cutNumber","contentText","soundText"]
+	for (var idx=0;idx<targetProps.length;idx++){
+		var targetProp=this[targetProps[idx]];
+		var targetKeyIndex=targetProp.nearestKeyIndex(targetTime);//最も近接したキーのインデックス
+		if(Math.round(targetProp.keyTime(targetKeyIndex)/this.trgetCC.frameDuration)==myIndex){
+			targetProp.removeKey(tergetIndex);
+		}
+	}
+}
+//尺変更を含むカラム削除
+nas.eStoryBoard.deleteColumn=function(myIndex,myLength,compOption)
+{
+	if(! myIndex){myIndex=Math.round(this.targetCC.time/this.targetCC.frameDuration);};
+	if(! myLength){myLength=1;};
+	if(compOption==undefined){compOption=true}
+
+	app.beginUndoGroup("空白カラム挿入")
+
+	for(var idx=0;idx<myLength;idx++){this.removeColumn(myIndex+idx)};指定分のキーを削除
+
+var targetProps=["columnPosition","columnScale","pageIndex","scaleFit","timeText","cutNumber","contentText","soundText"]
+var targetTime=myIndex*this.targetCC.frameDuration;
+//	ターゲットプロパティの後方キーをすべて移動(前から順)
+	for(var idx=0;idx<targetProps.length;idx++)
+	{
+		var targetProp=this[targetProps[idx]];
+//ターゲットタイムラインのキーを前方から総当たりで 時間より大きければ前方へ移動
+		for(var kidx=1;kidx<=targetProp.numKeys;kidx++){
+			if(targetProp.keyTime(kidx)>targetTime){targetProp.shiftKey(kidx,-1*myLength*this.targetCC.frameDuration);};
+		}
+	}
+//フラグが立っていたらコンポの尺を変更
+	if(compOption){this.targetCC.setFrames(Math.round(this.targetCC.duration/this.targetCC.frameDuration)-myLength);};
+
+	app.endUndoGroup();
+}
+/*	カラム挿入操作
+	eStoryBoard.insertColumn(columnIndex integer,length integer,compLength bool)
+	指定カラムインデックスの後方へlength分のカラ登録を追加(指定カラムの登録が伸展)
+	columnIndex省略時はタイムマーカーのあるIndex
+	length省略時は 1カラム挿入
+	compLength オプションで操作分のフレームをコンポの継続時間に追加 デフォルトはtrue
+ */
+//当該時間以降のカラム登録が存在する場合は すべて後方へ1フレームずつ移動
+nas.eStoryBoard.insertColumn=function(myIndex,myLength,compOption)
+{
+	if(! myIndex){myIndex=Math.round(this.targetCC.time/this.targetCC.frameDuration);};
+	if(! myLength){myLength=1;};
+	if(compOption==undefined){compOption=true}
+	app.beginUndoGroup("空白カラム挿入")
+//フラグが立っていたらコンポの尺を変更
+	if(compOption){this.targetCC.setFrames(Math.round(this.targetCC.duration/this.targetCC.frameDuration)+myLength);};
+
+var targetProps=["columnPosition","columnScale","pageIndex","scaleFit","timeText","cutNumber","contentText","soundText"]
+var targetTime=myIndex*this.targetCC.frameDuration;
+
+//	ターゲットプロパティの後方キーをすべて移動(うしろから順)
+	for(var idx=0;idx<targetProps.length;idx++)
+	{
+		var targetProp=this[targetProps[idx]];
+//ターゲットタイムラインのキーを前方から総当たりで 時間より大きければ後方へ移動
+		for(var kidx=targetProp.numKeys;kidx<=1;kidx--){
+			if(targetProp.keyTime(kidx)>targetTime){targetProp.shiftKey(kidx,-1*myLength*this.targetCC.frameDuration);};
+		}
+//フラグがあればアウトポイントをコンポの終了点に合わせる(トライか?)
+	if(compOption){targetProp.outPoint=this.targetCC.duration;};
+	}
+	app.endUndoGroup();
+}

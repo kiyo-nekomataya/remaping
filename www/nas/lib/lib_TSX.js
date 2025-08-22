@@ -1,12 +1,17 @@
 ﻿/**
- *
- * @overview TSX関連プロシージャ
+ * @fileOverview
+ *  江面氏の(http://log.ezura.asia/)管理していた TSXformat テキスト(非公開)の読み書きのためのライブラリ
+ * <p>
+ * 同フォーマットは、シンプルなテキストファイルで
+ * 1ファイル（データ）あたり1レイヤー（トラック）分のタイミングを
+ * 整数値とカラセル記号のみで記述するフォーマット</p>
+ *　<p>詳細は別紙</p)
  * /(^[0-9\*]?--[^\-]*$|[eE])/
  */
-
-
+'use strict';
 /**
- * 画面再描画
+ * @function
+ * TSX機能用UI画面再描画
  */
 function init_TSXEx() {
     var _body = "<a	href='javascript:void(0);'";
@@ -22,16 +27,21 @@ function init_TSXEx() {
 }
 
 /**
+ * 
  * TSX 繰り返しリスト展開プロシージャ
  * @type {number}
  */
 var TSXEx_skipValue = 0;//グローバルで初期化
 
 /**
- * @param ListStr
+ * TSX形式の繰り返し処理を配列に展開して返す
+ * @function
+ * @param {String} ListStr
+ *  TSX形式繰り返し記述
  * @param rcl
+ *  再帰呼出しフラグ
  * @returns {Array}
- * @constructor
+ *  セル番号の配列
  */
 function TSX_expdList(ListStr, rcl) {
     if (!rcl) {
@@ -43,25 +53,24 @@ function TSX_expdList(ListStr, rcl) {
         TSXEx_skipValue = 0;
         //初回呼び出しのみ再度初期化
     }
-    /**
+    /*
      * (スキップ量は0固定)
-     * @type {string}
      */
     var SepChar = "\,";//カンマのみ？
 
-    /**
+    /*
      * 冒頭の[rR+]を削除
      */
     ListStr = ListStr.replace(/^([\+rR])(.*)$/, "$2");
-    /**
+    /*
      * リスト文字列を走査してカラセル表記を置換
      */
     ListStr = ListStr.replace(/[X\* ]/g, "x");
-    /**
+    /*
      * 角括弧を一組で括弧と置換
      */
     ListStr = ListStr.replace(/\[(.*)\]/g, "\($1\)");
-    /**
+    /*
      * "="を展開
      */
     ListStr = ListStr.replace(/(\,?)(\(.+\))\=([1-9][0-9]*)/g, "$1s$3\,$2\,s1");//括弧あり
@@ -71,10 +80,9 @@ function TSX_expdList(ListStr, rcl) {
 //		var PostX="/[0-9](\)[1-9])/";//括弧の後にセパレータを補う
     ListStr = ListStr.replace(/([^\.])(\)[1-9]?)/g, "$1" + SepChar + "$2");
 
-    /**
+    /*
      * 前処理終わり
      * リストをセパレータで分割して配列に
-     * @type {Array}
      */
     var srcList = [];
     srcList = ListStr.toString().split(SepChar);
@@ -88,13 +96,13 @@ function TSX_expdList(ListStr, rcl) {
     var StartCt = 0;
     var EndCt = 0;
 //rT=0;
-    /**
+    /*
      * 元配列を走査
      */
     for (var ct = 0; ct < srcList.length; ct++) {
         tcn = srcList[ct];
 
-        /**
+        /*
          * トークンがコントロールワードならば値はリザルトに積まない
          * 変数に展開してループ再開
          */
@@ -104,16 +112,15 @@ function TSX_expdList(ListStr, rcl) {
             continue;
         }
 
-        /**
+        /*
          * グローバル
          * トークンが開き括弧ならばデプスを加算して保留
          */
         if (tcn.match(/^(\(|\/)$/)) {
             sDepth = 1;
             StartCt = ct;
-            /**
+            /*
              * トークンを積まないで閉じ括弧を走査
-             * @type {number}
              */
             var ct2 = 0;//ローカルスコープにするために宣言する
             for (ct2 = ct + 1; ct2 < srcList.length; ct2++) {
@@ -125,9 +132,8 @@ function TSX_expdList(ListStr, rcl) {
                 }
                 if (sDepth == 0) {
                     EndCt = ct2;
-                    /**
+                    /*
                      * 最初の括弧が閉じたので括弧の繰り返し分を取得/ループ
-                     * @type {number}
                      */
                     var rT = RegExp.$2 * 1;
                     if (rT < 1) {
@@ -138,7 +144,7 @@ function TSX_expdList(ListStr, rcl) {
                         if ((StartCt + 1) != EndCt) {
 //alert("DPS= "+sDepth+" :start= "+StartCt+"  ;end= "+EndCt +"\r\n"+ srcList.slice(StartCt+1,EndCt).join(SepChar)+"\r\n\r\n-- "+rT);
                             expdList = expdList.concat(TSX_expdList(srcList.slice(StartCt + 1, EndCt).join(SepChar), "Rcall"));
-                            /**
+                            /*
                              * 括弧の中身を自分自身に渡して展開させる
                              */
                         }
@@ -152,7 +158,7 @@ function TSX_expdList(ListStr, rcl) {
                 tss_kip();//ct++;
             }
         } else {
-            /**
+            /*
              * トークンが展開可能なら展開して生成データに積む
              */
             if (tcn.match(/^([1-9]{1}[0-9]*)\-([1-9]{1}[0-9]*)$/)) {
@@ -176,7 +182,7 @@ function TSX_expdList(ListStr, rcl) {
 
         }
     }
-    /**
+    /*
      * 生成配列にスキップを挿入
      */
     function tss_kip() {
@@ -184,16 +190,17 @@ function TSX_expdList(ListStr, rcl) {
             expdList.push('');
         }
     }
-
-    /**
+    /*
      * カエス
      */
     return expdList;
 }
 
-/**
- * @param obj
+/**　XpsからTSXテキストへの変換と書き出し
+ * @param {Object Xps} obj
+ *  変換対象のXps
  * @param layerID
+ *  書き出し対象のレイヤID(トラックID+1)
  */
 function writeTSX(obj, layerID) {
     if (!isNaN(layerID)) {
@@ -203,7 +210,7 @@ function writeTSX(obj, layerID) {
         var stID = 1;
         var edID = obj.xpsTracks.length-1;
     }
-    /**
+    /*
      * objはXPSオブジェクトを与えること
      */
 //対象タイムラインがtiming系でない場合は、処理をスキップ
@@ -269,16 +276,17 @@ function writeTSX(obj, layerID) {
 }
 
 
-/***
- * @param datastream
- * @returns {boolean}
- * @constructor TSX2XPS(TSXStream)
- *
+/**
  * TSXストリームをXPS互換データストリームに変換する
  * ストリームが、複数のレイヤを含んでいても良い
+ * 
+ * @function
+ * @param {String} TSX datastream
+ * @returns {String XpsStream}
+ *
  */
 function TSX2XPS(datastream) {
-    /**
+    /*
      * データ冒頭の空白文字を削除
      */
     datastream = datastream.replace(/^\s*/, "");
@@ -288,7 +296,7 @@ function TSX2XPS(datastream) {
         alert("error : " + datastream);
         return false
     }
-    /**
+    /*
      * 不正データ時処理
      * ラインで分割して配列に取り込み
      */
@@ -298,34 +306,25 @@ function TSX2XPS(datastream) {
     var SrcData = [];
     SrcData = datastream.split("\n");
 
-    /**
+    /*
      * データストリームを判定する
-     * @type {number}
      */
     SrcData.startLine = 0;//データ開始行
-    SrcData.dataClass = "AEKey";//データ種別(XPS/AEKey/TSX)
-
-    /**
+    /*
      * ソースデータのプロパティ
-     * @type {number}
      */
-//	SrcData.layerHeader	=0;//レイヤヘッダ開始行
-//	SrcData.layerProps	=0;//レイヤプロパティエントリ数
     SrcData.layerCount = 0;//レイヤ数
-    SrcData.layers = [];//レイヤ情報トレーラー
-//	SrcData.layerBodyEnd	=0;//レイヤ情報終了行
+    SrcData.layers     = [];//レイヤ情報トレーラー
     SrcData.frameCount = 0;//読み取りフレーム数
-    /**
-     * TSXデータ走査第一パス(プロパティ取得)
-     * @type {number}
-     */
-    SrcData.time = 0;//初期化
-    var LayerDuration = 0;
-    SrcData.layerCount = 0;//初期化
-    var LayerCount = 0;
+    SrcData.time       = 0;//初期化
+    var LayerDuration  = 0;
+    var LayerCount     = 0;
 
+    /*
+     * TSXデータ走査第一パス(プロパティ取得)
+     */
     for (var line = 0; line < SrcData.length; line++) {
-        /**
+        /*
          * 本体情報の確認
          * レイヤカウント・各レイヤの継続時間カウント
          * タイムシートの長さは最長のレイヤを使用
@@ -341,11 +340,10 @@ function TSX2XPS(datastream) {
                 LayerDuration = 0;
                 LayerCount++;
             }
-            /**
+            /*
              * 記述終了・継続時間加算リセット・レイヤ加算
              */
         } else {
-//if(!SrcData[line].match(/^[\/eE].*$/)){}
             if (LayerCount == SrcData.layerCount) {
                 SrcData.layerCount++;
                 SrcData.layers[LayerCount] = {};
@@ -382,27 +380,19 @@ function TSX2XPS(datastream) {
 
     SrcData.trin = [0, "trin"];
     SrcData.trout = [0, "trout"];
-//	SrcData.frameCount	=;
-//	SrcData.	="";
-//	SrcData.	="";
-//	SrcData.	="";	
-//	SrcData.	="";
 
-    /**
+    /*
      * 第一パス終了・読み取った情報でXPSオブジェクトを初期化
-     * @type {number|*}
      */
     SrcData.duration = SrcData.time;//TSXはトランジションを扱わない
-    /**
+    /*
      * 仮オブジェクトにマッピングしてストリームで返す
-     * @type {Xps}
      */
     var myXps = new Xps(SrcData.layerCount, SrcData.time);
 
 
-    /**
+    /*
      * 第一パスで読み取ったプロパティをXPSに転記
-     * @type {string|string}
      */
     myXps.mapfile = SrcData.mapfile;
     myXps.title = SrcData.title;
@@ -423,7 +413,7 @@ function TSX2XPS(datastream) {
     myXps.trin = SrcData.trin;
     myXps.trout = SrcData.trout;
 
-    /**
+    /*
      * 読み取りデータを調べて得たキーメソッドとブランク位置を転記
      */
     for (var lyr = 0; lyr < SrcData.layers.length; lyr++) {
@@ -433,14 +423,12 @@ function TSX2XPS(datastream) {
         myXps.xpsTracks[trackID].lot = SrcData.layers[lyr].lot;
     }
 
-    /**
+    /*
      * TSXデータ走査第二パス(タイムライン取得)
-     * @type {number}
      */
 
-    /**
+    /*
      * カウンタ初期化
-     * @type {number}
      */
     SrcData.time = 0;//初期化
     var LayerTime = 0;
@@ -448,9 +436,7 @@ function TSX2XPS(datastream) {
     LayerCount = 0;
     var RepeatBuf = [];
     var repIdx = 0;
-//	var readCountLine	=	0;
-//	var readCountLayer	=	0;
-    /**
+    /*
      * 本体データ読み取り
      */
     for (var line = 0; line < SrcData.length; line++) {
@@ -460,7 +446,7 @@ function TSX2XPS(datastream) {
                 LayerTime = 0;
                 LayerCount++;
             }
-            /**
+            /*
              * 記述終了・継続時間加算リセット・レイヤ加算
              */
         } else {
@@ -501,8 +487,6 @@ function TSX2XPS(datastream) {
         }
 
     }
-//alert(JSON.stringify(SrcData));
-//alert("X:"+myXps.toString());
     return myXps.toString();
 }
-//　TSX2XPS
+//

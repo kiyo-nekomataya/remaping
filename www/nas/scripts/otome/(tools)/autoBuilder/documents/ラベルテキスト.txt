@@ -1,0 +1,22 @@
+﻿//expression版　ラベルテキスト推定
+if((numKeys)&&(nearestKey.time==time))
+{
+	var myValue=text.sourceText;//キーがあるのでその値を使う
+}else{
+	var myValue=(Math.round(time/thisComp.frameDuration)+1).toString();//初期値は　1orig フレーム番号
+//レイヤを下から探索して最初に当たったレイヤを取得する　上はカブセ・調整・効果等のレイヤである可能性が高い
+	for(var lidx=thisComp.numLayers;lidx>0;lidx--)
+	{
+//まず表示されているか否か 非表示・ガイド・調整をスキップ
+		if(
+			(thisComp.layer(lidx).)
+			(thisComp.layer(lidx))
+			(thisComp.layer(lidx))
+			(thisComp.layer(lidx))
+		)
+		{
+			myValue=thisComp.layer(lidx).name
+		}
+	}
+}
+myValue;

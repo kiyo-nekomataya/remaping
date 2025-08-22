@@ -1,11 +1,33 @@
 ﻿/**
-		日本語ポストスクリプトデータの為のコンバート関数
+ *	@fileOverview
+ *		日本語ポストスクリプトデータの為のコンバート関数
+ *
+ *	日本語文字列をファイル内に埋め込むためのエンコード関数等
+ *	使用はecl|iconv-liteライブラリに依存
+ *	@requires ecl.js
+ *	node.js環境下で iconv-liteが存在すればそちらを優先して利用
+ */
+'use strict';
+if((typeof window == 'undefined')&&(typeof app == 'undefined')){
+	var ecl = require('./ecl-mod');
+    var nas = require('./nas_common');
+};
 
-	日本語文字列をファイル内に埋め込むためのエンコード関数
-	使用はeclライブラリに依存
-*/
-//日本語文字列のみの16進エンコード
-function EncodePS(Str){
+/**
+ *	@function
+ *		入力文字列をepsファイルで使用可能なように<br />
+ *		JIS7 16進エンコードして返す
+ *
+ *	@params {String} Str
+ *		入力文字列
+ *	@returns {String}
+ *		JIS7 16進　エンコードされた文字列
+ *	@example
+ *	var myString = "たぬきの宝くじ";
+ *	var encoded = EncodePS(myString);//"<243F2442422444752422438>"
+ *	console.log(encoded);
+ */
+nas.EncodePS = function EncodePS(Str){
 	var jStr=EscapeJIS7(Str);var eStr="";
 //この関数注意 **コントロールコードとASCII排除がまだ 05/11/27 kiyo
 	for(idx=0;idx<jStr.length;idx++){
@@ -16,29 +38,54 @@ function EncodePS(Str){
 			idx = idx+2 ;
 			continue;
 		}else{
-			eStr+="%"+Zf(jStr.charCodeAt(idx).toString(16));
+			eStr+="%"+nas.Zf(jStr.charCodeAt(idx).toString(16));
 		}
 	};
 	eStr=eStr.replace(/\%1B\%2[48]\%42/g,'');
 	return "<"+eStr.replace(/\%/g,'')+">";
 };
-//16進デコード
-function DecodePS(eStr){
+/**
+ *	@function
+ *		入力JIS7-16進コードをデコード
+ *
+ *	@params {String} eStr
+ *		エンコードされた文字列
+ *	@returns {String}
+ *		デコード文字列
+ *	@example
+ *	var myString = "<243F2442422444752422438>";
+ *	var decoded = DecodePS(myString);//"たぬきの宝くじ"
+ *	console.log(decoded)
+ */
+nas.DecodePS = function DecodePS(eStr){
 	if(eStr.match(/^\<[0-9a-fA-F]+\>$/)){
 		var dStr="";
-		for(idx=0;idx<eStr.length;idx++){
+		for(idx=1;idx<(eStr.length-1);idx++){
 			if(idx%2==1){
 				dStr+="%"+eStr.charAt(idx);
 			}else{
 				dStr+=eStr.charAt(idx);
 			}
-		};return UnescapeJIS8("%1B%24%42"+dStr.slice(1,-2)+"%1B%28B");
+		};
+		return UnescapeJIS7(dStr);
+		return UnescapeJIS7("%1B%24%42"+dStr.slice(1,-2)+"%1B%28B");
 	}else{
 		return false;
 	};
 };
-/*半角全角混在文字列をコード切替を含めて\エスケープ8進エンコード*/
-function EncodePS2(Str){
+/**
+ *	半角全角混在文字列をコード切替を含めて\エスケープ JIS8-8進エンコード
+ *	@params {String} Str
+ *		入力文字列
+ *	@returns {String}
+ *		\エスケープで JIS8-8進エンコードされた文字列
+ *	@example
+ *	var myString = "たぬきの宝くじ";
+ *	var encoded = EncodePS(myString);
+ * //"\377\001\044\077\044\114\044\055\044\116\112\165\044\057\044\070"
+ *  console.log(encoded);
+ */
+nas.EncodePS2 = function EncodePS2(Str){
  var jStr=EscapeJIS8(Str);
  var eStr=new Array();
  var kMode=false
@@ -105,8 +152,18 @@ function EncodePS2(Str){
 //	return jStr +" : "+eStr.join("");
 	return eStr.join("");
 }
-//8進デコード
-function DecodePS2(eStr){
+/**
+ *	8進デコード
+ *	@params {String} eStr
+ *		エンコードされた文字列
+ *	@returns {String}
+ *		デコードされたJIS8文字列
+ *	@example
+ *	var myString = "\377\001\044\077\044\114\044\055\044\116\112\165\044\057\044\070";
+ *	var decoded = DecodePS2(myString);//"たぬきの宝くじ"
+ *	
+ */
+nas.DecodePS2 = function DecodePS2(eStr){
 //デコードすべき文字列が含まれている
 	if(eStr.match(/\\[0-7][0-7][0-7]/))
 	{
@@ -131,3 +188,23 @@ function DecodePS2(eStr){
 		return eStr;
 	};
 };
+/*TEST
+	var myString = "たぬきの宝くじ";
+	var encoded = EncodePS(myString);
+	console.log("JIS7 Encode :" + encoded);
+	var decoded = DecodePS(encoded);//"たぬきの宝くじ"
+	console.log("Decoded :" + decoded)
+
+	var myString = "たぬきの宝くじ";
+	var encoded = EncodePS2(myString);
+	console.log("JIS8 Encode :" + encoded);
+	var decoded = DecodePS2(encoded);//"たぬきの宝くじ"
+	console.log("Decoded :" + decoded)
+*/
+/*=======================================*/
+if((typeof window == 'undefined')&&(typeof app == 'undefined')){
+    module.exports.EncodePS = EncodePS;
+    module.exports.DecodePS = DecodePS;
+    module.exports.EncodePS2 = EncodePS2;
+    module.exports.DecodePS2 = DecodePS2;
+}

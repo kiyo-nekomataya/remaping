@@ -18,7 +18,8 @@
 	}
 }
 .modalBt {
-	width:6em;
+	height   :27px; 
+	min-width:6em;
 }
 
 element.style {

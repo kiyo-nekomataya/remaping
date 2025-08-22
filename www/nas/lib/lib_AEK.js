@@ -1,5 +1,5 @@
 ﻿/**
- * @fileoverview lib_AEK.js
+ * @fileoverview
  * AEキーフレームからXPSオブジェクトに対する変換ライブラリ
  * XPS2AEKは特に重要
  *
@@ -36,8 +36,11 @@
  * 判定部分はXPSの同名オブジェクトでラップ
  * AEKey関連関数は、lib_AEK.js　として分離　2013.04.06
  */
-
-
+'use strict';
+/*=======================================*/
+if((typeof window == 'undefined')&&(typeof app == 'undefined')){
+    var nas = require('./xpsio');
+};
 /**
  * AEの動作を模倣するために設定する偽オブジェクトの定義
  * 定義に使用する関数
@@ -52,7 +55,7 @@
 //     }
 // }
 
-
+var AEKey = {};
 /**
  * 合成キャリアオブジェクト設定
  * キャリアオブジェクト単体は使用しないが、
@@ -61,7 +64,7 @@
  * 合成バッファのたぐいは、コレ!
  * @constructor
  */
-function Carrier() {
+AEKey.Carrier = function Carrier() {
 //this.prototype.contructor=Array;
     this.width = 0;
     this.height = 0;
@@ -72,14 +75,13 @@ function Carrier() {
 
 /**
  * プロトタイプメソッド
- * new Carrier();
- * Carrier.prototype.constructor = Array;
+ * new AEKey.Carrier();
+ * AEKey.Carrier.prototype.constructor = Array;
  *
  * @param rate
  * @returns {*}
  */
-Carrier.prototype.setFrameRate =
-    function (rate) {
+AEKey.Carrier.prototype.setFrameRate = function (rate) {
         if (!rate) {
             rate = this.frameRate;
         } else {
@@ -93,8 +95,7 @@ Carrier.prototype.setFrameRate =
  * @param duration
  * @returns {*}
  */
-Carrier.prototype.setFrameDuration =
-    function (duration) {
+AEKey.Carrier.prototype.setFrameDuration = function (duration) {
         if (!duration) {
             duration = this.frameDuration;
         } else {
@@ -109,8 +110,7 @@ Carrier.prototype.setFrameDuration =
  * @param h
  * @param a
  */
-Carrier.prototype.setGeometry =
-    function (w, h, a) {
+AEKey.Carrier.prototype.setGeometry = function (w, h, a) {
         if (w) {
             this.width = w;
         }
@@ -141,7 +141,7 @@ Carrier.prototype.setGeometry =
  * @param kAtrib
  * @constructor
  */
-function KeyFrame(f, v, vCp, tCp, kAtrib) {
+AEKey.KeyFrame = function KeyFrame(f, v, vCp, tCp, kAtrib) {
     if (!f) {
         f = 0
     }
@@ -168,19 +168,19 @@ function KeyFrame(f, v, vCp, tCp, kAtrib) {
      */
 
 }
-//	new KeyFrame();
+//	new AEKey.KeyFrame();
 
 /**
  * タイムライン設定
  * @param atrib
  * @constructor
  */
-function TimeLine(atrib) {
+AEKey.TimeLine = function TimeLine(atrib) {
     this.name = atrib
 }
-//	new TimeLine();
-TimeLine.prototype = [];
-TimeLine.prototype.constructor = TimeLine;
+//	new AEKey.TimeLine();
+AEKey.TimeLine.prototype = [];
+AEKey.TimeLine.prototype.constructor = AEKey.TimeLine;
 
 /**
  * タイムラインはAEの場合だとタイムラインデータのトレーラと言う観点でPropertyに相当するオブジェクト
@@ -191,7 +191,7 @@ TimeLine.prototype.constructor = TimeLine;
 
 
 /**
- * TimeLine.setKeyFrame(myKeyFrame)
+ * AEKey.TimeLine.setKeyFrame(myKeyFrame)
  * 引数    キーフレームオブジェクト
  * 戻値    登録したキーのインデックス
  *
@@ -206,7 +206,7 @@ TimeLine.prototype.constructor = TimeLine;
  * @param myKeyFrame
  * @returns {number}
  */
-TimeLine.prototype.setKeyFrame = function (myKeyFrame) {
+AEKey.TimeLine.prototype.setKeyFrame = function (myKeyFrame) {
     for (var id = 0; id < this.length; id++) {
         nas.otome.writeConsole(myKeyFrame.frame + "<>" + this[id].frame);
         if (myKeyFrame.frame == this[id].frame) {
@@ -224,14 +224,14 @@ TimeLine.prototype.setKeyFrame = function (myKeyFrame) {
  * @returns {*}
  * @private
  */
-function valueAtTime_(t) {
+AEKey.valueAtTime_ = function valueAtTime_(t) {
     if (t <= this[0].frame) {
         return this[0].value
     }
     if (t >= this[this.length - 1].frame) {
         return this[this.length - 1].value
     }
-    for (id = 1; id < this.length; id++) {
+    for (var id = 1; id < this.length; id++) {
         if (t == this[id].frame) {
             return this[id].value
         }
@@ -295,7 +295,7 @@ function valueAtTime_(t) {
                 } while (TtT / Tvv > 0.9999999 && TtT / Tvv < 1.0000001);//精度確認
                 //その得られた助変数を使って値を返す。値の次元数でループ
                 var Result = new Array(Vstart.length);
-                for (i = 0; i < Vstart.length; i++) {
+                for (var i = 0; i < Vstart.length; i++) {
                     Result[i] = nas.bezier(Vstart[i], Vcp1[i], Vcp2[i], Vend[i], Tt)
                 }
                 return Result;
@@ -321,7 +321,7 @@ function valueAtTime_(t) {
  *
  * @constructor
  */
-function FakeLayer() {
+AEKey.FakeLayer = function FakeLayer() {
 
     this.width = 640;
     this.height = 480;
@@ -337,39 +337,39 @@ function FakeLayer() {
      */
     this.init = function () {
 
-        this.timeRemap = new TimeLine("timeRemap");
-        this.timeRemap.push(new KeyFrame(0, "blank"));
-        this.anchorPoint = new TimeLine("anchorPoint");
-        this.anchorPoint.push(new KeyFrame(0, [this.width / 2, this.height / 2, 0]));
-        this.position = new TimeLine("position");
-        this.positiont.push(new KeyFrame(0, [thisComp.width / 2, thisComp.heigth / 2, 0]));
-        this.rotation = new TimeLine("rotation");
-        this.rotation.push(new KeyFrame(0, [0, 0, 0]));
-        this.opacity = new TimeLine("opacity");
+        this.timeRemap = new AEKey.TimeLine("timeRemap");
+        this.timeRemap.push(new AEKey.KeyFrame(0, "blank"));
+        this.anchorPoint = new AEKey.TimeLine("anchorPoint");
+        this.anchorPoint.push(new AEKey.KeyFrame(0, [this.width / 2, this.height / 2, 0]));
+        this.position = new AEKey.TimeLine("position");
+        this.positiont.push(new AEKey.KeyFrame(0, [thisComp.width / 2, thisComp.heigth / 2, 0]));
+        this.rotation = new AEKey.TimeLine("rotation");
+        this.rotation.push(new AEKey.KeyFrame(0, [0, 0, 0]));
+        this.opacity = new AEKey.TimeLine("opacity");
         this.opacity.push(new KayFrame(0, 100));
     }
 }
-//	new FakeLayer();
-FakeLayer.prototype = new Carrier();
-FakeLayer.prototype.constructor = FakeLayer;
-//inherit(FakeLayer,Carrier);//Carrierのメソッドを取得
+//	new AEKey.FakeLayer();
+AEKey.FakeLayer.prototype = new AEKey.Carrier();
+AEKey.FakeLayer.prototype.constructor = AEKey.FakeLayer;
+//inherit(FakeLayer,AEKey.Carrier);//AEKey.Carrierのメソッドを取得
 
 /**
  *
  * @param ip
  * @param op
  */
-FakeLayer.prototype.setClip = function (ip, op) {
+AEKey.FakeLayer.prototype.setClip = function (ip, op) {
     if (ip && ip >= 0 && ip <= duration) this.inPoint = ip;
     if (op && op >= 0 && op <= duration) this.outPoint = op;
     return [ip, op];
 };
 /*
- FakeLayer.prototype.=function(){
+ AEKey.FakeLayer.prototype.=function(){
  };
- FakeLayer.prototype.=function(){
+ AEKey.FakeLayer.prototype.=function(){
  };
- FakeLayer.prototype.=function(){
+ AEKey.FakeLayer.prototype.=function(){
  };
  */
 
@@ -395,7 +395,7 @@ FakeLayer.prototype.setClip = function (ip, op) {
  * @param f
  * @constructor
  */
-function FakeComposition(w, h, a, l, f) {
+AEKey.FakeComposition = function FakeComposition(w, h, a, l, f) {
     this.layers = [];
     if (!w)    w = 640;
     if (!h)    h = 480;
@@ -410,24 +410,24 @@ function FakeComposition(w, h, a, l, f) {
 }
 
 //	ダミー初期化
-//	new FakeComposition();
-FakeComposition.prototype = new Carrier();
-FakeComposition.prototype.constructor = FakeComposition;
+//	new AEKey.FakeComposition();
+AEKey.FakeComposition.prototype = new AEKey.Carrier();
+AEKey.FakeComposition.prototype.constructor = AEKey.FakeComposition;
 
-//		inherit(FakeComposition,Carrier);//Carrierのメソッドを取得
-//		inherit(FakeComposition,Array);//配列としてのメソッドを取得
+//		inherit(AEKey.FakeComposition,AEKey.Carrier);//AEKey.Carrierのメソッドを取得
+//		inherit(AEKey.FakeComposition,Array);//配列としてのメソッドを取得
 
 /**
  * メソッド設定
  * @returns {number}
  * @private
  */
-function frame_duration_() {
+AEKey.frame_duration_ = function frame_duration_() {
     return 1 / this.framerate;
 }
 
-FakeComposition.prototype.frameDuration = frame_duration_;
-FakeComposition.prototype.frame_duration = frame_duration_;
+AEKey.FakeComposition.prototype.frameDuration = AEKey.frame_duration_;
+AEKey.FakeComposition.prototype.frame_duration = AEKey.frame_duration_;
 
 
 /**
@@ -439,7 +439,7 @@ FakeComposition.prototype.frame_duration = frame_duration_;
  * @param UpS
  * @returns {*}
  */
-function ssUnit(UpS) {
+AEKey.ssUnit = function ssUnit(UpS) {
     if (isNaN(UpS)) {
         switch (UpS) {
             case "NTSC"    :
@@ -456,7 +456,7 @@ function ssUnit(UpS) {
         }
     } else {
         UpS = Math.round(UpS);//	ドロップフレーム系の処置・どのみち整数でないとイヤだけど、暫定で
-        for (ssu = 4; ssu > 1; ssu--) {
+        for (var ssu = 4; ssu > 1; ssu--) {
             if (UpS % ssu == 0)return UpS / ssu;
         }
         return UpS;
@@ -466,7 +466,7 @@ function ssUnit(UpS) {
 }
 
 /**
- * ckBlank(timeLine)
+ * AEKey.ckBlank(timeLine)
  * 制御レイヤ(現在カラセル制御のみ)の判定
  * 判定するtimelineオブジェクトを与える。
  * すべての値が 0 || 100    ならばカラセルレイヤであると判定
@@ -475,8 +475,8 @@ function ssUnit(UpS) {
  * @param timeLine
  * @returns {boolean}
  */
-function ckBlank(timeLine) {
-    for (xid = 0; xid < timeLine.length; xid++) {
+AEKey.ckBlank = function ckBlank(timeLine) {
+    for (var xid = 0; xid < timeLine.length; xid++) {
         if (timeLine[xid].value[0] % 100 != 0) {
             return false
         }
@@ -493,7 +493,7 @@ var thisTimeLine = null;
  * @returns {string}
  * @constructor
  */
-function AEK2XDS(datastream) {
+ function AEK2XDS(datastream) {
     /**
      * AE-Key data encoder
      * AEキーの挿入は外部でストリームを組み立ててputする方式に変更する
@@ -530,9 +530,9 @@ function AEK2XDS(datastream) {
 
     /**
      * 仮にデータを取得するコンポを初期化
-     * @type {FakeComposition}
+     * @type {AEKey.FakeComposition}
      */
-    thisComp = new FakeComposition();
+    thisComp = new AEKey.FakeComposition();
     thisComp.maxFrame = 0;//キーの最大時間を取得するプロパティを初期化
     ly_id = 0;//レイヤID初期化
     tl_id = 0;//タイムラインID初期化
@@ -542,11 +542,11 @@ function AEK2XDS(datastream) {
      * 第一パス開始
      * データをスキャンしてコンポ(オブジェクト)に格納
      */
-    for (line = 0; line < SrcData.length; line++) {
+    for (var line = 0; line < SrcData.length; line++) {
         /**
          * キーデータに含まれるレイヤ情報の取得
          */
-        if (MSIE) {
+        if (appHost.platform == 'MSIE') {
             var choped = SrcData[line].charCodeAt(SrcData[line].length - 1);
             if (choped <= 32) SrcData[line] = SrcData[line].slice(0, -1);
         }
@@ -637,12 +637,12 @@ function AEK2XDS(datastream) {
 //	if (thisTimeLine.maxValue<value && value < 999999)
 //	thisTimeLine.maxValue=value;
 
-//result=thisTimeLine.push(new KeyFrame(frame,value));
-//thisComp.layers[ly_id][tl_id][kf_id] = new KeyFrame(frame,value);
+//result=thisTimeLine.push(new AEKey.KeyFrame(frame,value));
+//thisComp.layers[ly_id][tl_id][kf_id] = new AEKey.KeyFrame(frame,value);
 //kf_id ++;
-//result=thisComp.layers[ly_id][tl_id].setKeyFrame(new KeyFrame(frame,value));
+//result=thisComp.layers[ly_id][tl_id].setKeyFrame(new AEKey.KeyFrame(frame,value));
 
-                thisComp.layers[ly_id][tl_id].push(new KeyFrame(frame, value));
+                thisComp.layers[ly_id][tl_id].push(new AEKey.KeyFrame(frame, value));
                 result = thisComp.layers[ly_id][tl_id].length;
 
 //	if(dbg) dbgPut(">>set "+thisComp.layers[ly_id][tl_id].name+
@@ -661,9 +661,9 @@ function AEK2XDS(datastream) {
 //if(dbg) dbgPut("\n\nNew Layer INIT "+l+":"+SrcData[line]);
             /**
              * レイヤ作成
-             * @type {FakeLayer}
+             * @type {AEKey.FakeLayer}
              */
-            thisComp.layers[ly_id] = new FakeLayer();
+            thisComp.layers[ly_id] = new AEKey.FakeLayer();
 //		thisComp.layers[ly_id].init();
             thisLayer = thisComp.layers[ly_id];//ポインタ設定
 
@@ -739,25 +739,23 @@ function AEK2XDS(datastream) {
                         tlid = SrcLine[0];
                 }
 
-//	if(! thisComp.layers[ly_id][tl_id]){thisComp.layers[ly_id][tl_id]= new TimeLine(tl_id)}else{if(dbg) dbgPut(tl_id)}
+//	if(! thisComp.layers[ly_id][tl_id]){thisComp.layers[ly_id][tl_id]= new AEKey.TimeLine(tl_id)}else{if(dbg) dbgPut(tl_id)}
 
                 if (!thisComp.layers[ly_id][tl_id]) {
                     thisComp.layers[ly_id][tl_id] = [];
                     thisComp.layers[ly_id][tl_id].name = [tl_id];
                     thisComp.layers[ly_id][tl_id].maxValue = 0;
-                    thisComp.layers[ly_id][tl_id].valueAtTime = valueAtTime_;
+                    thisComp.layers[ly_id][tl_id].valueAtTime = AEKey.valueAtTime_;
                 }
                 //else{	if(dbg) dbgPut(tl_id + " is exist")	}
 //			なければ作る＝すでにあるタイムラインならスキップ
                 thisTimeLine = thisComp.layers[ly_id][tl_id];
 //		if(dbg) dbgPut("set TIMELINE :"+ly_id+":"+tl_id);
                 continue;
-            }
-        }
-    }
-
+            };
+        };
+    };
 //		all_AEfake();
-
     /**
      * キーの読み込みが終わったのでキーデータを解析
      * キーの最後のフレームをみて、カットの継続時間を割り出す。
@@ -765,8 +763,8 @@ function AEK2XDS(datastream) {
      */
     thisComp.duration =
         nas.FCT2ms(
-            ssUnit(thisComp.frameRate) *
-            Math.ceil(thisComp.maxFrame / ssUnit(thisComp.frameRate))
+            AEKey.ssUnit(thisComp.frameRate) *
+            Math.ceil(thisComp.maxFrame / AEKey.ssUnit(thisComp.frameRate))
         ) / 1000;//最小単位はキリの良いところで設定
 
 
@@ -822,7 +820,7 @@ function AEK2XDS(datastream) {
              * カラセル制御レイヤはあるか
              */
             if (thisComp.layers[lyr].opacity) {
-                if (ckBlank(thisComp.layers[lyr].opacity)) {
+                if (AEKey.ckBlank(thisComp.layers[lyr].opacity)) {
                     SrcData.layers[lyr].blmtd = "opacity";
                     SrcData.layers[lyr].blpos = "end";
                     //仮のブランクレイヤ
@@ -832,7 +830,7 @@ function AEK2XDS(datastream) {
                 }
             } else {
                 if (thisComp.layers[lyr].wipe) {
-                    if (ckBlank(thisComp.layers[lyr].wipe)) {
+                    if (AEKey.ckBlank(thisComp.layers[lyr].wipe)) {
                         SrcData.layers[lyr].blmtd = "wipe";
                         SrcData.layers[lyr].blpos = "end";
                         //仮のブランクレイヤ
@@ -850,7 +848,7 @@ function AEK2XDS(datastream) {
             var MaxValue = 0;//最大値を控える変数
             var blAP = false;//カラセル出現フラグ
             var tmpBlank = (SrcData.layers[lyr].blmtd == "opacity") ? 0 : 100;//仮のブランク値
-            for (kid = 0; kid < thisComp.layers[lyr].timeRemap.length; kid++) {
+            for (var kid = 0; kid < thisComp.layers[lyr].timeRemap.length; kid++) {
                 if (thisComp.layers[lyr].timeRemap[kid].value[0] >= 999999) {
                     isExpression = true;
                     blAP = true;
@@ -930,7 +928,7 @@ function AEK2XDS(datastream) {
                  */
                 var MaxValue = 0;
                 var isTiming = true;
-                for (kid = 0; kid < thisComp.layers[lyr].slider.length; kid++) {
+                for (var kid = 0; kid < thisComp.layers[lyr].slider.length; kid++) {
                     /**
                      * 整数か
                      */
@@ -1032,12 +1030,12 @@ function AEK2XDS(datastream) {
 //	var AETransStream=new String();//リザルト文字列の初期化
         var AETransStream = "";//リザルト文字列の初期化
         var AETransArray = new Array(SrcData.layerCount);//
-        for (layer = 0; layer < SrcData.layerCount; layer++) {
+        for (var layer = 0; layer < SrcData.layerCount; layer++) {
             AETransArray[layer] = [];
         }
     }
 
-    for (layer = 0; layer < SrcData.layerCount; layer++) {
+    for (var layer = 0; layer < SrcData.layerCount; layer++) {
         /**
          * レイヤ数回す
          * @type {string}
@@ -1052,7 +1050,7 @@ function AEK2XDS(datastream) {
          * レイヤごとのブランク値を出す。999999は、パス
          */
 
-        for (kid = 0; kid < thisComp.layers[layer][timingTL].length; kid++) {
+        for (var kid = 0; kid < thisComp.layers[layer][timingTL].length; kid++) {
             /**
              * タイミング保持タイムラインのキー数で転送
              */
@@ -1110,7 +1108,7 @@ function AEK2XDS(datastream) {
                     if (kid < thisComp.layers[layer][timingTL].length - 1) {
                         var currentframe = thisComp.layers[layer][timingTL][kid].frame;
                         var nextframe = thisComp.layers[layer][timingTL][kid + 1].frame;
-                        for (fr = currentframe + 1; fr < nextframe; fr++) {
+                        for (var fr = currentframe + 1; fr < nextframe; fr++) {
                             AETransArray[layer].push("");
                         }
                     }
@@ -1131,11 +1129,11 @@ function AEK2XDS(datastream) {
      * @type {number}
      */
     var MaxLength = 0;
-    for (layer = 0; layer < SrcData.layerCount; layer++) {
+    for (var layer = 0; layer < SrcData.layerCount; layer++) {
         MaxLength = (MaxLength < AETransArray[layer].length) ?
             AETransArray[layer].length : MaxLength;
     }
-    for (layer = 0; layer < SrcData.layerCount; layer++) {
+    for (var layer = 0; layer < SrcData.layerCount; layer++) {
         AETransArray[layer].length = MaxLength;
         AETransStream += AETransArray[layer].join(",");
         if (layer < SrcData.layerCount - 1)AETransStream += "\n";
@@ -1171,7 +1169,7 @@ function AEK2XDS(datastream) {
  * @returns {string}
  * @constructor
  */
-XPS2AEK = function (myXps, layer_id) {
+ function XPS2AEK(myXps, layer_id) {
 
     /**
      * @desc 将来、データツリー構造が拡張された場合、機能開始時点でツリーの仮構築必須
@@ -1230,7 +1228,7 @@ XPS2AEK = function (myXps, layer_id) {
         /**
          * 2?ラストフレームループ
          */
-        for (f = 1; f < layerDataArray.length; f++) {
+        for (var f = 1; f < layerDataArray.length; f++) {
             /**
              * 有効データを判定して無効データエントリを直前のコピーで埋める
              */
@@ -1242,7 +1240,7 @@ XPS2AEK = function (myXps, layer_id) {
                     layer_max_lot : bufDataArray[f];
             }
         }
-        max_lot = (layer_max_lot > key_max_lot) ?
+        var max_lot = (layer_max_lot > key_max_lot) ?
             layer_max_lot : key_max_lot;
 
         /**
@@ -1251,9 +1249,9 @@ XPS2AEK = function (myXps, layer_id) {
          * ここで、layer_max_lot が 0 であった場合変換すべきデータが無いので処理中断
          */
         if (layer_max_lot == 0) {
-//            xUI.errorCode = 4;
-    console.log("変換すべきデータがありません。\n処理を中断します。");
+            xUI.errorCode = 4;
             return;
+// "変換すべきデータがありません。\n処理を中断します。";
         }
     }
 
@@ -1278,7 +1276,7 @@ XPS2AEK = function (myXps, layer_id) {
     /**
      * 有効データで埋まった配列を再評価(2?ラスト)
      */
-    for (f = 1; f < bufDataArray.length; f++) {
+    for (var f = 1; f < bufDataArray.length; f++) {
         /**
          * キーオプションにしたがって以下の評価でキー配列にスタック(フレームのみ)
          */
@@ -1348,7 +1346,7 @@ XPS2AEK = function (myXps, layer_id) {
      */
     var remapBody =
         'Time Remap\n\tFrame\tseconds\t\n';
-    for (n = 0; n < keyStackArray["remap"].length; n++) {
+    for (var n = 0; n < keyStackArray["remap"].length; n++) {
         if (bufDataArray[keyStackArray["remap"][n]] == "blank") {
             var seedValue = (blank_pos == "first") ? 1 : max_lot + 1;
         } else {
@@ -1374,7 +1372,7 @@ XPS2AEK = function (myXps, layer_id) {
         'スライダ\tスライダ制御\tEffect\ Parameter\ #1\t\n\tFrame\t\t\n' :
         'Effects\tスライダ制御\tスライダ\n\tFrame\t\t\n';
 
-    for (n = 0; n < keyStackArray["remap"].length; n++) {
+    for (var n = 0; n < keyStackArray["remap"].length; n++) {
         expBody += "\t";
         expBody += keyStackArray["remap"][n].toString(10);
         expBody += "\t";
@@ -1421,7 +1419,7 @@ XPS2AEK = function (myXps, layer_id) {
             break;
     }
 
-    for (n = 0; n < keyStackArray["blank"].length; n++) {
+    for (var n = 0; n < keyStackArray["blank"].length; n++) {
         blankBody += "\t";
         blankBody += keyStackArray["blank"][n].toString(10);
         blankBody += "\t";
@@ -1566,9 +1564,19 @@ XPS2AEK = function (myXps, layer_id) {
 
     Result += '\n';
     Result += 'End of Keyframe Data';
-/*
+
     if (xUI.errorCode) {
         xUI.errorCode = 0
-    }; // */
+    }
     return Result;
 };
+
+/*=======================================*/
+if((typeof window == 'undefined')&&(typeof app == 'undefined')){
+    exports.AEK2XDS = AEK2XDS;
+    exports.XPS2AEK = XPS2AEK;
+}
+/*  eg. for import
+    const { AEK2XDS , XPS2AEK } = require('./lib_AEK.js');
+
+*/

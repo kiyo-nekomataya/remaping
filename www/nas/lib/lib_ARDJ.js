@@ -1,17 +1,23 @@
 ﻿/**
- *    @fileoverview ARDJ2XPS(ARDJStream)
- *    ARDJファイルをXPS互換テキストにコンバートする
- *    引き数は、ARDLデータのテキストストリーム(JSON)
- *    またはARDJオブジェクトそのまま
+ *    @fileoverview
+ *  AERemap exseed | cellRemap(http://bryful.yuzu.bz//ae.html)の
+ *  ARDJデータを読み書きするためのライブラリ<br />
  */
-
+'use strict';
+/*=======================================*/
+if((typeof window == 'undefined')&&(typeof app == 'undefined')){
+    var nas = require('./xpsio');
+};
 /**
- * @param myARDJ
- * @returns {boolean}
- * @constructor
+ *    ARDJファイルをXPS互換テキストにコンバートする<br />
+ * @function
+ * @param {Object ARDJ | String JSON of ARDJ} myARDJ
+ *    ARDJオブジェクト　または　ARDLデータのテキストストリーム(JSON)
+ * @returns {String nas.Xps}
+ *    nas.Xps互換テキスト
  */
 function ARDJ2XPS(myARDJ) {
-    /**
+    /*
      * 引数のプロパティを見てJSONデータならオブジェクト化
      */
     if (!myARDJ.cells) {
@@ -29,7 +35,7 @@ function ARDJ2XPS(myARDJ) {
                 myARDJ = false;
             }
         }
-        /**
+        /*
          * JSONオブジェクトあればトライ　失敗したらEvalで更にトライ
          */
     }
@@ -48,8 +54,8 @@ function ARDJ2XPS(myARDJ) {
         myLayers = myARDJ.cellCount;
     }
 
-    var myXps = new Xps(parseInt(myLayers), parseInt(myFrames));
-    myXps.init(parseInt(myLayers), parseInt(myFrames));
+    var myXps = new nas.Xps();
+    myXps.init(parseInt(myLayers) + 2, parseInt(myFrames));
 
     //alert(myXps.toString());
     if (myARDJ.sheetName) {
@@ -82,23 +88,24 @@ function ARDJ2XPS(myARDJ) {
 }
 
 /**
- * 引数はオブジェクトでも、ストリームでも受け付ける。
+ * @function
+ * nas.XpsオブジェクトからARDJテキストテキスト（JSON）へ変換
  * コンバートするXPSをARDJ互換形式で書き出すことができる。
- * ARDJはJSONテキストなので保存時はUTF8を推奨
- *
- * @param myXps
- * @returns {*}
- * @constructor XPS2ARDJ(myXPS)
+ * ARDJはJSONテキストなので保存時はUTF8に
+ *　
+ * @param {Object nas.Xps|String nas.Xps} myXps
+ *  引数はオブジェクトでも、ストリームでも受け付ける。
+ * @returns {String ARDJ} (JSON)
  */
 function XPS2ARDJ(myXps) {
     /**
      * 引数がソースであっても処理する。XPSでない場合はfalse
      */
-    if (myXps instanceof Xps) {
+    if (myXps instanceof nas.Xps) {
         var sourceXPS = myXps;
     } else {
         if ((myXps instanceof String) && (myXps.match(/^nasTIME-SHEET/))) {
-            var sourceXPS = new Xps();
+            var sourceXPS = new nas.Xps();
             if (!sourceXPS.parseXps(myXps)) {
                 return false;
             }
@@ -107,14 +114,14 @@ function XPS2ARDJ(myXps) {
         }
     }
 
-    /**
+    /*
      * コンバートする
      *
-     * Xps暫定フォーマットのままなので、決め打ちでtimingタイムラインになってるけど
+     * nas.Xps暫定フォーマットのままなので、決め打ちでtimingタイムラインになってるけど
      * これは本来判定が必要　2013.03.24
      */
 
-    /**
+    /*
      * ARDJを空オブジェクトで初期化
      * @type {{sheetName: string, frameRate: number, frameCount: number, cellCount: number, caption: Array, cells: Array}}
      */
@@ -127,18 +134,16 @@ function XPS2ARDJ(myXps) {
         "cells": []
     };
 
-    /**
-     * 元データから転記
-     * @type {string}
+    /*
+     * 元データからプロパティ転記
      */
     myARDJ.sheetName = [sourceXPS.title, sourceXPS.opus, sourceXPS.scene, sourceXPS.cut].join("_");
     myARDJ.frameRate = parseInt(sourceXPS.framerate, 10);
     myARDJ.frameCount = sourceXPS.duration();
 
-    /**
+    /*
      * レイヤ名を組む
-     * option="timing"のものだけpushしてIDを控える
-     * @type {Array}
+     * option="timing"のトラックのみpushしてIDを控える
      */
     var myTarget = [];
     for (var lid = 1; lid < sourceXPS.xpsTracks.length-1; lid++) {
@@ -149,19 +154,18 @@ function XPS2ARDJ(myXps) {
     }
     myARDJ.cellCount = myTarget.length;//セルカウントセット
 
-    /**
+    /*
      * 変換するタイムラインを処理してキー配列を作成
      */
     for (var lid = 0; lid < myARDJ.cellCount; lid++) {
         var buffDataArray = sourceXPS.getNormarizedStream(myTarget[lid]-1);
         var keyDataArray = [];
-        /**
+        /*
          * 第一フレームセット
-         * @type {number}
          */
         var currentValue = (isNaN(buffDataArray[0])) ? 0 : buffDataArray[0];
         keyDataArray.push([0, currentValue]);
-        /**
+        /*
          * 第二フレーム以降を処理
          */
         for (var fid = 1; fid < myARDJ.frameCount; fid++) {
@@ -170,15 +174,14 @@ function XPS2ARDJ(myXps) {
                 //前と同じデータならskip
                 continue;
             } else {
-                /**
+                /*
                  * 違っていたらカレント更新してキー追加
-                 * @type {number}
                  */
                 currentValue = nextValue;
                 keyDataArray.push([fid, currentValue]);
             }
         }
-        /**
+        /*
          * 配列長が1で、かつキーの値が0の場合は空配列をセットする
          */
         if ((keyDataArray.length == 1) && (keyDataArray[0][1] == 0)) {
@@ -194,3 +197,12 @@ function XPS2ARDJ(myXps) {
     return (JSON instanceof Object) ? JSON.stringify(myARDJ) : myARDJ.toSource();
 }
 //ARDJ2XPS(XPS2ARDJ(XPS));
+ /*=======================================*/
+if((typeof window == 'undefined')&&(typeof app == 'undefined')){
+    exports.ARDJ2XPS = ARDJ2XPS;
+    exports.XPS2ARDJ = XPS2ARDJ;
+}
+/*  eg. for import
+    const { ARD2XPS , XPS2ARD } = require('./lib_ARD.js');
+
+*/

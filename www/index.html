@@ -317,7 +317,7 @@
 	<button
 	id=ibMdocInfo
 		class='iconButton iconButton-info'
-		onclick='myScenePref.open("edit");'
+		onclick='xpsScenePref.open("edit");'
 		title="XpsProperties"
 	>
 	</button>
@@ -1820,13 +1820,13 @@ onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"-(1)")'
 					<input type=checkbox
 					style="display:inline;"
 					id="scnNewSheet"
-					onChange=myScenePref.chgNewSheet()
+					onChange=xpsScenePref.chgNewSheet()
 				>
 				<span id=scnNewSheetLbl> 新規作成 </span>
 			</span>
 			<input
 				id=scnPushentry type=button value="登録" class="scnControl" 
-				onclick='myScenePref.putProp();
+				onclick='xpsScenePref.putProp();
 					serviceAgent.addEntry(xUI.XPS,function(){
 						var myIdentifier = Xps.getIdentifier(xUI.XPS,false);
 						serviceAgent.currentRepository.getSCi(function(){
@@ -1837,10 +1837,10 @@ onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"-(1)")'
 					});'
 				title='現在のタイムシートをリポジトリに登録します'
 			>
-			<input id=scnUpdate    type=button value="更  新" class="scnControl" onClick="myScenePref.putProp();">
-			<input id=scnNew       type=button value="作  成" class="scnControl" onClick="myScenePref.putProp();">
-			<input id=scnReset      type=button value="リセット" class="scnControl" onClick="myScenePref.getProp();">
-			<input id=scnClose     type=button value="閉じる" class="scnControl" onClick="myScenePref.close();">
+			<input id=scnUpdate    type=button value="更  新" class="scnControl" onClick="xpsScenePref.putProp();">
+			<input id=scnNew       type=button value="作  成" class="scnControl" onClick="xpsScenePref.putProp();">
+			<input id=scnReset      type=button value="リセット" class="scnControl" onClick="xpsScenePref.getProp();">
+			<input id=scnClose     type=button value="閉じる" class="scnControl" onClick="xpsScenePref.close();">
 		</td>
 		</tr>
 
@@ -1858,7 +1858,7 @@ onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"-(1)")'
 					</th>
 					<td width=24em colspan=2 id=scnMapfile>
 						no xMap data
-<!--<input type=text  style="width:100%" disabled value="---" onChange="myScenePref.rewrite(this.id)"/>-->
+<!--<input type=text  style="width:100%" disabled value="---" onChange="xpsScenePref.rewrite(this.id)"/>-->
 					</td>
 				</tr>
 				<tr>
@@ -1872,7 +1872,7 @@ onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"-(1)")'
 							value="" 
 							autoComplete= "on"
 							list ="scnTitleList"
-							onChange="myScenePref.reWrite(this.id)"
+							onChange="xpsScenePref.reWrite(this.id)"
 						>
 						<datalist id="scnTitleList">
 						</datalist>
@@ -1888,7 +1888,7 @@ onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"-(1)")'
 						value=""
 						autoComplete= "on"
 						list ="scnOpusList"
-						onChange="myScenePref.reWrite(this.id)"
+						onChange="xpsScenePref.reWrite(this.id)"
 					>
 					<datalist id="scnOpusList">
 					</datalist>
@@ -1902,7 +1902,7 @@ onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"-(1)")'
 						id=scnSubtitle
 						style="width:95%"
 						value=""
-						onChange="myScenePref.reWrite(this.id)"
+						onChange="xpsScenePref.reWrite(this.id)"
 				>
 				</td>
 				</tr>
@@ -1914,7 +1914,7 @@ onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"-(1)")'
 					id=scnScene
 					style="width:80%"
 					value="---"
-					onChange="myScenePref.rewrite(this.id)"
+					onChange="xpsScenePref.rewrite(this.id)"
 					>
 				</td>
 				<td>
@@ -1922,7 +1922,7 @@ onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"-(1)")'
 					id=scnCut
 					style="width:80%"
 					value="---"
-					onChange="myScenePref.rewrite(this.id)"
+					onChange="xpsScenePref.rewrite(this.id)"
 					>
 				</td>
 				</tr>
@@ -1965,13 +1965,13 @@ onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"-(1)")'
 						value="tr-in"
 						autoComplete= "on"
 						list ="scnTransitionList"
-						onChange="myScenePref.rewrite(this.id)"
+						onChange="xpsScenePref.rewrite(this.id)"
 					>
 					<input type=text
 						id=scnTrinT
 						style="width:5em"
 						value="---"
-						onChange="myScenePref.rewrite(this.id)"
+						onChange="xpsScenePref.rewrite(this.id)"
 					>
 				</td>
 				</tr>
@@ -1983,7 +1983,7 @@ onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"-(1)")'
 					<input	type=text
 						id=scnTime
 						value="---" 
-						onChange="myScenePref.rewrite(this.id)"
+						onChange="xpsScenePref.rewrite(this.id)"
 					>
 				</td>
 				</tr>
@@ -1998,13 +1998,13 @@ onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"-(1)")'
 						value="tr-out"
 						autoComplete= "on"
 						list ="scnTransitionList"
-						onChange="myScenePref.rewrite(this.id)"
+						onChange="xpsScenePref.rewrite(this.id)"
 					>
 					<input type=text
 						id=scnTrotT
 						style="width:5em"
 						value="---"
-						onChange="myScenePref.rewrite(this.id)"
+						onChange="xpsScenePref.rewrite(this.id)"
 					>
 				</td>
 				</tr>
@@ -2028,19 +2028,19 @@ onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"-(1)")'
 			class=timeButton
 			id=incrBt_L
 			style='background-color:#888888;font-size:12px;'
-			onclick='myScenePref.incrFocusTarget(event);'> 
+			onclick='xpsScenePref.incrFocusTarget(event);'> 
 		</button> 
 		<button
 			class=timeButton
 			id=incrBt_M
 			style='background-color:#aaaaaa;font-size:12px;'
-			onclick='myScenePref.incrFocusTarget(event);'> 
+			onclick='xpsScenePref.incrFocusTarget(event);'> 
 		</button> 
 		<button
 			class=timeButton
 			id=incrBt_R
 			style='font-size:12px;'
-			onclick='myScenePref.incrFocusTarget(event);'> 
+			onclick='xpsScenePref.incrFocusTarget(event);'> 
 		</button> 
 <!--
 		<button
@@ -2092,7 +2092,7 @@ onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"-(1)")'
 					<select
 						id=scnFormatList
 						style ='text-align:center;width:95%;'
-						onChange="myScenePref.chgProp(this.id)"
+						onChange="xpsScenePref.chgProp(this.id)"
 						title = 'プリセットからフォーマットを選択してください'
 					></select>
 				</td>
@@ -2113,7 +2113,7 @@ onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"-(1)")'
 						
 						style="width:2em"
 						value="---"
-						onChange=myScenePref.chglayers(this.id)
+						onChange=xpsScenePref.chglayers(this.id)
 						title="重ね数の変更を行います"
 					>
 					<input	type=text
@@ -2121,13 +2121,13 @@ onclick='nas.incrFCTonHTMLInput(document.getElementById("editTC"),"-(1)")'
 						id=scnLayersLbls
 						style="width:16em"
 						value="---"
-						onChange=myScenePref.chglayers(this.id)
+						onChange=xpsScenePref.chglayers(this.id)
 					title="ラベルを指定します"
 					>
 					<input	type=button
 						id=scnLayerUpdate
 						value="< 詳細 >"
-						onClick=myScenePref.openTable()
+						onClick=xpsScenePref.openTable()
 						title="セルの詳細を編集します"
 					>
 				</td>

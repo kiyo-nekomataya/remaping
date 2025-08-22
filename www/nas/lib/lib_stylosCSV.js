@@ -3,7 +3,11 @@
  *  セルシスのRetas!Pro　スタイロスの出力するCSVデータの入出力をサポートするライブラリ
  *  CLIP STUDIP PAINT(以下 CSPと略) CSV ファイルをサポートする
  */
- 
+'use strict';
+/*=======================================*/
+if((typeof window == 'undefined')&&(typeof app == 'undefined')){
+    var nas = require('./xpsio');
+};
 /*    
  *    引き数は、CSVデータのテキストストリーム
  *    書式は限定的で、スタイロスまたはCLIP STUDIO PAINT （以下CSP）の書き出す形式に準じていなくてはならない。
@@ -64,7 +68,7 @@
  * @param {String}  dialogFolder
  *      省略可　台詞として読み込むフォルダをIDまたはフォルダ名で指定<br>複数指定の場合は配列で与える<br>省略時は自動判定
  * @returns {String}
- *      Xps互換ストリームデータ
+ *      nas.Xps互換ストリームデータ
  */
 function StylosCSV2XPS(CSVStream, spcFolder, dialogFolder) {
     /*
@@ -76,7 +80,7 @@ function StylosCSV2XPS(CSVStream, spcFolder, dialogFolder) {
     /*
      * CSVデータをオブジェクト化する
      */
-    myStylosCSV = {};
+    var myStylosCSV = {};
     /*
      * ラインで分割して配列に取り込み
      * ここではデータフィールドに改行は含まれないことを前提としているのでデータ形式に注意
@@ -305,10 +309,10 @@ console.log(myStylosCSV.folders[fidx].name);
         if (this.dialogCount == 0) {
             resultStream += "dialog\t";
         }
-        for (idx = 0; idx < this.dialogCount; idx++) {
+        for (var idx = 0; idx < this.dialogCount; idx++) {
             resultStream += "dialog\t";
         }
-        for (idx = 0; idx < (this.convertTable.length - this.dialogCount); idx++) {
+        for (var idx = 0; idx < (this.convertTable.length - this.dialogCount); idx++) {
             resultStream += "timing\t";
         }
         resultStream += "]";
@@ -317,13 +321,13 @@ console.log(myStylosCSV.folders[fidx].name);
          * ラベル配置
          */
         resultStream += "[CELL\tN\t";
-        for (idx = 0; idx < this.layerLabel.length; idx++) {
+        for (var idx = 0; idx < this.layerLabel.length; idx++) {
             resultStream += this.layerLabel[idx] + "\t";
         }
         resultStream += "]";
         resultStream += myLineFeed;
 
-        for (frm = 0; frm < this.frameDuration; frm++) {
+        for (var frm = 0; frm < this.frameDuration; frm++) {
             resultStream += "\t";//行頭のカラデータ
 
             if (this.dialogCount == 0) {
@@ -363,10 +367,10 @@ console.log(myStylosCSV.folders[fidx].name);
 }
 
 /**
- *  Xpsからスタイロス形式のCSVストリームへ変換する
- *  @param {Object Xps | String} myXPS
- *      ソースXpsオブジェクト　または　ストリーム
- *  @param {Object Xps | String}    myReferenceXPS
+ *  nas.Xpsからスタイロス形式のCSVストリームへ変換する
+ *  @param {Object nas.Xps | String} myXPS
+ *      ソースnas.Xpsオブジェクト　または　ストリーム
+ *  @param {Object nas.Xps | String}    myReferenceXPS
  *      第二ソースオブジェクト　またはストリーム
  *  @returns {String}
  *      変換済みCsvデータ
@@ -381,11 +385,11 @@ function XPS2StylosCSV(myXPS, myReferenceXPS) {
     /*
      * 引数がソースであっても処理する。XPSでない場合はfalse
      */
-    if (myXPS instanceof Xps) {
+    if (myXPS instanceof nas.Xps) {
         var sourceXPS = myXPS;
     } else {
         if ((myXPS instanceof String) && (myXPS.match(/^nasTIME-SHEET/))) {
-            var sourceXPS = new Xps();
+            var sourceXPS = new nas.Xps();
             if (!sourceXPS.parseXps(myXPS)) {
                 return false;
             }
@@ -396,16 +400,16 @@ function XPS2StylosCSV(myXPS, myReferenceXPS) {
     /*
      * リファレンスXPSがない場合は、カラで親サイズのカラオブジェクトを作る（親XPSのコピーのほうが良いか？）
      */
-    if (myReferenceXPS instanceof Xps) {
+    if (myReferenceXPS instanceof nas.Xps) {
         var referenceXPS = myReferenceXPS;
     } else {
         if ((myReferenceXPS instanceof String) && (myReferenceXPS.match(/^nasTIME-SHEET/))) {
-            var referenceXPS = new Xps();
+            var referenceXPS = new nas.Xps();
             if (!referenceXPS.readIN(myReferenceXPS)) {
                 return false;
             }
         } else {
-            var referenceXPS = new Xps(sourceXPS.xpsTracks.length-2, sourceXPS.duration());//カラオブジェクト
+            var referenceXPS = new nas.Xps(sourceXPS.xpsTracks.length-2, sourceXPS.duration());//カラオブジェクト
         }
     }
     /*
@@ -433,7 +437,7 @@ function XPS2StylosCSV(myXPS, myReferenceXPS) {
         if (referenceXPS.xpsTracks[trks].option.match(/timing|cell/i)){myStylosCSV.refCount++}
     }
 //    myStylosCSV.recordCunt = (myXPS.xpsTracks.length - 2) * 2 + 2;//(トラック数×２＋フレームカウント＋セリフ)
-    /*　ここは見直しが必要　タイミングトラックをそれぞれのXpsごとにカウントして処理するルーチンを書くこと　2016 10 23
+    /*　ここは見直しが必要　タイミングトラックをそれぞれのnas.Xpsごとにカウントして処理するルーチンを書くこと　2016 10 23
         変更（2019.0514）
     */
     
@@ -514,3 +518,12 @@ function XPS2StylosCSV(myXPS, myReferenceXPS) {
  * CSPに準ずるために拡張が必要
  * りまぴん的にはステージを指定して一括変換を行うのが良さそう
  */
+ /*=======================================*/
+if((typeof window == 'undefined')&&(typeof app == 'undefined')){
+    exports.StylosCSV2XPS = StylosCSV2XPS;
+    exports.XPS2StylosCSV = XPS2StylosCSV;
+}
+/*  eg. for import
+    const { StylosCSV2XPS , XPS2StylosCSV } = require('./lib_stylosCVS.js');
+
+*/

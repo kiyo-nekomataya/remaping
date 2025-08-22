@@ -1,345 +1,1 @@
-﻿/**
- * @fileOverview ESTK用　プリファレンスの読み込みと保存
- *<pre>
- * 保存するオブジェクトをそれぞれ１ファイルで設定フォルダへjsonテキストで保存する
- * 拡張子は.json
- * ファイル名はオブジェクト名をそのまま利用
- * 例: nas.inputMedias.body.json 等
- * プリファレンスとして保存するオブジェクトはこのファイルの設定として固定
- * 読み込みは記録フォルダの内部を検索してオブジェクトの存在するもの全て
- * 新規のオブジェクトは作成しない
- * 乙女のローカルで作成したファンクションをadobeライブラリ（ESTK）全体へ拡張
- * あとで乙女の部当該分を換装すること
- *
- * ホストアプリケーション別の切り分けを組み込んで、ファイルを共用に変更
- *</pre>
- * @todo ただし、アプリケーションごとのプロパティの切り分けは別ファイルの方が望ましいので、次の機会に各ホストごとの設定ファイルへ移行の予定
- * 2016.05.31
- */
-'use strict';
-/** Folder　オブジェクトにnasライブラリのパスをアタッチ
- * @constant   {String} nas.baseLocation
- */
-Folder.nas = nas.baseLocation;
-//alert(Folder.nas.fsName)
-//alert (nas.baseLocation)
-//nas.preferenceFolder=new Folder(Folder.nas.path+"/scripts/lib/etc");//保存場所固定
-//nas.preferenceFolder=new Folder(Folder.nas.path+"/nas/lib/etc");//保存場所固定
-/** Folder　オブジェクトにnasライブラリのパスをアタッチ
- * @constant   {String} nas.preferenceFolder
- */
-nas.preferenceFolder = new Folder(Folder.userData.fullName + "/nas/lib/etc");//保存場所固定
-
-
-/**
- *  設定フォルダから指定のオブジェクトを読み出して設定する<br />
- *  (ESTK)
- * @function
- * @param {String} myPropName
- *  読み出すオブジェクト名　未指定の場合は"*"(すべて)
- */
-nas.readPreference = function (myPropName) {
-    if (!myPropName) {
-        myPropName = "*"
-    }
-    var myPrefFiles = this.preferenceFolder.getFiles(myPropName + ".json");
-    for (var idx = 0; idx < myPrefFiles.length; idx++) {
-        var myPropName = myPrefFiles[idx].name.replace(/\.json$/, "");
-        var myProp;
-        try {
-            myProp = eval(myPropName);
-        } catch (er) {
-            //               alert(myPropName +"if  not Exists. loading aborted");
-            continue;
-        }
-        if (myProp){
-            var myOpenFile = new File(myPrefFiles[idx].fsName);
-            var canRead = myOpenFile.open("r");
-            if (canRead) {
-                myOpenFile.encoding = "UTF-8";
-                var myContent = myOpenFile.read();
-                myOpenFile.close();
-                if (nas.otome) {
-                    nas.otome.writeConsole(myContent);
-                }
-//先にvalueを確定する
-                var myValue = JSON.parse(myContent);
-                if(myProp.parse instanceof Function){
-                    myProp.parse(myContent);
-                }else if(myProp.setValue instanceof Function){
-                    myProp.setValue(myContent);
-                }else if(myProp instanceof nas.Framerate){
-                    
-                }else{
-                    
-                }
-                if (myContent.match(/\(new\sNumber\(([0-9\.]+)\)\)/)) {
-//Number
-                    myContent = myContent.replace(/\(new\sNumber(\([0-9\.]+\))\)/g, RegExp.$1);
-                    if(
-                        (myPropName.match(/(.*[^\.])\.selected/)) &&
-                        (eval(RegExp.$1 + " instanceof nTable"))
-                    ){
-//nTable selected
-                        eval(RegExp.$1 + ".select\(" + myContent + "\)");
-                    } else {
-                        myProp = myContent;
-//                        eval(myPropName + " =(" + myContent + ")");
-                    }
-                } else if(
-                        myContent.match(/\(new\sString\((.+)\)\)/)
-                ){
-//String
-                    myContent = myContent.replace(/\(new\sString(\(.+)\)\)/g, RegExp.$1);
-                    myProp = myContent;
-//                    eval(myPropName + " =" + myContent);
-                } else {
-                    if (nas.otome) {
-                        nas.otome.writeConsole(myPropName + " = eval(" + myContent + ")");
-                    }
-                    myProp = eval(myContent);
-//                    eval(myPropName + " =eval(" + myContent + ")");
-                }
-            }
-        } else {
-            if (nas.otome) {
-                nas.otome.writeConsole("cannot Replace prop " + myPropName);
-            }
-        }
-    }
-};
-
-/**
- *  設定フォルダへ指定のオブジェクトを書き出す<br />
- *  (ESTK)
- * @function
- * @param {Array of String} myPrefs
- *  書き出すオブジェクト名　未指定の場合はデフォルトのオブジェクトすべて
-
-nTable            "nas.registerMarks.bodys",
-nTable.slected    "nas.registerMarks.selected",
-nTable            "nas.inputMedias.bodys",
-nTable.slected    "nas.inputMedias.selected",
-nTable            "nas.outputMedias.bodys",
-nTable.slected    "nas.outputMedias.selected",
-nTable            "nas.workTitles.bodys",
-nTable.slected    "nas.workTitles.selected",
-String|UserInfo               "nas.CURRENTUSER",
-String|Number|UnitREsolution  "nas.RESOLUTION",
-String|Number|FrameRate       "nas.FRATE",
-Nuber                         "nas.SheetLength",
-REGEX            "nas.importFilter",
-REGEX            "nas.cellRegex",
-REGEX            "nas.bgRegex",
-REGEX            "nas.mgRegex",
-REGEX            "nas.loRegex"
-
- */
-nas.writePreference = function (myPrefs) {
-    if (!myPrefs) {
-        myPrefs = [];
-    }
-    if (!(myPrefs instanceof Array)) {
-        myPrefs = [myPrefs];
-    }//配列に
-
-    if (myPrefs.length == 0) {
-// 旧タイプ pmdb 非対応設定
-        myPrefs = [
-            "nas.registerMarks.bodys",
-                "nas.registerMarks.selected",
-            "nas.inputMedias.bodys",
-                "nas.inputMedias.selected",
-            "nas.outputMedias.bodys",
-                "nas.outputMedias.selected",
-            "nas.workTitles.bodys",
-                "nas.workTitles.selected",
-            "nas.CURRENTUSER",
-            "nas.RESOLUTION",
-            "nas.FRATE",
-            "nas.SheetLength",
-            "nas.importFilter",
-            "nas.cellRegex",
-            "nas.bgRegex",
-            "nas.mgRegex",
-            "nas.loRegex"
-        ];
-        if (isAdobe) {
-//AE専用
-            if (app.name.indexOf("AfterEffects") > 0) {
-                myPref.push("nas.expressions");
-                //		"nas.ftgFolders"
-            }
-//PS専用
-            if (app.name.indexOf("Photoshop") > 0) {
-                myPref.push("nas.axe");
-            }
-        }
-    }
-    if ((this.preferenceFolder.exists) && (!(this.preferenceFolder.readonly))) {
-        for (var idx = 0; idx < myPrefs.length; idx++) {
-            var myProp = eval(myPrefs[idx]);
-            if (myProp != undefined) {
-                if (myProp instanceof RegExp){
-                    var myContent = eval(myPrefs[idx] + ".toString()");
-                    if (myContent.match(/\/([ig]+)$/)) {
-                        var myRegOpt = RegExp.$1;
-                    } else {
-                        var myRegOpt = "";
-                    }
-                    var myContentBody = myContent.slice(1, myContent.length - myRegOpt.length - 1).replace(/\\/g, "\\\\");
-                    myContent = "\(new RegExp\(\"" + myContentBody + "\",\"" + myRegOpt + "\"\)\)";
-                } else if(myProp instanceof nas.UserInfo){
-                    var myContent = myProp.handle;//handleのみ抽出
-                } else if(myProp instanceof nas.UnitResolution){
-                    var myContent = myProp.as("dpc");//旧フォーマット互換DPC
-                } else if(myProp instanceof nas.Framerate){
-                    var myContent = myProp.rate;
-                } else {
-                    var myContent = JSON.stringify(myProp);
-//                    var myContent = eval(myPrefs[idx] + ".toSource()")
-                }
-                var myFileName = myPrefs[idx] + ".json";
-                if (nas.otome) {
-                    nas.otome.writeConsole(myContent);
-                }
-                var myOpenFile = new File(this.preferenceFolder.path + "/" + this.preferenceFolder.name + "/" + myFileName);
-                var canWrite = myOpenFile.open("w");
-                if (canWrite) {
-                    if (nas.otome) {
-                        nas.otome.writeConsole(myOpenFile.fsName);
-                    }
-                    myOpenFile.encoding = "UTF-8";
-                    myOpenFile.write(myContent);
-                    myOpenFile.close();
-                } else {
-                    var msg = myOpenFile.fsName + nas.localize({en: ": It failed to write", ja: ": これなんか書けないカンジ"});
-                    if (nas.otome) {
-                        nas.otome.writeConsole(msg)
-                    } else {
-                        alert(msg)
-                    }
-                }//ファイルが既存かとか調べない うほほ
-
-            } else {
-                var msg = nas.localize({
-                    en: "object :%1 does not seem to exist. It can not be saved.",
-                    ja: "object :%1 は存在しないようです。保存できません。"
-                }, myPrefs[idx]);
-                if (nas.otome) {
-                    nas.otome.writeConsole(msg)
-                } else {
-                    alert(msg)
-                }
-            }
-        }
-    }//else{alert("GOGO")}
-};
-
-//nas.writePreference();
-
-
-/**
- * @desc 個人情報をクリアする。最後に再初期化を促すメッセージを出力<br />
- *  (ESTK)
- * @function
- */
-nas.cleraPreference = function () {
-
-    /*
-     * nas.uiMsg.dm023
-     * var msg="個人領域に記録した情報をすべてクリアします。"+nas.GUI.LineFeed;
-     * msg+="nasライブラリを使用するすべてのアプリケーションの情報をクリアしますので、"+nas.GUI.LineFeed;
-     * msg+="AEとPSでnasライブラリを使用している方は特にご注意ください。"+nas.GUI.LineFeed;
-     * msg+="クリアして良いですか？"+nas.GUI.LineFeed;
-     */
-    var msg = nas.localize(nas.uiMsg.dm023);
-
-    var doFlag = confirm(msg);
-
-    if ((doFlag) && (this.preferenceFolder.exists) && (!(this.preferenceFolder.readonly))) {
-        var myPrefFiles = this.preferenceFolder.getFiles("*.json");
-        var clearCount = 0;
-        if (myPrefFiles.length) {
-            for (var idx = 0; idx < myPrefFiles.length; idx++) {
-                try {
-                    myPrefFiles[idx].remove();
-                    clearCount++;
-                } catch (er) {
-
-                }
-            }
-
-            /*
-             * nas.uiMsg.dm024
-             * 個人領域に記録した情報 :%COUNT% 個のデータをクリアしました。
-             * 現在の情報は、メモリ上にあります。\nデータはアプリケーション再起動の際に初期化されます。
-             * 初期化を希望する場合は、保存せずにアプリケーションを再起動してください。"
-             */
-            msg = nas.localize(nas.uiMsg.dm024, clearCount);//
-        } else {
-            //no data
-            msg = nas.localize(nas.uiMsg.noRemoveData);//"消去するデータがありませんでした"
-        }
-        alert(msg);
-    }//else{alert("GOGO")}
-};
-//nas.clearPreference();
-
-
-/**
- * 外部供給されたプリファレンスを個人領域に取り込むメソッド<br />
- * フォルダを指定して、そこにある設定データを読み出す<br />
- *  (ESTK)
- *
- * @function
- * @param {String folderpath} myFolder
- *  ターゲットフォルダ　指定のない場合はフォルダターゲットを取得
- * @returns {boolean} インポート成功時はtrue失敗時はfalse
- */
-nas.importPreference = function (myFolder) {
-    var goFlag = true;
-    if (typeof myFolder != "Folder") {
-        var myMsg = nas.localize(nas.uiMsg.dm025);//"インポートする設定のあるフォルダを指定して下さい";
-        myFolder = Folder.selectDialog(myMsg);
-        if (myFolder) {
-            myMsg = myFolder.fullName + nas.localize(nas.uiMsg.dm027);//027":\n上のフォルダの設定をインポートします。\n同名の設定は上書きされて取り消しはできません\n実行してよろしいですか？"
-            goFlag = confirm(myMsg);
-        }
-    }
-    if (goFlag) {
-        var currentPrefFolder = nas.preferenceFolder;
-        nas.preferenceFolder = myFolder;//設定
-        nas.readPreference();//全て読む
-        nas.preferenceFolder = currentPrefFolder;//復帰
-        nas.writePreference();//書き込む
-    }
-};
-
-/**
- * プリファレンス書き出しメソッド<br />
- * 指定のフォルダーに設定を書き出す<br />
- *  (ESTK)
- *
- * @function
- * @params {String folderpath} myFolder
- *  ターゲットフォルダ　指定のない場合はフォルダターゲットを取得
- * @returns {boolean} エクスポート成功時はtrue失敗時はfalse
- */
-nas.exportPreference = function (myFolder) {
-    var goFlag = true;
-    if (typeof myFolder != "Folder") {
-        var myMsg = nas.localize(nas.uiMsg.dm026);//"設定を書き出すフォルダを指定して下さい";
-        myFolder = Folder.selectDialog(myMsg);
-        if (myFolder) {
-            myMsg = myFolder.fullName + nas.localize(nas.uiMsg.dm028);//028":\n上のフォルダに設定をエクスポートします。\n空きフォルダ推奨します\n実行してよろしいですか？"
-            goFlag = confirm(myMsg);
-        }
-    }
-    if (goFlag) {
-        var currentPrefFolder = nas.preferenceFolder;
-        nas.preferenceFolder = myFolder;//設定
-        nas.writePreference();//書き込む
-        nas.preferenceFolder = currentPrefFolder;//復帰
-    }
-};
+﻿/** * @fileOverview *	もとはpsAxe(Adobe環境)用の専用ライブラリ * ESTK|node|WEB用 共用に更新 *	プリファレンスの読み込みと保存を担当 *<pre> * 保存するオブジェクトをそれぞれ１ファイルで設定フォルダへテキストで保存する * 拡張子は.json|.pref * ファイル名はオブジェクト名をそのまま利用 *	WEB版では読み込みのみをサポート　書き出しはサーバに対してのみ可能 *	WEB版ではlocalStorageを利用した読み書きを行う仕様に変更 *	prefLibではcookieを扱わないものとする  * 例: nas.inputMedias.body.json |nas.inputMedias.body.pref等 * プリファレンスとして保存するオブジェクトはこのファイルの設定として固定 * 読み込みは記録フォルダの内部を検索してオブジェクトの存在するもの全て * 新規のオブジェクトは作成しない * 乙女のローカルで作成したファンクションをadobeライブラリ（ESTK）全体へ拡張 * あとで乙女の部当該分を換装すること * * ホストアプリケーション別の切り分けを組み込んで、ファイルを共用に変更 * * *  Electron環境下での挙動 *  Mainプロセス *      他の環境に準じてプリファレンスを読み込む *      UI設定を含み、配下の環境と設定値を共有する *      各クライアントからの要求を受信して値を戻す *      クライアントからのリクエストを処理する部分を拡張する *      値レスポンスに関しては書き出し部分の変更 *      保存リクエストに関しては、受信＞更新(＞ブロードキャスト?) *      メイン側からBrowserに対する一斉送信の仕組みも必要(uatハンドラ) *  Browserプロセス *      reabPref等の読み出しメソッドのリクエスト先をMainプロセスへ振替る *      書込メソッドも同様 * *  UXP環境下の拡張 *      読み出しが特殊 Node環境と判断されるが、fsが独自のものになる *       * * *</pre> * @todo ただし、アプリケーションごとのプロパティの切り分けは別ファイルの方が望ましいので、次の機会に各ホストごとの設定ファイルへ移行の予定 *  2016.05.31 *  photoshopで動作不正を起こしていた部分を修正 *  2016.06.22 *	AE環境で古いライブラリが呼ばれていた部分を削除 *	機能をnode|WEBへ拡張 *	2021.06.11 *	 */'use strict';/*=======================================*///load order :end (ソースを増やした場合は最終位置へ)/*=======================================*/if ((typeof config != 'object')||(config.on_cjs)){    var config    = require( './nas_common' ).config;    var appHost   = require( './nas_common' ).appHost;    var nas       = require( './nas_menuItem').nas;    var fs        = require( 'fs-extra');}else if(typeof nas == 'undefined'){	var nas = {};};/*	nas-core.	nas-HTML*//* Folder オブジェクトが存在するなら nasライブラリのパスをアタッチ * @constant   {String} nas.baseLocation *	この周辺環境はnas.File関連へ移動 *	WEB|Electron|node環境では 	ライブラリインストール済みならば (home)/(userData)/nas/lib/etc/ 		フルパスでアクセス 	未インストール状態では (application-root)/nas/lib/etc/ 		相対パスでアクセス */if(typeof Folder == 'function') Folder.nas = new Folder(nas.baseLocation.fullName);//保存場所同定if(appHost.platform == 'UXP'){//UXP プラグイン専用 (ESの常駐モジュールが同期する)//	nas.preferenceFolder = }else if(appHost.ESTK){//ESTK	nas.preferenceFolder = new Folder(Folder.userData.fullName + "/nas/lib/etc" );}else if(appHost.Nodejs){//node.js|Electron main process|Electron browswe process hub preload module	nas.preferenceFolder = new nas.File(nas.File.join(nas.baseLocation.fullName,"lib/etc"));}else if(appHost.Electron){	appHost.Electron == 'browser'	nas.preferenceFolder = new nas.File(nas.File.join(nas.baseLocation.fullName,"lib/etc"));}else{//WEB | Electron browser prosses hub | spoke front module	nas.preferenceFolder = new nas.File("nas/lib/etc","./");//アプリ専用 (Mainモジュールが同期する)};/** *  @params {String}    str *  @params {Boolean}   opt *  @returns {Object} *  文字列形式で指定されたオブジェクトを返す関数 *  存在しない場合は、undefinedを返すが *  オブションがあれば空オブジェクトとして返す */nas.getObject = function getObject(str,opt){	if(typeof str != 'string') return undefined;	str = str.split('.');//toArray	var result = undefined;	for (var i = 0; i < str.length ; i ++){		try {result = eval(str.slice(0,(i+1)).join('.'))}catch(err){result = undefined;}		if (typeof result == 'undefined') {			if(opt){				result = eval(str[i] + ' = {}') ;//空オブジェクトを設定する			}else{				return undefined;//オプションがなければ undefined を認めた時点で返す			};		};	};	return result;}/** *  設定フォルダ(nas/lib/etc/)から指定のオブジェクトを読み出して設定する<br> *  (ESTK|node|Electron|WEB) * @function * @param {String|Array of String} myPropName *  読み出すオブジェクト名 または オブジェクト名配列 *	引数オブジェクトは、.json|.pref どちらかの拡張子を持つが引数はオブジェクト名のみを使用する *  先行でjsonを取得して、失敗した場合にprefを取得する * Electron 環境下でのプリファレンスの扱いは以下のように行われる * nas 配下の値はすべて mainモジュールが記録・読み出しの代行を行う *	立ち上げ時に Mainモジュールが読み出しを行い自身のプロパティとして保持 *	Rendererモジュールは、設定フォルダではなく専用の問い合わせチャンネル（API）を用いてM *	Mainモジュールに対して値の請求を行う *	Mainモジュールは、自身がキャッシュを持っていない値を請求された場合は、 *	読み出しをトライして得られた値を返してキャッシュ */nas.readPreference = function(myPropName){  if((appHost.fileAccess)||(appHost.platform=='Electron')){//ホームパスファイルアクセス ESTK || Nodejs || Electron	var myPrefFiles = [];	if(appHost.platform == 'UXP'){console.log('UXP検出');//UXP			}else if(appHost.ESTK){//ESTK		if(! myPropName) myPropName="*";// 未指定の場合は、保存位置のすべて("*")の記録データを取得		myPrefFiles = myPrefFiles.concat(			nas.preferenceFolder.getFiles(myPropName+".pref")		).concat(			nas.preferenceFolder.getFiles(myPropName+".json")		);	}else if(appHost.Nodejs){//Node.js (メインモジュールの動作のみを想定)		var entries = fs.readdirSync(nas.preferenceFolder.fullName,{withFileTypes:true});console.log(entries);// 未指定の場合は、保存位置のすべて("*")の記録データを取得		if(! myPropName) myPropName=".+";		myPrefFiles = entries.filter(function(e){			return e.name.match(new RegExp(myPropName + "\\.(pref|json)$"));		});//フィルタして設定ファイルを取得		myPrefFiles = Array.from(myPrefFiles,function(e){			return (nas.File.join(nas.preferenceFolder.fullName,e.name));		});//フルパス化	}else if(appHost.platform == 'Electron'){//Electron Rendererモジュール専用のプリファレンス請求部分//ハブ経由でメインプロセスへリクエスト転送して戻り値をコールバック処理console.log(myPropName);//Electron Rendererプロセスの場合はhubのElectronIPC経由でメインプロセスに値を請求する		uat.MH.parentModule.window.postMessage({			channel:'callback',			from:{name:xUI.app,id:uat.MH.objectIdf},			to:{name:'hub',id:uat.MH.parentModuleIdf},			command:'electronIpc.readPreference',			content:[myPropName],			callback:"console.log(...argument)"		});//myPrefFilesが初期値のままなのでこのケースを取った場合は即時終了	};	if(myPrefFiles.length == 0) return ;	myPrefFiles.sort();	if(appHost.platform == 'uxp'){//UXP			}else if(appHost.ESTK){//ESTKではObject File()		for(var idx=0;idx<myPrefFiles.length;idx++){			var propType = nas.File.extname(myPrefFiles[idx].name);//.json|.pref			var prpName  = nas.File.basename(myPrefFiles[idx].name);//拡張子を払う			prpName = prpName.slice(0,(prpName.length-propType.length));			var prp = nas.getObject(prpName);//オブジェクトを参照			if(typeof prp == 'undefined') continue;//存在しないのでスキップ			var myOpenFile=new File(myPrefFiles[idx].fsName);			var canRead=myOpenFile.open("r");			if(canRead){				myOpenFile.encoding="UTF-8";				var myContent=myOpenFile.read();				myOpenFile.close();				if(nas.otome) nas.otome.writeConsole(myContent);				if(myContent.length == 0) continue;//データ内容が無い				nas.setPreference(prpName,myContent);			};		};	}else if(appHost.Nodejs){//node環境下では データは フルパスの配列 fsで直読みconsole.log(myPrefFiles);		myPrefFiles.forEach(function(f){			var propType = nas.File.extname(f);//.json|.pref			var prpName  = nas.File.basename(f);			prpName = prpName.slice(0,(prpName.length-propType.length));//拡張子を払う			var prp = nas.getObject(prpName);//オブジェクトを参照 console.log([prpName,prp]);			if(typeof prp == 'undefined'){//存在しないのでスキップ？ 作る？;//NOPで捨てる			}else{console.log('find prop : '+ prpName);console.log(fs.existsSync(f));				if(fs.existsSync(f)){					var myContent = fs.readFileSync(f,'utf8');console.log(myContent);					if(myContent.length >= 0) nas.setPreference(prpName,myContent);				};			};		});	}else if(appHost.platform=='Electron'){//この分岐は処理されないconsole.log(myPropName);//Electron Rendererプロセスの場合はIPC経由でメインプロセスに値を請求する/* すべてhubに対する問い合わせにする			var entries = electronIpc.readdirSync(nas.preferenceFolder.fullName,{withFileTypes:true});// 未指定の場合は、保存位置のすべて("*")の記録データを取得			if(! myPropName) myPropName=".+";			myPrefFiles = entries.filter(function(e){				return e.name.match(new RegExp(myPropName + "\\.(pref|json)$"));			});console.log(myPrefFiles);// */	};  }else{//外部のパスにアクセスできない環境 主にWEB 配置場所に固定名称の読み出しリストが置かれる//アプリケーションルートからの相対ファイルアクセス// nas/lib/etc（デフォルトデータとして固定位置に置かれる サーバープロセスが書き直しを行うことがある）	if(! myPropName){		$.get('nas/lib/etc/nas_property_list',function(dat){			if(typeof dat == 'string') dat = JSON.parse(dat);//設定ファイルの配列をパース			dat.forEach(function(f){				var prpName = nas.File.basename(f).replace(/\.(json|pref)$/i,'');				var dataPath = nas.File.join("nas/lib/etc",f);				$.get(dataPath,function(c){					nas.setPreference(nas.File.basename(prpName),JSON.stringify(c));				});			});		});	}else{		if(typeof myPropName == 'string'){			myPropName = [myPropName];		}		myPropName.forEach(function(f){			$.ajax({				type    :"GET",				url     :nas.File.join("nas/lib/etc",f+'.json'),				encoding:'utf8',				dataType:'text'			}).done(function(data, status, xhr) {				nas.setPreference(nas.File.basename(f),data);//nas.File.basename(e).replace(/\.(json|pref)$/i,'')?			}).fail(function(xhr, status, error){				if(error)				$.ajax({					type    :"GET",					url     :nas.File.join("nas/lib/etc",f+'.pref'),					encoding:'utf8',					dataType:'text'				}).done(function(data, status, xhr) {					nas.setPreference(nas.File.basename(f),data);//nas.File.basename(e).replace(/\.(json|pref)$/i,'')?				}).fail(function(xhr, status, error){					console.log(error);				});				console.log(error);			});		});	};  };};// *//** *	@params {String} prpName *		取得するプロパティ名 *  @return {String} *      指定のオブジェクトをシリアライズした文字列 * スコープ内のオブジェクトをシリアライズして返す * 存在しないオブジェクトに対しては '' を返す */nas.getPreference = function (prpName){		var prop = nas.getObject(prpName);//オブジェクトの存在をチェック 現スコープに存在しないオブジェクトはスキップ		if(typeof prop == "undefined") return '';		var result = "";		if(prop instanceof RegExp){//正規表現指定をより分けて処理			result = prop.toString();		}else if(prop.dump instanceof Function){//配列			result = prop.dump('JSON');		}else if(			(prop instanceof nas.UnitResolution)||			(prop instanceof nas.Framerate)||			(prop instanceof nas.UserInfo)||			(prop.parse    instanceof Function)||			(prop.setValue instanceof Function)		){			result = prop.toString('JSON');		}else{			result = JSON.stringify(prop);		};	return result;}/** *	@params {String} prpName *		設定されるプロパティ名 *	@params {String} contentString *		シリアライズされた設定内容 *  @return {Object} *      指定のオブジェクト|null * スコープ内のオブジェクトに値を設定する * 存在しないオブジェクトはNOP */nas.setPreference = function (prpName,contentString){//console.log(prpName);//console.log(contentString);//console.log(typeof contentString == 'string');	var prp = nas.getObject(prpName);//オブジェクトを参照	if((prp)&&(typeof contentString == 'string')&&(contentString.length)){		if(prp instanceof RegExp){			prp = new RegExp(contentString);		}else if(prp.parseConfig instanceof Function){			prp.parseConfig(contentString);//parseConfig		}else if(prp.parse instanceof Function){			prp.parse(contentString);//parse		}else if(prp.setValue instanceof Function){			prp.setValue(contentString);//setValue		}else if(contentString.match(/^\(new\s.*\(/)){			eval(prpName + "= ( " + contentString + " )");		}else{			try{				eval (prpName + "= ( "+ contentString+ " )");			}catch(err){				if(config.dbg){					if(appHost.ESTK){						alert(err);					}else{						console.log(err);					};				};			};		};	};	return prp;}/*	root.pmdbをファイルから取得 AdobeESTK環境用*//*nas.readPmdb = function(){	var myPrefFiles=this.preferenceFolder.getFiles(myPropName+".pref");	for(var idx=0;idx<myPrefFiles.length;idx++)	{		var myPropName=myPrefFiles[idx].name.replace(/\.pref$/,"");		try{myProp=eval(myPropName);}catch(er){				alert(myPropName +"if  not Exists. loading aborted");				continue;			}		if(eval(myPropName)){			var myOpenFile=new File(myPrefFiles[idx].fsName);			var canRead=myOpenFile.open("r");			if(canRead){				myOpenFile.encoding="UTF-8";				var myContent=myOpenFile.read();				myOpenFile.close();				if(nas.otome){nas.otome.writeConsole(myContent);}				if(myContent.match(/\(new\sNumber\(([0-9\.]+)\)\)/)){					myContent=myContent.replace(/\(new\sNumber(\([0-9\.]+\))\)/g,RegExp.$1);					if(						(myPropName.match(/(.*[^\.])\.selected/))&&						(eval(RegExp.$1+"  instanceof nTable"))					){						eval(RegExp.$1 +".select\("+myContent+"\)");					}else{						eval(myPropName +" =("+myContent+")");					}				}else{					if(myContent.match(/\(new\sString\((.+)\)\)/)){						myContent=myContent.replace(/\(new\sString(\(.+)\)\)/g,RegExp.$1);						eval(myPropName +" ="+myContent);					}else{						if(nas.otome){							nas.otome.writeConsole(myPropName +" = eval("+myContent+")");						}						eval(myPropName +" =eval("+myContent+")");					}				}			}		}else{			if(nas.otome){nas.otome.writeConsole("cannot Replace prop "+myPropName);}		}	}};//*/* * 設定の保存・復帰用関数 * @params {Array of String|Object} * 引数:オブジェクト * 戻値:なし * 引数のオブジェクトをjsonで規定のフォルダに保存する * １オブジェクトにつき1ファイルを書き出す * jsonで保存に適さないオブジェクトを指定しないように注意すること * 引数が指定されない場合はシステムで規定の全オブジェクトを保存する * * UAT-Electronでの挙動 * 実際に保存を行うのはメインプロセス * ユーザ個別nasライブラリインストール済みの環境ならば、アプリケーション起動時にユーザ環境の同期を行う * ユーザライブラリのバージョンを確認 ユーザ環境設定を アプリケーションの環境設定に対して上書きコピーを行う * WEB版はこの機能は無く代わりにクッキーを利用する(Electron版ではクッキーを利用しない) * 書込みが発生した場合はメインプロセスに対して書込みを依頼する * メインプロセスは、ライブラリ内の環境設定を書き換えた上でアプリ内の環境設定を同期する * 読み込み時に * Rendererプロセス * 	Mainプロセスに対して保存リクエストを発行 * Mainプロセス * 	ライブラリあり ライブラリ読み出し>自身のスコープに設定 *	ライブラリなし アプリ内の情報を読み出し > 自身のスコープに設定 > ライブラリを設定（フォルダを作成）保存 */nas.writePreference=function(myPrefs){	if(typeof myPrefs == "undefined"){myPrefs=[]};	if(!(myPrefs instanceof Array)){myPrefs=[myPrefs]};//配列に	if(myPrefs.length==0){//試験用あとで調整/*	"nas.registerMarks.bodys",		"nas.registerMarks.selected",	"nas.inputMedias.bodys",		"nas.inputMedias.selected",	"nas.outputMedias.bodys",		"nas.outputMedias.selected",	"nas.workTitles.bodys",		"nas.workTitles.selected",				"nas.CURRENTUSER",//nas.UserInfo			"nas.RESOLUTION",//nas.UnitResolution			"nas.FRATE",//nas.Framerate			"nas.SheetLength",//			"nas.importFilter",			"nas.cellRegex",//RegExp			"nas.bgRegex",//RegExp			"nas.mgRegex",//RegExp			"nas.loRegex"//RegExp*/		myPrefs=[			"nas.registerMarks.bodys",					"nas.registerMarks.selected",			"nas.inputMedias.bodys",					"nas.inputMedias.selected",			"nas.outputMedias.bodys",					"nas.outputMedias.selected",			"nas.workTitles.bodys",				"nas.workTitles.selected",			"nas.CURRENTUSER",			"nas.RESOLUTION",			"nas.FRATE",			"nas.SheetLength",			"nas.importFilter",			"nas.cellRegex",			"nas.bgRegex",			"nas.mgRegex",			"nas.loRegex"		];console.log(myPrefs);		if(appHost.platform == 'UXP'){//UXP					}else if(appHost.ESTK){//ESTKではユーザライブラリのインストールが前提となる//AE専用			if(app.name.indexOf("AfterEffects")>0){				myPrefs.push("nas.expressions");//				"nas.ftgFolders"			};//PS専用			if(app.name.indexOf("Photoshop")>0){				myPrefs.push("nas.axe");			};		}else if(typeof uat != 'undefined'){//uat関連				myPrefs.push("config");		};	};//共用部console.log(myPrefs);	for(var idx=0;idx<myPrefs.length;idx++){//メソッドでシリアライズ値を取得		var myContent = nas.getPreference(myPrefs[idx]);		if(myContent == '') continue;		var myFileName=myPrefs[idx]+".pref";		if(appHost.platform == 'UXP'){//UXP					}else if((appHost.ESTK)&&(this.preferenceFolder.exists)){//ESTK			if(nas.otome){nas.otome.writeConsole(myPrefs[idx] +' : '+ myContent);}			var myOpenFile=new File(this.preferenceFolder.path+"/"+this.preferenceFolder.name+"/"+myFileName);			var canWrite=myOpenFile.open("w");			if(canWrite){				if(nas.otome){nas.otome.writeConsole(myOpenFile.fsName);}				myOpenFile.encoding="UTF-8";				myOpenFile.write(myContent);				myOpenFile.close();			}else{				var msg=myOpenFile.fsName+nas.localize({en:": It failed to write",ja:": これなんか書けないカンジ"});				if(nas.otome){nas.otome.writeConsole(msg)}else{alert(msg)}			};//ファイルが既存かとか調べない うほほ		}else if((appHost.Nodejs)&&(fs.existsSync(this.preferenceFolder.fullName))){console.log(nas.File.join(this.preferenceFolder.fullName,myFileName),myContent);			fs.writeFile(				nas.File.join(this.preferenceFolder.fullName,myFileName),				myContent,				function (err){					if (err) throw err;					console.log('The file has been saved!');				}			);		}else if(appHost.platform == 'Electron'){//API経由でMainプロセスへ送り出すconsole.log(myContent);/*			var hubWindow = (window.opener)? window.opener:window;			hubWindow.postMessage({				channel : 'system',				to      : {name:'mainprocess',id:0},				from    : {name:xUI.app,id:uat.MH.objectIdf},				command : 'write_preference',				content : myContent			},window.location.origin);//*/		}else{				};//else{alert("QQQQQQ")}	};}//nas.writePreference//;/*	個人情報をクリアする。最後に再初期化を促すメッセージを出力*/nas.cleraPreference=function(){/*	023 * var msg="個人領域に記録した情報をすべてクリアします。"+nas.GUI.LineFeed; *	msg+="nasライブラリを使用するすべてのアプリケーションの情報をクリアしますので、"+nas.GUI.LineFeed; *	msg+="AEとPSでnasライブラリを使用している方は特にご注意ください。"+nas.GUI.LineFeed; *	msg+="クリアして良いですか？"+nas.GUI.LineFeed; */ var msg=nas.localize(nas.uiMsg.dm023); var doFlag=confirm(msg);	  if((doFlag)&&(this.preferenceFolder.exists)&&(! (this.preferenceFolder.readonly)))  {	var myPrefFiles=this.preferenceFolder.getFiles("*.pref");	var clearCount=0;	if (myPrefFiles.length){	 for(var idx=0;idx<myPrefFiles.length;idx++)	 {		   try{myPrefFiles[idx].remove();clearCount++;}catch(er){continue;}	 }//024/*個人領域に記録した情報 :%COUNT% 個のデータをクリアしました。現在の情報は、メモリ上にあります。\nデータはアプリケーション再起動の際に初期化されます。初期化を希望する場合は、保存せずにアプリケーションを再起動してください。"*/	 msg=nas.localize(nas.uiMsg.dm024,clearCount);//	}else{//no data  msg=nas.localize(nas.uiMsg.noRemoveData);//"消去するデータがありませんでした"	}	alert(msg);  };//else{alert("GOGO")}}//nas.clearPreference();/*nas.importPreference(myFolder)引数:ターゲットフォルダ　指定のない場合はフォルダターゲットを取得戻値: インポート成功時はtrue失敗時はfalse外部供給されたプリファレンスを個人領域に取り込むメソッド * 220713現時点ではESTK専用 */nas.importPreference = function(myFolder){	var goFlag=true;	if(typeof myFolder !="Folder"){		var myMsg=nas.localize(nas.uiMsg.dm025);//"インポートする設定のあるフォルダを指定して下さい";		myFolder=Folder.selectDialog(myMsg);		if(myFolder){			myMsg=myFolder.fullName + nas.localize(nas.uiMsg.dm027);//027":\n上のフォルダの設定をインポートします。\n同名の設定は上書きされて取り消しはできません\n実行してよろしいですか？"			goFlag=confirm(myMsg);		}	}	if(goFlag){		var currentPrefFolder=nas.preferenceFolder;		nas.preferenceFolder=myFolder;//設定		nas.readPreference();//全て読む		nas.preferenceFolder=currentPrefFolder;//復帰		nas.writePreference();//書き込む	}}/*nas.exportPreference(myFolder)引数:ターゲットフォルダ　指定のない場合はフォルダターゲットを取得戻値: インポート成功時はtrue失敗時はfalseプリファレンス書き出しメソッド * 220713現時点ではESTK専用 */nas.exportPreference = function(myFolder){	var goFlag=true;	if(typeof myFolder !="Folder"){		var myMsg=nas.localize(nas.uiMsg.dm026);//"設定を書き出すフォルダを指定して下さい";		myFolder=Folder.selectDialog(myMsg);		if(myFolder){			myMsg=myFolder.fullName + nas.localize(nas.uiMsg.dm028);//028":\n上のフォルダに設定をエクスポートします。\n空きフォルダ推奨します\n実行してよろしいですか？"			goFlag=confirm(myMsg);		}	}	if(goFlag){		var currentPrefFolder=nas.preferenceFolder;		nas.preferenceFolder=myFolder;//設定		nas.writePreference();//書き込む		nas.preferenceFolder=currentPrefFolder;//復帰	}}/*=======================================*/if((typeof config == 'object')&&(config.on_cjs)){    exports.config  = config;    exports.appHost = appHost;    exports.nas     = nas;};

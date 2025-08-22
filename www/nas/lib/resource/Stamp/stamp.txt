@@ -1,0 +1,68 @@
+﻿stamp仕様 2022 05 09
+
+サイズは96ppi 1インチ角(96x96px)固定
+アルファチャンネルつきモノクロpng
+またはsvg
+
+スタンプは汎用データとして設定する
+
+スタンプcollectionObject
+nas.pmdb.utils.stamp ={
+	<key>:{
+		name:<スタンプ名称>,
+		url:<画像url(blob等)>,
+		alt:<代替テキスト>
+	},....
+}
+
+
+nas/lib/etc/userStamp.pref
+nas/lib/resource/stamp/images/
+
+
+cursorは以下のようにスタンプの形状で表現
+cursor : url(<cursor-path>) 48 48,auto
+hoverCursor = 'url(<cursor-path>) 48 48,auto'
+ 等で表現
+	クリック(mouseup)で捺印
+
+//UI指定色
+	var stampColor = pman.reName.canvasPaint.parseColor(pman.reName.canvasPaint.pencilColorF);
+//スタンプ画像 svg|png アルファチャンネルを利用
+	var stampImagePath = <stamp image path>
+//非表示のcanvas(96x96)にbackgroungで指定カラーを置いて
+	var stampCanvas = document.createElement('canvas')
+	stampCanvas.width  = 96;
+	stampCanvas.height = 96;
+	document.body.appendChild(stampCanvas);
+	var ctx = canvas.getContext("2d");
+//指定色のボックスを描く
+	ctx.fillStyle = stampColor;
+	ctx.fillRect(0, 0, stampCanvas.width, stampCanvas.height);
+	ctx.globalCompositeOperation = 'destination-in';
+//指定の画像のアルファでマスクしてスタンプ画像を生成する
+	var maskImg = new Image();
+	maskImg.onload = function () {
+//指定画像を中央配置するので 96x96以上の画像を使用するとクリップアウトが発生する
+		ctx.drawImage(maskImg, centerX - (maskImg.width / 2), centerY - (maskImg.height / 2), maskImg.width, maskImg.height);
+//生成されたアルファつきモノクロ画像をpngでcallbackへ与える
+		stampCanvas.toBlob(function(blob) {
+			var stampImage = new Image()
+			stampImage.src  = URL.createObjectURL(blob);
+			callback(stampImage);
+		});
+		document.body.removeChild(stampCanvas);
+	};
+	maskImg.src = stampImagePath;
+	
+	
+スタンプ群は基礎オブジェクトを nas.Pm 配下に置く
+pmdbに格納
+参照は nas.pmdbを参照する
+
+	nas.Pm.Stamp
+	nas.Pm.StampCollection
+
+外部アプリDBは基礎オブジェクトをxUIに置く
+
+	xUI.extApps

@@ -1,15 +1,18 @@
 ﻿/**
- * charset="utf-8"
- * @fileoverview STS2XPS(myOpenFile)
- *
- * STSファイルをXPS互換テキストにコンバートする
- * 引数    STSデータをポイントするファイルオブジェクト
- * 拡張子は sts/STS のみ。
- * ヘッダ検査あり。ファイルの破損は検査なし
- * 要 乙女バイナリ拡張
- * 全ファイルを配列にとらない方が良いかも…
+ *    @fileoverview
+ *  STS(ShiratakeSoftware　http://striping2nd.or.tv/sts/)の
+ *  .STSデータを読み書きするためのライブラリ<br />
+ *  STSはサイト閉鎖 インターネットアーカイブで入手は可能
+ *  https://web.archive.org/web/20150920054052/http://striping2nd.or.tv/sts/
+ *</pre>
+ *  Blogに対応するための変更　2021.04
+ *  引数をファイルからArray|Uint8Arrayに変更
  */
 'use strict';
+/*=======================================*/
+if((typeof window == 'undefined')&&(typeof app == 'undefined')){
+    var nas = require('./xpsio');
+};
 /**
  *
  * @params {Array} dataArray
@@ -44,40 +47,22 @@ function STS2XPS(dataArray,idf) {
     var labelOffset = mySTS.layerCount * (mySTS.frameDuration * mySTS.dataLength) + 23;
 // ラベル長(バイト数)
     labelDataLength[0] = mySTS[labelOffset];
-
-/*
- * open
- *    myOpenFile.open("r");
- *    myOpenFile.encoding = "CP932";
- */
-
 // 最初のラベルを取得
-console.log([labelOffset + 1,labelDataLength[0]]);
     mySTS.layerLabel[0] = mySTS.slice(labelOffset + 1,labelOffset + labelDataLength[0]+1);
-console.log(mySTS.layerLabel[0]);
-
     for (var idx = 1; idx < mySTS.layerCount; idx++) {
         labelOffset = labelOffset + mySTS.layerLabel[idx - 1].length + 1;//新アドレス
         labelDataLength[idx] = mySTS[labelOffset];//ラベル長(バイト数)
-console.log([labelOffset + 1,labelDataLength[idx]]);
-//        myOpenFile.seek(labelOffset + 1, 0);//シーク
         mySTS.layerLabel[idx] = mySTS.slice(labelOffset + 1,labelOffset + labelDataLength[idx]+1);//取得
-console.log(mySTS.layerLabel[idx]);
     }
 //SJIS文字列に変換
     for (var idl = 0; idl < mySTS.layerLabel.length; idl++) {
         var lbl ="";
         for (var c = 0 ; c < mySTS.layerLabel[idl].length; c ++){
             lbl += "%" + mySTS.layerLabel[idl][c].toString(16);
-        }
-console.log(lbl);
-console.log(mySTS.layerLabel[idl]);
+        };
         mySTS.layerLabel[idl] = UnescapeSJIS(lbl);
     };
-    /**
-     * XPS互換ストリームに変換
-     * @returns {string}
-     */
+// XPS互換ストリームに変換
     mySTS.toSrcString = function () {
         var resultStream = "nasTIME-SHEET 0.5";
         resultStream += "\n";
@@ -93,25 +78,22 @@ console.log(mySTS.layerLabel[idl]);
         resultStream += "\n";
         resultStream += "##TROUT=0+00.,\x22\x22";
         resultStream += "\n";
-        /**
-         * ラベル配置
-         * @type {string}
-         */
+// ラベル配置
         resultStream += "[CELL\tN\t";
         for (var idx = 0; idx < this.layerCount; idx++) {
             resultStream += this.layerLabel[idx] + "\t";
-        };
+        }
         resultStream += "]";
         resultStream += "\n";
 
         for (var frm = 0; frm < this.frameDuration; frm++) {
             resultStream += "\t\t";
-            for (idx = 0; idx < this.layerCount; idx++) {
+            for (var idx = 0; idx < this.layerCount; idx++) {
                 if (frm == 0) {
                     var currentValue = this.body(idx, frm);
                 } else {
                     var currentValue = (this.body(idx, frm) == this.body(idx, (frm - 1))) ? "" : this.body(idx, frm);
-                };
+                }
                 resultStream += (currentValue === 0) ? "X\t" : currentValue + "\t";
             };
             resultStream += "\n";
@@ -123,6 +105,3 @@ console.log(mySTS.layerLabel[idl]);
     };
     return mySTS.toSrcString();
 }
-/*TEST
-
-*/

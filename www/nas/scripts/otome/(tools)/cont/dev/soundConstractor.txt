@@ -1,0 +1,43 @@
+﻿/*
+	テキストを読み込んで、サウンドオブジェクトを作成
+	配置する仮モジュール
+*/
+//サウンドオブジェクトコンストラクタ
+function Sound(contentText){
+	if(! contentText){
+		this.bodyText="";
+	}else{
+		this.bodyText=contentText;
+	}
+//プロパティ初期化
+	this.label="SOUND";
+	this.content="----";//
+	this.length=this.content.toString().length;//char count これいらんべぇ
+	this.duration=24;//frame count
+	this.timeComments=new Array();
+
+//初期化メソッド
+	this.init(){
+		if(contentText){
+//ラベルを抽出
+			var myLabel=contentText.match(/^([^「」¥"]*)/))[0];
+			if(myLabel){this.label=myLabel;};
+//内容テキストを抽出
+			var myContents=(contentText.match(/(「|¥")([^」¥"]+)/);
+			if(myContents){
+				this.content=RegExp.$2.replace(/[（¥(][^¥(¥)（）]*[¥)）]/g,"");//括弧付きコメントを払う
+//これいらなぁ				this.length=this.content.toString().length;//char count
+//括弧付きコメントを抽出してインデックスを計算する
+				var myComments=myContents.match(/[（¥(][^¥(¥)（）]*[¥)）]/g));
+				var dropCount=0;
+				for(var idx=0;idx<myComments.length;idx++){
+					myCommentBody=myComments[idx].replace(/[¥(¥)（）]/g.""));
+					myCommentIndex=myContents.indexOf(myComments[idx])-dropCount;
+					dropCount=myComments[idx].length;
+				}
+			}
+		}
+	}
+
+}
+

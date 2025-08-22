@@ -1,12 +1,12 @@
 ﻿/**
- * @fileoverview    Xps(Animation Timesheet)ライブラリ
+ * @fileoverview    nas.Xps(Animation Timesheet)ライブラリ
  * @author      nekomataya kiyo@nekomataya.info
- * @requires    nas_common
- * format version 0.59x
+ * @requires    nas_common nas.Pm.pmdb
+ * 250717
  */
 'use strict';
 /*=======================================*/
-// load order:7
+// load order:8
 /*=======================================*/
 if ((typeof config != 'object')||(config.on_cjs)){
     var config  = require('./nas_common').config;
@@ -20,14 +20,14 @@ if ((typeof config != 'object')||(config.on_cjs)){
  * 2013.04.02 外部フォーマット解析部分分離
  * 2015.06.12 Xps及びMap関連オブジェクトをnas.配下に移動
  * 2016.04.15 psAxe系とりまぴん系のマージ
- * 2016.08.20 データ構造の変更Xps.layersとXps.xpsBodyをXps.xpsTracksに統合
+ * 2016.08.20 データ構造の変更nas.Xps.layersとnas.Xps.xpsBodyをnas.Xps.xpsTracksに統合
  * 2016.12.01 オブジェクトに Line/Stage/Jobのプロパティを増設パーサと出力も対応
  * 2021.03.15 作業サインの増設
  * Xpsオブジェクト初期化手順
  * Xpsオブジェクトの新規作成
  * コンストラクタ
  * eg.
- * myXPS=new Xps([layer count][,frame length]);//現処理
+ * myXPS=new Xps([layer count][,frame length]);//旧処理
  * myXPS=new nas.Xps([layer count][,frame length]);//こちらに移行予定
  *
  * Xpsクラスオブジェクトコンストラクタ
@@ -44,48 +44,48 @@ if ((typeof config != 'object')||(config.on_cjs)){
  *
  * XPSオブジェクトの再初期化
  *
- * method    [object Xps].init([int trackcount(layerCount)][,int frames])
+ * method    [object nas.Xps].init([int trackcount(layerCount)][,int frames])
  * 自分自身を再初期化する。
  * すべてのプロパティをリセット
  * 指定されたレイヤ数とフレーム長で空の値のテーブルを作成する。
  * 以前のデータは消去。new_XPSは、内部でこのメソッドを呼ぶ。
  *
  * 現在の継続時間を返す
- * method    [object Xps].duration()
+ * method    [object nas.Xps].duration()
  * このメソッドは、プロパティに変更予定
  *
  * 現在のカット尺を返す
- * method    [object Xps].time()
+ * method    [object nas.Xps].time()
  * このメソッドは、プロパティに変更予定
  *
  * カット尺をフレーム数で返す
- * method    [object Xps].getTC(フレーム数)
+ * method    [object nas.Xps].getTC(フレーム数)
  * 暫定メソッド、消えそう
  *
  * テキスト形式データを読み込んでオブジェクトに反映
- * method    [object Xps].readIN(テキストデータ)
+ * method    [object nas.Xps].readIN(テキストデータ)
  * parseXpsのラッパとして残置
  *
- * method    [object Xps].parseXps(xpsStreamText)
+ * method    [object nas.Xps].parseXps(xpsStreamText)
  * 与えられたテキストストリームをパースしてオブジェクトを再初期化する
  * 現在のプロパティはすべて破棄
  * 戻値:取り込み成功時にtrue/失敗の際はfalse
  * テキスト形式で出力
- * method    [object Xps].toString(セパレータ)
+ * method    [object nas.Xps].toString(セパレータ)
  * そのうち拡張
  * と思っていたが、コンバータは別立てにしてXpsオブジェクトの汎用性を高めるが吉
  *
- * method    [object Xps].mkAEKey(レイヤID)
+ * method    [object nas.Xps].mkAEKey(レイヤID)
  * モードよっては不要ぽい
  * 同上
  *
  * オブジェクトメソッド一覧
  *
- * Xps.newLayers= function(layerCount)://レイヤプロパティトレーラを作成して返す（削除されました）
- * Xps.newTracks= function(TrackCount);//タイムシートの本体オブジェクトを作成して戻す
+ * nas.Xps.newLayers= function(layerCount)://レイヤプロパティトレーラを作成して返す（削除されました）
+ * nas.Xps.newTracks= function(TrackCount);//タイムシートの本体オブジェクトを作成して戻す
  */
 /**
- * object Xps(汎用アニメーションタイムシート)日本形式のタイムシート記述クラスを提供
+ * object nas.Xps(汎用アニメーションタイムシート)日本形式のタイムシート記述クラスを提供
  * @class 
  *   汎用アニメーションタイムシートクラス
  * 
@@ -172,7 +172,7 @@ if ((typeof config != 'object')||(config.on_cjs)){
  *      トランジションが設定された場合のマージンは、超過分が自動でくりこまれる
  *  sheetImage noteImage を実装
  */
-function Xps(Layers, Length, Framerate, xmap, nodepath) {
+nas.Xps = function Xps(Layers, Length, Framerate, xmap, nodepath){
     this.XpsFormatVersion = 'nasTIME-SHEET 0.9w mobile extension test';//プロパティ化 2023 02
 /*初期プロパティ*/
     this.id             = nas.uuid();//ユニークインデックス
@@ -184,11 +184,11 @@ function Xps(Layers, Length, Framerate, xmap, nodepath) {
 
 /* 2022 12拡張
 マスターデータとして画像を記録可能にする拡張に伴い Xpstデータに タイムシートの外見を記録するように変更
-プロパティ名称は Xps.sheetLooks
+プロパティ名称は nas.Xps.sheetLooks
 これはタイムシートの書類としての外見を保持するプロパティとなる
 クラスを初期化の際は、オブジェクトの初期化手順を踏むこと
  */
-    this.sheetLooks     = JSON.parse(JSON.stringify(Xps.DocumentFormat)) ;//初期値
+    this.sheetLooks     = JSON.parse(JSON.stringify(nas.Xps.DocumentFormat)) ;//初期値
     this.documentMode   = 'pageImage';//pageImage|page(WordProp)|scroll(Compact)
 //    this.parent;//親Xps参照用プロパティ初期値は undefined（参照無し）
 /*
@@ -200,7 +200,6 @@ function Xps(Layers, Length, Framerate, xmap, nodepath) {
  * 以下 this.pmuと同期が必要 変更時は参照して再同期
  *
  */
-if(nas.Xps){
     var currentFlow = nas.pmdb.pmWorkflows.entry('%default%');
     if(currentFlow){
         this.line  = new nas.Xps.XpsLine(
@@ -219,14 +218,8 @@ if(nas.Xps){
     }
     this.job   = new nas.Xps.XpsJob('[init]:0');
     this.currentStatus = new nas.Xps.JobStatus();
-}else{
-    this.line  = new XpsLine("(本線):0");
-    this.stage = new XpsStage("layout:0");
-    this.job   = new XpsStage('init:0');
-    this.currentStatus = new JobStatus();
-};
-    this.mapfile = "";//旧コード互換 削除予定
 
+    this.mapfile = "";//旧コード互換 削除予定
 
     this.opus      = '';//this.pmu.opus;
     this.title     = '';//this.pmu.title.toString();
@@ -234,7 +227,6 @@ if(nas.Xps){
     this.scene     = '';//this.pmu.scene;
     this.cut       = '';//this.pmu.cut;
     this.inherit   = '';//this.pmu.inherit(文字列化);
-
     this.trin      = new nas.ShotTransition('trin');
     this.trout     = new nas.ShotTransition('trout');
     this.headMargin   = 0;//カット開始前マージンフレーム Int frames
@@ -245,20 +237,22 @@ if(nas.Xps){
 
     var Now = new Date();
     this.create_time = Now.toNASString();
-    this.create_user = ((xUI)&&(xUI.currentUser))? xUI.currentUser:new nas.UserInfo(myName);
+    this.create_user = ((xUI)&&(xUI.currentUser))? xUI.currentUser:new nas.UserInfo(config.myName);
     this.update_time = Now.toNASString();
-    this.update_user = ((xUI)&&(xUI.currentUser))? xUI.currentUser:new nas.UserInfo(myName);
+    this.update_user = ((xUI)&&(xUI.currentUser))? xUI.currentUser:new nas.UserInfo(config.myName);
 
 //オブジェクトコレクション設定
-//シグネチャ
+//シグネチャトレーラー
     this.signatures  = new nas.UserSignatureCollection();
+//タイムシートフォーマット
+//    this.sheetLooks   = {};//new nas.Xps.SheetLooks();
 //タイムシート画像
     this.timesheetImages  = new nas.NoteImageCollection();
     this.noteImages       = new nas.NoteImageCollection();
     this.noteImages.imageAppearance = 1;
 //ドキュメント画像マスターセッション間フラグ if true image master data
 //    this.imgMaster    = false;
-//状態取得関数として実装　定数扱いにしない
+//状態取得関数として実装 定数扱いにしない
 
 // タイムライントラックコレクション配列初期化
 // コレクションの初期化で同時にシートメモが空文字列で初期化される
@@ -267,8 +261,8 @@ console.log(this.sheetLooks);
         this.sheetLooks.trackSpec,
         nas.FCT2Frm(this.sheetLooks.PageLength,new nas.Framerate(this.sheetLooks.FrameRate))
     );
-console.log('Object constractor XPS:')
-console.log(Array.from(this.xpsTracks,(e)=> e.option));
+//console.log('Object constractor XPS:')
+//console.log(Array.from(this.xpsTracks,(e)=> e.option));
 //if(dbg) console.log(this.xpsTracks);
     if(arguments.length) this.init(Layers, Length, Framerate, xmap, nodepath);
 
@@ -313,7 +307,7 @@ console.log(Array.from(this.xpsTracks,(e)=> e.option));
 "update_user"  :{ get:"toString", put:"parse"},
  */
 }
-//==================== Object Xps//
+//==================== Object nas.Xps//
 
 /*
 Xpsをフルスペックに拡張するための基礎情報
@@ -366,11 +360,11 @@ tracknote
 */
 
 if((config)&&(config.SheetLooks)){
-    Xps.DocumentFormat = config.SheetLooks;
-}else if(SheetLooks){
-    Xps.DocumentFormat = SheetLooks;
+    nas.Xps.DocumentFormat = config.SheetLooks;
+}else if(typeof SheetLooks == "object"){
+    nas.Xps.DocumentFormat = SheetLooks;
 }else{
-    Xps.DocumentFormat = {
+    nas.Xps.DocumentFormat = {
     "FormatName"    :"remaping",
     "TemplateImage" :"/remaping/template/timeSheet_default.png",
     "WorkTitleLogo" :"",
@@ -431,17 +425,18 @@ if((config)&&(config.SheetLooks)){
     ]
     };
 };
-Xps.TrackProperties=[
+
+nas.Xps.TrackProperties=[
     "dialog","sound",
     "cell","timing","replacement","still",
     "camerawork","camera","geometry","stage","stagework",
     "effect","sfx","composite",
     "comment","tracknote","reference","action","timecode"
 ];
-Xps.TrackPropRegex=new RegExp(Xps.TrackProperties.join("|"),"i");
+nas.Xps.TrackPropRegex=new RegExp(nas.Xps.TrackProperties.join("|"),"i");
 
 /*
- *	Xps.sheetLooks.xpsTracksの配置とXps.sheetLooksからエリアを導く
+ *	nas.Xps.sheetLooks.xpsTracksの配置とXps.sheetLooksからエリアを導く
  *エリアを形成するトラック
  *	reference,
  *	action,
@@ -458,10 +453,10 @@ Xps.TrackPropRegex=new RegExp(Xps.TrackProperties.join("|"),"i");
  */
 //トラック重ね順を支配するドキュメントタイプを確定
 //ドキュメントタイプは、レイヤーの重ね順を規定する
-Xps.DocumentType = "jp";//"jp"|"us"
+nas.Xps.DocumentType = "jp";//"jp"|"us"
 
 //トラックオプションからエリアタイプを得る対照テーブル
-Xps.AreaOptions = {
+nas.Xps.AreaOptions = {
 		"dialog"     :"dialog",
 		"sound"      :"dialog",
 		"cell"       :"replacement",
@@ -484,7 +479,7 @@ Xps.AreaOptions = {
 	};
 
 //トラックオプションとSheetLooks変数の対照テーブル
-Xps.TrackWidth = {
+nas.Xps.TrackWidth = {
 		"dialog"     :"DialogWidth",
 		"sound"      :"SoundWidth",
 		"cell"       :"SheetCellWidth",
@@ -506,7 +501,7 @@ Xps.TrackWidth = {
 		"comment"    :"CommentWidth"
 	};
 //トラックオプションとシートセルCSSの対照テーブル
-Xps.TrackClass = {
+nas.Xps.TrackClass = {
 		"dialog"     :"dialogSpan",
 		"sound"      :"dialogSpan",
 		"cell"       :"timingSpan",
@@ -581,16 +576,17 @@ Xps.TrackClass = {
  画像カウントは必要なので、コレクションの合計を返す関数を作成する
  */
 /*
-Xps.prototype.imgCount = function (){
+nas.Xps.prototype.imgCount = function (){
 //return ((this.xpsTracks.countStr() == 0)&&(this.timesheetImages.members.length > 0))? true:false;
 return (this.timesheetImages.members.length + this.noteImages.members.length);
 };// */
-Xps.prototype.imgMaster = function (){ return ((this.xpsTracks.countStr() == 0)&&(this.timesheetImages.length))? true:false;};
+nas.Xps.prototype.imgMaster = function (){ return ((this.xpsTracks.countStr() == 0)&&(this.timesheetImages.length))? true:false;};
 /**
  * 新規タイムライントレーラを作成
  * 固定のダイアログタイムライン及びフレームコメントタイムラインがある。
  * この二つのタイムラインは、レコードの開始及び終了マーカーを兼ねるため削除できないので注意
- * @params {Number} trackSpec
+ * @params {Array | Number} trackSpec
+ *  trackSpec配列 または スカラ 未指定の場合は親オブジェクトのtrackSpec(標準値)で初期化
  * @params {Number} frameCount
  * @returns {Array} 
  * タイムライントラックトレーラはプロパティトレーラを兼ねる
@@ -598,8 +594,9 @@ Xps.prototype.imgMaster = function (){ return ((this.xpsTracks.countStr() == 0)&
  * 初期化時にカメラトラックを作成しない
  *    timecodeトラックは画面上は存在するがxpsTracksメンバーには含まれない
  */
-Xps.prototype.newTracks = function (trackSpec,trackDuration) {
-    var myTimelineTracks = new XpsTrackCollection(this,this.job.id,trackDuration);//parent,index,duration
+nas.Xps.prototype.newTracks = function (trackSpec,trackDuration) {
+    if(!(trackSpec)) trackSpec = Xps.DocumentFormat.trackSpec;
+    var myTimelineTracks = new nas.Xps.XpsTrackCollection(this,this.job.id,trackDuration);//parent,index,duration
     var trackCount   = 0;
     var dialogIndex  = 1;
     var soundIndex   = 1;
@@ -621,7 +618,7 @@ console.log(trackSpec)
                 for(var ix=0;ix <trackSpec[pix][1];ix++){
                     var dialogLabel = (ix == 0)? "N":"N"+dialogIndex;
                     myTimelineTracks.splice( myTimelineTracks.length-1, 0,
-                        new XpsTimelineTrack(dialogLabel, trackSpec[pix][0],this.xpsTracks,trackDuration,trackCount)
+                        new nas.Xps.XpsTimelineTrack(dialogLabel, trackSpec[pix][0],this.xpsTracks,trackDuration,trackCount)
                     );
                     dialogIndex ++;
                 };
@@ -629,7 +626,7 @@ console.log(trackSpec)
             case "sound":
                 for(var ix=0;ix <trackSpec[pix][1];ix++){
                     myTimelineTracks.splice( myTimelineTracks.length-1, 0,
-                        new XpsTimelineTrack("S"+dialogIndex, trackSpec[pix][0],this.xpsTracks,trackDuration,trackCount)
+                        new nas.Xps.XpsTimelineTrack("s"+soundIndex, trackSpec[pix][0],this.xpsTracks,trackDuration,trackCount)
                     );
                     soundIndex ++;
                 };
@@ -639,7 +636,7 @@ console.log(trackSpec)
             case "timing":
                 for(var ix=0;ix <trackSpec[pix][1];ix++){
                     myTimelineTracks.splice( myTimelineTracks.length-1, 0,
-                        new XpsTimelineTrack(defaultNames.charAt(cellIndex % 26), trackSpec[pix][0],this.xpsTracks,trackDuration,trackCount)
+                        new nas.Xps.XpsTimelineTrack(defaultNames.charAt(cellIndex % 26), trackSpec[pix][0],this.xpsTracks,trackDuration,trackCount)
                     );
                     cellIndex ++;
                 };
@@ -647,7 +644,7 @@ console.log(trackSpec)
             case "still":
                 for(var ix=0;ix <trackSpec[pix][1];ix++){
                     myTimelineTracks.splice( myTimelineTracks.length-1, 0,
-                        new XpsTimelineTrack(nas.Zf(trackCount,2), trackSpec[pix][0],this.xpsTracks,trackDuration,trackCount)
+                        new nas.Xps.XpsTimelineTrack(nas.Zf(trackCount,2), trackSpec[pix][0],this.xpsTracks,trackDuration,trackCount)
                     );
                     stillIndex ++;
                 };
@@ -656,7 +653,7 @@ console.log(trackSpec)
             case "camerawork":
                 for(var ix=0;ix <trackSpec[pix][1];ix++){
                     myTimelineTracks.splice( myTimelineTracks.length-1, 0,
-                        new XpsTimelineTrack("cam"+cameraIndex, trackSpec[pix][0],this.xpsTracks,trackDuration,trackCount)
+                        new nas.Xps.XpsTimelineTrack("cam"+cameraIndex, trackSpec[pix][0],this.xpsTracks,trackDuration,trackCount)
                     );
                     cameraIndex ++;
                 };
@@ -666,7 +663,7 @@ console.log(trackSpec)
             case "stagework":
                 for(var ix=0;ix <trackSpec[pix][1];ix++){
                     myTimelineTracks.splice( myTimelineTracks.length-1, 0,
-                        new XpsTimelineTrack("stg"+stgIndex, trackSpec[pix][0],this.xpsTracks,trackDuration,trackCount)
+                        new nas.Xps.XpsTimelineTrack("stg"+stgIndex, trackSpec[pix][0],this.xpsTracks,trackDuration,trackCount)
                     );
                     stgIndex ++;
                 };
@@ -676,7 +673,7 @@ console.log(trackSpec)
             case "composite":
                 for(var ix=0;ix <trackSpec[pix][1];ix++){
                     myTimelineTracks.splice( myTimelineTracks.length-1, 0,
-                        new XpsTimelineTrack("ex"+effectIndex, trackSpec[pix][0],this.xpsTracks,trackDuration,trackCount)
+                        new nas.Xps.XpsTimelineTrack("ex"+effectIndex, trackSpec[pix][0],this.xpsTracks,trackDuration,trackCount)
                     );
                     effectIndex ++;
                 };
@@ -685,7 +682,7 @@ console.log(trackSpec)
             case "tracknote":
                 for(var ix=0;ix <trackSpec[pix][1];ix++){
                     myTimelineTracks.splice( myTimelineTracks.length-1, 0,
-                        new XpsTimelineTrack("nt"+noteIndex, trackSpec[pix][0],this.xpsTracks,trackDuration,trackCount)
+                        new nas.Xps.XpsTimelineTrack("nt"+noteIndex, trackSpec[pix][0],this.xpsTracks,trackDuration,trackCount)
                     );
                     noteIndex ++;
                 };
@@ -700,17 +697,14 @@ console.log(trackSpec)
     myTimelineTracks.renumber();
     return myTimelineTracks;
 };
-
 /**
- * xpsTracksのメンバーをタイムラインオブジェクトとしてアクセスする抽出メソッド
- *
  * @params {Number|String} idx
  *   指定IDはラベル文字列でも良い　ラベルの場合は先にマッチしたトラックが戻る
  * @returns {Object nas.Xps.XpsTimelineTrack}
+ * xpsTracksのメンバーをタイムラインオブジェクトとしてアクセスする抽出メソッド
  *
-nas.Xps.prototype.timeline = function (idx) {}
  */
-Xps.prototype.timeline = function (idx) {
+nas.Xps.prototype.timeline = function (idx) {
     if(isNaN(idx)){
       idx = String(idx);
       return this.xpsTracks.find(function(element){return (element.id == idx)});
@@ -719,34 +713,64 @@ Xps.prototype.timeline = function (idx) {
     };
 };
 /**
- * Xpsの再初期化
+ * Xps再初期化
  *
  *  @params {Array | Object trackspec | number}  Layers
  *      スカラ値またはスカラを要素に持つ配列
  *       trackSpec配列またはtrackSpec配列をプロパティに持つオブジェクト
  *  @params {Number|String} Length
- *       ドキュメントの継続フレーム数またはシート長文字列
+ *       ドキュメントの継続フレーム数(Int) ... 144|シート長文字列(String) ... "(3+12)"
  *  @params {Object nas.Framerate | String}  Framerate
- *       ドキュメントのフレームレート
+ *       ドキュメントのフレームレート '24FPS'
  *  @params {Object xMap | String}  xmap
  *          xMap オブジェクトまたはxMapを初期化可能なフルサイズの識別子
  *  @params {String}  nodepath
  *          制作管理ノードパス文字列
  */
-//nas.Xps.prototype.init = function (Layers, Length, Framerate, xmap, nodepath){}
-Xps.prototype.init = function (Layers, Length, Framerate, xmap, nodepath) {
+nas.Xps.prototype.init = function (Layers, Length, Framerate, xmap, nodepath) {
 //引数の省略値
+// notepath
     if ((typeof nodepath == 'undefined')||(!(nodepath))) nodepath = '*.*.0.';//本線最終ステージ最終ノード
+//xmap
     if (!( xmap instanceof xMap)) xmap = new xMap(xmap);
+//Framerate
     if (typeof Framerate == 'undefined'){
         Framerate = false;// xmap.framerate;
     } else if (!(Framerate instanceof nas.Framerate)){
          Framerate = nas.newFramerate(String(Framerate));
     }
     if (! Framerate) Framerate = nas.newFramerate(this.sheetLooks.FrameRate);
+//Length(==duration)
     if (isNaN(Length)) Length = nas.FCT2Frm(Length,Framerate);
-//現在のドキュメント1ページ分で初期化
+//      現在のドキュメント1ページ分で初期化
     if (!Length) Length = nas.FCT2Frm(this.sheetLooks.PageLength,Framerate)
+//Layers
+    if(!(Layers)) Layers = this.sheetLooks;
+//														xMap|pmu処理
+    /**
+     * Xps標準のプロパティ設定
+     * @type {string}
+     */
+    this.xMap  = xmap ;//参照用xMapを設定
+//console.log(this.xMap.getIdentifier()); 初期化引数で設定済み
+//    this.pmu   = new nas.Pm.PmUnit(this,this.xMap.getIdentifier());
+    this.pmu   = new nas.Pm.PmUnit(this,nas.Pm.getIdentifier(this.xMap,'full'));//状況により不正データの可能性あり
+var setNode = this.xMap.pmu.nodeManager.getNode(nodepath);
+if(setNode) {
+//console.log(setNode);
+    var line  = this.pmu.nodeManager.new_ManagementLine(setNode.stage.parentLine.toString(true));
+    var stage = this.pmu.nodeManager.new_ManagementStage(setNode.stage.toString(true),line);
+    var job   = this.pmu.nodeManager.new_Job(setNode.toString(true),stage);
+    job.jobStatus = new nas.Pm.JobStatus(setNode.jobStatus.toString());
+}else{
+//console.log('look Xps')
+    var line  = this.pmu.nodeManager.new_ManagementLine(this.line.toString(true));
+    var stage = this.pmu.nodeManager.new_ManagementStage(this.stage.toString(true),line);
+    var job   = this.pmu.nodeManager.new_Job(this.job.toString(true),stage);
+    job.jobStatus = new nas.Pm.JobStatus(this.currentStatus.toString());
+}
+    this.pmu.currentNode = this.pmu.nodeManager.getNode();
+	this.syncPmuProps();
 
 //初期化引数 Layers を正規化
 //sheetLooks オブジェクトを初期化引数として渡せるように変更 20230905
@@ -756,12 +780,13 @@ Xps.prototype.init = function (Layers, Length, Framerate, xmap, nodepath) {
 		(Layers.trackSpec instanceof Array)
 	){
 //引数としてsheetLooksを受け取った場合、先行してオブジェクトプロパティとして設定する
-		this.sheetLooks = documentFormat.normalizeSheetlooks(Layers);
+//		this.sheetLooks = documentFormat.normalizeSheetlooks(Layers);
+		this.sheetLooks = JSON.parse(JSON.stringify(Layers));
 		Layers = Array.from(this.sheetLooks.trackSpec);//レイヤー引数をトラックスペックに設定する
 	}else{
-//それ以外はSheetLooksをデフォルトで設定
-		this.sheetLooks = documentFormat.normalizeSheetlooks(SheetLooks);
+//それ以外はconfig.SheetLooksをデフォルトで設定
 //		this.sheetLooks = documentFormat.normalizeSheetlooks(config.SheetLooks);
+		this.sheetLooks = JSON.parse(JSON.stringify(config.SheetLooks));
 	};
 //Layers引数なし 標準的なA,B,C,D 4レイヤで初期化(旧仕様)
 	if (typeof Layers == 'undefined') Layers = 4;
@@ -846,9 +871,9 @@ console.log('不正引数検出のためトラック仕様をデフォルト値�
     this.rate  = this.framerate.name;
     var Now = new Date();
     this.create_time = Now.toNASString();
-    this.create_user = ((xUI)&&(xUI.currentUser))? xUI.currentUser:new nas.UserInfo(myName);
+    this.create_user = ((xUI)&&(xUI.currentUser))? xUI.currentUser:new nas.UserInfo(config.myName);
     this.update_time = Now.toNASString();
-    this.update_user = ((xUI)&&(xUI.currentUser))? xUI.currentUser:new nas.UserInfo(myName);
+    this.update_user = ((xUI)&&(xUI.currentUser))? xUI.currentUser:new nas.UserInfo(config.myName);
 
 //    this.memo = "";
 // タイムシート画像トレーラーを初期化
@@ -857,14 +882,107 @@ console.log('不正引数検出のためトラック仕様をデフォルト値�
     this.timesheetImages.clearMember();
 // タイムライントレーラー(トラックコレクション)作成
     this.xpsTracks = this.newTracks(trackSpec, Length);
-};
 
+// pmu拡張時処理
+/*
+  if(this.pmu){
+	var startNode = this.pmu.nodeManager.getNodeByNodepath('0.0.0.');
+	if(startNode){
+        this.create_time = startNode.createDate.toNASString();
+        this.create_user = (startNode.createUser)? startNode.createUser.toString():'';
+    }
+	var lastNode  = this.pmu.nodeManager.getLastNode();
+    if(lastNode){
+        this.update_time = lastNode.createDate.toNASString();
+        this.update_user = (lastNode.createUser)? lastNode.createUser.toString():'';
+    }
+    if(this.pmu.currentNode){
+//console.log(this.pmu.currentNode);
+        this.line       = new nas.Xps.XpsLine (this.pmu.currentNode.stage.parentLine.toString(true));
+        this.stage      = new nas.Xps.XpsStage(this.pmu.currentNode.stage.toString(true));
+        this.job        = new nas.Xps.XpsJob(this.pmu.currentNode.toString(true));
+        this.currentStatus = new nas.Xps.JobStatus(this.pmu.currentNode.jobStatus.toString());
+    }
+  }else{
+      //逆同期 プロパティは限定　あまり使用機会はないはず
+    this.pmu.opus  = nas.pmdb.products.entry(this.opus);
+    this.pmu.title = nas.pmdb.workTitles.entry(this.title);
+    this.pmu.subtitle = this.subtitle;
+    if(this.pmu.inherit.length > 0){
+        this.pmu.scene    = this.scene;
+        this.pmu.cut      = this.cut;
+        this.pmu.inherit[0] = nas.Pm.parseSCi(
+            this.inherit+
+            "("+this.trin.toString('xps')+")"+
+            "("+this.trout.toString('xps')+")"
+        );
+    }
+//各シートのフレームレートは独自設定が可能でエピソードやタイトルのフレームレートを上書きすることはない（不可逆）
+//ノードの情報はタイムシート側からの書き換えを禁止する（タイムシートの書き換え自体を禁止）
+//exListから外すことで対処
+  };// */
+};
+/**
+ *    pmuの内容とプロパティを同期する
+ */
+nas.Xps.prototype.syncPmuProps = function(){
+    if(!(this.pmu)) return false;
+//console.log(this.pmu);
+    if (this.pmu.opus instanceof nas.Pm.Opus){
+	    this.opus	    = this.pmu.opus.name;
+	    this.subtitle	= this.pmu.opus.subtitle;
+    }else{
+	    this.opus	    = this.pmu.product.opus;
+	    this.subtitle	= this.pmu.product.subtitle;
+    };
+	if (this.pmu.title instanceof nas.Pm.WorkTitle){
+	    this.title	    = this.pmu.title.fullName;
+	    this.framerate	= this.pmu.title.framerate;
+	    this.rate       = this.pmu.title.framerate.name;
+	}else{
+	    this.title	    = this.pmu.product.title;
+	    this.framerate	= new nas.Framerate();
+	    this.rate       = this.framerate.name;
+	};
+	if(this.pmu.pmdb.medias){
+	    var im = this.pmu.pmdb.medias.entry(this.pmu.title);
+	    if(im){
+	        this.standerdFrame  = im.animationField;
+	        this.standerdPeg    = im.animationField.peg.toString();
+	        this.baseResolution = im.baseResolution;
+        };
+    };
+	this.scene	  = this.pmu.scene;
+	this.cut	  = this.pmu.cut  ;
+	this.inherit  = this.pmu.inherit;
+
+	var startNode = this.pmu.nodeManager.getNodeByNodepath('0.0.0.');
+	if(startNode){
+        this.create_time = startNode.createDate;
+        this.create_user = startNode.createUser;
+    };
+	var lastNode  = this.pmu.nodeManager.getLastNode();
+    if(lastNode){
+        this.update_time = lastNode.updateDate;
+        this.update_user = lastNode.updateUser;
+    };
+    this.currentNode = this.pmu.currentNode;
+	this.lines	=this.pmu.nodeManager.lines;
+	this.stages	=this.pmu.nodeManager.stages;
+	this.jobs	=this.pmu.nodeManager.nodes;
+	this.lineIssues   =	this.pmu.issues;
+console.log('sync pmu property');
+console.log()
+};
+/* TEST
+    
+*/
 /*
     getMAPメソッド自体が不要 XPS.getMapメソッド削除 20200115
  */
 /**
  * カット識別子を返すオブジェクトメソッド
- * Xps.getIdentifier(識別オプション,)
+ * nas.Xps.getIdentifier(識別オプション,)
  * カット識別文字列を返す
  * カット識別子はタイトル、制作番号、シーン、カット番号の各情報をセパレータ"_"で結合した文字列
  * カット番号以外の情報はデフォルトの文字列と比較して一致した場合セパレータごと省略
@@ -902,7 +1020,7 @@ SCi     "__","("が禁止される
  * @params opt
  * @returns {string}
  */
-Xps.prototype.getIdentifier = function (opt) {
+nas.Xps.prototype.getIdentifier = function (opt) {
     var opusName = (this.opus.name)? this.opus.name:this.opus;
     var myResult=""
     switch (opt){
@@ -926,6 +1044,7 @@ Xps.prototype.getIdentifier = function (opt) {
         nas.Frm2FCT(this.time(),3,0,this.framerate);
         myResult=this.title+'#'+opusName+'['+this.subtitle+']__s'+this.scene+'-c'+this.cut+'('+ timeString+')';
     }
+
     return myResult;
 };
 
@@ -943,24 +1062,36 @@ Xps.prototype.getIdentifier = function (opt) {
     または先行でxMapを同期(再初期化)して、そこを基準にXpsを同期
     2021 現在処理なし
 */
-Xps.prototype.syncIdentifier =function(myIdentifier,withoutTime){
+nas.Xps.prototype.syncIdentifier =function(myIdentifier,withoutTime){
     if(typeof withoutTime == 'undefined') withoutTime = true;
-    var parseData   = Xps.parseIdentifier(myIdentifier);
-console.log(parseData);
-    this.title      = parseData.title;
-    this.cut        = parseData.cut;
-    this.opus       = parseData.opus;
-    this.subtitle   = parseData.subtitle;
-    this.scene      = parseData.scene;
-    if(parseData.currentStatus){
-        this.line       = parseData.line;
-        this.stage      = parseData.stage;
-        this.job        = parseData.job;
-        this.currentStatus = parseData.currentStatus;
+    var currentTime = nas.Frm2FCT(this.time(),5,0,this.framerate);
+    if(this.xMap instanceof nas.xMap){
+        if(nas.Pm.compareIdentifier(nas.Pm.getIdentifier(this.xMap),myIdentifier)){
+            this.xMap.init(myIdentifier);
+            this.xMap.pmu.setProduct(myIdentifier);
+            this.xMap.syncPmuProps();
+        }
     }
-    if (! withoutTime){
-//        var newTime = nas.FCT2Frm(parseData.sci[0].time)+Math.ceil((this.trin[0]+this.trout[0])/2);
-        var newTime = nas.FCT2Frm(parseData.sci[0].time) + this.headMargin + this.tailMargin;
+    if(! this.pmu) {
+        this.pmu = new nas.Pm.PmUnit(this,myIdentifier);
+        var parseData = nas.Pm.parseIdentifier(myIdentifier);
+    }else{
+        var parseData = this.pmu.setProduct(myIdentifier);
+    }
+    if(parseData.mNode){
+        this.pmu.nodeManager.lines.add(parseData.line);
+        this.pmu.nodeManager.stages.add(parseData.stage);
+        this.pmu.nodeManager.nodes.add(parseData.job);
+        this.pmu.currentNode = this.pmu.nodeManager.getNode();
+    }
+    this.syncPmuProps();
+console.log(parseData)
+    if ((! withoutTime)&&(parseData.sci.length)){
+        var newTime = nas.FCT2Frm(parseData.sci[0].time)+
+            Math.ceil((nas.FCT2Frm(this.trin.time) +
+            nas.FCT2Frm(this.trout.time)) / 2);
+        this.setDuration(newTime);
+console.log('setDuration:' + newTime);
     }
 return parseData;
 }
@@ -969,39 +1100,40 @@ return parseData;
  * ダイアログタイムラインの要素数で返す
  * 初期状態でボディの存在しないシートが存在しないように注意
  * 未記述でも空ボディのタイムラインが存在する。
- * エラー関連コードは排除の方向で
+ * エラー関連コードは排除
  *チェックが進んだら関数自体を廃してxpsTracks.durationの参照に切り替える
  * @returns {*}
  */
-Xps.prototype.duration = function () {
+nas.Xps.prototype.duration = function () {
     if(this.xpsTracks.duration){
         return this.xpsTracks.duration;
     }else{
         return this.xpsTracks[0].length;
     }
 };
-Xps.prototype.getDuration =function () { return this.xpsTracks.duration; }
+nas.Xps.prototype.getDuration =function () { return this.xpsTracks.duration; }
 
 /**
  * カット尺をフレーム数で返す
  * @returns {number}
  */
-Xps.prototype.time = function () {
-    return (this.duration() - this.headMargin - this.tailMargin);
+nas.Xps.prototype.time = function () {
+    return (this.duration() - (this.headMargin + this.tailMargin));
+//     - Math.ceil((nas.FCT2Frm(this.trin.time) + nas.FCT2Frm(this.trout.time)) / 2);
 };
 /**
  * フレーム数からTCを返す
  * @params mtd
  * @returns {string}
  */
-Xps.prototype.getTC = function (mtd) {
+nas.Xps.prototype.getTC = function (mtd) {
     return (nas) ? nas.Frm2FCT(mtd, 3, 0, this.framerate) : Math.floor(mtd / this.framerate) + "+" + mtd % this.framerate + ".";
 };
 /*
  *	タイムライントラックの前後マージンを自動調整
  *	マージン設定の際に呼び出す補助関数
  */
-Xps.prototype.adjustMargin = function adjustMargin(){
+nas.Xps.prototype.adjustMargin = function adjustMargin(){
 	if(this.headMargin < this.trin / 2)  this.headMargin = this.trin / 2;
 	if(this.tailMargin < this.trout / 2) this.tailMargin = this.trout / 2;
 }
@@ -1014,7 +1146,7 @@ Xps.prototype.adjustMargin = function adjustMargin(){
 /**
  *  
  */
-Xps.prototype.stringifySheetLooks = function () {
+nas.Xps.prototype.stringifySheetLooks = function () {
     return JSON.stringify(this.sheetLooks);
 }
 /**
@@ -1024,7 +1156,7 @@ Xps.prototype.stringifySheetLooks = function () {
  *  アプリ画面の書換はこのメソッドでは呼び出されない
  *  必要ならば、画面の書き換えは別に呼び出す
  */
-Xps.prototype.parseSheetLooks = function (sheetLooks){
+nas.Xps.prototype.parseSheetLooks = function (sheetLooks){
 console.log(sheetLooks);
 console.log(this);
     if ((typeof sheetLooks == 'string')&&(sheetLooks.match(/(\{[\s\S]*?\})/))){
@@ -1064,7 +1196,7 @@ console.log(this);
  具体的には別オブジェクトの同期操作が不用になるので、単純化した操作系に変更するナリ
  引数はタイムラインオブジェクトを求める
  指定がない場合は、デフォルトの新規オブジェクトを作成して挿入するように変更
- * Xps.insertTL(id,Timelines)
+ * nas.Xps.insertTL(id,Timelines)
  * Timelines(複数可・配列渡し)
  * idの前方に引数のタイムラインを挿入
  * idが未指定・範囲外の場合、後方へ挿入
@@ -1074,11 +1206,11 @@ console.log(this);
  *
  * @params {Number} myId
  *  挿入点トラックid　指定idの前方に挿入される
- * @params {Araay of XpsTimelineTrack} myTimelines
+ * @params {Araay of nas.Xps.XpsTimelineTrack} myTimelines
  *  挿入オブジェクトまたは配列
  * @returns {Array of Object XpsTimelineTrack}
  */
-Xps.prototype.insertTL = function (myId, myTimelines) {
+nas.Xps.prototype.insertTL = function (myId, myTimelines) {
     //引数が配列ではないまたは単独のタイムライントラックオブジェクトである場合配列化する
 /*
  XpsTimelineTrackが配列ベースのため通常の配列をinstanceof XpsTimelineTrack で判定すると trueが戻るので
@@ -1099,48 +1231,31 @@ Xps.prototype.insertTL = function (myId, myTimelines) {
  */
         if (!(myTimelines[idx].id)) {
             if (myTimelines[idx]) {
-                myTimelines[idx] = new XpsTimelineTrack(myTimelines[idx], "timing",this.xpsTracks,this.duration());
+                myTimelines[idx] = new nas.Xps.XpsTimelineTrack(myTimelines[idx], "timing",this.xpsTracks,this.duration());
             } else {
-                myTimelines[idx] = new XpsTimelineTrack(nas.Zf(idx + myId, 2), "timing",this.xpsTracks,this.duration());
+                myTimelines[idx] = new nas.Xps.XpsTimelineTrack(nas.Zf(idx + myId, 2), "timing",this.xpsTracks,this.duration());
             }
-        }
-// 挿入データを揃えて挿入
-//        this.xpsTracks.splice(myId + idx, 0, myTimelines[idx]);
+        };
     };
 // 挿入データを揃えて挿入
-        this.xpsTracks.insertTrack(myId,myTimelines);
+    this.xpsTracks.insertTrack(myId,myTimelines);
     return myTimelines;
 };
 //test insertTL(挿入点id,挿入するタイムラインオブジェクト配列)
-//var myNewTracks=new XpsTimelineTrack("ins1","timing",XPS.xpsTracks,"")
+//var myNewTracks=new nas.Xps.XpsTimelineTrack("ins1","timing",XPS.xpsTracks,"")
 // XPS.insertTL()
 /**
- * Xps.deleteTL([id])
+ * nas.Xps.deleteTL([id])
  * 指定idのタイムラインを削除する。1～
  * デフォルトの音声タイムラインとフレームコメントの削除はできない
  * IDを単独又は配列渡しで
  * XpsLayerとxpsTracks はそのうちタイムラインとして統合すべきかと思う。
  *
  * @params {Array of Number} args
- * @returns 
+ * @returns {Object TimeLineTrack}
  */
-Xps.prototype.deleteTL = function (args) {
+nas.Xps.prototype.deleteTL = function (args) {
     return this.xpsTracks.removeTrack(args);
-/*
-    if (!(args instanceof Array)) {
-        args = [args]
-    };
-    args.sort().reverse();
-    for (var idx = 0; idx < args.length; idx++) {
-        //操作範囲外の値は無視
-        var targetIndex = args[idx];
-        if (isNaN(targetIndex)) {
-            continue;
-        }
-        if ((targetIndex > 0) && (targetIndex < this.xpsTracks.length - 1)) {
-            this.xpsTracks.splice(targetIndex, 1);
-        };
-    };// */
 };
 /**
  *	@params {String} direction
@@ -1157,7 +1272,7 @@ Xps.prototype.deleteTL = function (args) {
 	加算分は空白セルを作成して挿入 減算分は削除する
 
  */
-Xps.prototype.setMargin = function setMargin(direction,length){
+nas.Xps.prototype.setMargin = function setMargin(direction,length){
 	var target = [];
 	length = nas.FCT2Frm(length);//フレーム数に変換
 	if(length == false) return false;
@@ -1192,7 +1307,7 @@ Xps.prototype.setMargin = function setMargin(direction,length){
      トランジション・マージンの値は操作しないので
      それらに変更がある場合は別途変更処理が必要
 */
-Xps.prototype.setDuration =function(myDuration){
+nas.Xps.prototype.setDuration =function(myDuration){
     if(! myDuration) return false;
     if(myDuration != this.xpsTracks.duration){
         var currentDuration = this.xpsTracks.duration;
@@ -1209,7 +1324,7 @@ Xps.prototype.setDuration =function(myDuration){
     return this.xpsTracks.duration;
 }
 /**
- * Xps.reInitBody(newTimelines:int,newDuration:int)
+ * nas.Xps.reInitBody(newTimelines:int,newDuration:int)
  *
  * Xps本体データのサイズを変更する。
  * 元あったデータ内容は可能な限り保存
@@ -1224,7 +1339,7 @@ Xps.prototype.setDuration =function(myDuration){
  * @returns {boolean}
   引数にsheetLooks|trackSpecを与えられるように改修
  */
-Xps.prototype.reInitBody = function (newTimelines, newDuration) {
+nas.Xps.prototype.reInitBody = function (newTimelines, newDuration) {
 if(
     (typeof newTimelines == 'object')&&
     (newTimelines)
@@ -1302,7 +1417,7 @@ if(this.xpsTracks.duration){
 	this.xpsTracks.length = newTimelines;
     if (widthUp) {
         for (var i = oldWidth - 2; i < (newTimelines - 2); i++) {
-            this.xpsTracks[i] = new XpsTimelineTrack(i,"timing",this.xpsTracks,newDuration);//myLabel, myType, myParent, myLength
+            this.xpsTracks[i] = new nas.Xps.XpsTimelineTrack(i,"timing",this.xpsTracks,newDuration);//myLabel, myType, myParent, myLength
             this.xpsTracks[i]["id"] = ("00" + i).slice(-2);
             this.xpsTracks[i]["sizeX"] = this.xpsTracks[oldWidth - 3]["sizeX"];
             this.xpsTracks[i]["sizeY"] = this.xpsTracks[oldWidth - 3]["sizeY"];
@@ -1324,7 +1439,7 @@ if(this.xpsTracks.duration){
  *   @returns {Array}
  *
  *    xUI.getRange(Range:[[startColumn,startFrame],[endColumn,endFrame]])
- * Xps.getRange(Range:[[startC,startF],[endC,endF]])
+ * nas.Xps.getRange(Range:[[startC,startF],[endC,endF]])
  * 範囲内のデータをストリームで返す
  * xpsのメソッドに移行 2013.02.23
  * 範囲外のデータは、ヌルストリングを返す2015.09.18
@@ -1335,7 +1450,7 @@ if(this.xpsTracks.duration){
  * 第一象限と第三象限の指定は無効
  *
  */
-Xps.prototype.getRange = function (Range) {
+nas.Xps.prototype.getRange = function (Range) {
     if (typeof Range == "undefined") {
         Range = [[0, 0], [this.xpsTracks.length - 1, this.xpsTracks[0].length - 1]]
     }//指定がなければ全体をストリーム変換
@@ -1362,29 +1477,113 @@ Xps.prototype.getRange = function (Range) {
 // ストリームで返す
     return zBUF;
 };
+
+/*
+    pmu         直接アクセス禁止    pmuのメソッドに渡す
+    xpsTracks   同上              xpsTracksのメソッドに渡す
+*/
 /**<pre>
- * Xps.put(書込開始アドレス:[startC,startF],データストリーム)
+ * nas.Xps.put(書込開始アドレス:[startC,startF],データストリーム)
+ * nas.Xps.put(入力単位オブジェクト)
+ * 第一引数がアドレス指定配列ではない場合入力オブジェクトが渡されたものと判断する
+ * 入力ユニットのオブジェクト種別は問われないが、オブジェクトがaddress,valueの各プロパティを持っているものとする
+ * 引数としての入力オブジェクトの配列は受け付けない
+ * 複数レンジの書き込みはこのメソッドに渡す前に展開を行うこと
  * 書込開始アドレスを起点にストリームでタイムライントラックデータを置き換え
+ * 第一引数がXpsで、かつ本体オブジェクトと異なる場合は内容を複製する？
+ * Xpsオブジェクトメソッド
+ * undo/redo等はUIレベルの実装なのでここでは関知しない
+ * 書込開始アドレスに負の数を与えると有効範囲外の書込アドレス発生する
+ * 有効レンジ外データは無視される
+ * このメソッドでは本体データとしてセパレータの",""\n"を与えることはできない（禁則事項）
+ * リザルトとして　書き込みに成功したベクトル（左上、右下）、書き換え前のデータストリーム、書き込みに成功したデータ
+ * を返す </pre>
+ *
+ * @params {Array of Array | String}    input
+ * @params {String|Array}               content
+ * @returns [Array]
+ *  [書き込みプロパティアドレス,書き込み前の値,書き込み後の値]
+ */
+/*
+nas.Xps.prototype.put = function (input, content) {
+//従来指定をオブジェクト化
+	var inputUnit = input;
+	if(arguments.length > 1) inputUnit = {address:input,value:content};
+	if(
+		(inputUnit.address instanceof Array)||
+		(inputUnit.address.match(/\d+_\d+/))
+	) return this.xpsTracks.put(inputUnit)   ;//アドレス配列ならxpsTracksへ渡す
+
+	if(! inputUnit.address) return false     ;//ターゲットがない場合は失敗
+	if(inputUnit.address.indexOf('pmu')==0) return this.pmu.put(inputUnit);//pmuへ渡す
+//編集可能プロパティリスト
+var exLst = {
+"*"            :{ get:"toString", put:"parseXps"},
+"id"           :{ get:"toString", put:"direct"},
+"xMap"         :{ get:"toString", put:"parsexMap"},
+"timestamp"    :{ get:"toString", put:"direct"},
+"dataNode"     :{ get:"toString", put:"direct"},
+"line"         :{ get:"toString", put:"parse"},
+"stage"        :{ get:"toString", put:"parse"},
+"job"          :{ get:"toString", put:"parse"},
+"currentStatus":{ get:"toString", put:"parse"},
+"opus"         :{ get:"toString", put:"direct"},
+"title"        :{ get:"toString", put:"direct"},
+"subtitle"     :{ get:"toString", put:"direct"},
+"scene"        :{ get:"toString", put:"direct"},
+"cut"          :{ get:"toString", put:"direct"},
+"inherit"      :{ get:"toString", put:"direct"},
+"trin"         :{ get:"toString", put:"parse"},
+"trout"        :{ get:"toString", put:"parse"},
+"framerate"    :{ get:"toString", put:"parse"},
+"rate"         :{ get:"toString", put:"direct"},
+"create_time"  :{ get:"toString", put:"direct"},
+"create_user"  :{ get:"toString", put:"parse"},
+"update_time"  :{ get:"toString", put:"direct"},
+"update_user"  :{ get:"toString", put:"parse"},
+"mapfile"      :{ get:"toString", put:"direct"}
+};
+//変換テーブルに値のないプロパティは、書き込み不能なので失敗
+	if(! exLst[inputUnit.address]) return false;
+//アドレスから現データを取得
+	var targetProp   = this[inputUnit.address];
+	if(inputUnit.address == "*") targetProp = this;//特例
+	var currentValue = (targetProp)? targetProp[exLst[inputUnit.address].get]():targetProp;//シャローコピーを取得
+	var putMethod = exLst[inputUnit.address].put;
+	if(putMethod == 'direct'){
+//console.log('direct change :'+currentValue +' :to: '+ inputUnit.value);
+		this[inputUnit.address] = inputUnit.value;//直接代入
+	}else{
+//console.log('changevalue with method :'+putMethod +' :: '+ inputUnit.value);
+		this[inputUnit.address][putMethod](inputUnit.value);//メソッドで書き込み
+	}
+//戻り値は、書き込みに成功したレンジ
+//console.log(xUI.XPS === this);
+    return [inputUnit.address, currentValue, this[inputUnit.address]];
+};//*/
+nas.Xps.prototype.get = nas.Pm.valueGet;
+nas.Xps.prototype.put = nas.Pm.valuePut;
+/*
+ * nas.Xps.put(書込開始アドレス:[startC,startF],データストリーム)
+ * 書込開始アドレスを起点にストリームでデータ置き換え
  * Xpsオブジェクトメソッド
  * undo/redo等はUIレベルの実装なのでここでは関知しない
  * 書込開始アドレスに負の数を与えると、書込アドレスが負の場合レンジ外となる
  * レンジ外データは無視される
  * このメソッドでは本体データとしてセパレータの",""\n"を与えることはできない（禁則事項）
- * リザルトとして
- * 書き込みに成功したベクトル（左上、右下）、書き換え前のデータストリーム、書き込みに成功したデータ
- * を返す </pre>
+ * リザルトとして書き込みに成功したベクトル（左上、右下）、書き換え前のデータストリーム、書き込みに成功したデータを返す
  *
  * @params {Array of sheetcell address} myAddress
  * @params myStream
  * @returns {*}
- */
-Xps.prototype.put = function (myAddress, myStream) {
+
+nas.Xps.prototype.put = function (myAddress, myStream) {
 //指定がなければ操作失敗
     if ((!myAddress) || (typeof myStream == "undefined")) {
         return false
-    }
-//データストリームを配列に展開
-//データストリームが空文字列の場合は要素数１の配列に展開する
+    }//指定がなければ操作失敗
+
+// データストリームが空文字列の場合は要素数１の配列に展開する     * データストリームを配列に展開
     var srcData = new Array(myStream.toString().split("\n").length);
     for (var n = 0; n < srcData.length; n++) {
         srcData[n] = myStream.toString().split("\n")[n].split(",");
@@ -1412,12 +1611,14 @@ Xps.prototype.put = function (myAddress, myStream) {
                 (writeFrame >= 0) && (writeFrame < this.xpsTracks[0].length)
             ) {
                 this.xpsTracks[writeColumn][writeFrame] = srcData[c][f];
-            }
-        }
-    }
+            };
+        };
+    };
 //戻り値は、書き込みに成功したレンジ
     return [writeRange, this.getRange(writeRange), currentData];
-};
+}; //
+ 
+ */
 
 /**
  * 読み込みメソッド
@@ -1426,13 +1627,13 @@ Xps.prototype.put = function (myAddress, myStream) {
  * このメソッドをオーバーライドして使用すること。
  * 戻り値として、parseXps の戻り値を返すこと。2013.04.06
  *
- * @params datastream
+ * @params {String} datastream
  * @returns {Boolean}
  */
-Xps.prototype.readIN = function (datastream) {
+nas.Xps.prototype.readIN = function (datastream) {
     if (datastream instanceof Boolean) {
         return datastream
-    }
+    };
     return this.parseXps(datastream);
 };
 
@@ -1443,11 +1644,11 @@ Xps.prototype.readIN = function (datastream) {
  * このメソッドはXpsのパース専用になる
  * (将来の拡張用として必須)2013.04.06
  * パース成功時はオブジェクト自身を返す。
- * @params datastream
+ * @params {String} datastream
  * @returns {boolean}
  * パーサにフラグを与えて、フレームレートが確定するまでフレーム計算を行わないように修正
  */
-Xps.prototype.parseXps = function (datastream) {
+nas.Xps.prototype.parseXps = function (datastream) {
 //マルチステージ拡張を行うため以前のコードに存在したエラーハンドリングは全廃
     if ((! datastream)||(!(datastream.match))) {
 //console.log('bad datestream:') ;console.log(datastream);
@@ -1456,89 +1657,59 @@ Xps.prototype.parseXps = function (datastream) {
     };
 // ラインで分割して配列に取り込み
     var SrcData = [];
-    if (datastream.match(/\r/)) {
-        datastream = datastream.replace(/\r\n?/g, ("\n"))
-    };
+    if (datastream.match(/\r/)) datastream = datastream.replace(/\r\n?/g, ("\n"))
     SrcData = datastream.split("\n");
-//		var AEK=true;//AEKey read-formatTestFlag
-    /**
-     * データストリーム判別プロパティ
-     * @type {number}
-     */
-    SrcData.startLine = -1;//データ開始行
-//	SrcData.dataClass	="";//データバージョン識別用に流用？
-    /**
-     * データ種別判定は、削除作業開始2013.04.04
-     * ソースデータのプロパティ
-     * @type {number}
-     */
-    SrcData.layerHeader = 0;//レイヤヘッダ開始行
-    SrcData.layerProps = 0;//レイヤプロパティエントリ数
-    SrcData.trackCount = 0;//トラック数
-    SrcData.layers = [];//レイヤ情報トレーラー
-    SrcData.layerBodyEnd = 0;//レイヤ情報終了行
-    SrcData.frameCount = 0;//読み取りフレーム数
-    SrcData.framerate = this.framerate ;//フレームレート（現ドキュメントの値）
-    
-    /*
-     * 第一パス
-     * データ冒頭の空白行を無視して、データ開始行を取得
-     * 識別行の確認
-     * 冒頭ラインが識別コードまたは空行でなかった場合は、さようなら御免ね
-     * IEのデータの検証もここでやっといたほうが良い?
-     * 第一パスでフレームレートの取得を行う
-     * パースデータにフレームレートが指定されていない場合は、現在の値を維持
-     */
-console.log('read 1st path startup')
+    SrcData.startLine    = -1;//データ開始行
+    SrcData.layerHeader  = 0 ;//レイヤヘッダ開始行
+    SrcData.layerProps   = 0 ;//レイヤプロパティエントリ数
+    SrcData.trackCount   = 0 ;//トラック数
+    SrcData.layers       = [];//レイヤ情報トレーラー
+    SrcData.layerBodyEnd = 0 ;//レイヤ情報終了行
+    SrcData.frameCount   = 0 ;//読み取りフレーム数
+    SrcData.headMargin   = 0 ;//開始オフセットフレーム数
+    SrcData.tailMargin   = 0 ;//終了オフセットフレーム数
+    SrcData.framerate    = this.framerate ;//フレームレート（現ドキュメントの値）
+    SrcData.xMap         = null;
+/*
+ * 第一パス
+ * データ冒頭の空白行を無視して、データ開始行を取得
+ * 識別行の確認
+ * 冒頭ラインが識別コードまたは空行でなかった場合は、さようなら御免ね
+ * IEのデータの検証もここでやっといたほうが良い?
+ * 第一パスで xMap| フレームレート の取得を行う
+ * xMapの取得に失敗した場合は、nullを設定して最終的に解決
+ * パースデータにフレームレートが指定されていない場合は、現在の値を維持
+ */
     for (var l = 0; l < SrcData.length; l++) {
-        if (SrcData[l].match(/^\s*$/)) {
-        } else {
-            if (appHost.platform == 'MSIE') {
-                var choped = SrcData[l].charCodeAt(SrcData[l].length - 1);
-                if (choped <= 32)
-                    SrcData[l] = SrcData[l].slice(0, -1);
-            }
-            //なぜだかナゾなぜに一文字多いのか?
-            /**
-             *  データ処理中に含まれていた他フォーマットの解析部分は、別ライブラリで吸収
-             *  バージョンは 0.5 まで拡張
-             */
-            if (SrcData[l].match(/^nasTIME-SHEET\ 0\.[1-9][a-z]*\b/)) {
-                SrcData.startLine = l;//データ開始行
-            } else if((SrcData.startLine >= 0)&&(SrcData[l].match(/^##FRAME_RATE=(.*)$/))){
-                SrcData.framerate= nas.newFramerate(RegExp.$1);
-                break;//データ開始行のあとにフレームレート指定があればブレーク
-            };
-        };
-    };
-    /**
-     * 第一パス終了
-     * データ識別行がなければ処理中断
-     * データ行が無かったらサヨナラ
-     * "読み取るデータがないのです。";
-     */
-    if(SrcData.startLine < 0){
-//        xUI.errorCode = {ja:"データ開始行がありません このデータは読めないようです"};
-        return false;
-//	"002:どうもすみません。このデータは読めないみたいダ\n"
+        if((typeof SrcData[l] == 'undefined')||(SrcData[l].match(/^\s*$/))) continue;
+/*
+ *  データ処理中に含まれていた他フォーマットの解析部分は、別ライブラリで吸収
+ *  バージョンは 0.5 まで拡張
+ * 現バージョンは 0.9x （デバッグ処理バージョン）
+ */
+        if (SrcData[l].match(/^nasTIME-SHEET\ 0\.[1-9].*$/)) {
+            SrcData.startLine = l;//データ開始行
+        } else if((SrcData.startLine >= 0)&&(SrcData[l].match(/^##MAP_FILE=(.*)$/))){
+            SrcData.xMap = RegExp.$1;
+        } else if((SrcData.startLine >= 0)&&(SrcData[l].match(/^##FRAME_RATE=(.*)$/))){
+            SrcData.framerate= nas.newFramerate(RegExp.$1);
+        }
     }
-    if ((SrcData.length - SrcData.startLine) < 1) {
-//        xUI.errorCode = {ja:"データ本体がありません"};
-        return false;
-    }
-    /*
-     if(! SrcData.dataClass){
-     this.errorMsg[10]=("009:想定外エラー\n"+SrcData.dataClass + "error!");
-     xUI.errorCode=9;return false;
-     }
-     */
-
-    /**
-     * 変数名とプロパティ名の対照テーブル
-     * @type {string[]}
-     */
+/*
+ * 第一パス終了
+ * データ識別行がなければ処理中断
+ * データ行が無かったらサヨナラ
+ * "読み取るデータがないのです。";
+ */
+if(SrcData.startLine < 0) return false;
+/*
+ * 変数名とプロパティ名の対照テーブル
+ */
     var varNames = [
         "MAPPING_FILE",
+"REPOSITORY",
+"TIMESTAMP",
+"ID",
         "TITLE",
         "SUB_TITLE",
         "OPUS",
@@ -1570,6 +1741,9 @@ console.log('read 1st path startup')
      */
     var propNames = [
         "mapfile",
+"dataNode",
+"timestamp",
+"id",
         "title",
         "subtitle",
         "opus",
@@ -1599,42 +1773,35 @@ console.log('read 1st path startup')
     var props = new Array(varNames.length);
     for (var i = 0; i < varNames.length; i++) {
         props[varNames[i]] = propNames[i];
-    };
-    /*
-     * データ走査第二パス
-     * 時間プロパティ欠落時のために初期値設定
-     */
+    }
+/*
+ * データ走査第二パス
+ * 時間プロパティ欠落時のために初期値設定
+ */
 //console.log(SrcData);
-     var readMultiline = false;
-     var readMessage   = false;
-     var readExtension = false;
-//		SrcData.time="6+0";
-    SrcData.trin  = new nas.ShotTransition('trin');
-    SrcData.trout = new nas.ShotTransition('trout');
+    var readMultiline = false;
+    var readMessage   = false;
+    var readExtension = false;
+    SrcData.trin   = new nas.ShotTransition('trin');
+    SrcData.trout  = new nas.ShotTransition('trout');
     SrcData.headMargin = 0;
     SrcData.tailMargin = 0;
-    var nAme = '';var vAlue = '';
+
     for (var line = SrcData.startLine; line < SrcData.length; line++) {
         if((typeof SrcData[line] == 'undefined')||(SrcData[line].match(/^\s*$/))) continue;
-        /**
-         * 前置部分を読み込みつつ、本体情報の確認
-         */
-        if (appHost.platform == 'MSIE') {
-            var choped = SrcData[line].charCodeAt(SrcData[line].length - 1);
-            if (choped <= 32)
-                SrcData[line] = SrcData[line].slice(0, -1);
-        }
-        //なぜだかナゾなぜに一文字多いのか?
-        /**
-         * 申し送り取得フラグが立っていればコメントと他の有効記述以外をメッセージに加算
-         * 終了サインまたは他の有効記述で取得終了
-         */
+/*
+ * 前置部分を読み込みつつ、本体情報の確認
+ */
+/*
+ * 申し送り取得フラグが立っていればコメントと他の有効記述以外をメッセージに加算
+ * 終了サインまたは他の有効記述で取得終了
+ */
         if((readMultiline)||(readMessage)||(readExtension)){
             if((readMultiline)&&(SrcData[line].match(/^#\[|^\#\#[A-Z].*=.*|^\#\#\<[A-Z].*\>\/$/i ))){
 //##<nAme>/ readMultiline close
                 readMultiline = false;nAme = ''; vAlue = '';
             }else if(SrcData[line].match(/^#\[|^\[[A-Z].*|^\#\#[A-Z].*=.*|^\#\#\<[A-Z].*\>\s*$/i )){
-                readMessage=false;readExtension=false;nAme = ''; vAlue = '';
+                readMessage=false;readExtension=false;
             }else{
                 if(! (SrcData[line].match(/^\#.*|^\s*$/i))){
                     if(readMessage) {
@@ -1646,7 +1813,7 @@ console.log('read 1st path startup')
                     };
                 };
             };
-            ;continue;
+            continue;
         };
         if (SrcData[line].match(/^\#\#\<([A-Z].*)\>$/i)){
 //##<nAme> readMultiline 
@@ -1655,74 +1822,71 @@ console.log('read 1st path startup')
             readMultiline = true;
             continue;
         }else if (SrcData[line].match(/^\#\#([A-Z].*)=(.*)$/i)) {
-//シートプロパティにマッチ
-            nAme = RegExp.$1;
-            vAlue = RegExp.$2;
-            /**
-             * 時間関連プロパティを先行して評価。
-             * 読み取ったフレーム数と指定時間の長いほうでシートを初期化する。
-             */
+// シートプロパティにマッチ 
+            var nAme = RegExp.$1;
+            var vAlue = RegExp.$2;
+/* 時間関連プロパティを先行して評価。
+ * 読み取ったフレーム数と指定時間の長いほうでシートを初期化する
+ * 指定時間の計算は time+(trin+trout)/2)+ startOffset + endOffset
+ */
             switch (nAme) {
-                case    "FRAME_RATE":
-                    //フレームレートは第一パスで取得済
+                case    "FRAME_RATE": //フレームレートは第一パスで取得済
                 break;
                 case    "TRIN":
                 case    "TROUT":
-// トランシットイン | トランシットアウト 配列形式からオブジェクトに更新
-/*                    var tm = nas.FCT2Frm(vAlue.split(",")[0],SrcData.framerate.rate);
-                    if (isNaN(tm)) tm = 0;
-                    var nm = vAlue.split(",")[1];
-                    if (!nm) nm = props[nAme];
-                    SrcData[props[nAme]] = [tm, nm];// */
-                    SrcData[props[nAme]].parse(vAlue,(nAme == 'TRIN')? true:false);
+// トランジションオブジェクトとしてパースする
+                    var trst = new nas.ShotTransition(vAlue);
+                    trst.direction = (nAme == 'TROUT')? 'out':'in';
+                    SrcData[props[nAme]] = trst;
                 break;
                 case    "TIME":
                 case    "HEAD_MARGIN":
                 case    "TAIL_MARGIN":
-// カット尺 | ヘッドマージン | テールマージン
-                    var frm = nas.FCT2Frm(vAlue,SrcData.framerate.rate);
-                    if (isNaN(frm)) frm = 0;
-                    SrcData[props[nAme]] = frm;
+// カット尺 前後記述マージン いずれもFCT表記可 (内部ではフレーム数で持つ)
+                    var tm = nas.FCT2Frm(vAlue,SrcData.framerate.rate);
+                    if (isNaN(tm)) tm = 0;
+                    SrcData[props[nAme]] = tm;
                 break;
-//user_info  ユーザ関連情報はオブジェクトに置き換え
+// user_info 
                 case  "CREATE_USER":
                 case  "UPDATE_USER":
                    SrcData[props[nAme]] = new nas.UserInfo(vAlue);
                 break;
-// 管理情報シングルステージドキュメントの際のみ処理
+// 管理情報シングルステージドキュメント
                 case   "Line":;
                    SrcData[props[nAme]] = (vAlue)?
-                       new XpsLine(vAlue):new XpsLine("0:"+nas.pmdb.pmTemplates.members[0].line);
+                       new nas.Xps.XpsLine(vAlue):new nas.Xps.XpsLine("0:"+nas.pmdb.pmWorkflows.entry('%default%').members[0].line);
+//                       new nas.Xps.XpsLine(vAlue):new nas.Xps.XpsLine("0:"+nas.pmdb.pmTemplates.members[0].line);
                 break;
                 case   "Stage":;
                    SrcData[props[nAme]] = (vAlue)?
-                       new XpsStage(vAlue):new XpsStage("0:"+nas.pmdb.pmTemplates.members[0].stages.members[0]);
+                       new nas.Xps.XpsStage(vAlue):new nas.Xps.XpsStage("0:"+nas.pmdb.pmWorkflows.entry('%default%').members[0].stages.members[0]);
+//                       new nas.Xps.XpsStage(vAlue):new nas.Xps.XpsStage("0:"+nas.pmdb.pmTemplates.members[0].stages.members[0]);
                 break;
                 case   "Job":;
                    SrcData[props[nAme]] = (vAlue)?
-                       new XpsStage(vAlue):new XpsStage("0:"+nas.Pm.jobNames[0]);
-                  break;
-// ステータス関連
-/*
- *    指名情報及び申し送りはステータスのサブプロパティとして扱う
- *    ステータスがない場合は無視する
- */
+                       new nas.Xps.XpsJob(vAlue):new nas.Xps.XpsJob("0:"+nas.Pm.jobNames[0]);
+                break;
+                  /* ステータス関連
+                   *    指名情報及び申し送りはステータスのサブプロパティとして扱う
+                   *    ステータスがない場合は無視する
+                   */
                 case   "CurrentStatus":;
-                   SrcData.currentStatus = new JobStatus(vAlue);
+                   SrcData.currentStatus = new nas.Xps.JobStatus(vAlue);
                   break;
                 case   "JobAssign":;
                    if(SrcData.currentStatus) SrcData.currentStatus.assign = vAlue;
                   break;
                 case   "Message":;
-                               //messageは複数行にわたるので読み出しルーチンが必要
+                //messageは複数行にわたるので読み出しルーチンが必要
                    if(SrcData.currentStatus) SrcData.currentStatus.message = vAlue;
                                 //申し送りメッセージ取得フラグを立てて次のループに入る
                      readMessage=true;continue;
-                  break;
+                break;
                 case    "EXTENSION_DATA":;
-                    console.log(vAlue);
+//console.log(vAlue);
                     SrcData.extension_data = vAlue;
-                                //拡張データ取得フラグを立てて次のループに入る
+                                //申し送りメッセージ取得フラグを立てて次のループに入る
                     readExtension=true;continue;
                 break;
                 default:
@@ -1731,63 +1895,58 @@ console.log('read 1st path startup')
 // 判定した値をプロパティで控える
             };
         };
-// タイムラインプロパティまたは終了識別にマッチ
+        /* タイムラインプロパティまたは終了識別にマッチ */
         if (SrcData[line].match(/^\[(([a-zA-Z]+)\t?.*)\]$/)) {
-// シート終わっていたらメモを取り込んで終了
+            /* シート終わっていたらメモを取り込んで終了 */
             if (SrcData[line].match(/\[END\]/)) {
-// シートボディ終了ライン控え
+                /* シートボディ終了ライン控え */
                 SrcData.layerBodyEnd = line;
                 SrcData["memo"] = '';
                 for (var li = line + 1; li < SrcData.length; li++) {
                     SrcData["memo"] += SrcData[li];
                     if ((li + 1) < SrcData.length) {
                         SrcData["memo"] += "\n"
-                    };
-// 最終行以外は改行を追加
-                };
+                    }
+                    /* 最終行以外は改行を追加 */
+                }
                 break;
-            }else{
-//トラックプロパティ
-                /*
-                 * 各レイヤの情報を取得
+            } else {
+                /* 各レイヤの情報を取得
                  * レイヤヘッダの開始行を記録
                  */
-                if (SrcData.layerHeader == 0) {
-                    SrcData.layerHeader = line
-                };
-                /*
-                 * ロットを記録(最大の行を採る)
-                 * @type {number}
-                 */
-                var trackCount =
-                    SrcData[line].split("\t").length - 1;
-                SrcData.trackCount =
-                    (SrcData.trackCount < trackCount) ?
-                        trackCount : SrcData.trackCount;
-                /*
-                 * エントリ数を記録
-                 */
+                if (SrcData.layerHeader == 0) SrcData.layerHeader = line;
+                /* ロットを記録(最大の行を採る) */
+                var trackCount = SrcData[line].split("\t").length - 1;
+                SrcData.trackCount = (SrcData.trackCount < trackCount) ?
+                    trackCount : SrcData.trackCount;
+                /* エントリ数を記録 */
                 SrcData.layerProps++;
-            };
+            }
         } else {
-            /*
-             * シートデータ本体の行数を加算
-             */
-            if (!SrcData[line].match(/^\#.*$/)) {
-                SrcData.frameCount++;	//読み取りフレーム数
-            };
-        };
-    };
-console.log(SrcData);
-
-//console.log(JSON.stringify(SrcData));
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+            /* シートデータ本体の行数を加算 // 読み取りフレーム数*/
+            if (!SrcData[line].match(/^\#.*$/)) SrcData.frameCount++;
+        }
+    }
+//idf欠落が発生しないようにソースを調整(存在しない場合は初期化)
+if(! SrcData.title)    SrcData.title    = this.title;
+if(! SrcData.opus)     SrcData.opus     = this.opus;
+if(! SrcData.subtitle) SrcData.subtitle = this.subtitle;
+if(! SrcData.scene)    SrcData.scene    = this.scene;
+if(! SrcData.cut)      SrcData.cut      = this.cut;
+if(! SrcData.time)     SrcData.time     = this.time();
+if(! SrcData.line)     SrcData.line  = new nas.Xps.XpsLine("0:"+nas.pmdb.pmWorkflows.entry("%default%").members[0].line);
+if(! SrcData.stage)    SrcData.stage = new nas.Xps.XpsStage("0:"+nas.pmdb.pmWorkflows.entry("%default%").members[0].stages.members[0]);
+//if(! SrcData.line)     SrcData.line  = new nas.Xps.XpsLine("0:"+nas.pmdb.pmTemplates.members[0].line);
+//if(! SrcData.stage)    SrcData.stage = new nas.Xps.XpsStage("0:"+nas.pmdb.pmTemplates.members[0].stages.members[0]);
+if(! SrcData.job)      SrcData.job   = new nas.Xps.XpsJob("0:"+nas.Pm.jobNames[0]);
+if(! SrcData.currentStatus ) SrcData.currentStatus = (SrcData.job.id == 0)? new nas.Xps.JobStatus('Startup'):new nas.Xps.JobStatus('Fixed');
 // 第二パス終了・読み取った情報でXPSオブジェクトを再初期化(共通)
-// 継続時間確定に先行してマージンを算出 トランジション時間はヘッド・テールマージンにくりこみ
-    if (SrcData.headMargin < (SrcData.trin / 2))
-        SrcData.headMargin = Math.ceil(SrcData.trin / 2);
-    if (SrcData.tailMargin < (SrcData.trout / 2))
-        SrcData.tailMargin = Math.ceil(SrcData.trout / 2);
+//console.log(SrcData);
+// 継続時間確定に先行してマージンを算出
+    if (SrcData.headMargin < SrcData.trin.frames(SrcData.framerate) / 2)
+        SrcData.headMargin = Math.ceil(SrcData.trin.frames(SrcData.framerate) / 2);
+    if (SrcData.tailMargin < SrcData.trout.frames(SrcData.framerate) / 2)
+        SrcData.tailMargin = Math.ceil(SrcData.trout.frames(SrcData.framerate) / 2);
 //表記上の継続時間を取得
     SrcData.duration = Math.ceil( SrcData.time + SrcData.headMargin + SrcData.tailMargin);
 //実データと記載を比較して長い方を実際の継続時間にする
@@ -1797,11 +1956,35 @@ console.log(SrcData);
     var sheetHeadMargin = SrcData.headMargin;
     var sheetTailMargin = SheetDuration - sheetHeadMargin;
 
+//pmu設定のため進捗ステータスを組み上げる
+var xmapidf = nas.Pm.stringifyIdf([
+    SrcData.title,
+    SrcData.opus,
+    SrcData.subtitle,
+    SrcData.scene,
+    SrcData.cut,
+    SrcData.time,
+    SrcData.line.toString(true),
+    SrcData.stage.toString(true),
+    SrcData.job.toString(true),
+    SrcData.currentStatus.toString(true)
+]);
+//Xps再初期化
+    this.init(SrcData.trackCount, SheetDuration,SrcData.framerate,xmapidf);
+//ノードマネージャー内の対応ノードの日付を設定
+    var currentNode = this.pmu.nodeManager.nodes[0];
+    currentNode.createDate = new Date(SrcData.create_time);
+    currentNode.updateDate = new Date(SrcData.update_time);
+    currentNode.createUser = new nas.UserInfo(SrcData.create_user);
+    currentNode.updateUser = new nas.UserInfo(SrcData.update_user);
+    currentNode.sessionIdf = SrcData.sessionIdf;
+    currentNode.clientIdf  = SrcData.clientIdf;
 
-
-console.log('INIT TRACKCOUNT')
-    this.init(SrcData.trackCount-2, SheetDuration,SrcData.framerate);//再初期化
-
+    if(SrcData.job.toString(true) == this.pmu.nodeManager.nodes[0].toString(true)){
+//console.log('OK-match');
+    }else{
+//console.log('NOGOOD :' +SrcData.job.toString(true) +' : '+ this.pmu.nodeManager.nodes[0].toString(true));
+    };
 //新フォーマットのデータにはsheetLooksが含まれる
 /*
     sheetLooksは必ずしも実際のトラック数と一致はしないので注意が必要
@@ -1827,17 +2010,17 @@ console.log(options);
 console.log(trackOptions);
             trackOptions.reverse().forEach(function(e){
                 var dtct = false;
-                if((Xps.AreaOptions[e] == 'camera')||(Xps.AreaOptions[e] == false)){
+                if((nas.Xps.AreaOptions[e] == 'camera')||(nas.Xps.AreaOptions[e] == false)){
                     if (!dtct) cameraCount ++ ;
-                }else if((typeof Xps.AreaOptions[e] != 'undefined')||(Xps.AreaOptions[e] != 'camera')){
+                }else if((typeof nas.Xps.AreaOptions[e] != 'undefined')||(nas.Xps.AreaOptions[e] != 'camera')){
                     dtct = true;
                 };
             });
             trackOptions.forEach(function(e){
                 var dtct = false;
-                if((Xps.AreaOptions[e] == 'sound')||(Xps.AreaOptions[e] == false)){
+                if((nas.Xps.AreaOptions[e] == 'sound')||(nas.Xps.AreaOptions[e] == false)){
                     if (cellCount == 0) soundCount ++ ;
-                }else if((typeof Xps.AreaOptions[e] != 'undefined')||(Xps.AreaOptions[e] == 'sound')){
+                }else if((typeof nas.Xps.AreaOptions[e] != 'undefined')||(nas.Xps.AreaOptions[e] == 'sound')){
                     dtct = true;
                 };
             });
@@ -1869,12 +2052,10 @@ console.log('INIT TRACKSPEC')
 //        this.parseSheetLooks(SrcData.sheetLooks);//再初期化
 //    };
 // 第二パスで読み取ったプロパティをXPSに転記
-
-// time/currentStatus/extension_data/ 以外はそのまま転記
-console.log(this.timesheetImages.members.length);
-
+// time/currentStatus/extension_data 以外はそのまま転記
     for (var id = 0; id < propNames.length; id++) {
         var prpName = propNames[id];
+//        if (SrcData[prpName] && prpName != "time") this[prpName] = SrcData[prpName];
         if (SrcData[prpName] && prpName != "time") {
             if((this[prpName].setValue)&&(this[prpName].setValue instanceof Function)){
                 this[prpName].setValue(SrcData[prpName]);
@@ -1885,7 +2066,6 @@ console.log(this.timesheetImages.members.length);
             };
         };
     };
-
 // 読み取りデータを調べて得たキーメソッドとブランク位置を転記
     for (var lyr = 0; lyr < SrcData.layers.length; lyr++) {
         this.xpsTracks[lyr].blmtd = SrcData.layers[lyr].blmtd;
@@ -1894,40 +2074,18 @@ console.log(this.timesheetImages.members.length);
     }
 //memo(noteText)があれば転記
     if (SrcData["memo"]) this.xpsTracks.noteText = SrcData["memo"];//後ほどメモパーサを作って入れ替え？
-
 //拡張データ処理
-    if( SrcData.signatures ){
-console.log('srcdata has signatures');
-console.log( SrcData.signatures );
-        this.signatures.parse(SrcData.signatures);
-    };
+    if( SrcData.signatures ) this.signatures.parse(SrcData.signatures);
+    if( SrcData.sheetLooks ) this.sheetLooks = JSON.parse(SrcData.sheetLooks);
 //画像データ
     this.timesheetImages.clearMember();
-    if( SrcData.timesheetImages ){
-
-console.log('srcdata has timesheetImages Collection');
-console.log( SrcData.timesheetImages );
-        this.timesheetImages.parse(SrcData.timesheetImages);
-//        var itmCount = JSON.parse(SrcData.timesheetImages).length;
-//        if(itmCount > 0){
-//console.log('timesheetImages member count :'+ itmCount);
-//console.log(SrcData.timesheetImages);
-//            this.timesheetImages.parse(SrcData.timesheetImages);
-//        };
-console.log(this.timesheetImages);
-    };
+    if( SrcData.timesheetImages ) this.timesheetImages.parse(SrcData.timesheetImages);
     this.noteImages.clearMember();
-    if( SrcData.noteImages ){
-console.log('srcdata has noteImages Collection');
-console.log( SrcData.noteImages );
-        this.noteImages.parse(SrcData.noteImages);
-//        var itmCount = JSON.parse(SrcData.noteImages).length;
-//        if(itmCount > 0) this.noteImages.parse(SrcData.noteImages);
-//console.log(this.noteImages);
-    };
-
+    if( SrcData.noteImages )      this.noteImages.parse(SrcData.noteImages);
 // 各エントリのトラックプロパティとシート本体情報を取得(第三パス)
     var frame_id = 0;//読み取りフレーム初期化
+//pmu 同期
+//    this.syncPmuProps();
 
     for (var line = SrcData.layerHeader; line < SrcData.layerBodyEnd; line++) {
 // 角括弧で開始するデータはタイムライントラックプロパティ
@@ -1939,50 +2097,52 @@ console.log( SrcData.noteImages );
                 layerPropName = "id";//cahanged "name" to "id" 20160818
             };
 // レイヤプロパティが空白の場合があるので適切なデータで置き換える?  読み込みで例外処理を作るべきか？
-//console.log(layerPropName,layerProps);
-//console.log('srcData-trackcount '+ SrcData.trackCount +': xps-tracks:' +this.xpsTracks.length);
-//console.log(this.xpsTracks);
             for (var c = 0; c < SrcData.trackCount; c++) {
             	if(layerProps[c + 1]==""){
             		if (layerPropName=="option"){
             			layerProps[c + 1]=(c==0)?"dialog":"comment";
             		};
             	};
-//console.log(this.xpsTracks[c]);
-                if(this.xpsTracks[c]){
-                    this.xpsTracks[c][layerPropName] = layerProps[c + 1];
-                }else{
-//console.log(c,layerPropName,layerProps[c+1]);
-                    
-                };
-            };
+                this.xpsTracks[c][layerPropName] = layerProps[c + 1];
+            }
         } else {
-//console.log(SrcData.trackCount);
-//console.log(this.xpsTracks.length);
-//console.log(line);
-
 // ほかコメント以外はすべてシートデータ
             if (!SrcData[line].match(/^\#.*$/)) {
-//console.log(SrcData[line]);
-//console.log(SrcData.trackCount)
                 var myLineAry = (SrcData[line].match(/\t/)) ? SrcData[line].split("\t") : SrcData[line].replace(/[\;\:\,]/g, "\t").split("\t");
-//console.log(myLineAry);
                 for (var col = 1; col <= (SrcData.trackCount); col++) {
 // シート本体データの取得
-//console.log(col-1);
-//console.log(this.xpsTracks[col - 1]);
-                    this.xpsTracks[col - 1][frame_id] =
-                        (myLineAry[col] != undefined) ?
-                            myLineAry[col].replace(/(^\s*|\s*$)/, "") : "";
+                    this.xpsTracks[col - 1][frame_id] = (myLineAry[col] != undefined) ?
+                        myLineAry[col].replace(/(^\s*|\s*$)/, "") : "";
                 };
                 frame_id++;
             };
         };
     };
+//読み出しデータからPmUnitを初期化
+//nas.Pm.SCi = function SCi(cutName,cutProduct,cutTime,cutTRin,cutTRout,cutRate,cutFrate,cutId)
+//nas.Pm.PmUnit=function(parentData,productIdentifier)
+/*	var mySCi = new nas.Pm.SCi(
+		this.cut,
+		this.opus,
+		this.time(),
+		this.trin,
+		this.trout,
+		this.rate,
+		this.framerate
+	);
+    this.pmu.setProduct(this.title+'#'+((this.opus.name)?this.opus.name:this.opus)+'//'+mySCi.toString('full'));
+    this.pmu.nodeManager.reset();
+    var ln  = this.pmu.nodeManager.new_ManagementLine(this.line.toString(true));
+    var stg = this.pmu.nodeManager.new_ManagementStage(this.stage.toString(true),ln);
+    var nd  = this.pmu.nodeManager.new_Job(this.job.toString(true),stg);
+ */
 // 転記後にareaOrderの再初期化
     this.xpsTracks.initAreaOrder(this.sheetLooks.trackSpec);
     this.xpsTracks.assignAreaOrderMember();
-/*
+
+//console.log(JSON.stringify(this.pmu.nodeManager.getChart()));
+/* データ読込終了時一括処理 checkdata
+ *
  * 読み取ったデータを検査する(データ検査は別のメソッドにしろ!??)
  * マップファイルは、現在サポート無し
  * サポート開始時期未定
@@ -1992,14 +2152,9 @@ console.log( SrcData.noteImages );
  * 現在は、代用MAPオブジェクトを先行して作成してあるが、
  * 本来のマップが確定するのはこのタイミングなので、注意!
  */
-/*    if (xUI.errorCode) {
-        alert("error :" + localize(xUI.errorCode));
-    };// */
 //console.log(this.toString());
 //   仮設　ｘMap初期化　2018.12
 if (! (this.xMap.currentJob)) this.xMap.syncProperties(this); 
-console.log(this);
-console.log(this.toString(true));
     return this;
 };
 
@@ -2012,9 +2167,11 @@ console.log(this.toString(true));
  *  @returns {string}
  *
  */
-Xps.prototype.toString = function (exprt) {
+nas.Xps.prototype.toString = function (exprt){
     if(typeof exprt == 'undefined') exprt = true;
-    var Now = new Date();
+    var Now = new Date();//toStringの用途が保存時のみでなくなったので自動更新手法を変更
+    if(! this.id)        this.id        = nas.uuid();
+    if(! this.timestamp) this.timestamp = Now.getTime();
     /**
      * セパレータ文字列調整
      * @type {string}
@@ -2037,31 +2194,35 @@ Xps.prototype.toString = function (exprt) {
      * @type {string}
      */
     result += '\n##MAPPING_FILE=' + this.mapfile;
-    result += '\n##TITLE=' + this.title;
-    result += '\n##SUB_TITLE=' + this.subtitle;
-    result += '\n##OPUS=' + this.opus;
-    result += '\n##SCENE=' + this.scene;
-    result += '\n##CUT=' + this.cut;
-    result += '\n##TIME=' + nas.Frm2FCT(this.time(), 3, 0, this.framerate);
-    result += '\n##TRIN='  + this.trin.toString('xps');
-    result += '\n##TROUT=' + this.trout.toString('xps');
+    
+    if(this.dataNode) result += '\n##REPOSITORY='   + this.dataNode;
+    if(this.timestamp)      result += '\n##TIMESTANP='    + this.timestamp;
+    if(this.id)             result += '\n##ID='           + this.id;
+
+    result += '\n##TITLE='        + this.title;
+    result += '\n##SUB_TITLE='    + this.subtitle;
+    result += '\n##OPUS='         + this.opus;
+    result += '\n##SCENE='        + this.scene;
+    result += '\n##CUT='          + this.cut;
+    result += '\n##TIME='         + nas.Frm2FCT(this.time(), 3, 0, this.framerate);
+    result += '\n##TRIN='         + this.trin.toString('xps');
+    result += '\n##TROUT='        + this.trout.toString('xps');
 // あれば記入
     if(this.headMargin) result += '\n##HEAD_MARGIN=' + this.headMargin.toString();
     if(this.tailMargin) result += '\n##TAIL_MARGIN=' + this.tailMargin.toString();
-
-    result += '\n##CREATE_USER=' + this.create_user;
-    result += '\n##UPDATE_USER=' + this.update_user;
-    result += '\n##CREATE_TIME=' + this.create_time;
-    result += '\n##UPDATE_TIME=' + Now.toNASString();
-    result += '\n##FRAME_RATE=' + this.framerate.toString();
-    result += '\n##Line='+this.line.toString();
-    result += '\n##Stage='+this.stage.toString();
-    result += '\n##Job='+this.job.toString();
+    result += '\n##CREATE_USER='  + this.create_user;
+    result += '\n##UPDATE_USER='  + this.update_user;
+    result += '\n##CREATE_TIME='  + this.create_time;
+    result += '\n##UPDATE_TIME='  + ((this.update_time)? this.update_time:Now.toNASString());
+    result += '\n##FRAME_RATE='   + this.framerate.toString();
+    result += '\n##Line='         +this.line.toString();
+    result += '\n##Stage='        +this.stage.toString();
+    result += '\n##Job='          +this.job.toString();
     result += '\n##CurrentStatus='+this.currentStatus.toString();
 if((this.currentStatus.assign)&&(this.currentStatus.assign.length))
-    result += '\n##JobAssign='+this.currentStatus.assign;
+    result += '\n##JobAssign='    +this.currentStatus.assign;
 if((this.currentStatus.message)&&(this.currentStatus.message.length))
-    result += '\n##Message='+this.currentStatus.message;
+    result += '\n##Message='      +this.currentStatus.message;
 //result+='\n##FOCUS='	+11//
 //result+='\n##SPIN='	+S3//
 //result+='\n##BLANK_SWITCH='	+File//
@@ -2090,6 +2251,7 @@ if((this.currentStatus.message)&&(this.currentStatus.message.length))
         result += '\n##<noteImages>/';
     };
     result += '\n#';
+//以下トラックプロパティ
     result += bold_sep;//セパレータ####################################
     /**
      * レイヤ別プロパティをストリームに追加
@@ -2118,12 +2280,8 @@ if((this.currentStatus.message)&&(this.currentStatus.message.length))
     for (var line = 0; line < this.duration(); line++) {
         result += '\n.';//改行＋ラインヘッダ
         for (var column = 0; column < (this.xpsTracks.length); column++) {
-//           var address = column + '_' + line;
-//			if(! Separator){}else{};
-
+            var address = column + '_' + line;
             result += '\t' + this.xpsTracks[column][line];
-//				result+=Separator+this.xpsTracks[column][line];
-
         }
         /**
          * 1/4秒おきにサブセパレータ/秒セパレータを出力
@@ -2162,14 +2320,11 @@ if((this.currentStatus.message)&&(this.currentStatus.message.length))
      * セパレータを空白に変換したものは必要
      * 変更前(開始時点)のバックアップを返すモード必要/ゼロスクラッチの場合は、カラシートを返す。
      */
-//    if (xUI.errorCode) {
-//        xUI.errorCode = false;
-//    }
     return result;
 };
 
 /**
- * Xps.isSame(targetXps)
+ * nas.Xps.isSame(targetXps)
  * 引数    比較するXpsオブジェクト
  * シート内容比較メソッド 相互の値が同じか否か比較する関数
  * ユーザ名・時間等は比較しないでシート内容のみ比較する
@@ -2179,18 +2334,18 @@ if((this.currentStatus.message)&&(this.currentStatus.message.length))
  * @params compareFramerate bool
  * @returns {boolean}
  */
-Xps.prototype.isSame = function (targetXps,compareFramerate) {
+nas.Xps.prototype.isSame = function (targetXps,compareFramerate) {
     if(typeof compareFramerate == 'undefined') compareFramerate = false;
 
     if( (compareFramerate) &&
         ((this.framarate.rate != targetXps.framerate.rate) ||
          (this.framarate.opt != targetXps.framerate.opt))
     ){ return false }
-    var rejectRegEx = new RegExp("framerate|errorCode|errorMsg|mapfile|create_time|create_user|update_time|update_user|layers|xpsTracks|memo|line|stage|job|currentStatus|JobAssign|Message");
+    var rejectRegEx = new RegExp("framerate|errorCode|errorMsg|mapfile|xMap|pmu|create_time|create_user|update_time|update_user|layers|trin|trout|xpsTracks|memo|line|stage|job|currentStatus|JobAssign|Message|id|timestamp|dataNode");
     /**
      * プロパティリスト
      */
-//    errorCode, errorMsg, mapfile, opus, title, subtitle, scene, cut, trin, trout, framerate, create_time, create_user, update_time, update_user, layers, memo, xpsTracks, mkStage, getInfo, guessLink, init, getMap, duration, time, getTC, readIN, toString, mkAEKey;
+//id,xMap,pmu,timestamp,dataNode,line,stage,job,currentStatus,opus,title,subtitle,scene,cut,inherit,trin,trout,framerate,rate,create_time,create_user,update_time,update_user,xpsTracks,mapfile,init,syncPmuProps,newTracks,timeline,getIdentifier,syncIdentifier,duration,getDuration,time,getTC,insertTL,deleteTL,setDuration,reInitBody,getRange,put,readIN,parseXps,toString,isSame,getNormarizedStream,getNoteText";
 /**
     フレームレートを比較するオプションのデフォルト値はfalse
 */
@@ -2205,7 +2360,7 @@ Xps.prototype.isSame = function (targetXps,compareFramerate) {
             continue
         }
         /**
-         * 配列プロパティをスキップしているので注意後で配列比較を書く
+         * 配列プロパティをスキップしているので注意 後で配列比較を書く
          */
         if ((this[myProp] == targetXps[myProp])) {
             continue
@@ -2214,6 +2369,7 @@ Xps.prototype.isSame = function (targetXps,compareFramerate) {
          * プロパティがあれば比較してマッチしていればスキップ(targetXps[myProp])&&
          */
 //		return [this[myProp],targetXps[myProp]].join(" != ");//抜けたデータがあればNG判定で終了
+//console.log('no match :'+myProp);
         return false;//
     }
 //opus,title,subtitle,scene,cut,trin,trout,framerate,
@@ -2228,10 +2384,12 @@ Xps.prototype.isSame = function (targetXps,compareFramerate) {
      */
     for (var lIdx = 0; lIdx < this.xpsTracks.length; lIdx++) {
         for (var myProp in this.xpsTracks[lIdx]) {
+            if (this.xpsTracks[lIdx][myProp] instanceof Object) continue;
             if ((this.xpsTracks[lIdx][myProp] == targetXps.xpsTracks[lIdx][myProp])) {
                 continue
             }
             //(targetXps.layers[lIdx][myProp])&&
+//console.log('no match track prop :'+myProp);
             return false;
         }
     }
@@ -2240,6 +2398,7 @@ Xps.prototype.isSame = function (targetXps,compareFramerate) {
      * メモ比較
      */
     if (this.xpsTracks.noteText.replace(/¥s+/g, " ").replace(/¥n/g, "") != targetXps.xpsTracks.noteText.replace(/¥s+/g, " ").replace(/¥n/g, "")) {
+//console.log('no match memo :');
         return false
     }
     /**
@@ -2249,6 +2408,7 @@ Xps.prototype.isSame = function (targetXps,compareFramerate) {
         return false
     }
     if (this.xpsTracks[0].length != targetXps.xpsTracks[0].length) {
+//console.log('no match TimelinTrackDuration :');
         return false
     }
     for (var L = 0; L < this.xpsTracks.length; L++) {
@@ -2256,6 +2416,7 @@ Xps.prototype.isSame = function (targetXps,compareFramerate) {
             if (this.xpsTracks[L][F] == targetXps.xpsTracks[L][F]) {
                 continue
             }
+//console.log('no match timeline :' + [L,F].join());
             return false;
         }
     }
@@ -2289,7 +2450,7 @@ Xps.prototype.isSame = function (targetXps,compareFramerate) {
  * @params layer_id
  * @returns {Array}
  */
-Xps.prototype.getNormarizedStream = function (layer_id) {
+nas.Xps.prototype.getNormarizedStream = function (layer_id) {
     var layerDataArray = this.xpsTracks[layer_id + 1];
     layerDataArray.label = (layer_id < 0) ? "N" : this.xpsTracks[layer_id].id;
     if (layer_id < 0) {
@@ -2324,14 +2485,13 @@ Xps.prototype.getNormarizedStream = function (layer_id) {
     if (currentValue == "interp") currentValue = false;
     bufDataArray[0] = (currentValue) ? currentValue : "blank";
 
-    /**
-     * 2>>ラストフレーム ループ
-     */
+/*
+ * 2>>ラストフレーム ループ
+ */
     for (var f = 1; f < layerDataArray.length; f++) {
-        /**
-         * 有効データを判定して無効データエントリを直前のコピーで埋める
-         * @type {*}
-         */
+ /*
+ * 有効データを判定して無効データエントリを直前のコピーで埋める
+ */
         currentValue = dataCheck(layerDataArray[f], layerDataArray.label, bflag);
         if (currentValue == "interp") currentValue = false;//キー変換 && timing 限定
         bufDataArray[f] = (currentValue) ? currentValue : bufDataArray[f - 1];
@@ -2353,19 +2513,638 @@ Xps.prototype.getNormarizedStream = function (layer_id) {
 };
 
 /**
- *    Xpsに単独記録する制作管理オブジェクト
+    Xpstノートテキストを返す
+    行頭が"_※ "のエントリーは、システムがシートから拾い上げて追加するエントリー
+*/
+nas.Xps.prototype.getNoteText = function(){
+    var result = [];
+//トランジションが存在すればそれを記載
+    var transitText = "";
+    transitText += this.trin.toString();
+    if (transitText.length) transitText += ' / ';
+    transitText += this.trout.toString();
+	if (transitText.length) result.push("]X[" + transitText);
+//カメラワークオブジェクトを記載
+    for (var tix = 0;tix < this.xpsTracks.length;tix++){
+        if(this.xpsTracks[tix].option =='camera'){
+            var sections = this.xpsTracks[tix].parseTimelineTrack();
+            for (var six = 0;six < sections.length ; six ++){
+                if(sections[six].value) result.push(sections[six].value.toString());
+            }
+        }
+    }
+//ユーザ文字列を追加
+    if(this.xpsTracks.noteText) result.push(this.xpsTracks.noteText);
+
+    return result.join("\n");
+}
+
+//xUI.XPS.getNoteText();
+/* Class Method */
+/**
+    グループ記述の有る文字列を分解して要素名とグループ名を分離するXpsクラスメソッド
+    引数の文字列を評価してそのラベルとエントリ文字列に分解して返す
+    Reaplacmentトラック用
+
+引数:セルエントリ文字列
+戻値:配列[エントリ文字列,グループラベル]
+
+グループラベルが存在しない文字列の戻値は要素数１の配列
+ */
+nas.Xps.sliceReplacementLabel = function (myStr){
+    let myLabel ;let myName ;
+    if(myStr.match(/^(.+)[\s\-_]([^\s\-_].*)$/)){
+        myLabel = RegExp.$1;
+        myName  = RegExp.$2;
+    } else if (myStr.match(/^([A-Z])(\(?.+\)?|\[?.+\]?|<?.+>?)$/)){
+        myLabel = RegExp.$1;
+        myName  = RegExp.$2;
+    } else {
+        return [myStr];
+    }
+    return [myName,myLabel];
+}
+// test
+/*
+   var myResult="";
+   var testStrings=[
+    "123","A123","A(123)","A<_=123>","A[123x]","A下-123","A--(123x)",A[◯]
+   ];
+    for(var idx=0;idx<testStrings.length;idx++){
+        myResult += testStrings[idx]+" : "+nas.Xps.sliceReplacementLabel(testStrings[idx])+"\n";
+    }
+//if(dbg) console.log(myResult);
+*/
+/**
+     Xpsオブジェクトから識別子を作成するクラスメソッド
+     名前を変更するか又はオブジェクトメソッドに統合
+     このメソッドは同名別機能のオブジェクトメソッドが存在するので厳重注意
+     クラスメソッドはURIencodingを行い、オブジェクトメソッドは'%'エスケープを行う
+
+*** 識別子のフレームレート拡張（予定）
+    (括弧)でくくられた時間情報は、カット尺であり素材継続時間ではない。
+    フレームレートを追加情報として補うことが可能とする
+    その際は以下のルールに従う
+    (FCT/FPS)
+    単独のカットに対して設定されたフレームレートは、そのカットのみで有効
+    基本的には、タイトルのプロパティからフレームレートを取得してそれを適用する。
+    識別子には、基本的にフレームレートを含める必要性はない。
+    タイトルのフレームレートと異なる場合のみ、識別子にフレームレートを埋め込む。
+
+    このコーディングは、pmdb実装後に行われる。2018.07.16
+
+引数  opt
+"title"#"opus"//"s-c"("time")//"line"//"stage"//"job"//"status"
+'episode'(or 'product')//'cut'//'statsu'
+
+デフォルトでは制作管理情報が付加されたフルフォーマットの識別子が戻る
+
+*/
+nas.Xps.getIdentifier = function(myXps,opt){
+//この識別子作成は実験コードです2016.11.14
+    if(typeof opt=='undefined') opt ='status';
+    var myIdentifier=[
+            encodeURIComponent(myXps.title)+
+        "#"+encodeURIComponent(myXps.opus.toString('name'))+
+        ((String(myXps.subtitle).length > 0)? "["+encodeURIComponent(myXps.subtitle)+"]":''),
+            encodeURIComponent(
+                "s" + ((myXps.scene)? myXps.scene : "-" )+
+                "c" + myXps.cut) +
+                "(" + myXps.time() +")",
+            encodeURIComponent(myXps.line.toString(true)),
+            encodeURIComponent(myXps.stage.toString(true)),
+            encodeURIComponent(myXps.job.toString(true)),
+            myXps.currentStatus.toString(true)
+        ];// */
+/*    var myIdentifier=[
+            encodeURIComponent(myXps.pmu.title)+
+        "#"+encodeURIComponent(myXps.pmu.opus.toString('name'))+
+        ((String(myXps.pmu.subtitle).length > 0)? "["+encodeURIComponent(myXps.pmu.subtitle)+"]":''),
+            encodeURIComponent(
+                "s" + ((myXps.pmu.scene)? myXps.pmu.scene : "-" )+
+                "c" + myXps.pmu.cut) +
+                "(" + myXps.time() +")"];
+        if(myXps.pmu.currentNode){
+            myIdentifier.splice(myIdentifier.length,0,
+                encodeURIComponent(myXps.pmu.currentNode.stage.parentLine.toString(true)),
+                encodeURIComponent(myXps.pmu.currentNode.stage.toString(true)),
+                encodeURIComponent(myXps.pmu.currentNode.toString(true)),
+                myXps.pmu.currentNode.jobStatus.toString(true)
+            );
+        };// */
+    var order = 2;     
+    switch(opt){
+    case 'title':
+    case 'opus':
+    case 'episode':
+    case 'product':
+        order = 1;break;
+    case 'cut':
+        order = 2;break;
+    case 'line':
+        order = 3;break;
+    case 'stage':
+        order = 4;break;
+    case 'job':
+        order = 5;break;
+    case 'status':
+    case 'full':
+    default:
+        order = 6;break;
+    }
+//識別子をネットワークリポジトリに送信後正常に追加・更新ができた場合は（コールバックで）ローカルリストの更新を行うこと
+    return myIdentifier.slice(0,order).join("//");;
+}
+
+
+/*
+    仮の比較関数
+    SCiオブジェクトに統合予定
+    一致推測は未実装
+    戻値:数値  -2   :no match
+               -1   :title match
+                0   :product match
+                1   :product + cut match
+                2   :line match
+                3   :stage match
+                4   :job match
+                5   :status match
+
+ステータス情報のうちassign/messageの比較は行わないステータス自体の比較もほぼ利用されないので省略を検討
+*/
+nas.Xps.compareIdentifier = function (target,destination){
+    var tgtInfo  = nas.Xps.parseIdentifier(target);
+    var destInfo = nas.Xps.parseIdentifier(destination);
+    //title
+        if(tgtInfo.title != destInfo.title) { return -2;}
+    //title+opus
+        if( tgtInfo.opus != destInfo.opus ) { return -1;}
+    //Scene,Cut
+        var tgtSC = tgtInfo.cut;
+        var dstSC = destInfo.cut;
+        if((! tgtSC)||(! dstSC)) return 0;
+        if(tgtSC != dstSC){return 0;}
+        var result = 1;
+    //version status
+        if (((tgtInfo.line)&&(destInfo.line))&&(tgtInfo.line.id.join() == destInfo.line.id.join() )){
+            result = 2;}else{return result;}
+        if (((tgtInfo.stage)&&(destInfo.stage))&&(tgtInfo.stage.id == destInfo.stage.id )){
+            result = 3;}else{return result;}
+        if (((tgtInfo.job)&&(destInfo.job))&&(tgtInfo.job.id  == destInfo.job.id )){
+            result = 4;}else{return result;}
+        if ((tgtInfo.currentStatus)&&(destInfo.currentStatus)&&(tgtInfo.currentStatus.content == destInfo.currentStatus.content)) result = 5;
+        return result;
+}
+/*  TEST
+var A =[
+    "うなぎ",0,"ニョロ",
+    "","12","2+0",
+    "0:(本線)","1:原画","2:演出チェック","Startup:kiyo@nekomataya.info:TEST"
+    ];
+var B =[
+    "うなぎ",0,"ニョロ",
+    "","12","2+0",
+    "0:(本線)","1:原画","2:演出チェック","Startup"
+    ];
+nas.Xps.compareIdentifier("35%E5%B0%8F%E9%9A%8A_PC#RBE//04d",'35%E5%B0%8F%E9%9A%8A_PC#RBE[ベルセルク・エンチャント演出]')
+//console.log(nas.Xps.compareIdentifier(nas.Xps.stringifyIdf(A),nas.Xps.stringifyIdf(B)))
+*/
+/**
+    識別子をパースする関数
+    SCiオブジェクトで戻す？
+    Identifier の持ちうる情報は以下
+
+    title
+        .name
+    opus
+        .name
+        .subtitle
+    [sci]
+        .name
+        .times
+    
+    [issues]
+        Line
+            .id
+            .name
+        Stage
+            .id
+            .name
+        Job
+            .id
+            .name
+    status
+        JobStatus
+            .content
+            .assign
+            .message
+*/
+/**
+    プロダクト識別子をパースして返す
+    サブタイトルは一致比較時に比較対象から外す
+    引数がまたは第一要素がカラの場合はfalse
+*/
+nas.Xps.parseProduct = function(productString){
+    var dataArray = String(productString).replace( /[\[\]\/]/g ,'#').split('#');
+    return {
+        title     :   ((typeof dataArray[0]=='undfined')||(String(dataArray[0])=='undefined'))? "":decodeURIComponent(dataArray[0]),
+        opus      :   ((typeof dataArray[1]=='undfined')||(String(dataArray[1])=='undefined'))? "":decodeURIComponent(dataArray[1]),
+        subtitle  :   ((typeof dataArray[2]=='undfined')||(String(dataArray[2])=='undefined'))? "":decodeURIComponent(dataArray[2])
+    };
+}
+/** test
+//if(dbg) console.log (nas.Xps.parseProduct('%E3%82%BF%E3%82%A4%E3%83%88%E3%83%AB%E6%9C%AA%E5%AE%9A#%E7%AC%AC%20%20%E8%A9%B1[TEST]//s-c123(144)//'));
+*/
+/**
+    sci識別子をパースして返す
+    識別子に付属する時間情報はトランジション／継続時間ではなくカット尺のみ
+    補助情報は持たせない。かつ対比時に比較対象とならないものとする
+    カット番号情報は、ここではscene-cutの分離を行わない
+    比較の必要がある場合に始めて比較を行う方針でコーディングする
+    sciString末尾の（括弧内）は時間情報部分
+    (括弧)による記述が2つ以上ある場合は最初の開き括弧の前がカット識別子で、時間情報は最後の（括弧）内の情報を用いる
+    
+    書式は(TC//framareteString) or (TC) フレームレートの指定のない場合はデフォルトの値で補われる
+    (1+12),(1+12//24FPS),(1:12//30),(01:12//30DF),(00:00:01:12//59.94)等
+    デフォルト値は、タイトルから取得
+    sciStringに時間情報が含まれないケースあり
+    time指定の存在しない識別子の場合"6:0"を補う
+
+    引数が与えられない場合は''とする
+*/
+nas.Xps.parseSCi = function(sciString){
+    if(typeof sciString == 'undefined') sciString = '';
+    var dataArray = String(sciString).split('/');
+//    if((dataArray.length==0)||(String(dataArray[0]).length==0)){return false};
+    var result = [];
+    for (var ix=0;ix < dataArray.length ;ix ++){
+        var currentEntry=dataArray[ix].split('(');
+        result.push({
+        'cut'   :   decodeURIComponent(currentEntry[0]),
+        'time'  :   (currentEntry.length ==1 )? "6:0":decodeURIComponent(currentEntry[currentEntry.length-1]).replace(/[\(\)]/g,'')
+        });
+    }
+    return result;
+}
+/** test
+    console.log (nas.Xps.parseSCi('s-cC%23%20(16)/s-c96(13)'));
+    console.log (nas.Xps.parseSCi('s-cC%23%20(16)(18)'));
+*/
+/**
+セル記述を整形して比較評価用に正規化された文字列を返すクラスメソッド
+戻り値は、<グループ名>-<セル番号>[-<ポストフィックス>]
+
+A_(001)_ovl  A-1-ovl
+*/
+nas.Xps.normalizeCell = function(myString){
+    return nas.normalizeStr(myString.replace( /[-_ー＿\s]/g ,"-")).replace( /([^\d.])0+/g ,"$1");
+}
+//test
+//nas.Xps.normalizeCell("A_００１２ー上");
+//nas.Xps.normalizeCell("");
+//nas.Xps.normalizeCell("");
+//nas.Xps.normalizeCell("");
+//nas.Xps.normalizeCell("");
+//nas.Xps.normalizeCell("");
+//nas.Xps.normalizeCell("");
+/**
+SCiデータ上のカット名をセパレータで分離するクラスメソッド
+この場合のカット名には時間情報・ステータス等を含まないものとする
+パースされたカット名は、カット、シーンの順の配列で戻す有効最大２要素
+
+    [cut,scene,<void>,~];//第三要素以降は分離しても使用されないことに注意
+    [cut,scene]
+    [cut]
+
+要素数が識別子に含まれる情報の深度を示す
+*/
+nas.Xps.parseCutIF = function(myIdentifier){
+    var result = String(myIdentifier).replace(/[\ _\-]+/g,"_").split("_").reverse();
+    for (var ix=0;ix<result.length;ix++){
+        if(ix==0){result[ix]=result[ix].replace(/^[CcＣｃ]/,"");};//cut
+        if(ix==1){result[ix]=result[ix].replace(/^[SsＳｓ]/,"");};//scene
+//        if(ix==2){result[ix]=result[ix].replace(/^[OoＯｏ#＃]/,"");};//opus
+        result[ix]=result[ix].replace(/^[#＃№]|^(No.)/,"");//ナンバーサインを削除
+    };
+    return result;
+}
+//test
+//if(dbg) console.log(nas.Xps.parseCutIF("00123#31[124]__s-c123"));
+//
+/**
+パース済みのカット識別子を比較してマッチ情報を返す
+シーンカットともに一致した場合のみtrueそれ以外は false
+引数に秒表記部が含まれないよう調整が必要
+この関数はブール値を返す　廃止予定　２０１９０６２０
+*/
+nas.Xps.compareCutIdf=function(tgt,dst){
+    if(tgt.match(/\(.+\)/)){tgt = nas.Xps.parseSCi(tgt)[0].cut};
+    if(dst.match(/\(.+\)/)){dst = nas.Xps.parseSCi(dst)[0].cut};
+    var tgtArray = nas.Xps.parseCutIF("-"+tgt);
+    var dstArray = nas.Xps.parseCutIF("-"+dst);
+    if (
+    (((tgtArray[1]=="")&&(dstArray[1]==""))||
+    (nas.RZf(nas.normalizeStr(tgtArray[1]),12)==nas.RZf(nas.normalizeStr(dstArray[1]),12)))&&
+    (nas.RZf(nas.normalizeStr(tgtArray[0]),12)==nas.RZf(nas.normalizeStr(dstArray[0]),12))
+    ) return true ;
+    return false ;
+}
+/*TEST
+nas.Xps.compareCutIdf("C12","s-c012");
+nas.Xps.compareCutIdf("0012","title_opus_s-c012");
+nas.Xps.compareCutIdf("C００１２","s-c012");
+nas.Xps.compareCutIdf("S#1-32","s01-c0３２");
+*/
+/**
+    @params {Object nas.Xps} targetXps
+    @params {Boolean} exprt
+    オブジェクト複製クラスメソッド
+    引数のXpsを複製して独立したオブジェクトとして戻す
+*/
+nas.Xps.duplicate = function duplicate(targetXps,exprt){
+    if(!(targetXps instanceof nas.Xps)) return;
+    if(! exprt) exprt = (exprt)?true:false;
+    var result = new nas.Xps();
+    result.parseXps(targetXps.toString(exprt));
+    return result;
+}
+/*TEST
+var X = nas.Xps.duplicate(xUI.XPS,true);
+console.log(X.toString());
+*/
+/**
+    配列指定で識別子をビルドするテスト用関数
+引数: [title,opus,subtitle,scene,cut,time,line,stage,job,status]
+*/
+nas.Xps.stringifyIdf = function(myData){
+///myDataはlength==10の配列であること
+//この識別子作成は実験コードです2016.11.14
+    var myIdentifier=[
+            encodeURIComponent(String(myData[0]))+
+        "#"+encodeURIComponent(String(myData[1]))+
+        ((String(myData[2]).length > 0)? "["+encodeURIComponent(myData[2])+"]":''),
+            encodeURIComponent(
+                "s" + ((myData[3])? myData[3] : "" )+'-'+
+                "c" + ((myData[4])?myData[4]:'00')) +
+                "(" + ((myData[5])?myData[5]:Sheet) +")",
+            encodeURIComponent(myData[6]),
+            encodeURIComponent(myData[7]),
+            encodeURIComponent(myData[8]),
+            myData[9]
+    ].join("//");
+    return myIdentifier;
+}
+//TEST
+/*
+nas.Xps.stringifyIdf([
+    "たぬき",
+    "12",
+    "ポンポコリン",
+    "",
+    123,
+    "1+12",
+    "0:(本線)",
+    "1:原画",
+    "2:演出チェック",
+    "Startup:kiyo@nekomataya.info"
+]);
+*/
+/**
+     データ識別子をパースして無名オブジェクトで戻す
+     データ判定を兼ねる
+     分割要素がカット番号を含まない（データ識別子でない）場合はfalseを戻す
+     SCi/listEntryオブジェクトとの兼ね合いを要調整20170104
+     
+     asign/
+     オブジェクトメソッドの識別子も解釈可能にする
+    
+    '//（二連スラッシュ）'を認識できなかったケースに限り'__（二連アンダーバー）'をセパレータとして認識するように変更
+    **"_(アンダーバー単独)"はセパレータ以外で使用するケースがあるため要注意
+*/
+nas.Xps.parseIdentifier = function(myIdentifier){
+    if(! myIdentifier) return false;
+    if(myIdentifier.indexOf( '//' )<0 ){ myIdentifier=myIdentifier.replace(/__/g,'//'); }
+    var dataArray = myIdentifier.split('//');
+    var result={};
+    result.product  = nas.Xps.parseProduct(dataArray[0]);
+    result.sci      = nas.Xps.parseSCi(dataArray[1]);
+    result.title    = result.product.title;
+    result.opus     = result.product.opus;
+    result.subtitle = result.product.subtitle;
+    var sep = nas.Xps.parseCutIF(result.sci[0].cut);
+    result.scene    = (sep.length > 1)? sep[1]:'';
+    result.cut      = sep[0];
+    result.time     = result.sci[0].time;
+    if(dataArray.length == 6){
+        result.line     = new nas.Xps.XpsLine(decodeURIComponent(dataArray[2]));
+        result.stage    = new nas.Xps.XpsStage(decodeURIComponent(dataArray[3]));
+        result.job      = new nas.Xps.XpsJob(decodeURIComponent(dataArray[4]));
+        result.currentStatus   = new nas.Xps.JobStatus(dataArray[5]);
+        //ステータスはデコード不用(オブジェクト自体がデコードする)
+    }
+    /*ここでは初期化しないundefined で戻す
+    {
+        result.line     = new nas.Xps.XpsLine(nas.pm.pmTemplate[0].line);
+        result.stage    = new nas.Xps.XpsStage(nas.pm.pmTemplate[0].stages[0]);
+        result.job      = new nas.Xps.XpsJob(nas.pm.jobNames.getTemplate(nas.pm.pmTemplate[0].stages[0],"init")[0]);
+        result.currentStatus   = "Startup";        
+    }*/
+//if(dbg) console.log(result);
+    return result;
+}
+/** test 
+//if(dbg) console.log(nas.Xps.parseIdentifier('%E3%81%8B%E3%81%A1%E3%81%8B%E3%81%A1%E5%B1%B1Max#%E3%81%8A%E3%81%9F%E3%82%81%E3%81%97//s-c10(72)//0%3A(%E6%9C%AC%E7%B7%9A)//0%3Alayout//0%3Ainit//Startup'));
+{
+  "product": {
+    "title": "かちかち山Max",
+    "opus": "おためし",
+    "subtitle": ""
+  },
+  "sci": [
+    {
+      "cut": "s-c10",
+      "time": "72"
+    }
+  ],
+  "title": "かちかち山Max",
+  "opus": "おためし",
+  "subtitle": "",
+  "scene": "",
+  "cut": "10",
+  "time": "72",
+  "line": {
+    "id": [
+      "0"
+    ],
+    "name": "本線"
+  },
+  "stage": {
+    "id": "0",
+    "name": "layout"
+  },
+  "job": {
+    "id": "0",
+    "name": "init"
+  },
+  "currentStatus": {
+    "content": "Startup",
+    "assign": "",
+    "message": ""
+  }
+}
+
+*/
+/**
+ *    Xpsオブジェクトから、xMapオブジェクトを引き出すクラスメソッド
+ *   @params    {Onject Xps}    targetXps
+ *   @returns   {Object xMap}
+ */
+nas.Xps.getxMap = function(targetXps){
+    if( ! (targetXps instanceof nas.Xps)) return null;
+    var idf = nas.Pm.getIdentifier(targetXps,'status');
+//console.log(idf);
+    var resultxMap = new nas.xMap(idf);
+    resultxMap.pmu.reset();
+    resultxMap.pmu.setProduct(idf);
+
+/*  xMapの基本プロパティをターゲットに同期させる
+ *  ノードマネージャが持っているデータをいったん破棄して入れ替え
+ */
+    var parseData = nas.Pm.parseIdentifier(idf);
+    var jobProps = [
+        '##['+parseData.mNode.job+']',
+        '##status='  +targetXps.currentStatus.content+';',
+        '##assign='  +targetXps.currentStatus.assign+';',
+        '##message=' +targetXps.currentStatus.message+';',
+        '##created=' +targetXps.create_time+'/'+targetXps.create_user+';',
+        '##updated=' +targetXps.update_time+'/'+targetXps.update_user+';'
+    ];
+    if(targetXps.worker)     jobProps.push('##worker='  +targetXps.worker+';');
+    if(targetXps.manager)    jobProps.push('##manager=' +targetXps.manager+';');
+    if(targetXps.clientIdf)  jobProps.push('##clientIdf=' +targetXps.clientIdf+';');
+    if(targetXps.sessionIdf) jobProps.push('##sessionIdf='+targetXps.sessionIdf+';');
+    if(targetXps.slipNumber) jobProps.push('##slipNumber='+targetXps.slipNumber+';');
+
+    var myJob = resultxMap.pmu.nodeManager.getNode();
+    myJob.parse(jobProps.join('\n'));
+    resultxMap.pmu.currentNode = resultxMap.pmu.nodeManager.getNode();
+    resultxMap.syncPmuProps();
+    resultxMap.create_user = new nas.UserInfo(targetXps.create_user);
+    resultxMap.create_time = new Date(targetXps.create_time);
+//issuesに従って、ステージを取得　ステージのターゲットアセットを　resultxMapに登録
+    var targetNode  = resultxMap.pmu.currentNode;
+    var targetAsset = targetNode.stage.asset;
+    if(! targetAsset){
+        var msg = '未定義アセットが指定されました。作品の管理者に相談してください。';
+        msg += 'assetName : '+targetNode.stage.stage.output;
+alert(msg);
+        return resultxMap;
+    }
+    var currentAsset = new nas.xMap.xMapAsset(
+        targetXps.stage.name,
+        targetAsset,
+        targetNode.stage
+    );
+//xpsを登録
+    var xpsGroup = resultxMap.new_xMapElement(
+        'timesheet',
+        'xps',
+        targetNode,
+        "[timesheet\txps]"
+    );
+    resultxMap.new_xMapElement(
+    targetXps.cut,
+    xpsGroup,
+    targetNode,
+    targetXps.getIdentifier('full')
+    );
+
+//トラックをパースして、トラック種別ごとにエレメントを登録する
+registElement:
+    for(var trix = 0 ; trix < targetXps.xpsTracks.length ; trix ++){
+        var targetTrack = targetXps.xpsTracks[trix];
+        if (targetTrack.option=='comment') continue;//コメントトラックはスキップ
+        var sections = targetTrack.parseTimelineTrack();
+//*** group setting
+        var currentGroup = resultxMap.new_xMapElement(
+            targetTrack.id,
+            targetTrack.option,
+            targetNode,
+            "["+[targetTrack.id,targetTrack.option].join('\t')+"]"
+        );
+        var skipProcess = false;
+        for(var six = 0; six < sections.length ;six ++){
+            if (sections[six]==null) continue;//ブランクセクションをスキップ
+//still|timing|dialog|sound|camera|camerawork|geometry|effect|composit|comment
+            switch (targetTrack.option){
+            //NOP
+            case "dialog":
+            case "camera":
+            case "camerawork":
+                if (sections[six].value === null){
+                    skipProcess=true;
+                }else{
+//console.log(sections[six].value);
+                    var myName = sections[six].value.name;//名前
+                    var contentSource = sections[six].value.toString();
+//console.log(sections[six].value.toString());
+                }
+            break;
+            case "geometry":
+            case "stage":
+            case "stagework":
+            case "composite":
+            case "effect":
+            case "sfx":
+            case "sound":
+                var myName = sections[six].getContent()[0];//名前
+                var contentSource = [targetTrack.id,sections[six].getContent()[0]].join('\t');
+            break;
+            case "cell":
+            case "replacement":
+            case "still":
+            case "timing":
+            default:
+                if(sections[six].value === null) skipProcess = true;
+                var myName = [targetTrack.id,sections[six].getContent()[0]].join('-');//名前
+                var contentSource = [targetTrack.id,myName].join('\t');
+            }
+            if(skipProcess){
+                skipProcess = false ;
+//console.log('skip process for:'+myName)
+//console.log(sections[six])
+                continue registElement; 
+            }
+//***** setting elements
+            resultxMap.new_xMapElement(
+                myName,
+                currentGroup,
+                targetNode,
+                contentSource
+            );
+        }
+        
+        var groupSource = "["+targetTrack.id +"\t"+ targetTrack.id+"]\n";
+//トラックごとにグループを登録
+    }
+    return resultxMap;
+}
+/*TEST
+x=nas.Xps.getxMap(xUI.XPS);
+x.toString();
+*/
+/**
+ *    Xpsに単独記録する制作管理オブジェクト nas.Xps.XpsLine
  *    ライン記述を与えてオブジェクトを初期化する
  *  @params {String}  lineDescription
  *  ライン記述<br />
- *　@example
- * var A= new XpsLine('(本線):0');
- * var A= new XpsLine( 1:(背景));
- * var A= new XpsLine('(背景3D-build):1:1');
- * var A= new XpsLine('1-1:(背景3D-build)');
+ *  @example
+ * var A= new nas.Xps.XpsLine('(本線):0');
+ * var A= new nas.Xps.XpsLine( 1:(背景));
+ * var A= new nas.Xps.XpsLine('(背景3D-build):1:1');
+ * var A= new nas.Xps.XpsLine('1-1:(背景3D-build)');
  * 等
- */
- 
-/*     識別名の(括弧)は払って比較
+ *     識別名の(括弧)は払って比較
  *     前置型式、後置型式どちらでも解釈
  *     引数記述が数値のみ指定は許されない（初期化に失敗させる）
  *    
@@ -2375,7 +3154,7 @@ Xps.prototype.getNormarizedStream = function (layer_id) {
  *     (当該ライン・ステージ・ジョブがxMapに存在しない場合は、xMapドキュメントを初期化の際に同期)
  *     当該のライン・ステージ・ジョブがpmdbに存在しない場合は、標準でxMap(==SCi)にエントリを追加
  */
-function XpsLine (lineDescription){
+nas.Xps.XpsLine = function XpsLine(lineDescription){
 	this.id	=	[0];//
 	this.name ='本線';//又は'trunk'
     if(lineDescription) this.parse(lineDescription);
@@ -2384,7 +3163,7 @@ function XpsLine (lineDescription){
  * ライン記述をプロパティにパースする
  *  @params {String} lineDescription
  */
-XpsLine.prototype.parse = function(lineDescription){
+nas.Xps.XpsLine.prototype.parse = function(lineDescription){
     if(typeof lineDescription == undefined) return this;
     lineDescription=String(lineDescription);
     if(lineDescription.match(/^[0-9]+$/)){lineDescription+=':-'}
@@ -2405,7 +3184,7 @@ XpsLine.prototype.parse = function(lineDescription){
  *  @params {bool} opt
  * 整数id部 前置・後置切り替えオプション
  */
-XpsLine.prototype.toString = function(opt){
+nas.Xps.XpsLine.prototype.toString = function(opt){
     if(opt)     return [this.id.join('-'),'(' + this.name +')'].join(':');
     return ['(' + this.name +')',this.id.join(':')].join(':');
 }
@@ -2415,12 +3194,12 @@ XpsLine.prototype.toString = function(opt){
  *  @params {String} stageDescription
  *  ステージを表す記述
  *  @example
- *  var A= new XpsStage("1:原画");
- *  var A= new XpsStage("原画:1");
+ *  var A= new nas.Xps.XpsStage("1:原画");
+ *  var A= new nas.Xps.XpsStage("原画:1");
  *  整数id部は前置・後置どちらの型式でも良い
  *   ':' は省略不可  Xpsへの記録時は後方型式を推奨
  */
-function XpsStage (stageDescription){
+nas.Xps.XpsStage = function XpsStage(stageDescription){
     this.id     = 0 ;
     this.name   = 'init';
     if(stageDescription) this.parse(stageDescription);
@@ -2429,7 +3208,7 @@ function XpsStage (stageDescription){
  * ステージ記述をプロパティにパースする
  *  @params {String} stageDescription
  */
-XpsStage.prototype.parse = function(stageDescription){
+nas.Xps.XpsStage.prototype.parse = function(stageDescription){
     if (typeof stageDescription =='undefined') return this;
     stageDescription=String(stageDescription);
     var prpArray=stageDescription.split(':');
@@ -2444,7 +3223,7 @@ XpsStage.prototype.parse = function(stageDescription){
  *  @params {bool} opt
  * 整数id部前置・後置切り替えオプション
  */
-XpsStage.prototype.toString = function(opt){
+nas.Xps.XpsStage.prototype.toString = function(opt){
     if(opt)     return [this.id,this.name].join(':');
     return [this.name,this.id].join(':');
 }
@@ -2453,7 +3232,7 @@ XpsStage.prototype.toString = function(opt){
  * 整数id部を、次ステージのために繰り上げる
  * 次ステージ名が与えられない場合は、IDのゼロ埋め３桁の数値に置き換える
  */
-XpsStage.prototype.increment = function(myString){
+nas.Xps.XpsStage.prototype.increment = function(myString){
     this.id   = nas.incrStr(String(this.id));
     this.name = (myString)? myString:nas.Zf(this.id,3);
     return this;
@@ -2463,7 +3242,7 @@ XpsStage.prototype.increment = function(myString){
  * 使用禁止
  *  @params {String} myString　次ステージ名
  */
-XpsStage.prototype.reset = function(myString){
+nas.Xps.XpsStage.prototype.reset = function(myString){
     this.id   = 0;
     this.name = (myString)? myString:'init';
     return this;
@@ -2474,44 +3253,48 @@ XpsStage.prototype.reset = function(myString){
  *  @params {String} jobString
  *  jobを表す記述
  *  @example
- *  var A= new XpsJob("1:[原画]");
- *  var A= new XpsJob("[原画]:1");
+ *  var A= new nas.Xps.XpsJob("1:[原画]");//id前置
+ *  var A= new nas.Xps.XpsJob("[原画]:1");//id後置
  *  整数id部は前置・後置どちらの型式でも良い
- *   ':' は省略不可  Xpsへの記録時は後方型式を推奨
+ *   ':' は省略不可  Xpsへの記録時は後置形式を推奨
  */
-function XpsJob (jobString){
+nas.Xps.XpsJob = function XpsJob(jobString){
     this.id   = 0 ;
     this.name = '';
     if(jobString) this.parse(jobString);
 }
 /**
- * ジョブ記述をプロパティにパースする
- *  @params {String} jobString
+ *  @params {String | Object nas.Xps.XpsJob} jobDescription
+ *  @returns {Object} this
+ * ジョブ記述｜オブジェクトをプロパティにパースする
  */
-XpsJob.prototype.parse = function(jobString){
-    if(typeof jobString == 'undefined')return this;
-    var prpArray=jobString.split(':');
+nas.Xps.XpsJob.prototype.parse = function(jobDescription){
+    if(typeof jobDescription == 'undefined') return this;
+    if(jobDescription instanceof nas.Xps.XpsJob) jobDescription = jobDescription.toString();
+    var prpArray= jobDescription.split(':');
     if(prpArray.length){
-        if(prpArray[0].match(/^\d+$/)){prpArray.reverse();}
+        if(prpArray[0].match(/^\d+$/)) prpArray.reverse();
         this.id = prpArray[1];
         this.name = prpArray[0].replace(/^\[|\]$/g,"");
-    }
+    };
     return this;
 }
 /** 文字列化して返す
  *  @params {bool} opt
- * 整数id部前置・後置切り替えオプション
+ *  @returns {String}
+ * 整数id部前置・後置切り替えオプション true:前置 / false:後置
  */
-XpsJob.prototype.toString=function(opt){
+nas.Xps.XpsJob.prototype.toString=function(opt){
    if(opt)     return [this.id,'['+this.name+']'].join(':');
     return ['['+this.name+']',this.id].join(':');
 }
 /**
  *  @params {String} myString　次ステージ名
+ *  @returns {Object} this
  * 整数id部を、次ステージのために繰り上げる
  * 次ステージ名が与えられない場合は、ユーザハンドルに置き換えられる
  */
-XpsJob.prototype.increment = function(myString){
+nas.Xps.XpsJob.prototype.increment = function(myString){
     this.id   = nas.incrStr(String(this.id));
     this.name = (myString)? myString:nas.CURRENTUSER;
     return this;
@@ -2521,14 +3304,14 @@ XpsJob.prototype.increment = function(myString){
  * 原則使用禁止
  *  @params {String} myString　次ステージ名
  */
-XpsJob.prototype.reset = function(myString){
+nas.Xps.XpsJob.prototype.reset = function(myString){
     this.id   = 0;
     this.name = (myString)? myString:'init';
     return this;
 }
 
 /*
-    JobStatus
+    nas.Xps.JobStatus
     Jobの状況（＝カットの作業状態）
     content:作業状態を示すキーワードStartup/Active/Hold/Fixed/Aborted/Compleated/
 初期値は"Startup(未着手)"
@@ -2562,7 +3345,7 @@ Active,Hold はサーバからエクスポートされた
     暫定的なスタータスとしてのFloatingは消滅　元来のStartupへ戻る
     Floatingはジョブのステータスでなく　ドキュメントのdataNodeプロパティを参照対象に変更する
  */
-function JobStatus (statusArg){
+nas.Xps.JobStatus = function(statusArg){
     this.content = "Startup";
     this.assign  = "";
     this.message = "";
@@ -2572,7 +3355,7 @@ function JobStatus (statusArg){
  * ステータス記述をプロパティにパースする
  *  @params {String} statusArg
  */
-JobStatus.prototype.parse = function(statusArg){
+nas.Xps.JobStatus.prototype.parse = function(statusArg){
     if (statusArg instanceof Array){
         var prpArray = statusArg;
         if(prpArray.length){
@@ -2594,7 +3377,7 @@ JobStatus.prototype.parse = function(statusArg){
  *  @params {bool} opt
  * 整数id部前置・後置切り替えオプション
  */
-JobStatus.prototype.toString=function(opt){
+nas.Xps.JobStatus.prototype.toString=function(opt){
     if(
         (opt)&&
         ((this.content=="Fixed")||(this.content=="Startup"))&&
@@ -2610,7 +3393,7 @@ JobStatus.prototype.toString=function(opt){
  * タイムライントラックの標準値を取得するメソッド
  *  タイムラインラベルが指定するグループがあらかじめ存在する場合は、そのグループオブジェクトが保持する値
  *  存在しない場合は、新規にグループを作成する。その際にトラックの種別ごとのValueオブジェクトを初期値として登録するのでその値を使用
- *  XpsTimelineTrack.getDefeultValue()側で調整
+ *  nas.Xps.XpsTimelineTrack.getDefeultValue()側で調整
  *  Replacementの場合、基本ブランクだが必ずしもブランクとは限らないので要注意
  *  トラック上で明示的なブランクが指定された場合は、値にfalse/null/"blank"を与える。
 
@@ -2619,12 +3402,12 @@ JobStatus.prototype.toString=function(opt){
  * @params myOption
  * @returns {*}
  */
-function _getMapDefault(myOption) {
+nas.Xps._getMapDefault = function(myOption) {
     var myGroup=this.xParent.parentXps.xMap.getElementByName(this.id);
     if((typeof myGroup == "undefined")||(! myGroup)){
 //console.log("no group detect. new grou setup");
 /*
-console.log([
+//console.log([
         this.id,
         this.option,
         this.xParent.parentXps.xMap,
@@ -2730,9 +3513,8 @@ console.log([
  * 各テーブルは先頭,末尾 またはその両方にタイムコードエリアトラックを置くことが可能
  * 
  *
- * nas.Xps.XpsTrackArea = 
  */
-function XpsTrackArea(type){
+nas.Xps.XpsTrackArea = function XpsTrackArea(type){
 	this.type     = (type)? type:"cell" ;// reference|action|sound|replacement|camera|geometry|composite
 	this.timecode = "none"              ;// none|both|head|tail
 	this.tracks   = 1                   ;// members.length に同期しない 初期化時点の基準値として働く
@@ -2769,13 +3551,17 @@ function XpsTrackArea(type){
  トラックのデータフィールドに表示ウインドウを設定できるように
  表示開始オフセットと表示フレーム数を設定する
  duration は従来どおりコレクション内部のトラックの長さを規定する　これはカット尺とは関係なくトラックの全フレーム数を表す
+ Xps.headMarginがショット開始オフセットを正の整数で、Xps.tailMarginはショット終了後の余剰フレーム数を記録する
+表示オプションはUIが記録
+
+
  startOffsetは、表示開始オフセットを正の整数で、viewRandeが表示ウインドウのフレーム数を記録する
  表示オプションはUIが記録
 
 areas // areaCollection プロパティを増設
 eg.
     var TRs = new XpsTrackCollection(parentXps,"0",144,{offset:24,})
-*/
+ */
 /**
     @constractor
     @params  {Object}    parent
@@ -2783,7 +3569,7 @@ eg.
     @params  {Number}    duration
     @params  {Object}    scope
  */
-function XpsTrackCollection (parent,index,duration,scope){
+nas.Xps.XpsTrackCollection = function XpsTrackCollection(parent,index,duration,scope){
 	this.parentXps  = parent    ;//固定情報親Xps
 	this.jobIndex   = index     ;//固定情報JobID
 	this.duration   = duration  ;//タイムライン継続時間（ショットのタイムではない）
@@ -2791,13 +3577,13 @@ function XpsTrackCollection (parent,index,duration,scope){
 	this.noteText    = ""           ;//property dopesheet note-text
 	this.areaOrder   = []           ;//トラックをメンバーごとに配置するためのエイリアス
 	this.length      = 1            ;//メンバーを要素数１(undefined)で初期化
-//	this[0] = new XpsTimelineTrack("N","dialog",this,this.duration); //初期要素としてダイアログフィールド
-//	this[1] = new XpsTimelineTrack("","comment",this,this.duration); //初期要素としてレコード終端フィールド
-	this[0] = new XpsTimelineTrack("","comment",this,this.duration); //初期要素としてレコード終端フィールド
+//	this[0] = new nas.Xps.XpsTimelineTrack("N","dialog",this,this.duration); //初期要素としてダイアログフィールド
+//	this[1] = new nas.Xps.XpsTimelineTrack("","comment",this,this.duration); //初期要素としてレコード終端フィールド
+	this[0] = new nas.Xps.XpsTimelineTrack("","comment",this,this.duration); //初期要素としてレコード終端フィールド
 //以下はオブジェクトメソッド（配列ベースなのでArrayオブジェクトのメソッド書き換えを防ぐためこの表記に統一）
 //オブジェクトメソッド群
 /**
-    @params {Object XpsTimelineTrack | String | Number}    trk
+    @params {Object nas.Xps.XpsTimelineTrack | String | Number}    trk
     @returns    {Boolean}
     指定のトラックが含まれるareaOrderグループを返す
     セルIDが指定された場合はそのIDを含むトラックを判定する
@@ -2805,8 +3591,8 @@ function XpsTrackCollection (parent,index,duration,scope){
  */
     this.getAreaOrder = function(trk){
         if((typeof trk == 'string')&&(trk.match(/\d+\_\d+/))) trk = trk.split('_')[0];
-        if(!(trk instanceof XpsTimelineTrack)) trk = this[parseInt(trk)];
-        return this.areaOrder.find((e)=> e.members.indexOf(trk)>=0);
+        if(!(trk instanceof nas.Xps.XpsTimelineTrack)) trk = this[parseInt(trk)];
+        return this.areaOrder.find(function(e){return (e.members.indexOf(trk) >= 0);});
     };//getAreaOrder
  
 /**
@@ -2848,13 +3634,13 @@ function XpsTrackCollection (parent,index,duration,scope){
             this.parentXps.sheetLooks.trackSpec = trackSpec;//チェックして複製のほうが良い
             this.initAreaOrder(trackSpec);//エリアオーダーを再初期化
             this.areaOrder.forEach(function(e){
-                var trk = this.find(function(elm){return (Xps.AreaOptions[elm.option]==e.type);});
+                var trk = this.find(function(elm){return (nas.Xps.AreaOptions[elm.option]==e.type);});
                 while(trk){
                     if(trk){
                         if(e.members.length < e.tracks) e.members.push(trk);//orderArea側に参照を残す
                         this.splice(this.indexOf(trk),1);//直接削除
                     };
-                    trk = this.find(function(elm){return (Xps.AreaOptions[elm.option]==e.type);});
+                    trk = this.find(function(elm){return (nas.Xps.AreaOptions[elm.option]==e.type);});
                 };
             },this);
             this.areaOrder.forEach(function(e){
@@ -2863,7 +3649,7 @@ function XpsTrackCollection (parent,index,duration,scope){
                         var tracklabel = (e.type == 'replacement')?
                             ('ABCDEFGHIJKLMNOPQRSTUVWXWZ').slice(e.members.length,e.members.length+1):
                             (e.type).slice(0,3)+(e.members.length + 1);
-                        e.members.push(new XpsTimelineTrack(tracklabel,e.type, this, this.duration));
+                        e.members.push(new nas.Xps.XpsTimelineTrack(tracklabel,e.type, this, this.duration));
                     };
                 };
                 e.members.forEach(function(mtrk){this.push(mtrk);},this);
@@ -2890,7 +3676,7 @@ console.log(this.parentXps);
         if (Object.keys(this.parentXps.sheetLooks).length > 0){
             var sheetLooks = JSON.parse(JSON.stringify(this.parentXps.sheetLooks));
         }else{
-            var sheetLooks = JSON.parse(JSON.stringify(SheetLooks));
+            var sheetLooks = JSON.parse(JSON.stringify(config.SheetLooks));
         }
             sheetLooks.trackSpec = this.getTrackSpec();
             return sheetLooks;
@@ -2906,7 +3692,7 @@ console.log(this.parentXps);
  */
     this.initAreaOrder = function(trackSpec){
 console.log('init area order');
-		if(!trackSpec) trackSpec = (this.parentXps.sheetLooks.trackSpec)? this.parentXps.sheetLooks.trackSpec:SheetLooks.trackSpec;
+		if(!trackSpec) trackSpec = (this.parentXps.sheetLooks.trackSpec)? this.parentXps.sheetLooks.trackSpec:config.SheetLooks.trackSpec;
 		this.areaOrder.length = 0;//clear table
 /*
 	trackSpecをスキャンしてエリアを確定する
@@ -2919,12 +3705,12 @@ console.log('init area order');
 			var tracktype   = trackSpec[ix][0];
 			var trackCount  = trackSpec[ix][1];
 			var trackOption = trackSpec[ix][2];
-			var areatype    = Xps.AreaOptions[tracktype];
+			var areatype    = nas.Xps.AreaOptions[tracktype];
 			if(areatype){
 				if((currentArea)&&(currentArea.type == areatype)){
 					currentArea.tracks += trackCount;
 				}else{
-					currentArea = new XpsTrackArea(areatype);
+					currentArea = new nas.Xps.XpsTrackArea(areatype);
 					this.areaOrder.push(currentArea);
 					currentArea.tracks = trackCount;//初期化時の定数
 					currentArea.fix  = (trackOption == 'fix')?  true:false;
@@ -2948,7 +3734,7 @@ console.log('init area order');
 			};
 		};
 //trackspec上のコメントトラックを無視して最後に加える
-		if(currentArea.type != 'comment') this.areaOrder.push(new XpsTrackArea('comment'));
+		if(currentArea.type != 'comment') this.areaOrder.push(new nas.Xps.XpsTrackArea('comment'));
 //membersテーブルをアサインしない
 		return this.areaOrder;
 	}
@@ -3000,8 +3786,8 @@ console.log('init area order');
             if(this.areaOrder[currentAreaId].type == 'comment')   break;//終端エリアは別処理
             if(
                 (this.areaOrder[currentAreaId].type == 'reference')||(
-                    (Xps.AreaOptions[this[i].option]==this.areaOrder[currentAreaId+1].type)&&
-                    (Xps.AreaOptions[this[i+1].option]!=this.areaOrder[currentAreaId].type)
+                    (nas.Xps.AreaOptions[this[i].option]==this.areaOrder[currentAreaId+1].type)&&
+                    (nas.Xps.AreaOptions[this[i+1].option]!=this.areaOrder[currentAreaId].type)
                 )
             ) currentAreaId++;
             this.areaOrder[currentAreaId].members.push(this[i]);
@@ -3013,13 +3799,13 @@ console.log('init area order');
     }
 /**
  * タイムラインを挿入
- * XpsTrackCollection.insertTrack(id,XpsTimelineTrack)
- * Timeline(XpsTimelineTrack object オブジェクト渡し)
+ * nas.Xps.XpsTrackCollection.insertTrack(id,nas.Xps.XpsTimelineTrack)
+ * Timeline(nas.Xps.XpsTimelineTrack object オブジェクト渡し)
  * idの前方に引数のタイムラインを挿入
  * idが未指定・範囲外の場合、後方へ挿入
  * 0番タイムラインの前方へ挿入可
  * @params myId
- * @params {Array of XpsTimelineTrack } myTrack
+ * @params {Array of nas.Xps.XpsTimelineTrack } myTrack
  */
     this.insertTrack = function(myId,myTrack){
         var insertCount=0;
@@ -3038,7 +3824,7 @@ console.log('init area order');
         var trackOffset = this.getTrackOffset(targetAreaId);
 //挿入
         for(var tc = 0 ; tc < myTrack.length ; tc++){
-            if(myTrack[tc] instanceof XpsTimelineTrack) {
+            if(myTrack[tc] instanceof nas.Xps.XpsTimelineTrack) {
                 targetArea.members.splice(myId-trackOffset+tc , 0, myTrack[tc]);
                 this.splice(myId+tc, 0, myTrack[tc]);
                 insertCount++;
@@ -3049,7 +3835,7 @@ console.log('init area order');
         return insertCount;
     };
 /**
- * XpsTrackCollection.removeTrack([id])
+ * nas.Xps.XpsTrackCollection.removeTrack([id])
  * 指定idのタイムラインを削除する
  * デフォルトの音声トラックとフレームコメントトラック及び最後のタイミングトラックの削除はできない
  * IDを単独又は配列渡しで
@@ -3131,12 +3917,12 @@ xUI.XPS.xpsTracks.areaOrder.findIndex(function(e){
         return ipct;
     }
 /**
- * XpsTrackCollection.getRange(Range:[[startC,startF],[endC,endF]])
+ * nas.Xps.XpsTrackCollection.getRange(Range:[[startC,startF],[endC,endF]])
  * 範囲内のデータをストリームで返す
  * xpsのメソッドに移行 2013.02.23
  * 範囲外のデータは、ヌルストリングを返す2015.09.18
  * 負のアドレスを許容150919
- * XpsTrackCollectionのメソッドに移行　もとのメソッドはラッパで残置　2020.05.16
+ * nas.Xps.XpsTrackCollectionのメソッドに移行　もとのメソッドはラッパで残置　2020.05.16
  * 全てシートの範囲外を指定された場合は、範囲のサイズの空ストリームを返す
  * チェックはない（不要）空ストリームを得る場合に使用可能
  * 開始と終了のアドレスが一致している場合は、該当セルの値を返す
@@ -3173,8 +3959,8 @@ xUI.XPS.xpsTracks.areaOrder.findIndex(function(e){
         return this.getRange(output)
     }
 /**
- * XpsTrackCollection.put(inputUnit)
- * XpsTrackCollection.put(inputAddress,inputContent)
+ * nas.Xps.XpsTrackCollection.put(inputUnit)
+ * nas.Xps.XpsTrackCollection.put(inputAddress,inputContent)
  * 指定アドレスにデータを書き込む
  * 入力ユニットのオブジェクト種別は問われないが、オブジェクトがaddress,valueの各プロパティを持っているものする
  * 引数としての入力オブジェクトの配列は受け付けない
@@ -3232,17 +4018,16 @@ xUI.XPS.xpsTracks.areaOrder.findIndex(function(e){
             }
         }
 //戻り値は、[書き込みに成功したレンジ,書き込み成功後データ,書き換え前のストリーム]
-        return [writeRange, this.getRange(writeRange), currentData];
+//        return [writeRange, this.getRange(writeRange), currentData];
 
 //新戻り値は[書き込み先頭アドレス,書き込み成功後データ,書き換え前のストリーム,書き込みに成功したレンジ]
-//        return [writeRange[0], this.getRange(writeRange), currentData, writeRange];
+        return [writeRange[0], this.getRange(writeRange), currentData, writeRange];
         
     };//put
 }
-XpsTrackCollection.prototype = Array.prototype;
-
+nas.Xps.XpsTrackCollection.prototype = Array.prototype;
 /**
- * @constructor XpsTimelineTrackオブジェクトコンストラクタ
+ * @constructor nas.Xps.XpsTimelineTrackオブジェクトコンストラクタ
  *
  * タイムラインのトラックとなるオブジェクト
  * 配列ベースで、xpsTracks(トラックコレクション)のメンバーとなる
@@ -3254,7 +4039,7 @@ XpsTrackCollection.prototype = Array.prototype;
  * ジオメトリを持たないオブジェクトもある
  * タイムライントラックを抽象化するためのレイヤーとして機能する
  * 旧来のXPSLayerの代替となるのである程度の互換を考慮すること
- * xpsBodyとXps.layersを統合するデータ構造である
+ * xpsBodyとnas.Xps.layersを統合するデータ構造である
  *
  * @params myLabel
  * @params myType
@@ -3265,37 +4050,46 @@ XpsTrackCollection.prototype = Array.prototype;
  親のXpsにアクセスする必要があるので、トラックの属するトラックコレクションへのポインタを持たせる。
  トラックコレクションが実質上のタイムシート本体である
  マルチステージ拡張のために必須
- 
+
  トラックのデフォルト（暗黙）値としてvalueプロパティを新設
- カット頭にセリフオブジェクトを置く場合に対応 2020.0827
- */
-function XpsTimelineTrack(myLabel, myType, myParent, myLength) {
+ カット頭にセリフオブジェクトを置く場合などに対応 2020.0827
+ 
+トラックコレクションにheadMargin tailMargin値を増設
+
+トラック種別に (timecode)(reference) tracknote を増設
+ (timecode)(reference) は、トラックに値を持たない位置指定オブジェクトで配列の内容は必ず""
+ ラベル等のプロパティも持たない
+ 実際に画面に表示される値は、実装に依存する
+
+ tracknoteは、commentに似た、任意の数登録可能なコンポジットに影響しないノートテキスト用のトラックとする
+  */
+nas.Xps.XpsTimelineTrack = function XpsTimelineTrack(myLabel, myType, myParent, myLength) {
 	
-	this.index     ;//indexは自動制御生成時点ではundefinedタイムラインコレクションへの組み込み時点で設定される
-	this.xParent   = myParent;//親オブジェクトへの参照（トラックコレクションxpsTracksへの参照）
-	this.length    = myLength;//配列メンバーを空文字列に設定する
-		for(var ix = 0;ix < this.length;ix ++){ this[ix] = "";}
-    this.duration  = this.length;
-    this.id        = myLabel;//識別用タイムラインid(文字列)タイムライン|グループ名
-    this.option    = (typeof myType == "undefined") ? "timing" : myType;//action|still|timing|replacement|dialog|sound|camera|camerawork|effect|composite|comment|tracknoteのいずれか
-    this.value     = '';//デフォルトのフィールド(シートセル)値
-    this.sizeX     = "640";//デフォルト幅 point
-    this.sizeY     = "480";//デフォルト高 point
-    this.aspect    = "1";//デフォルトのpixelAspect
-        this.lot   = "=AUTO=";//旧オブジェクト互換
-        this.blmtd = "file";//旧オブジェクト互換
-        this.blpos = "end";//旧オブジェクト互換
-    this.tag       = (this.option=='still')? this.id:'';
-    this.link      = ".";
-    this.parent    = ".";//
-    this.sections  = new XpsTimelineSectionCollection(this);
+	this.index;//indexは自動制御生成時点ではundefinedタイムラインコレクションへの組み込み時点で設定される
+	this.xParent=myParent;//親オブジェクトへの参照（トラックコレクションxpsTracksへの参照）
+	this.length=myLength;//配列メンバーを空文字列に設定する
+		for(var ix=0;ix<this.length;ix++){this[ix]="";}
+    this.duration=this.length;
+    this.id = myLabel;//識別用タイムラインid(文字列)タイムライン|グループ名
+    this.option = (typeof myType == "undefined") ? "timing" : myType;//(timecode)|(reference)|still|timing|replacement|dialog|sound|camera|camerawork|effect|composit|tracknote|commentのいずれか
+    this.value = '';//デフォルトのフィールド(シートセル)値
+    this.sizeX = "640";//デフォルト幅 point
+    this.sizeY = "480";//デフォルト高 point
+    this.aspect = "1";//デフォルトのpixelAspect
+    this.lot = "=AUTO=";//旧オブジェクト互換
+    this.blmtd = "file";//旧オブジェクト互換
+    this.blpos = "end";//旧オブジェクト互換
+    this.tag =(this.option=='still')? this.id:'';
+    this.link = ".";
+    this.parent = ".";//
+    this.sections = new nas.Xps.XpsTimelineSectionCollection(this);
     this.sectionTrust = false;//セクションコレクションが最新の場合のみtrueとなるインジケータ変数
 
 //以下はオブジェクトメソッド（配列ベースなのでArrayオブジェクトのメソッド書き換えを防ぐためこの表記に統一）
 //オブジェクトメソッド群
 /**
  * 削除メソッドをトラックオブジェクトに実装する	
- * XpsTimelineTrack.remove()
+ * nas.Xps.XpsTimelineTrack.remove()
  * 削除の派生機能としてトラックオブジェクト側にremoveメソッドを作る
  * =自分自身の削除命令を親コレクションに対して発行する
  */
@@ -3313,19 +4107,20 @@ function XpsTimelineTrack(myLabel, myType, myParent, myLength) {
         return newOne;
     }
 /**
-    @desc トラックのセルエントリの識別文字列を作成する
-    
-*/
+ *    @desc トラックのセルエントリの識別文字列を作成する
+ *    @params {String}    myStr
+ *   ??
+ */
     this.getCellIdentifier=function(myStr){
         if(this.option!="timing"){return null;}
         this.LabelRegex=new RegExp("^"+this.id.replace(/[\\\-\+\[\]\(\)\.\^\$]/g,"\\$&") + "[\s\-_]?(.*)$");
         if(myStr.match(LableRegex)){
-            myName  = RegExp.$1;
+            var myName  = RegExp.$1;
             myLabel = this.id;
         }else{
-            myName = myStr;
+            var myName = myStr;
         };
-    }
+    };
 /**
  * @desc タイムラインの中間処理メソッド
  * タイムラインをパースして有効データで埋まった１次元配列を返す
@@ -3401,26 +4196,24 @@ function XpsTimelineTrack(myLabel, myType, myParent, myLength) {
         }
         return false;
     }
-
-
+    
 //汎用関数設定
-    this.getDefaultValue = _getMapDefault;//
+    this.getDefaultValue = nas.Xps._getMapDefault;//
 
-    this.parseSoundTrack        =_parseSoundTrack;
-    this.parseDialogTrack       =_parseSoundTrack;
-    this.parseReplacementTrack  =_parseReplacementTrack;
-    this.parseCameraworkTrack   =_parseCameraworkTrack;
-    this.parseGeometryTrack     =_parseGeometryTrack;
-    this.parseCompositeTrack    =_parseCompositeTrack;
-
-    this.parseTimelineTrack = XpsTimelineTrack.parseTimelineTrack;
-    this.getSectionByFrame  = XpsTimelineTrack.getSectionByFrame;
-    this.pushEntry          = XpsTimelineTrack.pushEntry;
-    this.countMember        = XpsTimelineTrack.countMember;
-    this.findCell           = XpsTimelineTrack.findCell;
+    this.parseSoundTrack		=nas._parseSoundTrack;
+    this.parseDialogTrack		=nas._parseDialogTrack;
+    this.parseReplacementTrack	=nas._parseReplacementTrack;
+    this.parseCameraworkTrack	=nas._parseCameraworkTrack;
+    this.parseGeometryTrack		=nas._parseGeometryTrack;
+    this.parseCompositeTrack	=nas._parseCompositeTrack;
+    this.parseTimelineTrack = nas.Xps.XpsTimelineTrack.parseTimelineTrack;
+    this.getSectionByFrame  = nas.Xps.XpsTimelineTrack.getSectionByFrame;
+    this.pushEntry          = nas.Xps.XpsTimelineTrack.pushEntry;
+    this.countMember        = nas.Xps.XpsTimelineTrack.countMember;
+    this.findCell           = nas.Xps.XpsTimelineTrack.findCell;
 }
-
-XpsTimelineTrack.prototype = Array.prototype;
+/**/
+nas.Xps.XpsTimelineTrack.prototype = Array.prototype;
 //test
 //
 /**
@@ -3428,12 +4221,12 @@ XpsTimelineTrack.prototype = Array.prototype;
  * 第一トラックのダイアログのみしか処理しません
  * 
  * @params myValue
- * @returns {XpsTimelineSection}
- セクションの追加メソッドはセクションコレクションに移動・このメソッドの新規利用は不可
- 暫定コードを潰し終えたら削除
-
-XpsTimelineTrack.prototype.addSection = function (myValue) {
-    var newSection = new XpsTimelineSection(this, 0);//親Collection、継続時間
+ * @returns {nas.Xps.XpsTimelineSection}
+ * セクションの追加メソッドはセクションコレクションに移動・このメソッドの新規利用は不可
+ * 暫定コードを潰し終えたら削除
+ *
+nas.Xps.XpsTimelineTrack.prototype.addSection = function (myValue) {
+    var newSection = new nas.Xps.XpsTimelineSection(this, 0);//親Collection、継続時間
     newSection.value = myValue;
     this.sections.push(newSection);
     return newSection;
@@ -3445,14 +4238,14 @@ XpsTimelineTrack.prototype.addSection = function (myValue) {
 */
 
 /**
- * @constructor XpsTimelineSectionCollection
+ * @constructor nas.Xps.XpsTimelineSectionCollection
  *
  * トラック・セクションオブジェクトのプロパティとなるセクショントレーラー配列
  * セクションオブジェクトは、内包サブセクションを持つことができる
- * @params myParent as nas.XpsTimelineTrack
+ * @params myParent as nas.Xps.XpsTimelineTrack
  */
-function XpsTimelineSectionCollection(myParent) {
-    this.parent = myParent;// Object XpsTimelineTrack
+nas.Xps.XpsTimelineSectionCollection = function(myParent) {
+    this.parent = myParent;// Object nas.Xps.XpsTimelineTrack
 //以下はオブジェクトメソッド（配列ベースなのでArrayオブジェクトのメソッド書き換えを防ぐためこの表記に統一）
 //オブジェクトメソッド群
 /**<pre>
@@ -3468,37 +4261,37 @@ function XpsTimelineSectionCollection(myParent) {
  * エレメント新規作成が必要な場合はあらかじめ事前にエレメント新規作成を行って引数とする</pre>
  * @params {Object AnimationValue | String} myValue
  *      値オブジェクト|"interpolation"|"sectionCareer"
- * @returns {XpsTimelineSection}
+ * @returns {nas.Xps.XpsTimelineSection}
  */
     this.addSection = function (myValue) {
-        var newSection ;// 新規セクションnew XpsTimelineSection(this, 0, true|false);
+        var newSection ;// 新規セクションnew nas.Xps.XpsTimelineSection(this, 0, true|false);
         if(myValue == "sectionCareer"){
     //セクション保持用セクション(サウンドトラック用)
-            newSection = new XpsTimelineSection(this, 0, true);
-            //newSection.subSections=new XpsTimelineSectionCollection(newSection);
+            newSection = new nas.Xps.XpsTimelineSection(this, 0, true);
+            //newSection.subSections=new nas.Xps.XpsTimelineSectionCollection(newSection);
             newSection.mapElement;//エレメントは登録されない
             newSection.value="sectionCareer";//キーワードを保持;   
         } else if(this.parent.subSections){
     //親が中間値補間セクションまたはキャリアセクションであった場合無条件でサブセクションを登録
-            newSection = new XpsTimelineSection(this, 0 );
+            newSection = new nas.Xps.XpsTimelineSection(this, 0 );
             newSection.mapElement;//エレメントは登録されない
             newSection.value = (this.parent.value=="sectionCareer")?
                 myValue:
                 new nas.ValueInterpolator(newSection);
-        } else if(myValue instanceof nas.xMapElement){
+        } else if(myValue instanceof nas.xMap.xMapElement){
     //引数がxMapエレメントなのでそのまま有値セクション初期化
-            newSection = new XpsTimelineSection(this, 0 );
+            newSection = new nas.Xps.XpsTimelineSection(this, 0 );
             newSection.mapElement = myValue;
             newSection.value = newSection.mapElement.content;
         } else if(myValue == "interpolation"){
     //プライマリ中間値補間セクション
-            newSection = new XpsTimelineSection(this, 0, true);
-            newSection.subSections=new XpsTimelineSectionCollection(newSection);
+            newSection = new nas.Xps.XpsTimelineSection(this, 0, true);
+            newSection.subSections=new nas.Xps.XpsTimelineSectionCollection(newSection);
             newSection.mapElement;
             newSection.value=null;//new nas.ValueInterpolator();   
         } else {
     //中間値補間サブセクション以外の
-            newSection = new XpsTimelineSection(this, 0 );
+            newSection = new nas.Xps.XpsTimelineSection(this, 0 );
             newSection.mapElement;//エレメントは登録されない
             newSection.value = myValue;
         }
@@ -3507,7 +4300,7 @@ function XpsTimelineSectionCollection(myParent) {
         return newSection;
     };
 
-/* XpsTimelineSectionCollection.getDuration()メソッドは、セクションのdurationを合計するメソッド
+/* nas.Xps.XpsTimelineSectionCollection.getDuration()メソッドは、セクションのdurationを合計するメソッド
  * 
  */
     this.getDuration = function () {
@@ -3519,7 +4312,8 @@ function XpsTimelineSectionCollection(myParent) {
     };
 /*  セクション編集メソッド
  *      insertSection(id,newSection)
- *  指定idの前方にセクションを挿入する後方のセクションは、継続時間を維持したままさらに後方へ再配置される
+ *  指定idの前方にセクションを挿入する
+ *  後方のセクションは、継続時間を維持したままさらに後方へ再配置される
  *  カットの時間範囲を越えたセクションは消去または後方をカットされる（配列データとして後方へ「ブロックインサート」してフレーム単位で削除その後再パース）
 
  *      removeSection(id)
@@ -3542,7 +4336,7 @@ function XpsTimelineSectionCollection(myParent) {
 
     値の再配置は値の種別ごとに処理が異なるので要注意
 
-戻り値は、セクションを加工したトラック全体のストリーム（xUI.put Xps.putメソッドの引数として使用可能なストリーム）
+戻り値は、セクションを加工したトラック全体のストリーム（xUI.put nas.Xps.putメソッドの引数として使用可能なストリーム）
 + フォーカス位置のオフセット(0~)
 例：['1,,,3,,,4,,,7,,,8,,,9,,,0,,',0]
 
@@ -3590,7 +4384,7 @@ function XpsTimelineSectionCollection(myParent) {
         var startFrame = (tailOffset < 0)? headOffset + tailOffset  : headOffset;//逆転時に頭尾入替
         var endOffset  = Math.abs(tailOffset);
 
-console.log(["startFrame : ",startFrame,"/ endOffset :",endOffset].join(''))
+//console.log(["startFrame : ",startFrame,"/ endOffset :",endOffset].join(''))
 
 //トラック内のセクション最短継続長を取得       
 /*
@@ -3623,8 +4417,8 @@ dialog 区間は「コンテンツの文字数」それ以外は 1 にコメン�
             if(six > id) tailLimit += minimumContentLength  ;//後方区間最小値を集計
             minimumDurations.push(minimumContentLength)     ;//最小区間継続長配列
         }
-console.log(minimumDurations);
-console.log(["headLimit:",headLimit," / tailLimit",tailLimit].join(''));
+//console.log(minimumDurations);
+//console.log(["headLimit:",headLimit," / tailLimit",tailLimit].join(''));
 //指定範囲補正　入力保護のため指定位置の補正を強制的に行う
         if(endOffset < minimumDurations[id]){
             endOffset = minimumDurations[id]-1;
@@ -3635,8 +4429,8 @@ console.log(["headLimit:",headLimit," / tailLimit",tailLimit].join(''));
         if((this.parent.length-(startFrame+endOffset)) < tailLimit){
             startFrame -= tailLimit;
         }
-console.log(["targetSection.startOffset : ",targetSection.startOffset(),"/ Offset :",targetSection.duration - 1].join(''))
-console.log(["startFrame : ",startFrame,"/ endOffset :",endOffset].join(''))
+//console.log(["targetSection.startOffset : ",targetSection.startOffset(),"/ Offset :",targetSection.duration - 1].join(''))
+//console.log(["startFrame : ",startFrame,"/ endOffset :",endOffset].join(''))
 //補正確定後に以前の状態と前後位置が等しい場合は処理スキップ
 /*
     区間長は同じだが、内容が変化するケースがあるので、ここに内容判別が必要
@@ -3648,16 +4442,16 @@ console.log(["startFrame : ",startFrame,"/ endOffset :",endOffset].join(''))
 //前方に新規挿入セクションが発生する場合その部分をあらかじめカラ要素で埋めておく
         if ((id == 0)&&(startFrame > 0)) {
             myResult = new Array(startFrame);
-console.log('前方処理既存区間なし　空白セルを補充 frames: '+(startFrame-targetSection.headMargin));
+//console.log('前方処理既存区間なし　空白セルを補充 frames: '+(startFrame-targetSection.headMargin));
         }
 /*　==========================前方区間処理　*/
         if((startFrame > 0)&&(id > 0)){
             var changeLength = startFrame - targetSection.startOffset();
-console.log('前方区間伸縮パラメタ' + changeLength);
+//console.log('前方区間伸縮パラメタ' + changeLength);
             if(changeLength == 0){
 //変更なし現在のタイムラインをコピー
                 myResult = myResult.concat(this.parent.slice(0,startFrame-targetSection.headMargin));
-console.log('前方区間複製' + myResult.toString());
+//console.log('前方区間複製' + myResult.toString());
             }else{
                 var restMargin = startFrame - headLimit;
                 var newDurations = [];
@@ -3687,28 +4481,28 @@ console.log('前方区間複製' + myResult.toString());
                     }
                 }
                 if (manipulateOption == 'far') newDurations.reverse();
-console.log(newDurations);
+//console.log(newDurations);
                 for (var ix = 0 ; ix < id ;ix ++){
                         myResult = myResult.concat(this[ix].getStream(newDurations[ix]));
                     if((newDurations[ix]+this[ix].headMargin+this[ix].tailMargin) < 0){
-console.log(newDurations[ix]+this[ix].headMargin+this[ix].tailMargin);
+//console.log(newDurations[ix]+this[ix].headMargin+this[ix].tailMargin);
                         myResult.splice(newDurations[ix]+this[ix].headMargin+this[ix].tailMargin);
                     }
                 }
             }
 }
 //==========================ターゲット区間
-console.log(id);
+//console.log(id);
     myResult = myResult.concat(targetSection.getStream (endOffset+1));
 /*==========================後続区間処理　*/
     var endFrame = startFrame+endOffset;
 if(((endFrame) < (this.parent.length-1))&&(id < (this.length-1))){
     changeLength = (targetSection.startOffset()+targetSection.duration-1)-(startFrame+endOffset);
-console.log('後続区間伸縮パラメタ' + changeLength);
+//console.log('後続区間伸縮パラメタ' + changeLength);
     if(changeLength==0){
 //変更なしなので現在のタイムラインをコピーして終了
         myResult = myResult.concat(this.parent.slice(startFrame+endOffset+1+targetSection.tailMargin));
-console.log('後続区間複製' + this.parent.slice(startFrame+endOffset+1+targetSection.tailMargin));
+//console.log('後続区間複製' + this.parent.slice(startFrame+endOffset+1+targetSection.tailMargin));
     }else{
 //後続空白区間と最短区間合算を比較して一致するまで区間を拡張する
         var restMargin = this.parent.length - 1 - endFrame - tailLimit;
@@ -3742,7 +4536,7 @@ console.log('後続区間複製' + this.parent.slice(startFrame+endOffset+1+targ
 //alert(newDurations.join());
         for (var ix = 0 ; ix < newDurations.length ;ix ++){
             myResult = myResult.concat(this[id+1+ix].getStream(newDurations[ix]));
-console.log([newDurations[ix],this[id+1+ix].headMargin,this[id+1+ix].tailMargin]);
+//console.log([newDurations[ix],this[id+1+ix].headMargin,this[id+1+ix].tailMargin]);
             if((newDurations[ix]+this[id+1+ix].headMargin+this[id+1+ix].tailMargin) < 0){
                 myResult.splice(newDurations[ix]+this[id+1+ix].headMargin+this[id+1+ix].tailMargin);
             }
@@ -3751,17 +4545,17 @@ console.log([newDurations[ix],this[id+1+ix].headMargin,this[id+1+ix].tailMargin]
 }
 //リザルトがトラック長に満たない場合はカラ要素で埋める
     if(myResult.length < this.parent.length){
-console.log('fill empty :' +( this.parent.length-myResult.length));
+//console.log('fill empty :' +( this.parent.length-myResult.length));
         myResult = myResult.concat(new Array(this.parent.length-myResult.length));
     }
 //リターン
-console.log([myResult.join(),startFrame,endOffset]);
+//console.log([myResult.join(),startFrame,endOffset]);
     return [myResult.join(),startFrame,endOffset];
 }
 
 
 }
-XpsTimelineSectionCollection.prototype = Array.prototype;
+nas.Xps.XpsTimelineSectionCollection.prototype = Array.prototype;
 /*
     ターゲットセクションの値種別が範囲外記述を含む場合
     かつ
@@ -3771,7 +4565,7 @@ XpsTimelineSectionCollection.prototype = Array.prototype;
 */
 
 /**
- * @constructor XpsTimelineSection
+ * @constructor nas.Xps.XpsTimelineSection
  *
  * セクションオブジェクト
  * りまぴんではセクション編集時に都度生成される
@@ -3789,71 +4583,25 @@ XpsTimelineSectionCollection.prototype = Array.prototype;
  セクションを中間値生成セクションとして初期化するためには、引数isInterpをtrueにする
  subSectionsが初期化されデフォルトのサブセクションが登録される
 
- * @params {Object XpsTimelineSectionCollection} myParent
+ * @params {Object nas.Xps.XpsTimelineSectionCollection} myParent
  * @params {Number} myDuration
  * @params {boolean} isInterp
  */
-function _getSectionId () {
+nas.Xps._getSectionId = function(){
     for (var idx = 0; idx < this.parent.length; idx++) {
         if (this.parent[idx] === this) return idx;
-    }
+    };
 };
-function _getSectionStartOffset() {
+nas.Xps._getSectionStartOffset = function(){
     var myOffset = 0;
     for (var idx = 0; idx < this.parent.length; idx++) {
         if (this.parent[idx] === this) {
             return myOffset;
         } else {
             myOffset += this.parent[idx].duration;
-        }
-    }
+        };
+    };
 };
-/** nas.ValueInterpolator Objectは、nas.AnimationValue.jsへ移動済み
- * ValueInterpolatorは必要な情報を収集して、value プロパティに対して中間値を請求するオブジェクト
- * 実際の計算は各値のValue自身が行い仮のオブジェクトを作成して返す
- * 値エージェントとなるオブジェクト
- * 各valueプロパティには中間値補間
- * startValue.interpolate(endValue,indexCount,indexOffset,frameCount,frameOffset,props)
- * が実装される
- * ただし、Sound等中間値補間の存在しないオブジェクトには当該メソッドは不用（undefined）
- * そもそも補間区間を作らないので、ValueInterpolatorオブジェクトが作成されない
- *
- *　XpsTimelineSection.valueプロパティはnas.xMapElement
- *  @params {Object XpsTimelineSectionCollection}
- */
-
-nas.ValueInterpolator = function ValueInterpolator (parent){
-    this.parent=parent;//interpolateSection
-}
-
-
-nas.ValueInterpolator.prototype.valueOf = function valueOf(myProp){
-        var indexCount=parseInt(this.parent.subSections.length);//サブセクションの総数なので親の親のサブセクション
-        var indexOffset=this.parent.id()
-        var startValue=this.parent.parent.sections[currentIndex-1].value;
-        var frameCount=this.parent.duration;
-        var frameOffset=this.parent.startOffset();
-        var endValue=this.parent.parent.sections[currentIndex+1].value;
-        return startValue.interpolate(endValue,indexCount,indexOffset,frameCount,frameOffset,myProp);
-
-/*
-        var indexCount=parseInt(this.parent.parent.subSections.length);//サブセクションの総数なので親の親のサブセクション
-        var indexOffset=this.parent.id()
-        var startValue=this.parent.parent.parent.sections[currentIndex-1].value;
-        var frameCount=this.parent.parent.duration;
-        var frameOffset=this.parent.startOffset();
-        var endValue=this.parent.parent.parent.sections[currentIndex+1].value;
-        return startValue.interpolate(endValue,indexCount,indexOffset,frameCount,frameOffset,myProp);
-*/
-}
-
-nas.ValueInterpolator.prototype.getStream = function getStream(frameCount){
-    if(! frameCount) frameCount=this.parent.duration;
-    var resultContent = new Array(frameCount);
-    resultContent[0] = this.parent.getContent()[0];
-    return resultContent;
-}
-
 
 /**
  * タイムラインセクション
@@ -3861,35 +4609,35 @@ nas.ValueInterpolator.prototype.getStream = function getStream(frameCount){
  *  使用の都度初期化される一時オブジェクト
  * セクションコレクションにトラックごとに変更フラグを設けて、変更がない限りは再ビルドを避ける
  * セクションオブジェクトはparentプロパティにそのコレクションを含むオブジェクトへの参照を持つ
- *  XpsTimelineTrack || XpsTimelineSection
+ *  nas.Xps.XpsTimelineTrack || nas.Xps.XpsTimelineSection
  *
- *  @params {Object XpsTimelineSectionCollection} parent
- *      親となるXpsTimelineSectionCollection
+ *  @params {Object nas.Xps.XpsTimelineSectionCollection} parent
+ *      親となるnas.Xps.XpsTimelineSectionCollection
  *  @params {Number} duration
  *      セクションの長さ 通常０で初期化されてパーサにより更新される
  *  @params {boolean} isInterp
  *      初期化時に中間値補完サブセクションとして初期化が可能
  *
  *  parentがXpsTimelineSelectionCollection の場合は、基礎セクション(有値セクション及び中間値補間セクション)となる
- *    有値セクションは、セクションのvalueとしてnas.xMapElementのcontentプロパティを指し かつsectionsプロパティがundefinedとなる。
+ *    有値セクションは、セクションのvalueとしてnas.xMap.xMapElementのcontentプロパティを指し かつsectionsプロパティがundefinedとなる。
  *      中間値補間セクションは、valueを持たない(undefined)かつsectionsプロパティにメンバーを持つ
- *   parentがXpsTimelineSectionの場合は、サブセクション（中間値補間サブセクション）となる
+ *   parentがnas.Xps.XpsTimelineSectionの場合は、サブセクション（中間値補間サブセクション）となる
  *       中間値補間サブセクションは valueプロパティとしてValueInterpolatorオブジェクトを持ちmapElementを持たない
  *</pre>
  */
-function XpsTimelineSection(parent, duration, isInterp) {
+nas.Xps.XpsTimelineSection = function(parent, duration, isInterp) {
     this.parent   = parent      ;
     this.duration = duration    ;
     this.headMargin = 0;
     this.tailMargin = 0;
-    if(this.parent instanceof XpsTimelineSection){
+    if(this.parent instanceof nas.Xps.XpsTimelineSection){
         this.mapElement;//this.parent.parent.xParent.parentXps.xMap.getElementByName(this.value.)
         this.value=new nas.ValueInterpolator(this);
         this.subSections;//サブセクションコレクションを持たない
     }else{
         this.mapElement;//mapElementはxMapElementへの参照  undefinedで初期化してパーサが値を設定する
         this.value;//valueは this.mapElement.contentへの参照又はundefined  undefinedで初期化してパーサが値を設定する
-        this.subSections =(isInterp)? new XpsTimelineSectionCollection(this):undefined;
+        this.subSections =(isInterp)? new nas.Xps.XpsTimelineSectionCollection(this):undefined;
     }
     /**
      *   @method
@@ -3914,10 +4662,10 @@ function XpsTimelineSection(parent, duration, isInterp) {
  *  @returns {Array}
  *      区間内のセルの配列
  */
-XpsTimelineSection.prototype.getContent = function(){
+nas.Xps.XpsTimelineSection.prototype.getContent = function(){
         var startframe = this.startOffset();
         var timeline   = this.parent.parent;
-    if(this.parent.parent instanceof XpsTimelineSection){
+    if(this.parent.parent instanceof nas.Xps.XpsTimelineSection){
     //サブセクション　親セクションのオフセットを追加する
         startframe += this.parent.parent.startOffset();
         timeline = this.parent.parent.parent.parent;
@@ -3950,8 +4698,7 @@ XpsTimelineSection.prototype.getContent = function(){
  * xUI.put(xUI.XPS.xpsTracks[2].sections[0].getStream(32));
  *
  */
-XpsTimelineSection.prototype.getStream = function(frameCount){
-console.log(frameCount);
+nas.Xps.XpsTimelineSection.prototype.getStream = function(frameCount){
     if( frameCount < 0 ) return [];//NOP
     if(! frameCount ) frameCount = this.duration;
     if(this.parent.parent.option=='sound'){
@@ -3979,7 +4726,7 @@ console.log(frameCount);
                     ix = (ix+1)%this.subSections.length;
             }
             newContent.splice(frameCount);
-console.log(newContent);
+//console.log(newContent);
             newContent[newContent.length-1]=endSign;//endサイン復帰
             return newContent;
         }
@@ -3999,15 +4746,15 @@ console.log(newContent);
             nodeSymbol = nodeSymbols[this.parent.parent.option];
         }
         var newContent = this.getContent();//オリジナルを展開
-console.log(newContent.toString());
-        if (frameCount == this.duration){
+//console.log(newContent.toString());
+        if (frameCount == this.dutarion){
             return newContent;
         }else{
             var seedSection = this.subSections[0].getContent();
             if((nodeSymbol)&&(seedSection[0]!=nodeSymbol[0])) seedSection[0]=nodeSymbol[0];
             if((nodeSymbol)) newContent[newContent.length-1]=nodeSymbol[0];
-console.log(seedSection);
-console.log(newContent.toString());
+//console.log(seedSection);
+//console.log(newContent.toString());
             while (newContent.length < frameCount){
                newContent = newContent.concat(seedSection);
                 if (newContent.length > frameCount) break;
@@ -4017,7 +4764,7 @@ console.log(newContent.toString());
                 if(frameCount > 1) newContent[0]=nodeSymbol[1];
                 if(frameCount > 2) newContent[newContent.length-1]=nodeSymbol[2];
             }
-console.log(newContent);
+//console.log(newContent);
             return newContent;
         }
     }else{
@@ -4025,7 +4772,7 @@ console.log(newContent);
         if(!(this.value)) frameCount = frameCount + this.headMargin + this.tailMargin;
         if(frameCount < 0) frameCount = 0;
         var myResult = new Array(frameCount);
-console.log(frameCount +':'+this.getContent[0]+':'+this.parent.parent.option);
+//console.log(frameCount +':'+this.getContent[0]+':'+this.parent.parent.option);
         var currentSectionId = this.id();
         switch(this.parent.parent.option){
         case "camera":;
@@ -4065,24 +4812,24 @@ console.log(frameCount +':'+this.getContent[0]+':'+this.parent.parent.option);
 }
 
 /** セクションのID（=コレクション内の位置）を返す　@returns {Number} */
-XpsTimelineSection.prototype.id = _getSectionId;
+nas.Xps.XpsTimelineSection.prototype.id = nas.Xps._getSectionId;
 /** セクションの開始点フレームを返す　@returns {Number} */
-XpsTimelineSection.prototype.startOffset = _getSectionStartOffset;
+nas.Xps.XpsTimelineSection.prototype.startOffset = nas.Xps._getSectionStartOffset;
 
 
 /**
- * @constructor XpsTimelineSubSection
-    中間値生成サブセクション
-    セクション内のサブセクション
-    動画中割及びジオメトリ、コンポジットタイムラインの中間値を生成するオブジェクト
-    区間内インデックスをもち
-    親タイムライン上の先行するセクションの値と後方セクションの間の値を生成して返す
-    valueプロパティはnas.ValueInterpolator Object
-* parentにはセクションオブジェクトを与えて初期化する
-   サブセクションはセクションオブジェクトを兼用？？＞＞兼用する
-    
-
-function XpsTimelineSubSection(myParent, myDuration) {
+ * @constructor nas.Xps.XpsTimelineSubSection
+ *   中間値生成サブセクション
+ *   セクション内のサブセクション
+ *   動画中割及びジオメトリ、コンポジットタイムラインの中間値を生成するオブジェクト
+ *   区間内インデックスをもち
+ *   親タイムライン上の先行するセクションの値と後方セクションの間の値を生成して返す
+ *   valueプロパティはnas.ValueInterpolator Object
+ * parentにはセクションオブジェクトを与えて初期化する
+ *  サブセクションはセクションオブジェクトを兼用？？＞＞兼用する
+ *   
+ *
+nas.Xps.XpsTimelineSubSection = function(myParent, myDuration) {
     this.parent = myParent;
     this.duration = myDuration;
     this.value=new nas.ValueInterpolator(this);//valueはnas.ValueInterpolator
@@ -4090,436 +4837,9 @@ function XpsTimelineSubSection(myParent, myDuration) {
         return this.duration + ":" + this.value;
     }
 }
-XpsTimelineSubSection.prototype.id = _getSectionId;
-XpsTimelineSubSection.prototype.strtOffset = _getSectionStartOffset;
+nas.Xps.XpsTimelineSubSection.prototype.id = nas.Xps._getSectionId;
+nas.Xps.XpsTimelineSubSection.prototype.strtOffset = nas.Xps._getSectionStartOffset;
  */
-/**
-    グループ記述の有る文字列を分解して要素名とグループ名を分離するXpsクラスメソッド
-    引数の文字列を評価してそのラベルとエントリ文字列に分解して返す
-    Reaplacmentトラック用
-
-引数:セルエントリ文字列
-戻値:配列[エントリ文字列,グループラベル]
-
-グループラベルが存在しない文字列の戻値は要素数１の配列
- */
-Xps.sliceReplacementLabel = function (myStr){
-    let myLabel ;let myName ;
-    if(myStr.match(/^(.+)[\s\-_]([^\s\-_].*)$/)){
-        myLabel = RegExp.$1;
-        myName  = RegExp.$2;
-    } else if (myStr.match(/^([A-Z])(\(?.+\)?|\[?.+\]?|<?.+>?)$/)){
-        myLabel = RegExp.$1;
-        myName  = RegExp.$2;
-    } else {
-        return [myStr];
-    }
-    return [myName,myLabel];
-}
-// test
-/*
-   var myResult="";
-   var testStrings=[
-    "123","A123","A(123)","A<_=123>","A[123x]","A下-123","A--(123x)",A[◯]
-   ];
-    for(var idx=0;idx<testStrings.length;idx++){
-        myResult += testStrings[idx]+" : "+Xps.sliceReplacementLabel(testStrings[idx])+"\n";
-    }
-//if(dbg) console.log(myResult);
-*/
-/**
-     Xpsオブジェクトから識別子を作成するクラスメソッド
-     名前を変更するか又はオブジェクトメソッドに統合
-     このメソッドは同名別機能のオブジェクトメソッドが存在するので厳重注意
-     クラスメソッドはURIencodingを行い、オブジェクトメソッドは'%'エスケープを行う
-
-*** 識別子のフレームレート拡張（予定）
-    (括弧)でくくられた時間情報は、カット尺であり素材継続時間ではない。
-    フレームレートを追加情報として補うことが可能とする
-    その際は以下のルールに従う
-    (FCT/FPS)
-    単独のカットに対して設定されたフレームレートは、そのカットのみで有効
-    基本的には、タイトルのプロパティからフレームレートを取得してそれを適用する。
-    識別子には、基本的にフレームレートを含める必要性はない。
-    タイトルのフレームレートと異なる場合のみ、識別子にフレームレートを埋め込む。
-
-    このコーディングは、pmdb実装後に行われる。2018.07.16
-
-引数  opt
-"title"#"opus"//"s-c"("time")//"line"//"stage"//"job"//"status"
-'episode'(or 'product')//'cut'//'statsu'
-
-デフォルトでは制作管理情報が付加されたフルフォーマットの識別子が戻る
-
-*/
-
-Xps.getIdentifier=function(myXps,opt){
-//この識別子作成は実験コードです2016.11.14
-    if(typeof opt=='undefined') opt ='status';
-    var myIdentifier=[
-            encodeURIComponent(myXps.title)+
-        "#"+encodeURIComponent(myXps.opus)+
-        ((String(myXps.subtitle).length > 0)? "["+encodeURIComponent(myXps.subtitle)+"]":''),
-            encodeURIComponent(
-                "s" + ((myXps.scene)? myXps.scene : "-" )+
-                "c" + myXps.cut) +
-                "(" + myXps.time() +")",
-            encodeURIComponent(myXps.line.toString(true)),
-            encodeURIComponent(myXps.stage.toString(true)),
-            encodeURIComponent(myXps.job.toString(true)),
-            myXps.currentStatus.toString(true)
-        ];
-    var order = 2;     
-    switch(opt){
-    case 'title':
-    case 'opus':
-    case 'episode':
-    case 'product':
-        order = 1;break;
-    case 'cut':
-        order = 2;break;
-    case 'line':
-        order = 3;break;
-    case 'stage':
-        order = 4;break;
-    case 'job':
-        order = 5;break;
-    case 'status':
-    case 'full':
-    default:
-        order = 6;break;
-    }
-//識別子をネットワークリポジトリに送信後正常に追加・更新ができた場合は（コールバックで）ローカルリストの更新を行うこと
-    return myIdentifier.slice(0,order).join("//");;
-}
-
-
-/*
-    仮の比較関数
-    SCiオブジェクトに統合予定
-    一致推測は未実装
-    戻値:数値  -2   :no match
-               -1   :title match
-                0   :product match
-                1   :product + cut match
-                2   :line match
-                3   :stage match
-                4   :job match
-                5   :status match
-
-ステータス情報のうちassign/messageの比較は行わないステータス自体の比較もほぼ利用されないので省略を検討
-*/
-Xps.compareIdentifier =function (target,destination){
-    var tgtInfo  = Xps.parseIdentifier(target);
-    var destInfo = Xps.parseIdentifier(destination);
-    //title
-        if(tgtInfo.title != destInfo.title) { return -2;}
-    //title+opus
-        if( tgtInfo.opus != destInfo.opus ) { return -1;}
-    //Scene,Cut
-        var tgtSC = tgtInfo.cut;
-        var dstSC = destInfo.cut;
-        if((! tgtSC)||(! dstSC)) return 0;
-        if(tgtSC != dstSC){return 0;}
-        var result = 1;
-    //version status
-        if (((tgtInfo.line)&&(destInfo.line))&&(tgtInfo.line.id.join() == destInfo.line.id.join() )){
-            result = 2;}else{return result;}
-        if (((tgtInfo.stage)&&(destInfo.stage))&&(tgtInfo.stage.id == destInfo.stage.id )){
-            result = 3;}else{return result;}
-        if (((tgtInfo.job)&&(destInfo.job))&&(tgtInfo.job.id  == destInfo.job.id )){
-            result = 4;}else{return result;}
-        if ((tgtInfo.currentStatus)&&(destInfo.currentStatus)&&(tgtInfo.currentStatus.content == destInfo.currentStatus.content)) result = 5;
-        return result;
-}
-/*  TEST
-var A =[
-    "うなぎ",0,"ニョロ",
-    "","12","2+0",
-    "0:(本線)","1:原画","2:演出チェック","Startup:kiyo@nekomataya.info:TEST"
-    ];
-var B =[
-    "うなぎ",0,"ニョロ",
-    "","12","2+0",
-    "0:(本線)","1:原画","2:演出チェック","Startup"
-    ];
-Xps.compareIdentifier("35%E5%B0%8F%E9%9A%8A_PC#RBE//04d",'35%E5%B0%8F%E9%9A%8A_PC#RBE[ベルセルク・エンチャント演出]')
-//console.log(Xps.compareIdentifier(Xps.stringifyIdf(A),Xps.stringifyIdf(B)))
-*/
-/**
-    識別子をパースする関数
-    SCiオブジェクトで戻す？
-    Identifier の持ちうる情報は以下
-
-    title
-        .name
-    opus
-        .name
-        .subtitle
-    [sci]
-        .name
-        .times
-    
-    [issues]
-        Line
-            .id
-            .name
-        Stage
-            .id
-            .name
-        Job
-            .id
-            .name
-    status
-        JobStatus
-            .content
-            .assign
-            .message
-*/
-/**
-    プロダクト識別子をパースして返す
-    サブタイトルは一致比較時に比較対象から外す
-    引数がまたは第一要素がカラの場合はfalse
-*/
-Xps.parseProduct = function(productString){
-    productString = String(productString).replace( /[\[\]\/]/g ,'#');
-    var dataArray = productString.split('#');
-    return {
-        title     :   ((typeof dataArray[0]=='undfined')||(String(dataArray[0])=='undefined'))? "":decodeURIComponent(dataArray[0]),
-        opus      :   ((typeof dataArray[1]=='undfined')||(String(dataArray[1])=='undefined'))? "":decodeURIComponent(dataArray[1]),
-        subtitle  :   ((typeof dataArray[2]=='undfined')||(String(dataArray[2])=='undefined'))? "":decodeURIComponent(dataArray[2])
-    };
-}
-/** test
-//if(dbg) console.log (Xps.parseProduct('%E3%82%BF%E3%82%A4%E3%83%88%E3%83%AB%E6%9C%AA%E5%AE%9A#%E7%AC%AC%20%20%E8%A9%B1'));
-*/
-/**
-    sci識別子をパースして返す
-    識別子に付属する時間情報はトランジション／継続時間ではなくカット尺のみ
-    補助情報は持たせない。かつ対比時に比較対象とならないものとする
-    カット番号情報は、ここではscene-cutの分離を行わない
-    比較の必要がある場合に始めて比較を行う方針でコーディングする
-    sciString末尾の（括弧内）は時間情報部分
-    (括弧)による記述が2つ以上ある場合は最初の開き括弧の前がカット識別子で、時間情報は最後の（括弧）内の情報を用いる
-    
-    書式は(TC//framareteString) or (TC) フレームレートの指定のない場合はデフォルトの値で補われる
-    (1+12),(1+12//24FPS),(1:12//30),(01:12//30DF),(00:00:01:12//59.94)等
-    デフォルト値は、タイトルから取得
-    sciStringに時間情報が含まれないケースあり
-    time指定の存在しない識別子の場合"6:0"を補う
-
-    引数が与えられない場合は''とする
-*/
-Xps.parseSCi = function(sciString){
-    if(typeof sciString == 'undefined') sciString = '';
-    var dataArray = String(sciString).split('/');
-//    if((dataArray.length==0)||(String(dataArray[0]).length==0)){return false};
-    var result = [];
-    for (var ix=0;ix < dataArray.length ;ix ++){
-        var currentEntry=dataArray[ix].split('(');
-        result.push({
-        'cut'   :   decodeURIComponent(currentEntry[0]),
-        'time'  :   (currentEntry.length ==1 )? "6:0":decodeURIComponent(currentEntry[currentEntry.length-1]).replace(/[\(\)]/g,'')
-        });
-    }
-    return result;
-}
-/** test
-    console.log (Xps.parseSCi('s-cC%23%20(16)/s-c96(13)'));
-    console.log (Xps.parseSCi('s-cC%23%20(16)(18)'));
-*/
-/**
-セル記述を整形して比較評価用に正規化された文字列を返すクラスメソッド
-戻り値は、<グループ名>-<セル番号>[-<ポストフィックス>]
-
-A_(001)_ovl  A-1-ovl
-*/
-Xps.normalizeCell = function(myString){
-    return nas.normalizeStr(myString.replace( /[-_ー＿\s]/g ,"-")).replace( /([^\d.])0+/g ,"$1");
-}
-//test
-//Xps.normalizeCell("A_００１２ー上");
-//Xps.normalizeCell("");
-//Xps.normalizeCell("");
-//Xps.normalizeCell("");
-//Xps.normalizeCell("");
-//Xps.normalizeCell("");
-//Xps.normalizeCell("");
-/**
-SCiデータ上のカット名をセパレータで分離するクラスメソッド
-この場合のカット名には時間情報・ステータス等を含まないものとする
-パースされたカット名は、カット、シーンの順の配列で戻す有効最大２要素
-
-    [cut,scene,<void>,~];//第三要素以降は分離しても使用されないことに注意
-    [cut,scene]
-    [cut]
-
-要素数が識別子に含まれる情報の深度を示す
-*/
-Xps.parseCutIF = function(myIdentifier){
-    var result = String(myIdentifier).replace(/[\ _\-]+/g,"_").split("_").reverse();
-    for (var ix=0;ix<result.length;ix++){
-        if(ix==0){result[ix]=result[ix].replace(/^[CcＣｃ]/,"");};//cut
-        if(ix==1){result[ix]=result[ix].replace(/^[SsＳｓ]/,"");};//scene
-//        if(ix==2){result[ix]=result[ix].replace(/^[OoＯｏ#＃]/,"");};//opus
-        result[ix]=result[ix].replace(/^[#＃№]|^(No.)/,"");//ナンバーサインを削除
-    };
-    return result;
-}
-//test
-//if(dbg) console.log(Xps.parseCutIF("00123#31[124]__s-c123"));
-//
-/**
-パース済みのカット識別子を比較してマッチ情報を返す
-シーンカットともに一致した場合のみtrueそれ以外は false
-引数に秒表記部が含まれないよう調整が必要
-*/
-Xps.compareCutIdf=function(tgt,dst){
-    if(tgt.match(/\(.+\)/)){tgt = Xps.parseSCi(tgt)[0].cut};
-    if(dst.match(/\(.+\)/)){dst = Xps.parseSCi(dst)[0].cut};
-    var tgtArray = Xps.parseCutIF("-"+tgt);
-    var dstArray = Xps.parseCutIF("-"+dst);
-    if (
-    (((tgtArray[1]=="")&&(dstArray[1]==""))||
-    (nas.RZf(nas.normalizeStr(tgtArray[1]),12)==nas.RZf(nas.normalizeStr(dstArray[1]),12)))&&
-    (nas.RZf(nas.normalizeStr(tgtArray[0]),12)==nas.RZf(nas.normalizeStr(dstArray[0]),12))
-    ) return true ;
-    return false ;
-}
-/*TEST
-Xps.compareCutIdf("C12","s-c012");
-Xps.compareCutIdf("0012","title_opus_s-c012");
-Xps.compareCutIdf("C００１２","s-c012");
-Xps.compareCutIdf("S#1-32","s01-c0３２");
-*/
-
-/**
-    配列指定で識別子をビルドするテスト用関数
-引数: [title,opus,subtitle,scene,cut,time,line,stage,job,status]
-*/
-Xps.stringifyIdf = function(myData){
-//myDataはlength==10の配列であること
-//この識別子作成は実験コードです2016.11.14
-    var myIdentifier=[
-            encodeURIComponent(String(myData[0]))+
-        "#"+encodeURIComponent(String(myData[1]))+
-        ((String(myData[2]).length > 0)? "["+encodeURIComponent(myData[2])+"]":''),
-            encodeURIComponent(
-                "s" + ((myData[3])? myData[3] : "-" )+
-                "c" + myData[4]) +
-                "(" + myData[5] +")",
-            encodeURIComponent(myData[6]),
-            encodeURIComponent(myData[7]),
-            encodeURIComponent(myData[8]),
-            myData[9]
-    ].join("//");
-    return myIdentifier;
-}
-//TEST
-/*
-Xps.stringifyIdf([
-    "たぬき",
-    "12",
-    "ポンポコリン",
-    "",
-    123,
-    "1+12",
-    "0:(本線)",
-    "1:原画",
-    "2:演出チェック",
-    "Startup:kiyo@nekomataya.info"
-]);
-*/
-/**
-     データ識別子をパースして無名オブジェクトで戻す
-     データ判定を兼ねる
-     分割要素がカット番号を含まない（データ識別子でない）場合はfalseを戻す
-     SCi/listEntryオブジェクトとの兼ね合いを要調整20170104
-     
-     asign/
-     オブジェクトメソッドの識別子も解釈可能にする
-    
-    '//（二連スラッシュ）'を認識できなかったケースに限り'__（二連アンダーバー）'をセパレータとして認識するように変更
-    **"_(アンダーバー単独)"はセパレータ以外で使用するケースがあるため要注意
-
-*/
-Xps.parseIdentifier = function(myIdentifier){
-    if(! myIdentifier) return false;
-//    return nas.Pm.parseIdentifier(myIdentifier);
-    myIdentifier = nas.Pm.normalizeIdf(myIdentifier);//正規化
-    if(myIdentifier.indexOf( '//' )<0 ) myIdentifier = myIdentifier.replace(/__/g,'//');
-    var dataArray = myIdentifier.split('//');
-    var result={};
-    result.product  = Xps.parseProduct(dataArray[0]);
-    result.sci      = Xps.parseSCi(dataArray[1]);
-    result.title    = result.product.title;
-    result.opus     = result.product.opus;
-    result.subtitle = result.product.subtitle;
-    var sep = Xps.parseCutIF(result.sci[0].cut);
-    result.scene    = (sep.length > 1)? sep[1]:'';
-    result.cut      = sep[0];
-    result.time     = result.sci[0].time;
-    if(dataArray.length == 6){
-        result.line     = new XpsLine(decodeURIComponent(dataArray[2]));
-        result.stage    = new XpsStage(decodeURIComponent(dataArray[3]));
-        result.job      = new XpsStage(decodeURIComponent(dataArray[4]));
-        result.currentStatus   = new JobStatus(dataArray[5]);
-        //ステータスはデコード不用(オブジェクト自体がデコードする)
-    }
-    /*ここでは初期化しないundefined で戻す
-    {
-        result.line     = new XpsLine(nas.pm.pmTemplate[0].line);
-        result.stage    = new XpsStage(nas.pm.pmTemplate[0].stages[0]);
-        result.job      = new XpsStage(nas.pm.jobNames.getTemplate(nas.pm.pmTemplate[0].stages[0],"init")[0]);
-        result.currentStatus   = "Startup";        
-    }*/
-//if(dbg) console.log(result);
-    return result;
-}
-/** test 
-//if(dbg) console.log(Xps.parseIdentifier('%E3%81%8B%E3%81%A1%E3%81%8B%E3%81%A1%E5%B1%B1Max#%E3%81%8A%E3%81%9F%E3%82%81%E3%81%97//s-c10(72)//0%3A(%E6%9C%AC%E7%B7%9A)//0%3Alayout//0%3Ainit//Startup'));
-
-{
-  "product": {
-    "title": "かちかち山Max",
-    "opus": "おためし",
-    "subtitle": ""
-  },
-  "sci": [
-    {
-      "cut": "s-c10",
-      "time": "72"
-    }
-  ],
-  "title": "かちかち山Max",
-  "opus": "おためし",
-  "subtitle": "",
-  "scene": "",
-  "cut": "10",
-  "time": "72",
-  "line": {
-    "id": [
-      "0"
-    ],
-    "name": "本線"
-  },
-  "stage": {
-    "id": "0",
-    "name": "layout"
-  },
-  "job": {
-    "id": "0",
-    "name": "init"
-  },
-  "currentStatus": {
-    "content": "Startup",
-    "assign": "",
-    "message": ""
-  }
-}
-
-*/
-
 /*
         タイムラインをダイアログパースする
     タイムライントラックのメソッド
@@ -4547,10 +4867,9 @@ Xps.parseIdentifier = function(myIdentifier){
         戻り値はビルドに成功したセクション数(最低で１セクション)
         値として無音区間の音響オブジェクト（値）を作るか又は現状のままfalse(null)等で処理するかは一考
 */
-/*
-*/
-/** //test
-XpsTimelineTrack.prototype.parseSoundTrack=_parseSoundTrack;
+
+/*test
+nas.Xps.XpsTimelineTrack.prototype.parseSoundTrack=nas._parseSoundTrack;
 XPS.xpsTracks[0].parseSoundTrack();
 XPS.xpsTracks[0].sections[1].toString();
 
@@ -4604,7 +4923,7 @@ XpsTimelineTrack.prototype.parseTrack=_parseTrack;
  *  @params {String}    countOption
  *      動画記号のカウント方法を指定するテキストオプション　
  */
-XpsTimelineTrack.countMember = function(countOption){
+nas.Xps.XpsTimelineTrack.countMember = function(countOption){
 	if (this.option.match(/cell|timing|still|replacement/)){
 		var count = [];
 		var sections = this.parseReplacementTrack();
@@ -4648,7 +4967,7 @@ XpsTimelineTrack.countMember = function(countOption){
  *    </pre>
  *  @returns    {Object nas.Xps.XpsTimelineSectionCollection}
  */
-XpsTimelineTrack.parseTimelineTrack = function(){
+nas.Xps.XpsTimelineTrack.parseTimelineTrack = function(){
     var myResult = false;
     var defaultElementGroup = this.xParent.parentXps.xMap.getElementByName(this.id);
     if(! defaultElementGroup) defaultElementGroup=this.xParent.parentXps.xMap.new_xMapElement(this.id,this.option,this.xParent.parentXps.xMap.currentJob);
@@ -4693,7 +5012,7 @@ XpsTimelineTrack.parseTimelineTrack = function(){
  *  $returns    {Object nas.Xps.XpsTimelineSection | null}
  *      フレームを含むタイムラインセクション　または null
  */
-XpsTimelineTrack.getSectionByFrame = function(myFrame){
+nas.Xps.XpsTimelineTrack.getSectionByFrame = function(myFrame){
     if((typeof myFrame == "undefined") ||(myFrame < 0)) return null;
     var myResult = null;
     var mySections = this.sections;
@@ -4720,7 +5039,7 @@ XpsTimelineTrack.getSectionByFrame = function(myFrame){
  *  @params {String}    groupName
  *      グループ名
  */
-XpsTimelineTrack.pushEntry = function (elementName,groupName){
+nas.Xps.XpsTimelineTrack.pushEntry = function (elementName,groupName){
     var myGroup   = this.xParent.parentXps.xMap.getElementByName(groupName);
     var myElement = this.xParent.parentXps.xMap.getElementByName([groupName,elementName].join("-"));//請求するターゲットジョブ処理は保留
     if(!myElement){
@@ -4737,7 +5056,7 @@ XpsTimelineTrack.pushEntry = function (elementName,groupName){
  *	@params {String} cell
  *	@returns	{Object nas.CellDescription|null}
  */
-    XpsTimelineTrack.findCell = function (cell){
+    nas.Xps.XpsTimelineTrack.findCell = function (cell){
 	    for(var f=0; f<this.length;f++){
 		    var pcl = new nas.CellDescription(this[f],this.id);
 		    if(pcl.type != "normal") continue;
@@ -4750,6 +5069,6 @@ XpsTimelineTrack.pushEntry = function (elementName,groupName){
 /*=======================================*/
 if ((typeof config == 'object')&&(config.on_cjs)){
     exports.nas  = nas;
-//}else{
-//    var Xps = nas.Xps;
-};// 
+}else{
+    var Xps = nas.Xps;
+};

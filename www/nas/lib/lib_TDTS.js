@@ -24,6 +24,12 @@
  *	両方にデーがある場合は、原画と動画の２本のxpstを取得してアプリ側で参照を組み立てる
  *	tdts出力時は、リファレンスxpstを原画欄に合成して出力する
  *	xdts出力時は、従来型の出力を行う
+ */
+'use strict';
+/*=======================================*/
+if((typeof window == 'undefined')&&(typeof app == 'undefined')){
+    var nas = require('./xpsio');
+};
 /*
 タイムシートドキュメントオブジェクト
 	tdts(ToeianimationDigitalTimeSheet) format 及び　xdts(eXchangeDigitalTimeSheet)兼用
@@ -655,12 +661,12 @@ console.log( cameraworkTracks);
 
 console.log( stillTracks);
 console.log([["dialog",soundTracks.length],["timing",replacementTracks.length],["camera",cameraworkTracks.length]])
-    var myXps = new Xps(
+    var myXps = new nas.Xps(
     	[["dialog",soundTracks.length],["timing",replacementTracks.length],["camera",cameraworkTracks.length]],
     	parseInt(myFrames),
     	24
     );
-//new Xps([['sound',4],['timing',4],['camera',4]],120,30);
+//new nas.Xps([['sound',4],['timing',4],['camera',4]],120,30);
 console.log(myXps);
 //ドキュメント情報転記
 	if(timesheetDocument.header){
@@ -873,7 +879,7 @@ console.log(dialogString);
 			var insertTracks = [];
 			for (var tx = stillTracks[ix].texts.length -1  ; tx >= 0 ; tx -- ){
 				insertTracks.push(
-					new XpsTimelineTrack(
+					new nas.Xps.XpsTimelineTrack(
 						stillTracks[ix].texts[tx],
 						"still",
 						myXps.xpsTracks,
@@ -918,18 +924,18 @@ XPSオブジェクトを引数にしてXDTS/TDTSフォーマットで出力
 拡張時マルチドキュメントに対応
 
 引数:
-	myXps			Object Xps
+	myXps			Object nas.Xps
 	targetFormat 	String tdts/xtds dafault xdts
 	career			Object TDTS
 */
-XPS2TDTS=function(myXps,targetFormat,career){
+function XPS2TDTS(myXps,targetFormat,career){
 	if((typeof targetFormat == "undefined")||(targetFormat != 'tdts')) targetFormat = 'xdts';
 	if(typeof career != Object) career = TDTS.parseTdts(career);
 console.log(career);
 
 	var headerString = (targetFormat == 'tdts')? 'toeiDigitalTimeSheet Save Data':'exchangeDigitalTimeSheet Save Data';
 
-//キャリアオブジェクトにXps情報を転記
+//キャリアオブジェクトにnas.Xps情報を転記
 	if ((myXps.opus)||(myXps.subtitle))
 		career.header.episode = myXps.getIdentifier('episode');
 	if (myXps.scene)
@@ -941,7 +947,7 @@ console.log(career);
 	if (myXps.update_user)
 		career.timeTables[0].opratorName = myXps.update_user.handle;
 
-//Xpsトラックに合わせて	TDTSのトラックを編集
+//nas.Xpsトラックに合わせて	TDTSのトラックを編集
 	career.timeTables[0].duration = myXps.xpsTracks.duration;
 //	xpsTracksを順にサーチして、振り分け
 	var bookTrackNames   =[];
@@ -993,7 +999,7 @@ console.log(career);
 				for(var ssx = 0 ; ssx < timingTracks[tx].sections[six].subSections.length ; ssx ++){
 					var valueString = (timingTracks[tx].sections[six].subSections[ssx].value)?
 						timingTracks[tx].sections[six].subSections[ssx].getStream(1)[0] : "○";
-					valueString = (valueString.match( /^[\-·・◦○○]$/ ))? "SYMBOL_TICK_1" : "SYMBOL_TICK_2";//二種にふりわけ
+					valueString = (valueString.match( /^[\-·・○]$/ ))? "SYMBOL_TICK_1" : "SYMBOL_TICK_2";//二種にふりわけ
 					var currentFrameEntry  =  new TDTS.TimeTableFrameEntry(
 						timingTracks[tx].sections[six].startOffset()+timingTracks[tx].sections[six].subSections[ssx].startOffset()
 					);
@@ -1007,7 +1013,7 @@ console.log(career);
 				continue;	
 			}
 //			var valueString = (timingTracks[tx].sections[six].value)? timingTracks[tx].sections[six].value.name : "×";
-			var valueString = (timingTracks[tx].sections[six].value)? String(nas.parseNumber(timingTracks[tx].sections[six].getContent()[0])): "×";
+			var valueString = (timingTracks[tx].sections[six].value)? timingTracks[tx].sections[six].getContent()[0]: "×";
 			if((! valueString)||( valueString == "×")||(valueString == "blank-cell")) valueString = "SYMBOL_NULL_CELL";
 			var currentFrameEntry  =  new TDTS.TimeTableFrameEntry(timingTracks[tx].sections[six].startOffset());
 			currentFrameEntry.data = [];
@@ -1117,6 +1123,17 @@ console.log(career);
 	return headerString+'\n'+JSON.stringify(career);
 }
 /*
-XPSオブジェクトを引数にしてXDTSフォーマットで出力
+XPSオブジェクトを引数にしてXDTSフォーマットで出力 エイリアス
 */
-XPS2XDTS = XPS2TDTS;
+var XPS2XDTS = XPS2TDTS;
+
+/*=======================================*/
+if((typeof window == 'undefined')&&(typeof app == 'undefined')){
+    exports.TDTS2XPS = TDTS2XPS;
+    exports.XPS2TDTS = XPS2TDTS;
+    exports.XPS2XDTS = XPS2XDTS;
+}
+/*  eg. for import
+    const { TDTS2XPS , XPS2TDTS , XPS2XDTS } = require('./lib_TDTS.js');
+
+*/

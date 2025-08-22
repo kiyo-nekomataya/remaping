@@ -4,16 +4,21 @@
  * 乙女がとりついて色々とオーバーライドしたり働きます。
  * レンダー乙女ライブラリ
  */
-
+/**
+ * @namespace nas.otome
+ */
 nas.otome = {};
+/** @contant */
 var moduleName = "otomeLib";
+/** @contant */
 var myFilename = ("$RCSfile: nas_OtomeLib.js,v $").split(":")[1].split(",")[0];
+/** @contant */
 var myFilerevision = ("$Revision: 1.2 $").split(":")[1].split("$")[0];
 
 if (nas.Version) {
     nas.Version[moduleName] = moduleName + " :" + myFilename + " :" + myFilerevision;
 }
-/**
+/*
  * 識別
  * 作業用プロパティ
  */
@@ -29,7 +34,7 @@ if (nas.Version) {
 //	new Folder(Folder.startup.fsName+"/Scripts/nas");
 Folder.nas = nas.baseLocation;
 
-if (isWindows) {
+if (appHost.os != 'Mac') {
     Folder.scripts = Folder(Folder.startup.path.toString() + "/" + Folder.startup.name.toString() + "/Scripts");
     File.currentApp = File(Folder.startup.path.toString() + "/AfterFX.exe");//Windows
 } else {
@@ -41,17 +46,18 @@ if (isWindows) {
     File.currentApp = File(Folder.startup.path.toString() + "/AfterFX");//MacOSX
 }
 /**
+ *  Adobe CC用　ユーザスクリプトパス設定
+ */
+/**
  *Folder.userScriptは、AE12.2以上のバージョンで利用可能
  */
-	if (parseFloat(app.version) < 12.2) {
-        Folder.userScript=false
+	if (appHost.version < 12.2) {
+        Folder.userScript=false;
 	} else {
-        var currentVersion=app.version.split("x")[0];
-        currentVersion=currentVersion.split(".").slice(0,2).join(".");
-        if(isWindows) {
-            Folder.userScript=new Folder(Folder.userData.fullName+"/Adobe/After Effects/"+currentVersion);
+        if(appHost.os=="Win") {
+            Folder.userScript=new Folder(Folder.userData.fullName+"/Adobe/After Effects/"+appHost.version+"/");
         }else{
-            Folder.userScript=new Folder(Folder.userData.parent.fullName+"/Preferences/Adobe/After Effects/"+currentVersion);
+            Folder.userScript=new Folder(Folder.userData.parent.fullName+"/Preferences/Adobe/After Effects/"+appHost.version+"/");
         }
     }
 //*====================================================乙女とりつきメソッド*//
@@ -370,19 +376,20 @@ File.prototype.isSequenceElements = function (asStrict) {
 };
 
 /**
- * [object File].getBin([readNum])
- *    引数:
- *        readNum    読み出しbite数 省略値 ファイルの残りすべて
- *    戻り値:
- *        1バイトあたり1要素の配列 / 読み出し幅が1バイトの時のみNumber
- *    例:
- *        myContent=myFile.getBin();
+ * ファイルから指定バイト数読み出して、1バイトあたり1要素の数値の配列を返す
  * このメソッドはファイルのopen/close操作を行わない。
  * あらかじめファイルを(r)モードでオープンしておくこと。
  * 開かれていないファイルハンドルに対して操作した場合の戻り値は false
  *
- * @param readNum
- * @returns {*}
+ * @param {Number} readNum
+ *        読み出しbite数 省略値 ファイルの残りすべて
+ * @returns {Array}
+ *        1バイトあたり1要素の配列 / 読み出し幅が1バイトの時のみNumber
+ * @example
+ *        myFile.open('r');
+ *        myContent=myFile.getBin(12);
+ *        myFile.close();
+ *        console.log(myContent);
  */
 File.prototype.getBin = function (readNum) {
     if (this.tell() == -1)return false;//シークアドレスが-1 (オープンしてない)
@@ -411,12 +418,12 @@ File.prototype.getBin = function (readNum) {
         this.encoding = currentEncoding;
         return false;
     }
-    /**
+    /*
      *  読み出しオーバーの場合があるのでシーク位置を強制的に設定値にあわせる/エンコーディングを戻す
      */
     this.seek(endAddress);
     this.encoding = currentEncoding;
-    /**
+    /*
      *  要求された配列分だけ戻す
      */
     if (readNum == 1) return myContent[0];
@@ -426,18 +433,10 @@ File.prototype.getBin = function (readNum) {
 
 if (!app.buildName.match(/^6\.[05]/)) {
     /**
-     * (7.0)
-     *    [object File].putBin(writeData[,option])
-     *    引数:
-     *        writeData    書き込みデータ配列 省略時 error
-     *        Numberクラス以外のデータはnullを含め 0 として書き込み。
-     *        データ単独(1要素のみ)の場合は、Numberクラスも可
-     *        オプション(true)で書き込みモードバイト分割(リトルエンディアン)にする。
-     *        オプション("big")でビッグエンディアン
-     *    戻り値:
-     *        書き込み成功時にtrue
-     *    例:
-     *        if(! myFile.putBin(myContent)){alert("Write error !")}
+     * バイナリデータの書き込みを行う(ESTK)(AE7.0以降)
+     * @example
+     *     if(! myFile.putBin(myContent)){alert("Write error !")}
+
      * 1バイトあたり1要素の配列 / 読み出し幅が1バイトの時のみNumber
      * このメソッドはファイルのopen/close操作を行わない。
      * 負の値は切りあげて 0 ・ 255以上の値は切り捨てて 255
@@ -446,9 +445,15 @@ if (!app.buildName.match(/^6\.[05]/)) {
      * あらかじめファイルを(w)モードでオープンしておくこと。
      * 開かれていないファイルハンドルに対して操作した場合の戻り値は false
      *
-     * @param writeData
-     * @param option
+     * @param {Array} writeData
+     *        書き込みデータ配列 省略時 error
+     *        整数値以外のデータはnullを含め 0 として書き込む<br />
+     *        データ単独(1要素のみ)の場合は、Numberクラスも可
+     * @param {boolean} option
+     *        オプション(true)で書き込みモードバイト分割(リトルエンディアン)にする<br />
+     *        オプション("big")でビッグエンディアン
      * @returns {boolean}
+     *        書き込み成功時にtrue
      */
     File.prototype.putBin = function (writeData, option) {
         if (this.tell() == -1)return false;//シークアドレスが-1 (オープンしてない)
@@ -649,16 +654,34 @@ if (app.buildName.match(/^6\.[05]/)) {
     }
 }
 /**
+ * クリップボードの内容を取得するメソッド
+ * @returns {*}
+ */
+nas.otome.getClipboardText = function (){
+	var cmd;
+	if(appHost.os=="Win"){
+//windows
+		cmd = "cmd /c powershell get-clipboard";
+	}else{
+		cmd = "pbpaste";
+	};
+	if(cmd){
+		return system.callSystem(nas.otome.clipboardGetter)
+	}else{
+		return "";
+	}
+};
+/**
  * AERemapEXの付属コマンドを使用してクリップボードの内容を取得するメソッド
  * ScriptUI/AE_Clipboard.exe またはnas/lib/resource/AE_Clipboard.exeを検索して使用
  * 現在はWindowsのみのサービスだがMac版はシステムの/usr/bin/pbpaste コマンドを使用ああMac便利
  *
  * @returns {*}
- */
+ 
 nas.otome.getClipboardText = function () {
     if (!nas.otome.clipboardGetter) {
         nas.otome.clipboardGetter = null;
-        if (isWindows) {
+        if (appHost.os=="Win") {
             //windows
             var myGetters = ["/Scripts/nas/lib/resource/gc.exe", "/Scripts/ScriptUI Panels/AE_Clipboard.exe"];
             for (ix in myGetters) {
@@ -674,32 +697,49 @@ nas.otome.getClipboardText = function () {
     } else {
         return "";
     }
-};
+};// */
+/**
+ * クリップボードにテキストを書き込む
+ * @param string
+ * @returns {*}
+ */
+nas.GUI.setClipbordText = function (string) {
+	var cmd;
+
+	string = (typeof string == 'string') ? string : string.toString();
+	isWindows = $.os.indexOf('Windows') !== -1;
+	;
+	if (appHost.os == 'Win') {
+		cmd = 'cmd.exe /c cmd.exe /c "echo ' + string + '| clip"';
+	}else{
+		cmd = 'echo "' + string + '"| pbcopy';
+	}
+	system.callSystem(cmd);
+}
 /**
  *
  * @param myText
  * @returns {*}
- */
+ *
 nas.otome.setClipboardText = function (myText) {
     if (!nas.otome.clipboardWriter) {
         nas.otome.clipboardWriter = null;
-        if (isWindows) {
-            //windows
+        if (appHost.os=="Win") {
             var myWriters = ["/Scripts/nas/lib/resource/sc.exe", "/Scripts/nas/lib/resource/AE_Clipboard.exe"];
             for (ix in myWriters) {
                 nas.otome.clipboardWriter = new File(Folder.scripts.path.toString() + myWriters[ix]);
                 if (nas.otome.clipboardWriter.exists) break;
-            }
+            };
         } else {
-            nas.otome.clipboardWriter = new File("/usr/bin/pbcopy");//たぶん決め打ちでおっけー　後で確認
-        }
-    }
+            nas.otome.clipboardWriter = new File("/usr/bin/pbcopy");
+        };
+    };
     if (nas.otome.clipboardWriter.exists == true) {
         return system.callSystem("echo " + myText + " |" + nas.otome.clipboardWriter.fsName)
     } else {
         return "";
-    }
-};
+    };
+};// */
 /**
  * LayerCollection.addNullA()
  * 引数:    なし
@@ -878,8 +918,8 @@ LayerCollection.prototype.sortByName = function (myOpt) {
  * えーっと　CompItemのapplyPreset()は放置しておく　私は使わないから…
  * 2009/10/24
  */
-if (AEVersion >= 7) {
-    if (AEVersion < 9) {
+if (appHost.version >= 7) {
+    if (appHost.version < 9) {
         AVLayer.prototype.applyPresetA = function (myFile, skipUndo) {
             var myResult = false;
             if ((myFile instanceof File) && (myFile.exists)) {
@@ -1559,7 +1599,7 @@ AVLayer.prototype.applyTimeline = function (parentComp, myXps, linkID) {
          */
         var bflag = (blank_pos) ? false : true;
 
-        var AE_version = AEVersion;
+        var AE_version = appHost.version;
         var compFramerate = myXps.framerate;
         var footageFramerate = FootageFramerate;
         if (isNaN(footageFramerate)) {
@@ -2046,7 +2086,7 @@ CompItem.prototype.executeAction = function (targetFolder, skipUndo) {
          * ソートした順にプリセット・スクリプトを逐次実行
          */
         for (exAc.idx = 0; exAc.idx < exAc.doOrders.length; exAc.idx++) {
-            if (AEVersion >= 7) {
+            if (appHost.version >= 7) {
                 for (var fIdx = 0; fIdx < exAc.myActionsF.length; fIdx++) {
                     if (exAc.myActionsF[fIdx].orderId == exAc.doOrders[exAc.idx]) {
                         if (this.selectedLayers.length) {
@@ -2804,7 +2844,7 @@ function XpsStore() {
                 return false;
             }
         }
-        if (AEVersion < 7) {
+        if (appHost.version < 7) {
             return this.AE65Prop
         }
         /**
@@ -2851,7 +2891,7 @@ function XpsStore() {
                 return false;
             }
         }
-        if (AEVersion < 7) {
+        if (appHost.version < 7) {
             var storeName = [XPS.scene, XPS.cut].join("_");//
             this.body.layers[myIndex].name = storeName;
             return this.AE65Prop;
@@ -3098,6 +3138,27 @@ nas.otome.versionView = function () {
     alert(msg);
     return true;
 };
+/**
+ *
+ * @params {File}    myOpenFile
+ * @returns {Sring}
+ */
+function STS2XPSestk(myOpenFile) {
+    /**
+     * 識別文字列位置を確認してファイルフォーマット判定
+     */
+    myOpenFile.open("r");
+    var checkVer = myOpenFile.read(18);
+    myOpenFile.close();
+    if (!checkVer.match(/^\x11ShiraheiTimeSheet$/)) {
+        return false;
+    };
+// オープンして配列にとる
+    myOpenFile.open("r");
+    mySTS = myOpenFile.getBin();
+    myOpenFile.close();
+    return STS2XPS(mySTS,(myOpenFile.name).replace(/\.[\.]+$/,""));
+}
 
 /**
  * nas.otome.loadXPS(targetFile)
@@ -3131,13 +3192,37 @@ nas.otome.loadXPS = function (targetFile) {
     var myFileExt = myOpenfile.name.replace(/^.*\.([^\.]+)$/, "$1");//拡張子を抜き出す
     switch (myFileExt) {
         case "sts":
-            myContent = STS2XPS(myOpenfile).replace(/(\r\n?|\n)/g, "\n");
+            myOpenFile.open("r");
+            myContent = STS2XPS(
+                myOpenfile.getBin(),
+                (myOponfile.name).replace(/\.[\.]+$/,"")
+            ).replace(/(\r\n?|\n)/g, "\n");
+            myOpenFile.close();
+            break;
+        case "xdts":
+            myOpenfile.encoding = "SJIS";
+            myOpenFile.open("r");
+            myContent = TDTS2XPS(myOpenfile.read()).replace(/(\r\n?|\n)/g, "\n");
+            myOpenFile.close();
             break;
         case "ard":
-            myContent = AER2XPS(myOpenfile).replace(/(\r\n?|\n)/g, "\n");
+        case "ardj":
+            myOpenfile.encoding = "SJIS";
+            myOpenFile.open("r");
+            myContent = ARD2XPS(myOpenfile.read()).replace(/(\r\n?|\n)/g, "\n");
+            myOpenFile.close();
+            break;
+        case "csv":;//stylos csv
+            myOpenfile.encoding = "SJIS";
+            myOpenFile.open("r");
+            myContent = ARD2XPS(myOpenfile.read()).replace(/(\r\n?|\n)/g, "\n");
+            myOpenFile.close();
             break;
         case "tsh":
-            myContent = TSH2XPS(myOpenfile).replace(/(\r\n?|\n)/g, "\n");
+            myOpenfile.encoding = "SJIS";
+            myOpenFile.open("r");
+            myContent = TSH2XPS(myOpenfile.read()).replace(/(\r\n?|\n)/g, "\n");
+            myOpenFile.close();
             break;
         default:
             myOpenfile.encoding = "UTF8";
@@ -4358,7 +4443,7 @@ nas.otome.mkMapGroups = function () {
         nas.otome.writeConsole(err.toString());
         return;
     }
-    if (AEVersion < 7) {
+    if (appHost.version < 7) {
         /**
          * AE6.5の場合は、テンプレートを取り込んで代用する
          */
@@ -4460,7 +4545,7 @@ nas.otome.mkMapGroups = function () {
  * ココでは前提として有効なXPSファイルがターゲットフォルダの配下に含まれていることが前提である
  */
 nas.otome.buildMAP = function () {
-    if (AEVersion < 7) {
+    if (appHost.version < 7) {
         alert("この機能にはAE7以降が必要です");
         return;
     }
@@ -4905,7 +4990,7 @@ nas.otome.standbyCellFootages = function () {
  * @returns {*}
  */
 nas.otome.getElementsFrom = function (myItem) {
-    if (AEVersion < 7) {
+    if (appHost.version < 7) {
         return false
     }
     var myResult = [];
@@ -4957,7 +5042,7 @@ nas.otome.getElementsFrom = function (myItem) {
  * @returns {*}
  */
 nas.otome.selectProperty = function (myItem, myOption) {
-    if (AEVersion < 7) {
+    if (appHost.version < 7) {
         alert("申し訳ありませんがAE７以上の環境でご使用ください。");
         return null;
     }
@@ -5240,7 +5325,7 @@ nas.otome.selectProperty = function (myItem, myOption) {
  * @returns {*}
  */
 nas.otome.asSourceString = function (myItem, myBase, myForm) {
-    if (AEVersion < 7) {
+    if (appHost.version < 7) {
         alert("申し訳ありませんがAE７以上の環境でご使用ください。");
         return null;
     }
@@ -5467,9 +5552,9 @@ nas.otome.asSourceString = function (myItem, myBase, myForm) {
  * オブジェクト（プロパティ）ブラウザ関連
  * 乙女プリファレンスの読み込みと保存
  * 保存するオブジェクトをそれぞれ１ファイルで設定フォルダへjsonテキストで保存する
- * 拡張子は.json
+ * 拡張子は.pref
  * ファイル名はオブジェクト（プロパティ）名をそのまま
- * 例: nas.inputMedias.body.json 等
+ * 例: nas.inputMedias.body.pref 等
  * プリファレンスとして保存するオブジェクトはこのファイルの設定として固定
  * 読み込みは記録フォルダの内部を検索してオブジェクトの存在するもの全て
  * 新規のオブジェクトは作成しない
@@ -5491,12 +5576,14 @@ if (!nas.otome.preferenceFolder.exists) {
  * @param myPropName
  */
 nas.otome.readPreference = function (myPropName) {
+alert('old mathod nas.otome.readPreference');
+return;
     if (!myPropName) {
         myPropName = "*"
     }
-    var myPrefFiles = this.preferenceFolder.getFiles(myPropName + ".json");
+    var myPrefFiles = this.preferenceFolder.getFiles(myPropName + ".pref");
     for (var idx = 0; idx < myPrefFiles.length; idx++) {
-        var myPropName = myPrefFiles[idx].name.replace(/\.json$/, "");
+        var myPropName = myPrefFiles[idx].name.replace(/\.pref$/, "");
         if (eval(myPropName)) {
             var myOpenFile = new File(myPrefFiles[idx].fsName);
             var canRead = myOpenFile.open("r");
@@ -5543,6 +5630,8 @@ nas.otome.readPreference = function (myPropName) {
  * @param myPrefs
  */
 nas.otome.writePreference = function (myPrefs) {
+alert('old mathod nas.otome.writePreference');
+return;
     if (!myPrefs) {
         myPrefs = []
     }
@@ -5564,7 +5653,7 @@ nas.otome.writePreference = function (myPrefs) {
             "nas.outputMedias.selected",
             "nas.workTitles.bodys",
             "nas.workTitles.selected",
-            "myName",
+            "nas.CURRENTUSER",
             "nas.RESOLUTION",
             "nas.FRATE",
             "nas.SheetLength",
@@ -5603,7 +5692,7 @@ nas.otome.writePreference = function (myPrefs) {
                 } else {
                     var myContent = eval(myPrefs[idx] + ".toSource()")
                 }
-                var myFileName = myPrefs[idx] + ".json";
+                var myFileName = myPrefs[idx] + ".pref";
                 nas.otome.writeConsole(myContent);
                 var myOpenFile = new File(this.preferenceFolder.path + "/" + this.preferenceFolder.name + "/" + myFileName);
                 var canWrite = myOpenFile.open("w");
